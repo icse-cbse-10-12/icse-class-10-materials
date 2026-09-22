@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://icse-cbse-10-12.github.io/icse-class-10-materials/sitemap.xml
