@@ -2,10 +2,10 @@
 <html lang="en" class="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>ICSE Class 10 Material Hub | ICSE MasterClass</title>
   
-  <!-- Hidden SEO & GEO Metadata -->
+  <!-- Hidden SEO Metadata -->
   <meta name="keywords" content="ICSE Class 10 Notes, ICSE Question Bank PDF, ICSE 2026-27 Board Exam, ICSE PYQ Solved, ICSE MasterClass">
   <meta name="description" content="Free open-access educational resource directory for ICSE Class 10 students. Powered by ICSE MasterClass.">
   
@@ -37,116 +37,178 @@
   </script>
 
   <style>
+    /* Global Mobile Optimization resets */
+    html { -webkit-tap-highlight-color: transparent; }
     body { background-color: #030712; color: #f3f4f6; }
+    
     .glass-panel {
-      background: rgba(17, 24, 39, 0.8);
+      background: rgba(17, 24, 39, 0.85);
       backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
+    
     .glass-card {
-      background: rgba(30, 41, 59, 0.5);
+      background: rgba(30, 41, 59, 0.4);
       backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      transition: all 0.2s ease-in-out;
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .glass-card:hover {
-      border-color: rgba(245, 158, 11, 0.4);
-      transform: translateY(-2px);
+    
+    @media (hover: hover) {
+      .glass-card:hover {
+        border-color: rgba(245, 158, 11, 0.4);
+        transform: translateY(-2px);
+      }
     }
+
     .active-tab {
       background: #f59e0b !important;
       color: #030712 !important;
       font-weight: 700 !important;
+      border-color: #f59e0b !important;
     }
+    
     .scrollbar-none::-webkit-scrollbar { display: none; }
     .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
-<body class="min-h-screen flex flex-col font-sans">
+<body class="min-h-screen flex flex-col font-sans selection:bg-brand-500 selection:text-black">
 
   <!-- Top Announcement Bar -->
-  <div class="bg-gradient-to-r from-brand-600 via-amber-500 to-brand-600 text-black text-xs font-bold py-1.5 px-4 text-center tracking-wide">
-    🚀 ICSE Class 10 Resources Updated Live! 
-    <a href="https://t.me/ICSEMasterClass10" target="_blank" class="underline ml-2">Join Telegram Hub →</a>
+  <div class="bg-gradient-to-r from-brand-600 via-amber-500 to-brand-600 text-black text-[11px] sm:text-xs font-bold py-1.5 px-3 text-center tracking-wide flex items-center justify-center gap-1">
+    <span>🚀 Class 10 Board Materials Updated!</span>
+    <a href="https://t.me/ICSEMasterClass10" target="_blank" class="underline ml-1 hover:opacity-80">Join Telegram →</a>
   </div>
 
-  <!-- Navbar -->
-  <header class="sticky top-0 z-40 glass-panel border-b border-gray-800">
-    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <img src="icseYtLogo.png" alt="Logo" class="w-10 h-10 rounded-full border border-brand-500/50 object-cover">
+  <!-- Responsive Navbar -->
+  <header class="sticky top-0 z-40 glass-panel border-b border-gray-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <div class="flex items-center gap-2.5">
+        <img src="icseYtLogo.png" alt="Logo" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-brand-500/50 object-cover">
         <div>
-          <span class="font-extrabold text-lg text-white tracking-tight">ICSE <span class="text-brand-500">MasterClass</span></span>
-          <p class="text-[10px] text-gray-400 font-medium uppercase">Class 10 Portal</p>
+          <span class="font-extrabold text-base sm:text-lg text-white tracking-tight">ICSE <span class="text-brand-500">MasterClass</span></span>
+          <p class="text-[9px] sm:text-[10px] text-gray-400 font-medium tracking-wider uppercase">Class 10 Portal</p>
         </div>
       </div>
+
+      <!-- Action Buttons -->
       <div class="flex items-center gap-2">
-        <a href="https://t.me/ICSEMasterClass10" target="_blank" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-sky-500/10 text-sky-400 border border-sky-500/20 hover:bg-sky-500 hover:text-white transition">
-          <i class="fa-brands fa-telegram"></i> Telegram
+        <a href="https://t.me/ICSEMasterClass10" target="_blank" class="h-9 px-3 rounded-xl text-xs font-semibold bg-sky-500/10 text-sky-400 border border-sky-500/20 active:bg-sky-500 active:text-white sm:hover:bg-sky-500 sm:hover:text-white transition flex items-center gap-1.5">
+          <i class="fa-brands fa-telegram text-sm"></i>
+          <span class="hidden sm:inline">Telegram</span>
         </a>
-        <a href="https://www.youtube.com/@ICSEMasterClass10" target="_blank" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500 hover:text-white transition">
-          <i class="fa-brands fa-youtube"></i> YouTube
+        <a href="https://www.youtube.com/@ICSEMasterClass10" target="_blank" class="h-9 px-3 rounded-xl text-xs font-semibold bg-red-500/10 text-red-400 border border-red-500/20 active:bg-red-500 active:text-white sm:hover:bg-red-500 sm:hover:text-white transition flex items-center gap-1.5">
+          <i class="fa-brands fa-youtube text-sm"></i>
+          <span class="hidden sm:inline">YouTube</span>
         </a>
       </div>
+
     </div>
   </header>
 
-  <!-- Main Catalog View -->
-  <div id="mainView" class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
+  <!-- Main Catalog Area -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 flex-grow w-full">
     
-    <!-- Hero -->
-    <div class="text-center max-w-2xl mx-auto mb-8">
-      <h1 class="text-3xl sm:text-4xl font-black text-white mb-2">ICSE Class 10 <span class="text-brand-500">Study Vault</span></h1>
-      <p class="text-gray-400 text-sm">Select any resource to view detailed notes, video solutions, and download links.</p>
+    <!-- Hero Header -->
+    <div class="text-center max-w-2xl mx-auto mb-6 sm:mb-8">
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold bg-brand-500/10 text-brand-400 border border-brand-500/20 mb-3">
+        <i class="fa-solid fa-layer-group text-[9px]"></i> Resource Directory
+      </span>
+      <h1 class="text-2xl sm:text-4xl font-black text-white tracking-tight mb-2">
+        ICSE Class 10 <span class="text-brand-500">Study Vault</span>
+      </h1>
+      <p class="text-gray-400 text-xs sm:text-sm px-2">
+        Click any resource card below to view detailed notes, chapter specs, and download links.
+      </p>
     </div>
 
     <!-- Search Input -->
-    <div class="max-w-xl mx-auto relative mb-8">
-      <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-gray-500 text-sm"></i>
-      <input type="text" id="searchInput" oninput="filterResources()" placeholder="Search subject, book name, or chapter..." 
-             class="w-full bg-gray-900 text-gray-100 border border-gray-800 rounded-2xl py-3 pl-11 pr-4 text-sm focus:outline-none focus:border-brand-500 transition">
-    </div>
-
-    <!-- Subject Tabs -->
-    <div id="subjectTabs" class="flex overflow-x-auto gap-2 pb-4 scrollbar-none mb-6"></div>
-
-    <!-- Category Filters & Count -->
-    <div class="flex flex-wrap items-center justify-between gap-4 mb-6 pb-4 border-b border-gray-800">
-      <div id="categoryFilters" class="flex flex-wrap gap-2">
-        <button onclick="setCategoryFilter('All')" class="cat-btn active-tab px-4 py-1 rounded-xl text-xs font-semibold bg-gray-800 text-gray-300">All Types</button>
-        <button onclick="setCategoryFilter('Notes')" class="cat-btn px-4 py-1 rounded-xl text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800">Notes</button>
-        <button onclick="setCategoryFilter('Question Bank')" class="cat-btn px-4 py-1 rounded-xl text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800">Question Banks</button>
-        <button onclick="setCategoryFilter('Sample Paper')" class="cat-btn px-4 py-1 rounded-xl text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800">Sample Papers</button>
+    <div class="max-w-xl mx-auto relative mb-6">
+      <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-500">
+        <i class="fa-solid fa-magnifying-glass text-xs sm:text-sm"></i>
       </div>
-      <div id="itemCount" class="text-xs font-mono text-gray-400">Loading...</div>
+      <input type="text" id="searchInput" oninput="filterResources()" 
+             placeholder="Search by subject, title, or topic..." 
+             class="w-full bg-gray-900/90 text-gray-100 border border-gray-800 rounded-2xl py-3 pl-10 pr-4 text-xs sm:text-sm placeholder-gray-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition shadow-lg">
     </div>
 
-    <!-- Resource Grid -->
-    <div id="resourceGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
-    <div id="statusMessage" class="text-center py-16 text-gray-400">Loading resources...</div>
-  </div>
+    <!-- Mobile-optimized Horizontal Subject Slider -->
+    <div class="mb-5">
+      <p class="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-2 flex items-center gap-1.5">
+        <i class="fa-solid fa-book-bookmark text-brand-500"></i> Select Subject
+      </p>
+      <div id="subjectTabs" class="flex overflow-x-auto gap-2 pb-2 scrollbar-none touch-pan-x">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
 
-  <!-- Dynamic Resource Detail Sub-Page View (Modal Overlay) -->
-  <div id="detailView" class="fixed inset-0 z-50 bg-gray-950/95 backdrop-blur-md hidden overflow-y-auto p-4 sm:p-6">
-    <div class="max-w-4xl mx-auto my-8 bg-gray-900 border border-gray-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative">
+    <!-- Category Filters & Item Count -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-gray-800/80">
+      <div id="categoryFilters" class="flex flex-wrap gap-1.5 sm:gap-2 w-full sm:w-auto">
+        <button onclick="setCategoryFilter('All')" class="cat-btn active-tab px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-gray-800 text-gray-300 border border-gray-700/60 transition">All</button>
+        <button onclick="setCategoryFilter('Notes')" class="cat-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-gray-900/80 text-gray-300 border border-gray-800 transition">Notes</button>
+        <button onclick="setCategoryFilter('Question Bank')" class="cat-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-gray-900/80 text-gray-300 border border-gray-800 transition">Question Banks</button>
+        <button onclick="setCategoryFilter('Sample Paper')" class="cat-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-gray-900/80 text-gray-300 border border-gray-800 transition">Sample Papers</button>
+      </div>
+
+      <div id="itemCount" class="text-[11px] font-mono text-gray-400 bg-gray-900/80 px-2.5 py-1 rounded-lg border border-gray-800 self-end sm:self-auto">
+        Loading resources...
+      </div>
+    </div>
+
+    <!-- Adaptive Responsive Grid: 1 col on mobile, 2 on tablet, 3 on desktop -->
+    <div id="resourceGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+      <!-- Cards injected here -->
+    </div>
+
+    <!-- Loading / Status Display -->
+    <div id="statusMessage" class="text-center py-16">
+      <div class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-brand-500/10 text-brand-500 mb-3">
+        <i class="fa-solid fa-circle-notch fa-spin text-lg"></i>
+      </div>
+      <p class="text-gray-400 text-xs sm:text-sm font-medium">Fetching materials directly from database...</p>
+    </div>
+
+  </main>
+
+  <!-- Mobile-Optimized Sub-Page Detail View (Modal Dynamic Page) -->
+  <div id="detailView" class="fixed inset-0 z-50 bg-gray-950/95 backdrop-blur-md hidden overflow-y-auto p-4 sm:p-6 transition-all duration-200">
+    <div class="max-w-3xl mx-auto my-4 sm:my-8 bg-gray-900 border border-gray-800 rounded-2xl sm:rounded-3xl p-5 sm:p-8 shadow-2xl relative">
       
-      <!-- Back Button -->
-      <button onclick="closeSubPage()" class="mb-6 inline-flex items-center gap-2 text-xs font-bold text-gray-400 hover:text-white bg-gray-800 px-3.5 py-2 rounded-xl transition">
-        <i class="fa-solid fa-arrow-left"></i> Back to Catalog
-      </button>
+      <!-- Back Navigation Bar -->
+      <div class="flex items-center justify-between mb-5 pb-3 border-b border-gray-800">
+        <button onclick="closeSubPage()" class="inline-flex items-center gap-2 text-xs font-bold text-gray-300 hover:text-white bg-gray-800 active:bg-gray-700 px-3.5 py-2 rounded-xl transition">
+          <i class="fa-solid fa-arrow-left"></i> Back to Catalog
+        </button>
+        <span class="text-[11px] font-mono text-brand-400">ICSE MasterClass</span>
+      </div>
 
-      <!-- Sub-Page Content Container -->
+      <!-- Sub-Page Container -->
       <div id="detailContent"></div>
 
     </div>
   </div>
 
   <!-- Footer -->
-  <footer class="glass-panel border-t border-gray-800 py-6 text-gray-400 text-xs text-center">
-    <p>© 2026 ICSE MasterClass | Independent Student Portal</p>
+  <footer class="glass-panel border-t border-gray-800/80 py-8 text-gray-400 text-xs mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+      <div>
+        <p class="font-bold text-white mb-1">© 2026 ICSE MasterClass</p>
+        <p class="text-[11px] text-gray-400">Independent educational repository for ICSE Class 10 candidates.</p>
+      </div>
+      <div class="flex items-center gap-4 text-base">
+        <a href="https://t.me/ICSEMasterClass10" target="_blank" class="hover:text-sky-400 transition" title="Telegram"><i class="fa-brands fa-telegram"></i></a>
+        <a href="https://www.youtube.com/@ICSEMasterClass10" target="_blank" class="hover:text-red-400 transition" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+        <a href="https://icsemasterclass.blogspot.com/" target="_blank" class="hover:text-amber-400 transition" title="Blogspot"><i class="fa-solid fa-globe"></i></a>
+      </div>
+    </div>
   </footer>
 
-  <!-- Logic -->
+  <!-- Application Logic -->
   <script>
     const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQLGKfaC9WUePvCArs7YAxYP9tmoPYkCdfJviR2pdOnlSZ6gVLEqgtAEga4XLQpubVTfEsHo2eWBWx7/pub?output=csv";
 
@@ -170,31 +232,44 @@
         const response = await fetch(SHEET_CSV_URL);
         const csvText = await response.text();
         allResources = parseCSV(csvText);
+        
         document.getElementById("statusMessage").classList.add("hidden");
         filterResources();
 
-        // Check if direct deep link hash exists
+        // Deep linking support (#resource-0, #resource-1, etc.)
         if(window.location.hash.startsWith("#resource-")) {
           const index = parseInt(window.location.hash.replace("#resource-", ""));
           if(allResources[index]) openSubPage(index);
         }
       } catch (error) {
-        document.getElementById("statusMessage").innerText = "Failed to load database.";
+        console.error("Error loading CSV:", error);
+        document.getElementById("statusMessage").innerHTML = `
+          <div class="text-red-400 font-semibold mb-1">Failed to fetch database</div>
+          <p class="text-gray-400 text-xs">Verify internet connection or published sheet link.</p>
+        `;
       }
     }
 
     function parseCSV(text) {
       const lines = text.split('\n');
       if (lines.length < 2) return [];
+
       const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
       const data = [];
+
       for (let i = 1; i < lines.length; i++) {
         if (!lines[i].trim()) continue;
         const row = lines[i].match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || lines[i].split(',');
         const cleanedRow = row.map(cell => cell.trim().replace(/^"|"$/g, ''));
+
         let item = {};
-        headers.forEach((header, index) => { item[header] = cleanedRow[index] || ""; });
-        if (item["Book Name"] || item["Subject"]) data.push(item);
+        headers.forEach((header, index) => {
+          item[header] = cleanedRow[index] || "";
+        });
+
+        if (item["Book Name"] || item["Subject"]) {
+          data.push(item);
+        }
       }
       return data;
     }
@@ -202,7 +277,8 @@
     function renderSubjectTabs() {
       const container = document.getElementById("subjectTabs");
       container.innerHTML = subjectsList.map(sub => `
-        <button onclick="setSubjectFilter('${sub}')" class="sub-tab px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap border border-gray-800 ${sub === 'All' ? 'active-tab' : 'bg-gray-900 text-gray-300'}">
+        <button onclick="setSubjectFilter('${sub}')" 
+                class="sub-tab px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition border border-gray-800 ${sub === 'All' ? 'active-tab' : 'bg-gray-900/80 text-gray-300'}">
           ${sub}
         </button>
       `).join('');
@@ -211,9 +287,11 @@
     function setSubjectFilter(subject) {
       currentSubject = subject;
       document.querySelectorAll(".sub-tab").forEach(tab => {
-        tab.className = tab.innerText.trim() === subject 
-          ? "sub-tab active-tab px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap border border-brand-500"
-          : "sub-tab bg-gray-900 text-gray-300 px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap border border-gray-800";
+        if (tab.innerText.trim() === subject) {
+          tab.className = "sub-tab active-tab px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition border border-brand-500";
+        } else {
+          tab.className = "sub-tab bg-gray-900/80 text-gray-300 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition border border-gray-800";
+        }
       });
       filterResources();
     }
@@ -221,63 +299,79 @@
     function setCategoryFilter(category) {
       currentCategory = category;
       document.querySelectorAll(".cat-btn").forEach(btn => {
-        btn.className = btn.innerText.includes(category) || (category === 'All' && btn.innerText.includes('All'))
-          ? "cat-btn active-tab px-4 py-1 rounded-xl text-xs font-semibold"
-          : "cat-btn px-4 py-1 rounded-xl text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800";
+        if (btn.innerText.includes(category) || (category === 'All' && btn.innerText === 'All')) {
+          btn.className = "cat-btn active-tab px-3.5 py-1.5 rounded-xl text-xs font-semibold transition border border-brand-500";
+        } else {
+          btn.className = "cat-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-gray-900/80 text-gray-300 border border-gray-800 transition";
+        }
       });
       filterResources();
     }
 
     function filterResources() {
       const searchVal = document.getElementById("searchInput").value.toLowerCase();
-      const filtered = allResources.filter((item) => {
+
+      const filtered = allResources.filter(item => {
         const itemSubject = (item["Subject"] || "").toLowerCase();
         const itemCategory = (item["Category"] || "").toLowerCase();
         const bookName = (item["Book Name"] || "").toLowerCase();
-        
+
         let subMatch = currentSubject === "All" || itemSubject.includes(currentSubject.toLowerCase());
         let catMatch = currentCategory === "All" || itemCategory.includes(currentCategory.toLowerCase());
         let srchMatch = !searchVal || bookName.includes(searchVal) || itemSubject.includes(searchVal);
+
         return subMatch && catMatch && srchMatch;
       });
+
       renderGrid(filtered);
     }
 
     function renderGrid(resources) {
       const grid = document.getElementById("resourceGrid");
-      document.getElementById("itemCount").innerText = `${resources.length} Items`;
-      if (!resources.length) {
+      document.getElementById("itemCount").innerText = `${resources.length} Available`;
+
+      if (resources.length === 0) {
         grid.innerHTML = "";
         document.getElementById("statusMessage").classList.remove("hidden");
-        document.getElementById("statusMessage").innerText = "No resources found.";
+        document.getElementById("statusMessage").innerHTML = `
+          <p class="text-gray-400 text-xs">No matching study materials found.</p>
+        `;
         return;
       }
+
       document.getElementById("statusMessage").classList.add("hidden");
 
-      grid.innerHTML = resources.map((item) => {
+      grid.innerHTML = resources.map(item => {
         const originalIndex = allResources.indexOf(item);
         return `
-          <div onclick="openSubPage(${originalIndex})" class="glass-card rounded-2xl p-5 cursor-pointer flex flex-col justify-between hover:border-brand-500/50">
+          <div onclick="openSubPage(${originalIndex})" 
+               class="glass-card rounded-2xl p-4 sm:p-5 flex flex-col justify-between cursor-pointer active:scale-[0.99] sm:active:scale-100 transition">
             <div>
-              <div class="flex justify-between items-center gap-2 mb-3">
+              <div class="flex justify-between items-center gap-2 mb-2.5">
                 <span class="text-[10px] font-bold uppercase tracking-wider bg-brand-500/10 text-brand-400 border border-brand-500/20 px-2.5 py-0.5 rounded-md">
                   ${item["Subject"] || "General"}
                 </span>
-                <span class="text-[10px] text-gray-400 bg-gray-800 px-2 py-0.5 rounded">${item["Format"] || "PDF"}</span>
+                <span class="text-[10px] font-mono text-gray-400 bg-gray-800/80 px-2 py-0.5 rounded border border-gray-700/50">
+                  ${item["Format"] || "PDF"}
+                </span>
               </div>
-              <h3 class="font-bold text-base text-white mb-1.5 line-clamp-2">${item["Book Name"]}</h3>
-              <p class="text-xs text-gray-400 line-clamp-2 mb-4">${item["Scope"] || 'Click to view full notes and download details.'}</p>
+
+              <h3 class="font-bold text-sm sm:text-base text-white mb-1 leading-snug line-clamp-2">${item["Book Name"] || "ICSE Material"}</h3>
+              <p class="text-xs text-gray-400 mb-4 line-clamp-2">
+                ${item["Scope"] || "Tap to view resource details, download link, and video lectures."}
+              </p>
             </div>
-            <div class="pt-3 border-t border-gray-800 flex justify-between items-center text-xs text-brand-400 font-semibold">
-              <span>View Resource Page</span>
-              <i class="fa-solid fa-arrow-right"></i>
+
+            <div class="pt-3 border-t border-gray-800/80 flex items-center justify-between text-xs font-semibold text-brand-400">
+              <span class="flex items-center gap-1.5"><i class="fa-solid fa-book-open text-[11px]"></i> Open Material Page</span>
+              <i class="fa-solid fa-chevron-right text-[10px]"></i>
             </div>
           </div>
         `;
       }).join('');
     }
 
-    // Opens Dedicated Sub-Page View
+    // Opens Sub-Page Modal View
     function openSubPage(index) {
       const item = allResources[index];
       if (!item) return;
@@ -287,42 +381,42 @@
       const lectureLink = item["Lecture Link"] || "#";
 
       document.getElementById("detailContent").innerHTML = `
-        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
-          <span class="text-xs font-bold uppercase bg-brand-500/10 text-brand-400 border border-brand-500/20 px-3 py-1 rounded-lg">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-[10px] font-bold uppercase bg-brand-500/10 text-brand-400 border border-brand-500/20 px-2.5 py-1 rounded-md">
             ${item["Subject"] || "General"}
           </span>
-          <span class="text-xs text-gray-400 font-mono">Format: ${item["Format"] || "PDF"}</span>
+          <span class="text-[10px] font-mono text-gray-400 bg-gray-800 px-2 py-1 rounded">Format: ${item["Format"] || "PDF"}</span>
         </div>
 
-        <h1 class="text-2xl sm:text-3xl font-black text-white mb-4 leading-tight">${item["Book Name"]}</h1>
-        
-        <div class="bg-gray-800/50 border border-gray-700/50 rounded-2xl p-4 mb-6">
-          <h4 class="text-xs font-bold text-gray-300 uppercase tracking-wider mb-1">Description & Scope</h4>
-          <p class="text-sm text-gray-300 leading-relaxed">${item["Scope"] || "Full chapter-wise coverage prepared for ICSE Class 10 board examinations."}</p>
+        <h2 class="text-xl sm:text-2xl font-black text-white mb-3 leading-snug">${item["Book Name"]}</h2>
+
+        <div class="bg-gray-800/50 border border-gray-800 rounded-2xl p-4 mb-6">
+          <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Details & Scope</h4>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">${item["Scope"] || "Complete study notes and material designed for ICSE Class 10 preparation."}</p>
         </div>
 
-        <!-- Download & Video Action Buttons -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+        <!-- Touch-Friendly Full-Width Action Buttons -->
+        <div class="flex flex-col sm:flex-row gap-3 mb-6">
           ${driveLink !== "#" ? `
-            <a href="${driveLink}" target="_blank" class="bg-brand-500 hover:bg-brand-400 text-black font-bold py-3 px-4 rounded-xl text-center text-sm flex items-center justify-center gap-2 transition">
-              <i class="fa-solid fa-file-arrow-down text-base"></i> Open / Download PDF
+            <a href="${driveLink}" target="_blank" class="flex-1 min-h-[44px] bg-brand-500 active:bg-brand-400 text-black font-bold rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 transition shadow-lg shadow-brand-500/10">
+              <i class="fa-solid fa-file-arrow-down"></i> Download / View Material
             </a>
           ` : ''}
+
           ${lectureLink && lectureLink !== "#" ? `
-            <a href="${lectureLink}" target="_blank" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-xl text-center text-sm flex items-center justify-center gap-2 transition">
-              <i class="fa-brands fa-youtube text-base"></i> Watch Video Lecture
+            <a href="${lectureLink}" target="_blank" class="min-h-[44px] px-5 bg-red-600 active:bg-red-500 text-white font-bold rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 transition">
+              <i class="fa-brands fa-youtube"></i> Watch Explanation
             </a>
           ` : ''}
         </div>
 
-        <!-- Legal Disclaimer Note -->
-        <div class="text-[11px] text-gray-500 border-t border-gray-800 pt-4">
-          <p><strong>Notice:</strong> This material is indexed strictly for educational fair use by ICSE MasterClass. Copyrights remain with respective authors/publishers.</p>
+        <div class="text-[10px] text-gray-500 border-t border-gray-800 pt-3">
+          <strong>Notice:</strong> Shared under fair-use educational index. ICSE MasterClass does not claim ownership of proprietary publisher materials.
         </div>
       `;
 
       document.getElementById("detailView").classList.remove("hidden");
-      document.body.style.overflow = "hidden"; // Disable background scrolling
+      document.body.style.overflow = "hidden"; // Block body scroll on mobile
     }
 
     function closeSubPage() {
