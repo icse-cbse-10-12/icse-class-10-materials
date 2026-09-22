@@ -2,181 +2,220 @@
 <html lang="en" class="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>ICSE Class 10 Material Hub | ICSE MasterClass</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <!-- SEO & Schema Metadata -->
-  <meta name="keywords" content="ICSE Class 10 Notes, ICSE Question Bank PDF, ICSE 2026-27 Board Exam, ICSE PYQ Solved, ICSE MasterClass">
-  <meta name="description" content="Free open-access educational resource directory for ICSE Class 10 students. Powered by ICSE MasterClass.">
-  
+  <!-- Primary Meta Tags for SEO -->
+  <title>ICSE & ISC Class 10/12 Study Materials, Question Banks & Notes | ICSE MasterClass</title>
+  <meta name="title" content="ICSE & ISC Class 10/12 Study Materials, Question Banks & Notes | ICSE MasterClass">
+  <meta name="description" content="Free educational resource vault for ICSE Class 10 and ISC Class 12 students. Download Oswaal, Educart question banks, previous year solved papers, revision notes, and video lectures.">
+  <meta name="keywords" content="ICSE Class 10 materials, ISC Class 12 notes, Oswaal question bank PDF, Educart ICSE solved papers, ICSE Physics revision notes, ICSE Maths sample papers, ICSE MasterClass">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="ICSE MasterClass">
+
+  <!-- Open Graph / Facebook / WhatsApp Preview -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://icse-cbse-10-12.github.io/icse-class-10-materials/">
+  <meta property="og:title" content="ICSE & ISC Class 10/12 Study Materials & Notes Vault">
+  <meta property="og:description" content="Access free ICSE & ISC question banks, PYQs, and chapter notes for Physics, Chemistry, Maths, English, and more.">
+  <meta property="og:image" content="https://icse-cbse-10-12.github.io/icse-class-10-materials/assets/og-image.png">
+
+  <!-- Twitter Preview -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://icse-cbse-10-12.github.io/icse-class-10-materials/">
+  <meta property="twitter:title" content="ICSE & ISC Class 10/12 Study Materials & Notes Vault">
+  <meta property="twitter:description" content="Free study material vault with question banks, PYQs, and notes for ICSE/ISC board exams.">
+
+  <!-- Structured Data for Search Engines & AI Crawlers (Schema.org) -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "EducationalWebPage",
-    "name": "ICSE Class 10 Study Material Vault",
-    "description": "Free notes, question banks, and sample papers for ICSE Class 10 candidates.",
-    "educationalLevel": "Class 10 ICSE"
+    "@type": "EducationalOrganization",
+    "name": "ICSE MasterClass",
+    "url": "https://icse-cbse-10-12.github.io/icse-class-10-materials/",
+    "description": "A comprehensive digital vault providing free study materials, previous year question banks, revision notes, and sample papers for ICSE Class 10 and ISC students.",
+    "educationalLevel": ["ICSE Class 10", "ISC Class 11", "ISC Class 12"],
+    "about": [
+      { "@type": "Thing", "name": "Physics" },
+      { "@type": "Thing", "name": "Chemistry" },
+      { "@type": "Thing", "name": "Mathematics" },
+      { "@type": "Thing", "name": "Computer Applications" },
+      { "@type": "Thing", "name": "English Paper 1" },
+      { "@type": "Thing", "name": "English Paper 2" }
+    ]
   }
   </script>
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- FontAwesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Google Fonts: Inter -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <!-- Custom CSS Link -->
-  <link rel="stylesheet" href="style.css">
-
   <script>
     tailwind.config = {
       darkMode: 'class',
       theme: {
         extend: {
-          fontFamily: { sans: ['Inter', 'sans-serif'] },
           colors: {
             brand: {
-              400: '#fbbf24',
-              500: '#f59e0b',
-              600: '#d97706',
-              900: '#0b192c',
-              950: '#030712'
+              400: '#38bdf8',
+              500: '#0284c7',
+              600: '#0369a1',
             }
           }
         }
       }
     }
   </script>
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="min-h-screen flex flex-col font-sans selection:bg-brand-500 selection:text-black">
 
-  <!-- Top Announcement Bar -->
-  <div class="bg-gradient-to-r from-brand-600 via-amber-500 to-brand-600 text-black text-[11px] sm:text-xs font-bold py-1.5 px-3 text-center tracking-wide flex items-center justify-center gap-1">
-    <span>🚀 Class 10 Board Materials Updated!</span>
-    <a href="https://t.me/ICSEMasterClass10" target="_blank" class="underline ml-1 hover:opacity-80">Join Telegram →</a>
-  </div>
+<body class="bg-gray-950 text-gray-100 font-sans min-h-screen flex flex-col antialiased selection:bg-brand-500 selection:text-black">
 
-  <!-- Header / Navigation -->
-  <header class="sticky top-0 z-40 glass-panel border-b border-gray-800/80">
+  <!-- Header / Navbar -->
+  <header class="sticky top-0 z-40 bg-gray-950/80 backdrop-blur-md border-b border-gray-800/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      <div class="flex items-center gap-2.5 cursor-pointer" onclick="closeSubjectSubPage()">
-        <img src="icseYtLogo.png" alt="Logo" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-brand-500/50 object-cover">
-        <div>
-          <span class="font-extrabold text-base sm:text-lg text-white tracking-tight">ICSE <span class="text-brand-500">MasterClass</span></span>
-          <p class="text-[9px] sm:text-[10px] text-gray-400 font-medium tracking-wider uppercase">Class 10 Portal</p>
+      <a href="#" onclick="closeSubjectSubPage()" class="flex items-center gap-3 group">
+        <div class="w-9 h-9 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400 font-black text-lg group-hover:scale-105 transition-transform">
+          <i class="fa-solid fa-graduation-cap"></i>
         </div>
-      </div>
+        <span class="font-extrabold text-lg tracking-tight text-white group-hover:text-brand-400 transition">
+          ICSE MasterClass <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-brand-500/10 text-brand-400 border border-brand-500/20 ml-1">Vault</span>
+        </span>
+      </a>
 
-      <div class="flex items-center gap-2">
-        <a href="https://t.me/ICSEMasterClass10" target="_blank" class="h-9 px-3 rounded-xl text-xs font-semibold bg-sky-500/10 text-sky-400 border border-sky-500/20 hover:bg-sky-500 hover:text-white transition flex items-center gap-1.5">
-          <i class="fa-brands fa-telegram text-sm"></i>
-          <span class="hidden sm:inline">Telegram</span>
-        </a>
-        <a href="https://www.youtube.com/@ICSEMasterClass10" target="_blank" class="h-9 px-3 rounded-xl text-xs font-semibold bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500 hover:text-white transition flex items-center gap-1.5">
-          <i class="fa-brands fa-youtube text-sm"></i>
-          <span class="hidden sm:inline">YouTube</span>
-        </a>
-      </div>
+      <a href="https://t.me/ICSEMasterClass10" target="_blank" rel="noopener noreferrer" class="py-2 px-4 rounded-xl text-xs font-bold bg-sky-500/10 text-sky-400 border border-sky-500/20 hover:bg-sky-500 hover:text-white transition flex items-center gap-2">
+        <i class="fa-brands fa-telegram text-sm"></i> Join Telegram
+      </a>
     </div>
   </header>
 
-  <!-- MAIN LANDING VIEW (Subject Grid First) -->
-  <main id="mainLandingView" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
-    <div class="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
-      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold bg-brand-500/10 text-brand-400 border border-brand-500/20 mb-3">
-        <i class="fa-solid fa-layer-group text-[9px]"></i> Subject Directory
-      </span>
-      <h1 class="text-2xl sm:text-4xl font-black text-white tracking-tight mb-2">
-        ICSE Class 10 <span class="text-brand-500">Study Vault</span>
-      </h1>
-      <p class="text-gray-400 text-xs sm:text-sm">
-        Select a subject below to open its dedicated resource catalog with notes, question banks, and sample papers.
-      </p>
+  <!-- Main Container -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Loading / Status Message -->
+    <div id="statusMessage" class="text-center py-4 mb-6 glass-card rounded-2xl border border-gray-800 text-xs text-gray-400 flex items-center justify-center gap-2">
+      <i class="fa-solid fa-circle-notch fa-spin text-brand-400"></i>
+      <span>Syncing latest resource database...</span>
     </div>
 
-    <!-- Subject Grid -->
-    <div id="mainSubjectGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-      <!-- Subjects injected dynamically via script.js -->
-    </div>
+    <!-- MAIN LANDING VIEW -->
+    <section id="mainLandingView" class="space-y-8">
+      
+      <!-- Hero Banner -->
+      <div class="text-center space-y-3 py-6 max-w-3xl mx-auto">
+        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-brand-500/10 text-brand-400 border border-brand-500/20 inline-block">
+          Free ICSE & ISC Class 10 Study Material Library
+        </span>
+        <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
+          Master Your ICSE Exams with Direct Access Notes
+        </h1>
+        <p class="text-xs sm:text-sm text-gray-400 max-w-xl mx-auto">
+          Explore chapter-wise notes, top publisher question banks (Oswaal, Educart), solved past papers, and video lectures sorted by subject.
+        </p>
+      </div>
+
+      <!-- Subjects Cards Grid -->
+      <div id="mainSubjectGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <!-- JS dynamically renders subject cards here -->
+      </div>
+
+      <!-- Readable SEO & AI Description Block -->
+      <section class="mt-12 pt-8 border-t border-gray-800/80 max-w-5xl mx-auto space-y-6 text-gray-400 text-xs leading-relaxed">
+        <div class="p-6 rounded-2xl bg-gray-900/40 border border-gray-800/80 space-y-4">
+          <h2 class="text-lg font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-book-bookmark text-brand-400"></i>
+            About ICSE & ISC Class 10 MasterClass Resources
+          </h2>
+          <p>
+            Welcome to the official study material vault designed for ICSE Class 10 and ISC students preparing for board examinations. Our platform centralizes educational assets—ranging from chapter-wise practice tests to solved board papers—enabling students to prepare effectively across core subjects including Physics, Chemistry, Mathematics, Biology, English Literature, History & Civics, Geography, and Computer Applications.
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+            <div class="space-y-1">
+              <h3 class="font-bold text-gray-200">What You'll Find:</h3>
+              <ul class="list-disc list-inside space-y-1 text-gray-400">
+                <li>Oswaal & Educart Question Banks (Latest Editions)</li>
+                <li>Previous 10 Years Solved Board Papers (PYQs)</li>
+                <li>Chapter-wise Handwritten & Digital Revision Notes</li>
+                <li>Curated YouTube Video Lectures & Solution Playlists</li>
+              </ul>
+            </div>
+            <div class="space-y-1">
+              <h3 class="font-bold text-gray-200">How to Use the Vault:</h3>
+              <p>
+                Click on any subject card above to open its dedicated vault. Filter materials by category (Question Banks, Notes, Solved Papers) or search for specific chapter names and book publishers to view or download files directly.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </section>
+
+    <!-- SUBJECT DETAIL VIEW (Hidden by default) -->
+    <section id="subjectDetailView" class="hidden space-y-6">
+      
+      <!-- Top Navigation & Title Bar -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-800/80">
+        <div class="flex items-center gap-3">
+          <button onclick="closeSubjectSubPage()" class="w-9 h-9 rounded-xl bg-gray-900 border border-gray-800 hover:border-gray-700 text-gray-300 hover:text-white flex items-center justify-center transition">
+            <i class="fa-solid fa-arrow-left"></i>
+          </button>
+          <div>
+            <h2 id="selectedSubjectTitle" class="text-xl sm:text-2xl font-black text-white">Subject Vault</h2>
+            <p id="itemCount" class="text-xs text-gray-400">0 Materials Found</p>
+          </div>
+        </div>
+
+        <!-- Search Input -->
+        <div class="relative w-full sm:w-72">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xs"></i>
+          <input type="text" id="searchInput" oninput="filterResources()" placeholder="Search book, topic, publisher..." 
+                 class="w-full bg-gray-900 border border-gray-800 rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-brand-500 transition">
+        </div>
+      </div>
+
+      <!-- Category Filter Tabs -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+        <button onclick="setCategoryFilter('All', event)" class="cat-btn active-tab px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition">All Materials</button>
+        <button onclick="setCategoryFilter('Question Banks', event)" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition">Question Banks</button>
+        <button onclick="setCategoryFilter('Notes', event)" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition">Notes</button>
+        <button onclick="setCategoryFilter('Sample Papers', event)" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition">Sample Papers</button>
+        <button onclick="setCategoryFilter('PYQ', event)" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition">PYQs</button>
+      </div>
+
+      <!-- Resource Cards Grid -->
+      <div id="resourceGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- JS dynamically populates resource items here -->
+      </div>
+    </section>
+
   </main>
 
-  <!-- SUBJECT SUB-PAGE VIEW -->
-  <section id="subjectDetailView" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
-    <!-- Back Header -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-gray-800">
-      <div class="flex items-center gap-3">
-        <button onclick="closeSubjectSubPage()" class="inline-flex items-center gap-2 text-xs font-bold text-gray-300 hover:text-white bg-gray-800 active:bg-gray-700 px-3.5 py-2 rounded-xl transition">
-          <i class="fa-solid fa-arrow-left"></i> Back to Subjects
-        </button>
-        <h2 id="selectedSubjectTitle" class="text-lg sm:text-xl font-bold text-white"></h2>
-      </div>
-
-      <!-- Search Input within Subject Page -->
-      <div class="relative w-full sm:w-72">
-        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-gray-500 text-xs"></i>
-        <input type="text" id="searchInput" oninput="filterResources()" placeholder="Search in this subject..." class="w-full bg-gray-900 text-gray-100 border border-gray-800 rounded-xl py-2 pl-9 pr-4 text-xs focus:outline-none focus:border-brand-500 transition">
-      </div>
-    </div>
-
-    <!-- Category Filter Tabs inside Subject -->
-    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6">
-      <div id="categoryFilters" class="flex flex-wrap gap-1.5 sm:gap-2">
-        <button onclick="setCategoryFilter('All')" class="cat-btn active-tab px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-brand-500 text-black">All Types</button>
-        <button onclick="setCategoryFilter('Notes')" class="cat-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800">Notes</button>
-        <button onclick="setCategoryFilter('Question Bank')" class="cat-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800">Question Banks</button>
-        <button onclick="setCategoryFilter('Sample Paper')" class="cat-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800">Sample Papers</button>
-      </div>
-
-      <div id="itemCount" class="text-[11px] font-mono text-gray-400 bg-gray-900 px-2.5 py-1 rounded-lg border border-gray-800">
-        Loading...
-      </div>
-    </div>
-
-    <!-- PDF/Resource Cards Grid -->
-    <div id="resourceGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-      <!-- File cards rendered here -->
-    </div>
-
-    <!-- Status / Loading Display -->
-    <div id="statusMessage" class="text-center py-16">
-      <div class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-brand-500/10 text-brand-500 mb-3">
-        <i class="fa-solid fa-circle-notch fa-spin text-lg"></i>
-      </div>
-      <p class="text-gray-400 text-xs sm:text-sm font-medium">Fetching materials directly from database...</p>
-    </div>
-  </section>
-
   <!-- MATERIAL DETAIL MODAL VIEW -->
-  <div id="detailView" class="fixed inset-0 z-50 bg-gray-950/95 backdrop-blur-md hidden overflow-y-auto p-4 sm:p-6 transition-all duration-200">
-    <div class="max-w-3xl mx-auto my-4 sm:my-8 bg-gray-900 border border-gray-800 rounded-2xl sm:rounded-3xl p-5 sm:p-8 shadow-2xl relative">
-      <div class="flex items-center justify-between mb-5 pb-3 border-b border-gray-800">
-        <button onclick="closeMaterialModal()" class="inline-flex items-center gap-2 text-xs font-bold text-gray-300 hover:text-white bg-gray-800 active:bg-gray-700 px-3.5 py-2 rounded-xl transition">
-          <i class="fa-solid fa-arrow-left"></i> Back to Material List
-        </button>
-        <span class="text-[11px] font-mono text-brand-400">ICSE MasterClass</span>
-      </div>
+  <div id="detailView" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-gray-900 border border-gray-800 rounded-2xl max-w-lg w-full p-6 relative space-y-4 shadow-2xl">
+      <button onclick="closeMaterialModal()" class="absolute top-4 right-4 w-8 h-8 rounded-lg bg-gray-800 text-gray-400 hover:text-white flex items-center justify-center transition">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
 
-      <div id="detailContent"></div>
+      <div id="detailContent">
+        <!-- JS inserts material details dynamically -->
+      </div>
     </div>
   </div>
 
   <!-- Footer -->
-  <footer class="glass-panel border-t border-gray-800/80 py-8 text-gray-400 text-xs mt-auto">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
-      <div>
-        <p class="font-bold text-white mb-1">© 2026 ICSE MasterClass</p>
-        <p class="text-[11px] text-gray-400">Independent educational repository for ICSE Class 10 candidates.</p>
-      </div>
-      <div class="flex items-center gap-4 text-base">
-        <a href="https://t.me/ICSEMasterClass10" target="_blank" class="hover:text-sky-400 transition" title="Telegram"><i class="fa-brands fa-telegram"></i></a>
-        <a href="https://www.youtube.com/@ICSEMasterClass10" target="_blank" class="hover:text-red-400 transition" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
-        <a href="https://icsemasterclass.blogspot.com/" target="_blank" class="hover:text-amber-400 transition" title="Blogspot"><i class="fa-solid fa-globe"></i></a>
+  <footer class="mt-auto border-t border-gray-800/80 bg-gray-950 py-6 text-center text-xs text-gray-500">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <p>© 2026 ICSE MasterClass. All study resources belong to their respective publishers and owners.</p>
+      <div class="flex items-center gap-4">
+        <a href="https://t.me/ICSEMasterClass10" target="_blank" class="hover:text-brand-400 transition">Telegram</a>
+        <a href="https://www.youtube.com/@ICSEMasterClass10" target="_blank" class="hover:text-brand-400 transition">YouTube</a>
       </div>
     </div>
   </footer>
 
-  <!-- External JS Script -->
+  <!-- Main JavaScript File -->
   <script src="script.js"></script>
 </body>
 </html>
