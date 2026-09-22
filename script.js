@@ -82,7 +82,7 @@ async function fetchSheetData() {
   }
 }
 
-// 3. Robust CSV Parser
+// 3. CSV Parser
 function parseCSV(text) {
   const lines = text.split('\n').filter(line => line.trim() !== '');
   if (lines.length < 2) return [];
@@ -127,7 +127,7 @@ function parseCSV(text) {
   return data;
 }
 
-// 4. Subject Sub-Page Navigation
+// 4. Navigation
 function openSubjectSubPage(subjectName) {
   currentSubject = subjectName;
   window.location.hash = `subject-${encodeURIComponent(subjectName)}`;
@@ -148,7 +148,7 @@ function closeSubjectSubPage() {
   history.pushState("", document.title, window.location.pathname + window.location.search);
 }
 
-// 5. Category Filtering & Search
+// 5. Filtering & Search
 function setCategoryFilter(cat, evt) {
   currentCategory = cat;
   document.querySelectorAll('.cat-btn').forEach(btn => {
@@ -172,13 +172,15 @@ function filterResources() {
     const sheetSubjectLower = (item["Subject"] || "").toLowerCase().trim();
     const sheetCategoryLower = (item["Category"] || "").toLowerCase().trim();
     const sheetBookNameLower = (item["Book Name"] || "").toLowerCase().trim();
-    const sheetScopeLower = (item["Chapters / Scope Covered"] || "").toLowerCase().trim();
+    const sheetScopeLower = (item["Scope"] || "").toLowerCase().trim();
+    const sheetPublisherLower = (item["Publisher/Company"] || "").toLowerCase().trim();
 
     const matchSubject = !currentSubject || sheetSubjectLower.includes(selectedSubjectLower) || selectedSubjectLower.includes(sheetSubjectLower);
     const matchCategory = selectedCategoryLower === 'all' || sheetCategoryLower.includes(selectedCategoryLower);
     const matchSearch = !searchQuery || 
       sheetBookNameLower.includes(searchQuery) || 
       sheetScopeLower.includes(searchQuery) ||
+      sheetPublisherLower.includes(searchQuery) ||
       sheetSubjectLower.includes(searchQuery);
 
     return matchSubject && matchCategory && matchSearch;
@@ -187,7 +189,7 @@ function filterResources() {
   renderResourceGrid(filtered);
 }
 
-// 6. Render Resource Cards with Index-Based Click Handler
+// 6. Render Resource Grid
 function renderResourceGrid(items) {
   const grid = document.getElementById("resourceGrid");
   const countEl = document.getElementById("itemCount");
@@ -205,7 +207,6 @@ function renderResourceGrid(items) {
     return;
   }
 
-  // Store current filtered items globally so click handlers reference array index safely
   window.currentFilteredItems = items;
 
   grid.innerHTML = items.map((item, index) => `
@@ -215,7 +216,7 @@ function renderResourceGrid(items) {
           <span class="px-2.5 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-brand-500/10 text-brand-400 border border-brand-500/20">
             ${item["Category"] || 'Resource'}
           </span>
-          <span class="text-[10px] font-mono text-gray-500 uppercase">PDF</span>
+          <span class="text-[10px] font-mono text-gray-500 uppercase">${item["Format"] || 'PDF'}</span>
         </div>
 
         <h3 class="font-bold text-sm text-white mb-2 line-clamp-2 leading-snug">
@@ -223,7 +224,7 @@ function renderResourceGrid(items) {
         </h3>
 
         <p class="text-xs text-gray-400 mb-4 line-clamp-2">
-          ${item["Chapters / Scope Covered"] || 'Full syllabus notes & practice files.'}
+          ${item["Publisher/Company"] ? `<strong class="text-gray-300">${item["Publisher/Company"]}:</strong> ` : ''}${item["Scope"] || 'Full syllabus notes & practice files.'}
         </p>
       </div>
 
@@ -235,20 +236,38 @@ function renderResourceGrid(items) {
   `).join('');
 }
 
-// 7. Material Detail Modal View using Index Lookup
+// 7. Open Detail Modal View
 function openMaterialModalByIndex(index) {
   const item = window.currentFilteredItems[index];
   if (!item) return;
 
   const container = document.getElementById("detailContent");
-  const driveLink = item["Google Drive Direct View / Download Link"] || "#";
-  const telegramLink = item["Telegram Channel Post Link"] || "https://t.me/ICSEMasterClass10";
+  
+  const driveLink = (item["Google Drive Link"] || item["Google Drive Direct View / Download Link"] || "").trim();
+  const lectureLink = (item["Lecture Link"] || item["Telegram Channel Post Link"] || "").trim();
+
+  const driveBtnHtml = driveLink && driveLink !== "#"
+    ? `<a href="${driveLink}" target="_blank" rel="noopener noreferrer" class="w-full py-3 px-4 rounded-xl text-xs font-bold bg-brand-500 text-black hover:bg-brand-400 text-center transition flex items-center justify-center gap-2">
+         <i class="fa-solid fa-file-pdf text-sm"></i> Direct View / Download
+       </a>`
+    : `<button disabled class="w-full py-3 px-4 rounded-xl text-xs font-bold bg-gray-800 text-gray-500 cursor-not-allowed text-center flex items-center justify-center gap-2 border border-gray-700/50">
+         <i class="fa-solid fa-file-circle-xmark text-sm"></i> Link Coming Soon
+       </button>`;
+
+  const lectureBtnHtml = lectureLink
+    ? `<a href="${lectureLink}" target="_blank" rel="noopener noreferrer" class="w-full py-3 px-4 rounded-xl text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500 hover:text-white text-center transition flex items-center justify-center gap-2">
+         <i class="fa-brands fa-youtube text-sm"></i> Watch Video Lecture
+       </a>`
+    : `<a href="https://t.me/ICSEMasterClass10" target="_blank" rel="noopener noreferrer" class="w-full py-3 px-4 rounded-xl text-xs font-bold bg-sky-500/20 text-sky-400 border border-sky-500/30 hover:bg-sky-500 hover:text-white text-center transition flex items-center justify-center gap-2">
+         <i class="fa-brands fa-telegram text-sm"></i> Open in Telegram
+       </a>`;
 
   if (container) {
     container.innerHTML = `
       <div class="space-y-4">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-brand-500/10 text-brand-400 border border-brand-500/20">
-          <i class="fa-solid fa-folder-open"></i> ${item["Subject"] || 'General'}
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-brand-500/10 text-brand-400 border border-brand-500/20 max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
+          <i class="fa-solid fa-folder-open shrink-0"></i> 
+          <span class="truncate">${item["Subject"] || 'General'}</span>
         </div>
 
         <h2 class="text-xl sm:text-2xl font-black text-white leading-tight">
@@ -257,16 +276,14 @@ function openMaterialModalByIndex(index) {
 
         <div class="p-4 rounded-xl bg-gray-950/60 border border-gray-800 text-xs text-gray-300 space-y-2">
           <p><strong class="text-brand-400">Category:</strong> ${item["Category"] || 'N/A'}</p>
-          <p><strong class="text-brand-400">Chapters / Scope:</strong> ${item["Chapters / Scope Covered"] || 'N/A'}</p>
+          <p><strong class="text-brand-400">Publisher / Company:</strong> ${item["Publisher/Company"] || 'N/A'}</p>
+          <p><strong class="text-brand-400">Scope:</strong> ${item["Scope"] || 'N/A'}</p>
+          <p><strong class="text-brand-400">Format:</strong> ${item["Format"] || 'PDF'}</p>
         </div>
 
         <div class="pt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <a href="${driveLink}" target="_blank" class="w-full py-3 px-4 rounded-xl text-xs font-bold bg-brand-500 text-black hover:bg-brand-400 text-center transition flex items-center justify-center gap-2">
-            <i class="fa-solid fa-file-pdf text-sm"></i> Direct View / Download
-          </a>
-          <a href="${telegramLink}" target="_blank" class="w-full py-3 px-4 rounded-xl text-xs font-bold bg-sky-500/20 text-sky-400 border border-sky-500/30 hover:bg-sky-500 hover:text-white text-center transition flex items-center justify-center gap-2">
-            <i class="fa-brands fa-telegram text-sm"></i> Open in Telegram
-          </a>
+          ${driveBtnHtml}
+          ${lectureBtnHtml}
         </div>
       </div>
     `;
