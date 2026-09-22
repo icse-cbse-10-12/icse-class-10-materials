@@ -65,7 +65,6 @@ async function fetchSheetData() {
     allResources = parseCSV(csvText);
     if (statusMsg) statusMsg.classList.add("hidden");
 
-    // Handle direct hash deep linking on load (e.g. site.com/#subject-Physics)
     if (window.location.hash.startsWith("#subject-")) {
       const subName = decodeURIComponent(window.location.hash.replace("#subject-", ""));
       openSubjectSubPage(subName);
@@ -83,7 +82,7 @@ async function fetchSheetData() {
   }
 }
 
-// 3. Robust CSV Parser for Quoted Text & Internal Commas
+// 3. Robust CSV Parser
 function parseCSV(text) {
   const lines = text.split('\n').filter(line => line.trim() !== '');
   if (lines.length < 2) return [];
@@ -149,15 +148,17 @@ function closeSubjectSubPage() {
   history.pushState("", document.title, window.location.pathname + window.location.search);
 }
 
-// 5. Category Filtering & Search (Case-Insensitive)
-function setCategoryFilter(cat) {
+// 5. Category Filtering & Search
+function setCategoryFilter(cat, evt) {
   currentCategory = cat;
   document.querySelectorAll('.cat-btn').forEach(btn => {
     btn.classList.remove('active-tab');
     btn.classList.add('bg-gray-900', 'text-gray-300', 'border-gray-800');
   });
-  if (window.event && window.event.target) {
-    window.event.target.classList.add('active-tab');
+
+  const target = evt ? evt.target : (window.event ? window.event.target : null);
+  if (target) {
+    target.classList.add('active-tab');
   }
   filterResources();
 }
@@ -173,13 +174,8 @@ function filterResources() {
     const sheetBookNameLower = (item["Book Name"] || "").toLowerCase().trim();
     const sheetScopeLower = (item["Chapters / Scope Covered"] || "").toLowerCase().trim();
 
-    // Flexible Case-Insensitive Subject Match
     const matchSubject = !currentSubject || sheetSubjectLower.includes(selectedSubjectLower) || selectedSubjectLower.includes(sheetSubjectLower);
-    
-    // Flexible Case-Insensitive Category Match
     const matchCategory = selectedCategoryLower === 'all' || sheetCategoryLower.includes(selectedCategoryLower);
-    
-    // Flexible Search Query Match
     const matchSearch = !searchQuery || 
       sheetBookNameLower.includes(searchQuery) || 
       sheetScopeLower.includes(searchQuery) ||
@@ -191,7 +187,7 @@ function filterResources() {
   renderResourceGrid(filtered);
 }
 
-// 6. Render File Resource Cards
+// 6. Render Resource Cards with Index-Based Click Handler
 function renderResourceGrid(items) {
   const grid = document.getElementById("resourceGrid");
   const countEl = document.getElementById("itemCount");
@@ -209,7 +205,10 @@ function renderResourceGrid(items) {
     return;
   }
 
-  grid.innerHTML = items.map((item) => `
+  // Store current filtered items globally so click handlers reference array index safely
+  window.currentFilteredItems = items;
+
+  grid.innerHTML = items.map((item, index) => `
     <div class="glass-card rounded-2xl p-5 border border-gray-800/80 flex flex-col justify-between hover:border-brand-500/40 transition">
       <div>
         <div class="flex items-center justify-between gap-2 mb-3">
@@ -228,7 +227,7 @@ function renderResourceGrid(items) {
         </p>
       </div>
 
-      <button onclick="openMaterialModal('${encodeURIComponent(JSON.stringify(item))}')" 
+      <button onclick="openMaterialModalByIndex(${index})" 
               class="w-full mt-2 py-2 px-3 rounded-xl text-xs font-bold bg-brand-500/10 text-brand-400 border border-brand-500/30 hover:bg-brand-500 hover:text-black transition flex items-center justify-center gap-2">
         <i class="fa-solid fa-book-open"></i> Open Material Page
       </button>
@@ -236,11 +235,12 @@ function renderResourceGrid(items) {
   `).join('');
 }
 
-// 7. Material Detail Modal View
-function openMaterialModal(encodedJson) {
-  const item = JSON.parse(decodeURIComponent(encodedJson));
-  const container = document.getElementById("detailContent");
+// 7. Material Detail Modal View using Index Lookup
+function openMaterialModalByIndex(index) {
+  const item = window.currentFilteredItems[index];
+  if (!item) return;
 
+  const container = document.getElementById("detailContent");
   const driveLink = item["Google Drive Direct View / Download Link"] || "#";
   const telegramLink = item["Telegram Channel Post Link"] || "https://t.me/ICSEMasterClass10";
 
