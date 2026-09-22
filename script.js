@@ -5,6 +5,7 @@ let allResources = [];
 let currentSubject = '';
 let currentCategory = 'All';
 
+// Subject Grid Configuration (Includes Second Languages & Other Subjects)
 const subjectsConfig = [
   { name: "Physics", icon: "fa-atom", color: "from-blue-500/20 to-cyan-500/10" },
   { name: "Chemistry", icon: "fa-flask", color: "from-amber-500/20 to-yellow-500/10" },
@@ -13,7 +14,9 @@ const subjectsConfig = [
   { name: "English", icon: "fa-book", color: "from-rose-500/20 to-pink-500/10" },
   { name: "History & Civics", icon: "fa-landmark", color: "from-orange-500/20 to-amber-500/10" },
   { name: "Geography", icon: "fa-earth-americas", color: "from-teal-500/20 to-cyan-500/10" },
-  { name: "Computer Applications", icon: "fa-code", color: "from-blue-600/20 to-indigo-600/10" }
+  { name: "Computer Applications", icon: "fa-code", color: "from-blue-600/20 to-indigo-600/10" },
+  { name: "Second Languages", icon: "fa-language", color: "from-fuchsia-500/20 to-pink-500/10" },
+  { name: "Other Subjects", icon: "fa-cubes", color: "from-slate-500/20 to-gray-500/10" }
 ];
 
 // Initialize Page
@@ -132,26 +135,41 @@ function closeSubjectSubPage() {
   history.pushState("", document.title, window.location.pathname + window.location.search);
 }
 
-// 5. Category Filtering & Search
+// 5. Category Filtering & Search (Case-Insensitive)
 function setCategoryFilter(cat) {
   currentCategory = cat;
   document.querySelectorAll('.cat-btn').forEach(btn => {
     btn.classList.remove('active-tab');
     btn.classList.add('bg-gray-900', 'text-gray-300', 'border-gray-800');
   });
-  if (event) event.target.classList.add('active-tab');
+  if (event && event.target) {
+    event.target.classList.add('active-tab');
+  }
   filterResources();
 }
 
 function filterResources() {
   const searchQuery = (document.getElementById("searchInput")?.value || "").toLowerCase().trim();
+  const selectedSubjectLower = currentSubject.toLowerCase().trim();
+  const selectedCategoryLower = currentCategory.toLowerCase().trim();
 
   const filtered = allResources.filter(item => {
-    const matchSubject = !currentSubject || item["Subject"]?.toLowerCase().includes(currentSubject.toLowerCase());
-    const matchCategory = currentCategory === 'All' || item["Category"]?.toLowerCase() === currentCategory.toLowerCase();
+    const sheetSubjectLower = (item["Subject"] || "").toLowerCase().trim();
+    const sheetCategoryLower = (item["Category"] || "").toLowerCase().trim();
+    const sheetBookNameLower = (item["Book Name"] || "").toLowerCase().trim();
+    const sheetScopeLower = (item["Chapters / Scope Covered"] || "").toLowerCase().trim();
+
+    // Flexible Case-Insensitive Subject Match
+    const matchSubject = !currentSubject || sheetSubjectLower.includes(selectedSubjectLower) || selectedSubjectLower.includes(sheetSubjectLower);
+    
+    // Flexible Case-Insensitive Category Match
+    const matchCategory = selectedCategoryLower === 'all' || sheetCategoryLower.includes(selectedCategoryLower);
+    
+    // Flexible Search Query Match
     const matchSearch = !searchQuery || 
-      item["Book Name"]?.toLowerCase().includes(searchQuery) || 
-      item["Chapters / Scope Covered"]?.toLowerCase().includes(searchQuery);
+      sheetBookNameLower.includes(searchQuery) || 
+      sheetScopeLower.includes(searchQuery) ||
+      sheetSubjectLower.includes(searchQuery);
 
     return matchSubject && matchCategory && matchSearch;
   });
@@ -175,7 +193,7 @@ function renderResourceGrid(items) {
     return;
   }
 
-  grid.innerHTML = items.map((item, idx) => `
+  grid.innerHTML = items.map((item) => `
     <div class="glass-card rounded-2xl p-5 border border-gray-800/80 flex flex-col justify-between hover:border-brand-500/40 transition">
       <div>
         <div class="flex items-center justify-between gap-2 mb-3">
