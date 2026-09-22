@@ -5,18 +5,24 @@ let allResources = [];
 let currentSubject = '';
 let currentCategory = 'All';
 
-// Subject Grid Configuration (10 Subjects)
+// Subject Grid Configuration
 const subjectsConfig = [
+  { name: "English Paper 1", icon: "fa-pen-nib", color: "from-rose-500/20 to-pink-500/10" },
+  { name: "English Paper 2", icon: "fa-book-open", color: "from-pink-500/20 to-rose-500/10" },
+  { name: "Mathematics", icon: "fa-calculator", color: "from-purple-500/20 to-indigo-500/10" },
   { name: "Physics", icon: "fa-atom", color: "from-blue-500/20 to-cyan-500/10" },
   { name: "Chemistry", icon: "fa-flask", color: "from-amber-500/20 to-yellow-500/10" },
   { name: "Biology", icon: "fa-dna", color: "from-green-500/20 to-emerald-500/10" },
-  { name: "Mathematics", icon: "fa-calculator", color: "from-purple-500/20 to-indigo-500/10" },
-  { name: "English", icon: "fa-book", color: "from-rose-500/20 to-pink-500/10" },
   { name: "History & Civics", icon: "fa-landmark", color: "from-orange-500/20 to-amber-500/10" },
   { name: "Geography", icon: "fa-earth-americas", color: "from-teal-500/20 to-cyan-500/10" },
+  { name: "Commercial Studies", icon: "fa-briefcase", color: "from-slate-500/20 to-gray-500/10" },
+  { name: "Commercial Applications", icon: "fa-chart-line", color: "from-emerald-500/20 to-teal-500/10" },
+  { name: "Economic Applications", icon: "fa-coins", color: "from-yellow-500/20 to-amber-500/10" },
   { name: "Computer Applications", icon: "fa-code", color: "from-blue-600/20 to-indigo-600/10" },
-  { name: "Second Languages", icon: "fa-language", color: "from-fuchsia-500/20 to-pink-500/10" },
-  { name: "Other Subjects", icon: "fa-cubes", color: "from-slate-500/20 to-gray-500/10" }
+  { name: "Second Language (Hindi)", icon: "fa-language", color: "from-fuchsia-500/20 to-pink-500/10" },
+  { name: "Second Language (Tamil)", icon: "fa-language", color: "from-fuchsia-500/20 to-purple-500/10" },
+  { name: "Second Language (Kannada)", icon: "fa-language", color: "from-violet-500/20 to-fuchsia-500/10" },
+  { name: "Second Language (Malayalam)", icon: "fa-language", color: "from-purple-500/20 to-pink-500/10" }
 ];
 
 // Initialize Page
