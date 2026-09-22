@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ICSE Class 10 Material Hub | ICSE MasterClass</title>
+  
+  <!-- Hidden SEO & GEO Metadata -->
+  <meta name="keywords" content="ICSE Class 10 Notes, ICSE Question Bank PDF, ICSE 2026-27 Board Exam, ICSE PYQ Solved, ICSE MasterClass">
+  <meta name="description" content="Free open-access educational resource directory for ICSE Class 10 students. Powered by ICSE MasterClass.">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            brand: {
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+              900: '#0b192c',
+              950: '#030712'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body { background-color: #030712; color: #f3f4f6; }
+    .glass-panel {
+      background: rgba(17, 24, 39, 0.8);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-card {
+      background: rgba(30, 41, 59, 0.5);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.2s ease-in-out;
+    }
+    .glass-card:hover {
+      border-color: rgba(245, 158, 11, 0.4);
+      transform: translateY(-2px);
+    }
+    .active-tab {
+      background: #f59e0b !important;
+      color: #030712 !important;
+      font-weight: 700 !important;
+    }
+    .scrollbar-none::-webkit-scrollbar { display: none; }
+    .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans">
+
+  <!-- Top Announcement Bar -->
+  <div class="bg-gradient-to-r from-brand-600 via-amber-500 to-brand-600 text-black text-xs font-bold py-1.5 px-4 text-center tracking-wide">
+    🚀 ICSE Class 10 Resources Updated Live! 
+    <a href="https://t.me/ICSEMasterClass10" target="_blank" class="underline ml-2">Join Telegram Hub →</a>
+  </div>
+
+  <!-- Navbar -->
+  <header class="sticky top-0 z-40 glass-panel border-b border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <img src="icseYtLogo.png" alt="Logo" class="w-10 h-10 rounded-full border border-brand-500/50 object-cover">
+        <div>
+          <span class="font-extrabold text-lg text-white tracking-tight">ICSE <span class="text-brand-500">MasterClass</span></span>
+          <p class="text-[10px] text-gray-400 font-medium uppercase">Class 10 Portal</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="https://t.me/ICSEMasterClass10" target="_blank" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-sky-500/10 text-sky-400 border border-sky-500/20 hover:bg-sky-500 hover:text-white transition">
+          <i class="fa-brands fa-telegram"></i> Telegram
+        </a>
+        <a href="https://www.youtube.com/@ICSEMasterClass10" target="_blank" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500 hover:text-white transition">
+          <i class="fa-brands fa-youtube"></i> YouTube
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Catalog View -->
+  <div id="mainView" class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
+    
+    <!-- Hero -->
+    <div class="text-center max-w-2xl mx-auto mb-8">
+      <h1 class="text-3xl sm:text-4xl font-black text-white mb-2">ICSE Class 10 <span class="text-brand-500">Study Vault</span></h1>
+      <p class="text-gray-400 text-sm">Select any resource to view detailed notes, video solutions, and download links.</p>
+    </div>
+
+    <!-- Search Input -->
+    <div class="max-w-xl mx-auto relative mb-8">
+      <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-gray-500 text-sm"></i>
+      <input type="text" id="searchInput" oninput="filterResources()" placeholder="Search subject, book name, or chapter..." 
+             class="w-full bg-gray-900 text-gray-100 border border-gray-800 rounded-2xl py-3 pl-11 pr-4 text-sm focus:outline-none focus:border-brand-500 transition">
+    </div>
+
+    <!-- Subject Tabs -->
+    <div id="subjectTabs" class="flex overflow-x-auto gap-2 pb-4 scrollbar-none mb-6"></div>
+
+    <!-- Category Filters & Count -->
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-6 pb-4 border-b border-gray-800">
+      <div id="categoryFilters" class="flex flex-wrap gap-2">
+        <button onclick="setCategoryFilter('All')" class="cat-btn active-tab px-4 py-1 rounded-xl text-xs font-semibold bg-gray-800 text-gray-300">All Types</button>
+        <button onclick="setCategoryFilter('Notes')" class="cat-btn px-4 py-1 rounded-xl text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800">Notes</button>
+        <button onclick="setCategoryFilter('Question Bank')" class="cat-btn px-4 py-1 rounded-xl text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800">Question Banks</button>
+        <button onclick="setCategoryFilter('Sample Paper')" class="cat-btn px-4 py-1 rounded-xl text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800">Sample Papers</button>
+      </div>
+      <div id="itemCount" class="text-xs font-mono text-gray-400">Loading...</div>
+    </div>
+
+    <!-- Resource Grid -->
+    <div id="resourceGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+    <div id="statusMessage" class="text-center py-16 text-gray-400">Loading resources...</div>
+  </div>
+
+  <!-- Dynamic Resource Detail Sub-Page View (Modal Overlay) -->
+  <div id="detailView" class="fixed inset-0 z-50 bg-gray-950/95 backdrop-blur-md hidden overflow-y-auto p-4 sm:p-6">
+    <div class="max-w-4xl mx-auto my-8 bg-gray-900 border border-gray-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative">
+      
+      <!-- Back Button -->
+      <button onclick="closeSubPage()" class="mb-6 inline-flex items-center gap-2 text-xs font-bold text-gray-400 hover:text-white bg-gray-800 px-3.5 py-2 rounded-xl transition">
+        <i class="fa-solid fa-arrow-left"></i> Back to Catalog
+      </button>
+
+      <!-- Sub-Page Content Container -->
+      <div id="detailContent"></div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="glass-panel border-t border-gray-800 py-6 text-gray-400 text-xs text-center">
+    <p>© 2026 ICSE MasterClass | Independent Student Portal</p>
+  </footer>
+
+  <!-- Logic -->
+  <script>
+    const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQLGKfaC9WUePvCArs7YAxYP9tmoPYkCdfJviR2pdOnlSZ6gVLEqgtAEga4XLQpubVTfEsHo2eWBWx7/pub?output=csv";
+
+    let allResources = [];
+    let currentSubject = "All";
+    let currentCategory = "All";
+
+    const subjectsList = [
+      "All", "Physics", "Chemistry", "Biology", "Mathematics", 
+      "English", "History & Civics", "Geography", "Computer Applications", 
+      "Second Languages", "Other Subjects"
+    ];
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderSubjectTabs();
+      fetchSheetData();
+    });
+
+    async function fetchSheetData() {
+      try {
+        const response = await fetch(SHEET_CSV_URL);
+        const csvText = await response.text();
+        allResources = parseCSV(csvText);
+        document.getElementById("statusMessage").classList.add("hidden");
+        filterResources();
+
+        // Check if direct deep link hash exists
+        if(window.location.hash.startsWith("#resource-")) {
+          const index = parseInt(window.location.hash.replace("#resource-", ""));
+          if(allResources[index]) openSubPage(index);
+        }
+      } catch (error) {
+        document.getElementById("statusMessage").innerText = "Failed to load database.";
+      }
+    }
+
+    function parseCSV(text) {
+      const lines = text.split('\n');
+      if (lines.length < 2) return [];
+      const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+      const data = [];
+      for (let i = 1; i < lines.length; i++) {
+        if (!lines[i].trim()) continue;
+        const row = lines[i].match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || lines[i].split(',');
+        const cleanedRow = row.map(cell => cell.trim().replace(/^"|"$/g, ''));
+        let item = {};
+        headers.forEach((header, index) => { item[header] = cleanedRow[index] || ""; });
+        if (item["Book Name"] || item["Subject"]) data.push(item);
+      }
+      return data;
+    }
+
+    function renderSubjectTabs() {
+      const container = document.getElementById("subjectTabs");
+      container.innerHTML = subjectsList.map(sub => `
+        <button onclick="setSubjectFilter('${sub}')" class="sub-tab px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap border border-gray-800 ${sub === 'All' ? 'active-tab' : 'bg-gray-900 text-gray-300'}">
+          ${sub}
+        </button>
+      `).join('');
+    }
+
+    function setSubjectFilter(subject) {
+      currentSubject = subject;
+      document.querySelectorAll(".sub-tab").forEach(tab => {
+        tab.className = tab.innerText.trim() === subject 
+          ? "sub-tab active-tab px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap border border-brand-500"
+          : "sub-tab bg-gray-900 text-gray-300 px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap border border-gray-800";
+      });
+      filterResources();
+    }
+
+    function setCategoryFilter(category) {
+      currentCategory = category;
+      document.querySelectorAll(".cat-btn").forEach(btn => {
+        btn.className = btn.innerText.includes(category) || (category === 'All' && btn.innerText.includes('All'))
+          ? "cat-btn active-tab px-4 py-1 rounded-xl text-xs font-semibold"
+          : "cat-btn px-4 py-1 rounded-xl text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800";
+      });
+      filterResources();
+    }
+
+    function filterResources() {
+      const searchVal = document.getElementById("searchInput").value.toLowerCase();
+      const filtered = allResources.filter((item) => {
+        const itemSubject = (item["Subject"] || "").toLowerCase();
+        const itemCategory = (item["Category"] || "").toLowerCase();
+        const bookName = (item["Book Name"] || "").toLowerCase();
+        
+        let subMatch = currentSubject === "All" || itemSubject.includes(currentSubject.toLowerCase());
+        let catMatch = currentCategory === "All" || itemCategory.includes(currentCategory.toLowerCase());
+        let srchMatch = !searchVal || bookName.includes(searchVal) || itemSubject.includes(searchVal);
+        return subMatch && catMatch && srchMatch;
+      });
+      renderGrid(filtered);
+    }
+
+    function renderGrid(resources) {
+      const grid = document.getElementById("resourceGrid");
+      document.getElementById("itemCount").innerText = `${resources.length} Items`;
+      if (!resources.length) {
+        grid.innerHTML = "";
+        document.getElementById("statusMessage").classList.remove("hidden");
+        document.getElementById("statusMessage").innerText = "No resources found.";
+        return;
+      }
+      document.getElementById("statusMessage").classList.add("hidden");
+
+      grid.innerHTML = resources.map((item) => {
+        const originalIndex = allResources.indexOf(item);
+        return `
+          <div onclick="openSubPage(${originalIndex})" class="glass-card rounded-2xl p-5 cursor-pointer flex flex-col justify-between hover:border-brand-500/50">
+            <div>
+              <div class="flex justify-between items-center gap-2 mb-3">
+                <span class="text-[10px] font-bold uppercase tracking-wider bg-brand-500/10 text-brand-400 border border-brand-500/20 px-2.5 py-0.5 rounded-md">
+                  ${item["Subject"] || "General"}
+                </span>
+                <span class="text-[10px] text-gray-400 bg-gray-800 px-2 py-0.5 rounded">${item["Format"] || "PDF"}</span>
+              </div>
+              <h3 class="font-bold text-base text-white mb-1.5 line-clamp-2">${item["Book Name"]}</h3>
+              <p class="text-xs text-gray-400 line-clamp-2 mb-4">${item["Scope"] || 'Click to view full notes and download details.'}</p>
+            </div>
+            <div class="pt-3 border-t border-gray-800 flex justify-between items-center text-xs text-brand-400 font-semibold">
+              <span>View Resource Page</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Opens Dedicated Sub-Page View
+    function openSubPage(index) {
+      const item = allResources[index];
+      if (!item) return;
+
+      window.location.hash = `resource-${index}`;
+      const driveLink = item["Google Drive Link"] || item["Primary Link"] || "#";
+      const lectureLink = item["Lecture Link"] || "#";
+
+      document.getElementById("detailContent").innerHTML = `
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+          <span class="text-xs font-bold uppercase bg-brand-500/10 text-brand-400 border border-brand-500/20 px-3 py-1 rounded-lg">
+            ${item["Subject"] || "General"}
+          </span>
+          <span class="text-xs text-gray-400 font-mono">Format: ${item["Format"] || "PDF"}</span>
+        </div>
+
+        <h1 class="text-2xl sm:text-3xl font-black text-white mb-4 leading-tight">${item["Book Name"]}</h1>
+        
+        <div class="bg-gray-800/50 border border-gray-700/50 rounded-2xl p-4 mb-6">
+          <h4 class="text-xs font-bold text-gray-300 uppercase tracking-wider mb-1">Description & Scope</h4>
+          <p class="text-sm text-gray-300 leading-relaxed">${item["Scope"] || "Full chapter-wise coverage prepared for ICSE Class 10 board examinations."}</p>
+        </div>
+
+        <!-- Download & Video Action Buttons -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+          ${driveLink !== "#" ? `
+            <a href="${driveLink}" target="_blank" class="bg-brand-500 hover:bg-brand-400 text-black font-bold py-3 px-4 rounded-xl text-center text-sm flex items-center justify-center gap-2 transition">
+              <i class="fa-solid fa-file-arrow-down text-base"></i> Open / Download PDF
+            </a>
+          ` : ''}
+          ${lectureLink && lectureLink !== "#" ? `
+            <a href="${lectureLink}" target="_blank" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-xl text-center text-sm flex items-center justify-center gap-2 transition">
+              <i class="fa-brands fa-youtube text-base"></i> Watch Video Lecture
+            </a>
+          ` : ''}
+        </div>
+
+        <!-- Legal Disclaimer Note -->
+        <div class="text-[11px] text-gray-500 border-t border-gray-800 pt-4">
+          <p><strong>Notice:</strong> This material is indexed strictly for educational fair use by ICSE MasterClass. Copyrights remain with respective authors/publishers.</p>
+        </div>
+      `;
+
+      document.getElementById("detailView").classList.remove("hidden");
+      document.body.style.overflow = "hidden"; // Disable background scrolling
+    }
+
+    function closeSubPage() {
+      document.getElementById("detailView").classList.add("hidden");
+      document.body.style.overflow = "auto";
+      history.pushState("", document.title, window.location.pathname + window.location.search);
+    }
+  </script>
+</body>
+</html>
