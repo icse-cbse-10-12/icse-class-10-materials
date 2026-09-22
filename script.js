@@ -189,6 +189,17 @@ function filterResources() {
   renderResourceGrid(filtered);
 }
 
+// Helper to format absolute URLs safely
+function sanitizeUrl(rawUrl) {
+  if (!rawUrl) return '';
+  let url = rawUrl.trim();
+  if (!url || url === '#') return '';
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    url = 'https://' + url;
+  }
+  return url;
+}
+
 // 6. Render Resource Grid
 function renderResourceGrid(items) {
   const grid = document.getElementById("resourceGrid");
@@ -243,10 +254,13 @@ function openMaterialModalByIndex(index) {
 
   const container = document.getElementById("detailContent");
   
-  const driveLink = (item["Google Drive Link"] || item["Google Drive Direct View / Download Link"] || "").trim();
-  const lectureLink = (item["Lecture Link"] || item["Telegram Channel Post Link"] || "").trim();
+  const rawDrive = item["Google Drive Link"] || item["Google Drive Direct View / Download Link"] || "";
+  const rawLecture = item["Lecture Link"] || item["Telegram Channel Post Link"] || "";
 
-  const driveBtnHtml = driveLink && driveLink !== "#"
+  const driveLink = sanitizeUrl(rawDrive);
+  const lectureLink = sanitizeUrl(rawLecture);
+
+  const driveBtnHtml = driveLink
     ? `<a href="${driveLink}" target="_blank" rel="noopener noreferrer" class="w-full py-3 px-4 rounded-xl text-xs font-bold bg-brand-500 text-black hover:bg-brand-400 text-center transition flex items-center justify-center gap-2">
          <i class="fa-solid fa-file-pdf text-sm"></i> Direct View / Download
        </a>`
