@@ -5,7 +5,7 @@ let allResources = [];
 let currentSubject = '';
 let currentCategory = 'All';
 
-// Subject Grid Configuration (Includes Second Languages & Other Subjects)
+// Subject Grid Configuration (10 Subjects)
 const subjectsConfig = [
   { name: "Physics", icon: "fa-atom", color: "from-blue-500/20 to-cyan-500/10" },
   { name: "Chemistry", icon: "fa-flask", color: "from-amber-500/20 to-yellow-500/10" },
@@ -28,15 +28,19 @@ document.addEventListener('DOMContentLoaded', () => {
 // 1. Render Main Landing Subject Cards
 function renderMainSubjectGrid() {
   const container = document.getElementById("mainSubjectGrid");
+  if (!container) return;
+
   container.innerHTML = subjectsConfig.map(sub => `
     <div onclick="openSubjectSubPage('${sub.name}')" 
-         class="glass-card rounded-2xl p-5 cursor-pointer border border-gray-800/80 hover:border-brand-500/50 transition bg-gradient-to-br ${sub.color} group">
-      <div class="w-11 h-11 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400 text-xl mb-4 group-hover:scale-110 transition-transform">
-        <i class="fa-solid ${sub.icon}"></i>
+         class="glass-card rounded-2xl p-5 cursor-pointer border border-gray-800/80 hover:border-brand-500/50 transition bg-gradient-to-br ${sub.color} group flex flex-col justify-between">
+      <div>
+        <div class="w-11 h-11 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400 text-xl mb-4 group-hover:scale-110 transition-transform">
+          <i class="fa-solid ${sub.icon}"></i>
+        </div>
+        <h3 class="text-base font-bold text-white mb-1 tracking-tight">${sub.name}</h3>
+        <p class="text-xs text-gray-400 mb-4">Notes, question banks & solved papers</p>
       </div>
-      <h3 class="text-base font-bold text-white mb-1 tracking-tight">${sub.name}</h3>
-      <p class="text-xs text-gray-400 mb-4">Notes, question banks & solved papers</p>
-      <div class="text-xs font-bold text-brand-400 flex items-center justify-between pt-2 border-t border-gray-800/50">
+      <div class="text-xs font-bold text-brand-400 flex items-center justify-between pt-2 border-t border-gray-800/50 mt-auto">
         <span>Open Vault</span>
         <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1"></i>
       </div>
@@ -53,7 +57,7 @@ async function fetchSheetData() {
     const csvText = await response.text();
     
     allResources = parseCSV(csvText);
-    statusMsg.classList.add("hidden");
+    if (statusMsg) statusMsg.classList.add("hidden");
 
     // Handle direct hash deep linking on load (e.g. site.com/#subject-Physics)
     if (window.location.hash.startsWith("#subject-")) {
@@ -62,12 +66,14 @@ async function fetchSheetData() {
     }
   } catch (error) {
     console.error("Fetch error:", error);
-    statusMsg.innerHTML = `
-      <div class="text-red-400 text-xs font-semibold">
-        <i class="fa-solid fa-triangle-exclamation mb-1 text-base"></i><br>
-        Failed to load database. Please refresh or try again later.
-      </div>
-    `;
+    if (statusMsg) {
+      statusMsg.innerHTML = `
+        <div class="text-red-400 text-xs font-semibold">
+          <i class="fa-solid fa-triangle-exclamation mb-1 text-base"></i><br>
+          Failed to load database. Please refresh or try again later.
+        </div>
+      `;
+    }
   }
 }
 
@@ -121,17 +127,19 @@ function openSubjectSubPage(subjectName) {
   currentSubject = subjectName;
   window.location.hash = `subject-${encodeURIComponent(subjectName)}`;
 
-  document.getElementById("mainLandingView").classList.add("hidden");
-  document.getElementById("subjectDetailView").classList.remove("hidden");
-  document.getElementById("selectedSubjectTitle").innerText = `${subjectName} Vault`;
+  document.getElementById("mainLandingView")?.classList.add("hidden");
+  document.getElementById("subjectDetailView")?.classList.remove("hidden");
+  
+  const titleEl = document.getElementById("selectedSubjectTitle");
+  if (titleEl) titleEl.innerText = `${subjectName} Vault`;
 
   filterResources();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function closeSubjectSubPage() {
-  document.getElementById("subjectDetailView").classList.add("hidden");
-  document.getElementById("mainLandingView").classList.remove("hidden");
+  document.getElementById("subjectDetailView")?.classList.add("hidden");
+  document.getElementById("mainLandingView")?.classList.remove("hidden");
   history.pushState("", document.title, window.location.pathname + window.location.search);
 }
 
@@ -142,8 +150,8 @@ function setCategoryFilter(cat) {
     btn.classList.remove('active-tab');
     btn.classList.add('bg-gray-900', 'text-gray-300', 'border-gray-800');
   });
-  if (event && event.target) {
-    event.target.classList.add('active-tab');
+  if (window.event && window.event.target) {
+    window.event.target.classList.add('active-tab');
   }
   filterResources();
 }
@@ -182,7 +190,9 @@ function renderResourceGrid(items) {
   const grid = document.getElementById("resourceGrid");
   const countEl = document.getElementById("itemCount");
   
-  countEl.innerText = `${items.length} Material${items.length === 1 ? '' : 's'} Found`;
+  if (countEl) countEl.innerText = `${items.length} Material${items.length === 1 ? '' : 's'} Found`;
+
+  if (!grid) return;
 
   if (items.length === 0) {
     grid.innerHTML = `
@@ -228,35 +238,37 @@ function openMaterialModal(encodedJson) {
   const driveLink = item["Google Drive Direct View / Download Link"] || "#";
   const telegramLink = item["Telegram Channel Post Link"] || "https://t.me/ICSEMasterClass10";
 
-  container.innerHTML = `
-    <div class="space-y-4">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-brand-500/10 text-brand-400 border border-brand-500/20">
-        <i class="fa-solid fa-folder-open"></i> ${item["Subject"] || 'General'}
+  if (container) {
+    container.innerHTML = `
+      <div class="space-y-4">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-brand-500/10 text-brand-400 border border-brand-500/20">
+          <i class="fa-solid fa-folder-open"></i> ${item["Subject"] || 'General'}
+        </div>
+
+        <h2 class="text-xl sm:text-2xl font-black text-white leading-tight">
+          ${item["Book Name"] || 'Material File'}
+        </h2>
+
+        <div class="p-4 rounded-xl bg-gray-950/60 border border-gray-800 text-xs text-gray-300 space-y-2">
+          <p><strong class="text-brand-400">Category:</strong> ${item["Category"] || 'N/A'}</p>
+          <p><strong class="text-brand-400">Chapters / Scope:</strong> ${item["Chapters / Scope Covered"] || 'N/A'}</p>
+        </div>
+
+        <div class="pt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <a href="${driveLink}" target="_blank" class="w-full py-3 px-4 rounded-xl text-xs font-bold bg-brand-500 text-black hover:bg-brand-400 text-center transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-file-pdf text-sm"></i> Direct View / Download
+          </a>
+          <a href="${telegramLink}" target="_blank" class="w-full py-3 px-4 rounded-xl text-xs font-bold bg-sky-500/20 text-sky-400 border border-sky-500/30 hover:bg-sky-500 hover:text-white text-center transition flex items-center justify-center gap-2">
+            <i class="fa-brands fa-telegram text-sm"></i> Open in Telegram
+          </a>
+        </div>
       </div>
+    `;
+  }
 
-      <h2 class="text-xl sm:text-2xl font-black text-white leading-tight">
-        ${item["Book Name"] || 'Material File'}
-      </h2>
-
-      <div class="p-4 rounded-xl bg-gray-950/60 border border-gray-800 text-xs text-gray-300 space-y-2">
-        <p><strong class="text-brand-400">Category:</strong> ${item["Category"] || 'N/A'}</p>
-        <p><strong class="text-brand-400">Chapters / Scope:</strong> ${item["Chapters / Scope Covered"] || 'N/A'}</p>
-      </div>
-
-      <div class="pt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <a href="${driveLink}" target="_blank" class="w-full py-3 px-4 rounded-xl text-xs font-bold bg-brand-500 text-black hover:bg-brand-400 text-center transition flex items-center justify-center gap-2">
-          <i class="fa-solid fa-file-pdf text-sm"></i> Direct View / Download
-        </a>
-        <a href="${telegramLink}" target="_blank" class="w-full py-3 px-4 rounded-xl text-xs font-bold bg-sky-500/20 text-sky-400 border border-sky-500/30 hover:bg-sky-500 hover:text-white text-center transition flex items-center justify-center gap-2">
-          <i class="fa-brands fa-telegram text-sm"></i> Open in Telegram
-        </a>
-      </div>
-    </div>
-  `;
-
-  document.getElementById("detailView").classList.remove("hidden");
+  document.getElementById("detailView")?.classList.remove("hidden");
 }
 
 function closeMaterialModal() {
-  document.getElementById("detailView").classList.add("hidden");
+  document.getElementById("detailView")?.classList.add("hidden");
 }
