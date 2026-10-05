@@ -19,6 +19,7 @@ const subjectsConfig = [
   { name: "Commercial Applications", icon: "fa-chart-line", color: "from-emerald-500/20 to-teal-500/10" },
   { name: "Economic Applications", icon: "fa-coins", color: "from-yellow-500/20 to-amber-500/10" },
   { name: "Computer Applications", icon: "fa-code", color: "from-blue-600/20 to-indigo-600/10" },
+  { name: "Physical Education", icon: "fa-running", color: "from-red-500/20 to-orange-500/10" },
   { name: "Second Language (Hindi)", icon: "fa-language", color: "from-fuchsia-500/20 to-pink-500/10" },
   { name: "Second Language (Tamil)", icon: "fa-language", color: "from-fuchsia-500/20 to-purple-500/10" },
   { name: "Second Language (Kannada)", icon: "fa-language", color: "from-violet-500/20 to-fuchsia-500/10" },
@@ -175,7 +176,15 @@ function filterResources() {
     const sheetScopeLower = (item["Scope"] || "").toLowerCase().trim();
     const sheetPublisherLower = (item["Publisher/Company"] || "").toLowerCase().trim();
 
-    const matchSubject = !currentSubject || sheetSubjectLower.includes(selectedSubjectLower) || selectedSubjectLower.includes(sheetSubjectLower);
+    // Check match for subject including PE/Phys Ed variations
+    let matchSubject = !currentSubject || 
+                       sheetSubjectLower.includes(selectedSubjectLower) || 
+                       selectedSubjectLower.includes(sheetSubjectLower);
+
+    if (selectedSubjectLower === "physical education") {
+      matchSubject = matchSubject || sheetSubjectLower.includes("pe") || sheetSubjectLower.includes("phys ed");
+    }
+
     const matchCategory = selectedCategoryLower === 'all' || sheetCategoryLower.includes(selectedCategoryLower);
     const matchSearch = !searchQuery || 
       sheetBookNameLower.includes(searchQuery) || 
