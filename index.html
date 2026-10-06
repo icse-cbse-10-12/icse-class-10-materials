@@ -1,19 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
-
-
-
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-216MG1R5R4"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-216MG1R5R4');
-</script>
-  
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
@@ -87,11 +74,6 @@
 
 <body class="bg-gray-950 text-gray-100 font-sans min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black">
 
-  <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TCTSR7JS"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-  
   <!-- Header / Navbar -->
   <header class="sticky top-0 z-40 bg-gray-950/90 backdrop-blur-md border-b border-gray-800/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
@@ -211,15 +193,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
       </div>
 
-     <!-- Category Filter Tabs -->
-<div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
-  <button onclick="setCategoryFilter('All', event)" class="cat-btn active-tab px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition">All Materials</button>
-  <button onclick="setCategoryFilter('Question Banks', event)" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition">Question Banks</button>
-  <button onclick="setCategoryFilter('Notes', event)" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition">Notes</button>
-  <button onclick="setCategoryFilter('Textbooks / Reference Books', event)" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition">Textbooks / Reference Books</button>
-  <button onclick="setCategoryFilter('Sample Papers', event)" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition">Sample Papers</button>
-  <button onclick="setCategoryFilter('PYQ', event)" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition">PYQs</button>
-</div>
+      <!-- Category Filter Tabs -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+        <button onclick="setCategoryFilter('All', event)" class="cat-btn active-tab px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition">All Materials</button>
+        <button onclick="setCategoryFilter('Question Banks', event)" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition">Question Banks</button>
+        <button onclick="setCategoryFilter('Notes', event)" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition">Notes</button>
+        <button onclick="setCategoryFilter('Textbooks / Reference Books', event)" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition">Textbooks / Reference Books</button>
+        <button onclick="setCategoryFilter('Sample Papers', event)" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition">Sample Papers</button>
+        <button onclick="setCategoryFilter('PYQ', event)" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition">PYQs</button>
+      </div>
 
       <!-- Resource Cards Grid -->
       <div id="resourceGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -232,7 +214,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- MATERIAL DETAIL MODAL VIEW -->
   <div id="detailView" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-gray-900 border border-gray-800 rounded-2xl max-w-3xl w-full p-6 relative space-y-4 shadow-2xl">
-      <button onclick="closeMaterialModal()" class="absolute top-4 right-4 w-8 h-8 rounded-lg bg-gray-800 text-gray-400 hover:text-white flex items-center justify-center transition">
+      <button onclick="closeMaterialModal()" class="absolute top-4 right-4 w-8 h-8 rounded-lg bg-gray-800 text-gray-400 hover:text-white flex items-center justify-center transition z-10">
         <i class="fa-solid fa-xmark"></i>
       </button>
 
