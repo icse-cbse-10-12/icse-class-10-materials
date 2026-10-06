@@ -176,7 +176,7 @@ function filterResources() {
     const sheetScopeLower = (item["Scope"] || "").toLowerCase().trim();
     const sheetPublisherLower = (item["Publisher/Company"] || "").toLowerCase().trim();
 
-    // Check match for subject including PE/Phys Ed variations
+    // Subject Match
     let matchSubject = !currentSubject || 
                        sheetSubjectLower.includes(selectedSubjectLower) || 
                        selectedSubjectLower.includes(sheetSubjectLower);
@@ -185,7 +185,13 @@ function filterResources() {
       matchSubject = matchSubject || sheetSubjectLower.includes("pe") || sheetSubjectLower.includes("phys ed");
     }
 
-    const matchCategory = selectedCategoryLower === 'all' || sheetCategoryLower.includes(selectedCategoryLower);
+    // Category Match (Handles Textbooks / Reference Books)
+    let matchCategory = selectedCategoryLower === 'all' || sheetCategoryLower.includes(selectedCategoryLower);
+    if (selectedCategoryLower.includes('textbook') || selectedCategoryLower.includes('reference')) {
+      matchCategory = sheetCategoryLower.includes('textbook') || sheetCategoryLower.includes('reference') || sheetCategoryLower.includes('book');
+    }
+
+    // Search Match
     const matchSearch = !searchQuery || 
       sheetBookNameLower.includes(searchQuery) || 
       sheetScopeLower.includes(searchQuery) ||
@@ -196,17 +202,6 @@ function filterResources() {
   });
 
   renderResourceGrid(filtered);
-}
-
-// Helper to format absolute URLs safely
-function sanitizeUrl(rawUrl) {
-  if (!rawUrl) return '';
-  let url = rawUrl.trim();
-  if (!url || url === '#') return '';
-  if (!url.startsWith('http://') && !url.startsWith('https://')) {
-    url = 'https://' + url;
-  }
-  return url;
 }
 
 // 6. Render Resource Grid
@@ -229,34 +224,41 @@ function renderResourceGrid(items) {
 
   window.currentFilteredItems = items;
 
-  grid.innerHTML = items.map((item, index) => `
-    <div class="glass-card rounded-2xl p-5 border border-gray-800/80 flex flex-col justify-between hover:border-brand-500/40 transition">
-      <div>
-        <div class="flex items-center justify-between gap-2 mb-3">
-          <span class="px-2.5 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-brand-500/10 text-brand-400 border border-brand-500/20">
-            ${item["Category"] || 'Resource'}
-          </span>
-          <span class="text-[10px] font-mono text-gray-500 uppercase">${item["Format"] || 'PDF'}</span>
+  grid.innerHTML = items.map((item, index) => {
+    const editionText = item["Edition"] && item["Edition"] !== "Not Specified" ? `Edition: ${item["Edition"]}` : '';
+
+    return `
+      <div class="glass-card rounded-2xl p-5 border border-gray-800/80 flex flex-col justify-between hover:border-brand-500/40 transition">
+        <div>
+          <div class="flex items-center justify-between gap-2 mb-3">
+            <span class="px-2.5 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-brand-500/10 text-brand-400 border border-brand-500/20">
+              ${item["Category"] || 'Resource'}
+            </span>
+            <div class="flex items-center gap-1.5">
+              ${editionText ? `<span class="text-[10px] font-mono text-amber-400/80 bg-amber-500/10 border border-amber-500/20 px-1.5 py-0.5 rounded">${editionText}</span>` : ''}
+              <span class="text-[10px] font-mono text-gray-500 uppercase">${item["Format"] || 'PDF'}</span>
+            </div>
+          </div>
+
+          <h3 class="font-bold text-sm text-white mb-2 line-clamp-2 leading-snug">
+            ${item["Book Name"] || 'Untitled Document'}
+          </h3>
+
+          <p class="text-xs text-gray-400 mb-4 line-clamp-2">
+            ${item["Publisher/Company"] ? `<strong class="text-gray-300">${item["Publisher/Company"]}:</strong> ` : ''}${item["Scope"] || 'Full syllabus notes & practice files.'}
+          </p>
         </div>
 
-        <h3 class="font-bold text-sm text-white mb-2 line-clamp-2 leading-snug">
-          ${item["Book Name"] || 'Untitled Document'}
-        </h3>
-
-        <p class="text-xs text-gray-400 mb-4 line-clamp-2">
-          ${item["Publisher/Company"] ? `<strong class="text-gray-300">${item["Publisher/Company"]}:</strong> ` : ''}${item["Scope"] || 'Full syllabus notes & practice files.'}
-        </p>
+        <button onclick="openMaterialModalByIndex(${index})" 
+                class="w-full mt-2 py-2 px-3 rounded-xl text-xs font-bold bg-brand-500/10 text-brand-400 border border-brand-500/30 hover:bg-brand-500 hover:text-black transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-book-open"></i> Open Material Page
+        </button>
       </div>
-
-      <button onclick="openMaterialModalByIndex(${index})" 
-              class="w-full mt-2 py-2 px-3 rounded-xl text-xs font-bold bg-brand-500/10 text-brand-400 border border-brand-500/30 hover:bg-brand-500 hover:text-black transition flex items-center justify-center gap-2">
-        <i class="fa-solid fa-book-open"></i> Open Material Page
-      </button>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
-// 7. Open Detail Modal View with Embedded PDF/Word Viewer
+// 7. Open Detail Modal View
 function openMaterialModalByIndex(index) {
   const item = window.currentFilteredItems[index];
   if (!item) return;
@@ -265,40 +267,14 @@ function openMaterialModalByIndex(index) {
   
   const rawDrive = item["Google Drive Link"] || item["Google Drive Direct View / Download Link"] || "";
   const rawLecture = item["Lecture Link"] || item["Telegram Channel Post Link"] || "";
-  const fileFormat = (item["Format"] || "PDF").toLowerCase().trim();
+  const latestEditionLink = sanitizeUrl(item["Latest Edition Link"] || "");
 
   const driveLink = sanitizeUrl(rawDrive);
   const lectureLink = sanitizeUrl(rawLecture);
 
-  // Generate Embed Viewer URL
-  let embedViewerHtml = "";
-  if (driveLink) {
-    if (driveLink.includes("drive.google.com")) {
-      // Convert Google Drive view link to embed preview link
-      const previewUrl = driveLink.replace(/\/view(\?.*)?$/, '/preview');
-      embedViewerHtml = `
-        <div class="w-full h-80 sm:h-96 rounded-xl overflow-hidden border border-gray-800 bg-gray-950">
-          <iframe src="${previewUrl}" class="w-full h-full border-0" allow="autoplay" loading="lazy"></iframe>
-        </div>`;
-    } else if (fileFormat.includes("doc") || fileFormat.includes("word")) {
-      // Use MS Office Online Viewer for Word documents
-      const msViewerUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(driveLink)}`;
-      embedViewerHtml = `
-        <div class="w-full h-80 sm:h-96 rounded-xl overflow-hidden border border-gray-800 bg-gray-950">
-          <iframe src="${msViewerUrl}" class="w-full h-full border-0" loading="lazy"></iframe>
-        </div>`;
-    } else {
-      // Direct PDF embed fallback
-      embedViewerHtml = `
-        <div class="w-full h-80 sm:h-96 rounded-xl overflow-hidden border border-gray-800 bg-gray-950">
-          <iframe src="${driveLink}" class="w-full h-full border-0" loading="lazy"></iframe>
-        </div>`;
-    }
-  }
-
   const driveBtnHtml = driveLink
     ? `<a href="${driveLink}" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 px-4 rounded-xl text-xs font-bold bg-brand-500 text-black hover:bg-brand-400 text-center transition flex items-center justify-center gap-2">
-         <i class="fa-solid fa-external-link text-sm"></i> Open in New Tab
+         <i class="fa-solid fa-file-pdf text-sm"></i> Direct View / Download
        </a>`
     : `<button disabled class="w-full py-2.5 px-4 rounded-xl text-xs font-bold bg-gray-800 text-gray-500 cursor-not-allowed text-center flex items-center justify-center gap-2 border border-gray-700/50">
          <i class="fa-solid fa-file-circle-xmark text-sm"></i> Link Coming Soon
@@ -312,29 +288,34 @@ function openMaterialModalByIndex(index) {
          <i class="fa-brands fa-telegram text-sm"></i> Open in Telegram
        </a>`;
 
+  // Edition Details Block
+  const editionInfoHtml = `
+    <p><strong class="text-brand-400">Current File Edition:</strong> ${item["Edition"] || 'Not Specified'}</p>
+    ${item["Latest Edition Available?"] ? `<p><strong class="text-brand-400">Latest Edition Available?:</strong> ${item["Latest Edition Available?"]}</p>` : ''}
+    ${latestEditionLink && latestEditionLink !== '#' ? `<p class="pt-1"><a href="${latestEditionLink}" target="_blank" class="text-amber-400 underline font-semibold hover:text-amber-300 flex items-center gap-1"><i class="fa-solid fa-cart-shopping text-xs"></i> Get Latest Edition Book Link</a></p>` : ''}
+  `;
+
   if (container) {
     container.innerHTML = `
       <div class="space-y-4">
-        <div class="flex items-center justify-between gap-2">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-brand-500/10 text-brand-400 border border-brand-500/20 max-w-[80%] overflow-hidden text-ellipsis whitespace-nowrap">
-            <i class="fa-solid fa-folder-open shrink-0"></i> 
-            <span class="truncate">${item["Subject"] || 'General'}</span>
-          </div>
-          <span class="text-[10px] font-mono text-gray-400 uppercase bg-gray-800 px-2 py-0.5 rounded-md">${item["Format"] || 'PDF'}</span>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-brand-500/10 text-brand-400 border border-brand-500/20 max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
+          <i class="fa-solid fa-folder-open shrink-0"></i> 
+          <span class="truncate">${item["Subject"] || 'General'}</span>
         </div>
 
-        <h2 class="text-lg sm:text-xl font-black text-white leading-tight">
+        <h2 class="text-xl sm:text-2xl font-black text-white leading-tight">
           ${item["Book Name"] || 'Material File'}
         </h2>
 
-        ${embedViewerHtml}
-
-        <div class="p-3 rounded-xl bg-gray-950/60 border border-gray-800 text-xs text-gray-300 grid grid-cols-2 gap-2">
-          <p><strong class="text-brand-400">Publisher:</strong> ${item["Publisher/Company"] || 'N/A'}</p>
+        <div class="p-4 rounded-xl bg-gray-950/60 border border-gray-800 text-xs text-gray-300 space-y-2">
           <p><strong class="text-brand-400">Category:</strong> ${item["Category"] || 'N/A'}</p>
+          <p><strong class="text-brand-400">Publisher / Company:</strong> ${item["Publisher/Company"] || 'N/A'}</p>
+          <p><strong class="text-brand-400">Scope:</strong> ${item["Scope"] || 'N/A'}</p>
+          <p><strong class="text-brand-400">Format:</strong> ${item["Format"] || 'PDF'}</p>
+          ${editionInfoHtml}
         </div>
 
-        <div class="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div class="pt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
           ${driveBtnHtml}
           ${lectureBtnHtml}
         </div>
@@ -343,7 +324,4 @@ function openMaterialModalByIndex(index) {
   }
 
   document.getElementById("detailView")?.classList.remove("hidden");
-}
-function closeMaterialModal() {
-  document.getElementById("detailView")?.classList.add("hidden");
 }
