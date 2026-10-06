@@ -1,7 +1,7 @@
-// Google Sheets Published CSV Endpoint
+// Published Google Sheets CSV Endpoint
 const sheetCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQLGKfaC9WUePvCArs7YAxYP9tmoPYkCdfJviR2pdOnlSZ6gVLEqgtAEga4XLQpubVTfEsHo2eWBWx7/pub?output=csv';
 
-// Full Subject List Matching Folders
+// Full Subject List 
 const subjectsList = [
   "All",
   "Physics",
@@ -76,7 +76,7 @@ function initSubjectCards() {
   }).join('');
 }
 
-// Fetch CSV Data from Google Sheets
+// Fetch CSV Data from Google Sheets & Check Hash Route
 async function fetchSheetData() {
   const statusEl = document.getElementById('statusMessage');
   try {
@@ -89,6 +89,9 @@ async function fetchSheetData() {
     if (statusEl) {
       statusEl.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400"></i> <span>Loaded ${allResources.length} resources from database.</span>`;
     }
+
+    // Auto-open subject page if URL contains hash (e.g. #subject-Home%20Science or #subject-Physics)
+    checkHashRoute();
   } catch (error) {
     console.error('Fetch error:', error);
     if (statusEl) {
@@ -97,7 +100,19 @@ async function fetchSheetData() {
   }
 }
 
-// Robust CSV Parser
+// Check Hash Route on Load or Hash Change
+function checkHashRoute() {
+  const hash = window.location.hash;
+  if (hash && hash.startsWith('#subject-')) {
+    const rawSubject = decodeURIComponent(hash.replace('#subject-', '')).trim();
+    const matchedSubject = subjectsList.find(s => s.toLowerCase() === rawSubject.toLowerCase());
+    if (matchedSubject) {
+      selectSubject(matchedSubject, false);
+    }
+  }
+}
+
+// CSV Parser
 function parseCSV(text) {
   const lines = text.split('\n').filter(line => line.trim() !== '');
   if (lines.length < 2) return [];
@@ -142,9 +157,18 @@ function parseCSV(text) {
   return data;
 }
 
-// Subject Selection Handler
-function selectSubject(subjectName) {
+// Subject Selection Handler with URL Hash Updates
+function selectSubject(subjectName, updateHash = true) {
   currentSubject = subjectName;
+  
+  if (updateHash) {
+    if (subjectName === "All") {
+      history.pushState("", document.title, window.location.pathname + window.location.search);
+    } else {
+      window.location.hash = `subject-${encodeURIComponent(subjectName)}`;
+    }
+  }
+
   const titleEl = document.getElementById('selectedSubjectTitle');
   if (titleEl) {
     titleEl.innerText = subjectName === "All" ? "All Subjects Vault" : subjectName;
@@ -157,7 +181,7 @@ function selectSubject(subjectName) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Filter Engine (Handles typos and case-insensitivity)
+// Case-Insensitive Multi-Condition Filter Engine
 function filterResources() {
   const searchVal = (document.getElementById("searchInput")?.value || "").toLowerCase().trim();
 
@@ -176,6 +200,8 @@ function filterResources() {
       
       if (target === "physical education") {
         subMatch = itemSubject.includes("physical education") || itemSubject.includes("physical eduaction") || itemSubject.includes("pe");
+      } else if (target === "home science") {
+        subMatch = itemSubject.includes("home science") || itemSubject.includes("homescience");
       } else if (target === "second language - tamil") {
         subMatch = itemSubject.includes("tamil");
       } else if (target === "second language - malayalam") {
@@ -210,7 +236,7 @@ function filterResources() {
   renderGrid(filteredResources);
 }
 
-// Set Category Filter
+// Category Filter Tabs
 function setCategoryFilter(category, event) {
   currentCategory = category;
   document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active-tab', 'bg-amber-500', 'text-black'));
@@ -220,13 +246,14 @@ function setCategoryFilter(category, event) {
   filterResources();
 }
 
-// Navigation Back to Main View
+// Close Detail View and Clear Hash
 function closeSubjectSubPage() {
   document.getElementById('subjectDetailView')?.classList.add('hidden');
   document.getElementById('mainLandingView')?.classList.remove('hidden');
+  history.pushState("", document.title, window.location.pathname + window.location.search);
 }
 
-// Render Resource Cards Grid
+// Render Filtered Cards Grid
 function renderGrid(data) {
   const grid = document.getElementById("resourceGrid");
   const countEl = document.getElementById("itemCount");
@@ -267,7 +294,7 @@ function renderGrid(data) {
   }).join("");
 }
 
-// Modal View Handler
+// Modal Lightbox Viewer
 function openMaterialModalByIndex(index) {
   const item = filteredResources[index];
   if (!item) return;
@@ -315,7 +342,10 @@ function closeMaterialModal() {
   document.getElementById("detailView")?.classList.add("hidden");
 }
 
-// App Initialization
+// Listen to Hash Changes in Browser History
+window.addEventListener('hashchange', checkHashRoute);
+
+// DOM Ready Listener
 document.addEventListener("DOMContentLoaded", () => {
   initSubjectCards();
   fetchSheetData();
