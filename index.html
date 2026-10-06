@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   
-  <!-- SEO & Primary Meta Tags -->
+  <!-- Primary Meta Tags for SEO -->
   <title>ICSE Class 10 Study Materials, Question Banks & Notes | ICSE MasterClass</title>
   <meta name="title" content="ICSE Class 10 Study Materials, Question Banks & Notes | ICSE MasterClass">
   <meta name="description" content="Free educational resource vault for ICSE Class 10 students. Download Oswaal, Arihant, Goyal Brothers Prakashan, and Educart question banks, PYQs, revision notes, and video lectures.">
@@ -17,7 +17,7 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://icse-cbse-10-12.github.io/icse-class-10-materials/">
   <meta property="og:title" content="ICSE Class 10 Study Materials & Notes Vault">
-  <meta property="og:description" content="Access free ICSE question banks from Oswaal, Arihant, Goyal, PYQs, and chapter notes for Physics, Chemistry, Maths, Physical Education, English, and more.">
+  <meta property="og:description" content="Access free ICSE question banks from Oswaal, Arihant, Goyal, PYQs, and chapter notes for all subjects.">
   <meta property="og:image" content="https://icse-cbse-10-12.github.io/icse-class-10-materials/icseYtLogo.png">
 
   <!-- Structured Data (Schema.org) -->
@@ -58,7 +58,7 @@
 
 <body class="bg-gray-950 text-gray-100 font-sans min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black pb-20 sm:pb-12">
 
-  <!-- Header -->
+  <!-- Header Navigation -->
   <header class="sticky top-0 z-40 bg-gray-950/90 backdrop-blur-md border-b border-gray-800/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <a href="#" onclick="closeSubjectSubPage()" class="flex items-center gap-3 group">
@@ -71,11 +71,20 @@
         </div>
       </a>
 
-      <a href="https://t.me/ICSEMasterClass10" target="_blank" rel="noopener noreferrer" class="py-2 px-4 rounded-xl text-xs font-bold bg-sky-500/10 text-sky-400 border border-sky-500/20 hover:bg-sky-500 hover:text-white transition flex items-center gap-2">
-        <i class="fa-brands fa-telegram text-sm"></i> 
-        <span class="hidden sm:inline">Join Telegram</span>
-        <span class="sm:hidden">Telegram</span>
-      </a>
+      <!-- Header Action Buttons -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <a href="https://t.me/ICSEMasterClass10/1320" target="_blank" rel="noopener noreferrer" class="py-2 px-3 sm:px-4 rounded-xl text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20 hover:bg-amber-500 hover:text-black transition flex items-center gap-1.5">
+          <i class="fa-solid fa-comment-dots text-sm"></i>
+          <span class="hidden sm:inline">Feedback / Suggestions</span>
+          <span class="sm:hidden">Feedback</span>
+        </a>
+
+        <a href="https://t.me/ICSEMasterClass10" target="_blank" rel="noopener noreferrer" class="py-2 px-3 sm:px-4 rounded-xl text-xs font-bold bg-sky-500/10 text-sky-400 border border-sky-500/20 hover:bg-sky-500 hover:text-white transition flex items-center gap-1.5">
+          <i class="fa-brands fa-telegram text-sm"></i> 
+          <span class="hidden sm:inline">Join Telegram</span>
+          <span class="sm:hidden">Telegram</span>
+        </a>
+      </div>
     </div>
   </header>
 
@@ -106,7 +115,8 @@
       <div id="mainSubjectGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
         <!-- Rendered dynamically by script.js -->
       </div>
-   <!-- SEO / AI Readable Information -->
+
+      <!-- About Section -->
       <section class="mt-12 pt-8 border-t border-gray-800/80 max-w-5xl mx-auto space-y-6 text-gray-400 text-xs leading-relaxed">
         <div class="p-6 rounded-2xl bg-gray-900/40 border border-gray-800/80 space-y-4">
           <h2 class="text-lg font-bold text-white flex items-center gap-2">
@@ -114,21 +124,20 @@
             About ICSE MasterClass Study Vault
           </h2>
           <p>
-            Welcome to the official study material vault designed for ICSE Class 10 students preparing for board examinations. Our platform centralizes educational assets enabling students to prepare effectively across core subjects including Physics, Chemistry, Mathematics, Biology, English Literature, English Language, History & Civics, Geography, Computer Applications, Commercial Studies, Commercial Applications, Economic Applications, Environmental Applications, Home Science, Physical Education, and Second Languages (Hindi, Malayalam, Kannada, Tamil).
+            Welcome to the official study material vault designed for ICSE Class 10 students preparing for board examinations. Our platform centralizes educational assets enabling students to prepare effectively across core subjects.
           </p>
           
           <div class="p-4 rounded-xl bg-amber-500/5 border border-amber-500/20 text-xs text-gray-300 space-y-1 mt-4">
             <p class="font-bold text-amber-400 flex items-center gap-1.5">
-              <i class="fa-solid fa-triangle-exclamation"></i> Disclaimer & Takedown Request:
+              <i class="fa-solid fa-triangle-exclamation"></i> Disclaimer / Notice:
             </p>
             <p>
-              All study materials shared on this portal belong to their respective original publishers and authors. If you are a copyright owner and wish to request removal of any material, email us directly at 
+              All study materials shared on this portal belong to their respective original publishers and authors. If you wish to request removal of any material, email us at 
               <a href="mailto:icsemasterclass@gmail.com" class="text-amber-400 font-bold underline hover:text-amber-300">icsemasterclass@gmail.com</a>.
             </p>
           </div>
         </div>
       </section>
-
     </section>
 
     <!-- SUBJECT DETAIL VIEW -->
@@ -187,6 +196,50 @@
     </div>
   </div>
 
+  <!-- ENTRANCE POPUP MODAL (SUBSCRIBE / JOIN TELEGRAM) -->
+  <div id="welcomePopup" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-gray-900 border border-amber-500/30 rounded-3xl max-w-md w-full p-6 relative shadow-2xl space-y-5 text-center transform transition-all scale-100">
+      
+      <!-- Close Button -->
+      <button onclick="closeWelcomePopup()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700 flex items-center justify-center transition">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Header Icon -->
+      <div class="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mx-auto text-amber-400 text-2xl">
+        <i class="fa-solid fa-graduation-cap"></i>
+      </div>
+
+      <!-- Title & Description -->
+      <div class="space-y-2">
+        <h3 class="text-xl font-black text-white">Welcome to ICSE MasterClass</h3>
+        <p class="text-xs text-gray-400 leading-relaxed">
+          Get direct access to free study notes, question banks, and request custom materials directly from our community!
+        </p>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="space-y-3 pt-2">
+        <!-- YouTube Button -->
+        <a href="https://www.youtube.com/@ICSEMasterClass10?sub_confirmation=1" target="_blank" onclick="closeWelcomePopup()" class="w-full py-3 px-4 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-red-600/20 transition">
+          <i class="fa-brands fa-youtube text-base"></i>
+          <span>Subscribe YouTube to Get Materials</span>
+        </a>
+
+        <!-- Telegram Button -->
+        <a href="https://t.me/ICSEMasterClass10" target="_blank" onclick="closeWelcomePopup()" class="w-full py-3 px-4 rounded-xl bg-sky-500 hover:bg-sky-400 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-sky-500/20 transition">
+          <i class="fa-brands fa-telegram text-base"></i>
+          <span>Join Telegram to Request Materials</span>
+        </a>
+      </div>
+
+      <!-- Dismiss Footer Link -->
+      <button onclick="closeWelcomePopup()" class="text-[11px] text-gray-500 hover:text-gray-300 underline font-medium transition">
+        Continue to Website
+      </button>
+    </div>
+  </div>
+
   <!-- Floating Mobile Action Button -->
   <a href="https://t.me/ICSEMasterClass10" target="_blank" rel="noopener noreferrer" 
      class="fixed bottom-4 right-4 z-40 bg-sky-500 hover:bg-sky-400 text-white font-bold text-xs px-4 py-3 rounded-full shadow-lg shadow-sky-500/25 flex items-center gap-2 transition-all active:scale-95 sm:hidden">
@@ -199,6 +252,7 @@
     <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
       <p>© ICSE MasterClass. Educational materials remain the property of their respective publishers.</p>
       <div class="flex items-center gap-4">
+        <a href="https://t.me/ICSEMasterClass10/1320" target="_blank" rel="noopener noreferrer" class="hover:text-amber-400 transition font-semibold text-amber-400/90">Feedback / Suggestions</a>
         <a href="mailto:icsemasterclass@gmail.com" class="hover:text-amber-400 transition">Contact / Takedown</a>
         <a href="https://t.me/ICSEMasterClass10" target="_blank" class="hover:text-amber-400 transition">Telegram</a>
         <a href="https://www.youtube.com/@ICSEMasterClass10" target="_blank" class="hover:text-amber-400 transition">YouTube</a>
