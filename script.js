@@ -256,7 +256,7 @@ function renderResourceGrid(items) {
   `).join('');
 }
 
-// 7. Open Detail Modal View
+// 7. Open Detail Modal View with Embedded PDF/Word Viewer
 function openMaterialModalByIndex(index) {
   const item = window.currentFilteredItems[index];
   if (!item) return;
@@ -265,46 +265,76 @@ function openMaterialModalByIndex(index) {
   
   const rawDrive = item["Google Drive Link"] || item["Google Drive Direct View / Download Link"] || "";
   const rawLecture = item["Lecture Link"] || item["Telegram Channel Post Link"] || "";
+  const fileFormat = (item["Format"] || "PDF").toLowerCase().trim();
 
   const driveLink = sanitizeUrl(rawDrive);
   const lectureLink = sanitizeUrl(rawLecture);
 
+  // Generate Embed Viewer URL
+  let embedViewerHtml = "";
+  if (driveLink) {
+    if (driveLink.includes("drive.google.com")) {
+      // Convert Google Drive view link to embed preview link
+      const previewUrl = driveLink.replace(/\/view(\?.*)?$/, '/preview');
+      embedViewerHtml = `
+        <div class="w-full h-80 sm:h-96 rounded-xl overflow-hidden border border-gray-800 bg-gray-950">
+          <iframe src="${previewUrl}" class="w-full h-full border-0" allow="autoplay" loading="lazy"></iframe>
+        </div>`;
+    } else if (fileFormat.includes("doc") || fileFormat.includes("word")) {
+      // Use MS Office Online Viewer for Word documents
+      const msViewerUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(driveLink)}`;
+      embedViewerHtml = `
+        <div class="w-full h-80 sm:h-96 rounded-xl overflow-hidden border border-gray-800 bg-gray-950">
+          <iframe src="${msViewerUrl}" class="w-full h-full border-0" loading="lazy"></iframe>
+        </div>`;
+    } else {
+      // Direct PDF embed fallback
+      embedViewerHtml = `
+        <div class="w-full h-80 sm:h-96 rounded-xl overflow-hidden border border-gray-800 bg-gray-950">
+          <iframe src="${driveLink}" class="w-full h-full border-0" loading="lazy"></iframe>
+        </div>`;
+    }
+  }
+
   const driveBtnHtml = driveLink
-    ? `<a href="${driveLink}" target="_blank" rel="noopener noreferrer" class="w-full py-3 px-4 rounded-xl text-xs font-bold bg-brand-500 text-black hover:bg-brand-400 text-center transition flex items-center justify-center gap-2">
-         <i class="fa-solid fa-file-pdf text-sm"></i> Direct View / Download
+    ? `<a href="${driveLink}" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 px-4 rounded-xl text-xs font-bold bg-brand-500 text-black hover:bg-brand-400 text-center transition flex items-center justify-center gap-2">
+         <i class="fa-solid fa-external-link text-sm"></i> Open in New Tab
        </a>`
-    : `<button disabled class="w-full py-3 px-4 rounded-xl text-xs font-bold bg-gray-800 text-gray-500 cursor-not-allowed text-center flex items-center justify-center gap-2 border border-gray-700/50">
+    : `<button disabled class="w-full py-2.5 px-4 rounded-xl text-xs font-bold bg-gray-800 text-gray-500 cursor-not-allowed text-center flex items-center justify-center gap-2 border border-gray-700/50">
          <i class="fa-solid fa-file-circle-xmark text-sm"></i> Link Coming Soon
        </button>`;
 
   const lectureBtnHtml = lectureLink
-    ? `<a href="${lectureLink}" target="_blank" rel="noopener noreferrer" class="w-full py-3 px-4 rounded-xl text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500 hover:text-white text-center transition flex items-center justify-center gap-2">
+    ? `<a href="${lectureLink}" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 px-4 rounded-xl text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500 hover:text-white text-center transition flex items-center justify-center gap-2">
          <i class="fa-brands fa-youtube text-sm"></i> Watch Video Lecture
        </a>`
-    : `<a href="https://t.me/ICSEMasterClass10" target="_blank" rel="noopener noreferrer" class="w-full py-3 px-4 rounded-xl text-xs font-bold bg-sky-500/20 text-sky-400 border border-sky-500/30 hover:bg-sky-500 hover:text-white text-center transition flex items-center justify-center gap-2">
+    : `<a href="https://t.me/ICSEMasterClass10" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 px-4 rounded-xl text-xs font-bold bg-sky-500/20 text-sky-400 border border-sky-500/30 hover:bg-sky-500 hover:text-white text-center transition flex items-center justify-center gap-2">
          <i class="fa-brands fa-telegram text-sm"></i> Open in Telegram
        </a>`;
 
   if (container) {
     container.innerHTML = `
       <div class="space-y-4">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-brand-500/10 text-brand-400 border border-brand-500/20 max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
-          <i class="fa-solid fa-folder-open shrink-0"></i> 
-          <span class="truncate">${item["Subject"] || 'General'}</span>
+        <div class="flex items-center justify-between gap-2">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-brand-500/10 text-brand-400 border border-brand-500/20 max-w-[80%] overflow-hidden text-ellipsis whitespace-nowrap">
+            <i class="fa-solid fa-folder-open shrink-0"></i> 
+            <span class="truncate">${item["Subject"] || 'General'}</span>
+          </div>
+          <span class="text-[10px] font-mono text-gray-400 uppercase bg-gray-800 px-2 py-0.5 rounded-md">${item["Format"] || 'PDF'}</span>
         </div>
 
-        <h2 class="text-xl sm:text-2xl font-black text-white leading-tight">
+        <h2 class="text-lg sm:text-xl font-black text-white leading-tight">
           ${item["Book Name"] || 'Material File'}
         </h2>
 
-        <div class="p-4 rounded-xl bg-gray-950/60 border border-gray-800 text-xs text-gray-300 space-y-2">
+        ${embedViewerHtml}
+
+        <div class="p-3 rounded-xl bg-gray-950/60 border border-gray-800 text-xs text-gray-300 grid grid-cols-2 gap-2">
+          <p><strong class="text-brand-400">Publisher:</strong> ${item["Publisher/Company"] || 'N/A'}</p>
           <p><strong class="text-brand-400">Category:</strong> ${item["Category"] || 'N/A'}</p>
-          <p><strong class="text-brand-400">Publisher / Company:</strong> ${item["Publisher/Company"] || 'N/A'}</p>
-          <p><strong class="text-brand-400">Scope:</strong> ${item["Scope"] || 'N/A'}</p>
-          <p><strong class="text-brand-400">Format:</strong> ${item["Format"] || 'PDF'}</p>
         </div>
 
-        <div class="pt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div class="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
           ${driveBtnHtml}
           ${lectureBtnHtml}
         </div>
@@ -314,7 +344,6 @@ function openMaterialModalByIndex(index) {
 
   document.getElementById("detailView")?.classList.remove("hidden");
 }
-
 function closeMaterialModal() {
   document.getElementById("detailView")?.classList.add("hidden");
 }
