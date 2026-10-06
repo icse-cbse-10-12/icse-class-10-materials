@@ -220,7 +220,8 @@ function filterResources() {
         subMatch = itemSubject.includes("commercial app");
       } else if (target === "commercial studies") {
         subMatch = itemSubject.includes("commercial stud");
-      } else if (target === "economic applications") {
+      } else if (target === "eco
+                 nomic applications") {
         subMatch = itemSubject.includes("economic");
       } else {
         subMatch = itemSubject.includes(target);
@@ -253,7 +254,7 @@ function closeSubjectSubPage() {
   history.pushState("", document.title, window.location.pathname + window.location.search);
 }
 
-// Render Filtered Cards Grid
+// Render Filtered Cards Grid with Full Metadata
 function renderGrid(data) {
   const grid = document.getElementById("resourceGrid");
   const countEl = document.getElementById("itemCount");
@@ -268,32 +269,138 @@ function renderGrid(data) {
 
   grid.innerHTML = data.map((item, index) => {
     const rawDrive = item["Google Drive Link"] || item["Google Drive Direct View / Download Link"] || item["Link"] || "#";
-    const sanitizeLink = (rawDrive.startsWith('http') ? rawDrive : 'https://' + rawDrive);
+    const driveLink = rawDrive.startsWith('http') ? rawDrive : 'https://' + rawDrive;
+
+    const rawLecture = item["Lecture Link"] || item["Telegram Channel Post Link"] || "";
+    const lectureLink = rawLecture ? (rawLecture.startsWith('http') ? rawLecture : 'https://' + rawLecture) : "";
+
+    const rawLatestEdLink = item["Latest Edition Link"] || "";
+    const latestEdLink = rawLatestEdLink ? (rawLatestEdLink.startsWith('http') ? rawLatestEdLink : 'https://' + rawLatestEdLink) : "";
+
+    const isLatestAvailable = item["Latest Edition Available?"] || "";
+    const editionText = item["Edition"] && item["Edition"] !== "Not Specified" ? `Ed: ${item["Edition"]}` : "";
 
     return `
-      <div class="p-4 rounded-2xl bg-gray-900/60 border border-gray-800 hover:border-amber-500/40 transition flex flex-col justify-between gap-3">
+      <div class="p-4 rounded-2xl bg-gray-900/60 border border-gray-800 hover:border-amber-500/40 transition flex flex-col justify-between gap-3 shadow-lg">
         <div class="space-y-2">
-          <div class="flex items-center justify-between text-[10px]">
-            <span class="px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold">${item["Category"] || "General"}</span>
-            <span class="text-gray-400">${item["Publisher/Company"] || item["Publisher"] || item["Subject"] || ""}</span>
+          <!-- Category, Edition & Publisher Row -->
+          <div class="flex items-center justify-between text-[10px] gap-2">
+            <span class="px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold shrink-0">
+              ${item["Category"] || "General"}
+            </span>
+            <div class="flex items-center gap-1 overflow-hidden truncate text-gray-400">
+              ${editionText ? `<span class="px-1.5 py-0.5 rounded bg-gray-800 text-amber-300 font-mono font-semibold">${editionText}</span>` : ""}
+              <span class="truncate">${item["Publisher/Company"] || item["Publisher"] || item["Subject"] || ""}</span>
+            </div>
           </div>
-          <h3 class="font-bold text-sm text-white line-clamp-2">${item["Book Name"] || "Resource File"}</h3>
+
+          <!-- Book Title -->
+          <h3 class="font-bold text-sm text-white line-clamp-2 leading-snug">${item["Book Name"] || "Resource File"}</h3>
+          
+          <!-- Scope / Description -->
           ${item["Scope"] ? `<p class="text-xs text-gray-400 line-clamp-2">${item["Scope"]}</p>` : ''}
+
+          <!-- Latest Edition Info Tag -->
+          ${isLatestAvailable ? `
+            <div class="pt-1 text-[11px]">
+              <span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check text-[10px]"></i> Latest Edition: ${isLatestAvailable}</span>${latestEdLink ? `<a href="${latestEdLink}" target="_blank" class="ml-1 text-amber-400 underline hover:text-amber-300 font-bold">(Get Book)</a>` : ''}
+            </div>
+          ` : ''}
         </div>
         
-        <div class="grid grid-cols-2 gap-2 pt-1">
+        <!-- Action Buttons -->
+        <div class="grid grid-cols-2 gap-2 pt-2 border-t border-gray-800/80">
           <button onclick="openMaterialModalByIndex(${index})" class="py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-200 font-bold text-xs text-center transition flex items-center justify-center gap-1.5">
             <i class="fa-solid fa-eye"></i> Preview
           </button>
-          <a href="${sanitizeLink}" target="_blank" rel="noopener noreferrer" class="py-2 rounded-xl bg-amber-500 text-black font-bold text-xs text-center hover:bg-amber-400 transition flex items-center justify-center gap-1.5">
-            <i class="fa-solid fa-download"></i> Open Link
+
+          <a href="${driveLink}" target="_blank" rel="noopener noreferrer" class="py-2 rounded-xl bg-amber-500 text-black font-bold text-xs text-center hover:bg-amber-400 transition flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-download"></i> Material
           </a>
+
+          ${lectureLink ? `
+            <a href="${lectureLink}" target="_blank" rel="noopener noreferrer" class="col-span-2 py-2 rounded-xl bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500 hover:text-white font-bold text-xs text-center transition flex items-center justify-center gap-1.5">
+              <i class="fa-brands fa-youtube text-sm"></i> Watch Lecture
+            </a>
+          ` : ''}
         </div>
       </div>
     `;
   }).join("");
 }
 
+// Modal Lightbox Viewer
+function openMaterialModalByIndex(index) {
+  const item = filteredResources[index];
+  if (!item) return;
+
+  const modalBadge = document.getElementById("modalSubjectBadge");
+  const modalTitle = document.getElementById("modalTitle");
+  const container = document.getElementById("detailContent");
+
+  if (modalBadge) modalBadge.innerText = item["Subject"] || 'General';
+  if (modalTitle) modalTitle.innerText = item["Book Name"] || 'Material Document';
+
+  const rawDrive = item["Google Drive Link"] || item["Google Drive Direct View / Download Link"] || item["Link"] || "";
+  let driveLink = rawDrive.trim();
+  if (driveLink && !driveLink.startsWith('http')) driveLink = 'https://' + driveLink;
+
+  const rawLecture = item["Lecture Link"] || item["Telegram Channel Post Link"] || "";
+  const lectureLink = rawLecture ? (rawLecture.startsWith('http') ? rawLecture : 'https://' + rawLecture) : "";
+
+  const rawLatestEdLink = item["Latest Edition Link"] || "";
+  const latestEdLink = rawLatestEdLink ? (rawLatestEdLink.startsWith('http') ? rawLatestEdLink : 'https://' + rawLatestEdLink) : "";
+
+  let embedHtml = "";
+  if (driveLink && driveLink.includes("drive.google.com")) {
+    const previewUrl = driveLink.replace(/\/view(\?.*)?$/, '/preview');
+    embedHtml = `
+      <div class="w-full h-[55vh] sm:h-[62vh] rounded-xl overflow-hidden border border-gray-800 bg-black relative">
+        <iframe src="${previewUrl}" class="w-full h-full border-0" allow="autoplay" loading="lazy"></iframe>
+      </div>`;
+  }
+
+  if (container) {
+    container.innerHTML = `
+      <div class="space-y-4">
+        ${embedHtml}
+        
+        <div class="p-3.5 rounded-xl bg-gray-950 border border-gray-800 text-xs text-gray-300 grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <p><strong class="text-amber-400">Publisher:</strong> ${item["Publisher/Company"] || item["Publisher"] || 'N/A'}</p>
+          <p><strong class="text-amber-400">Category:</strong> ${item["Category"] || 'N/A'}</p>
+          <p><strong class="text-amber-400">Edition:</strong> ${item["Edition"] || 'Not Specified'}</p>
+          <p><strong class="text-amber-400">Format:</strong> ${item["Format"] || 'PDF'}</p>
+          <p class="col-span-full"><strong class="text-amber-400">Scope:</strong> ${item["Scope"] || 'N/A'}</p>
+          
+          ${item["Latest Edition Available?"] ? `
+            <p class="col-span-full pt-1 border-t border-gray-800/80">
+              <strong class="text-amber-400">Latest Edition Status:</strong> ${item["Latest Edition Available?"]}
+              ${latestEdLink ? `<a href="${latestEdLink}" target="_blank" class="ml-2 text-amber-400 underline font-bold"><i class="fa-solid fa-cart-shopping text-xs"></i> Get Latest Edition Book</a>` : ''}
+            </p>
+          ` : ''}
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+          <a href="${driveLink}" target="_blank" rel="noopener noreferrer" class="py-2.5 rounded-xl bg-amber-500 text-black font-bold text-xs text-center hover:bg-amber-400 transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Drive Link
+          </a>
+          
+          ${lectureLink ? `
+            <a href="${lectureLink}" target="_blank" rel="noopener noreferrer" class="py-2.5 rounded-xl bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500 hover:text-white font-bold text-xs text-center transition flex items-center justify-center gap-2">
+              <i class="fa-brands fa-youtube text-sm"></i> Watch Video Lecture
+            </a>
+          ` : `
+            <a href="https://t.me/ICSEMasterClass10" target="_blank" rel="noopener noreferrer" class="py-2.5 rounded-xl bg-sky-500/20 text-sky-400 border border-sky-500/30 hover:bg-sky-500 hover:text-white font-bold text-xs text-center transition flex items-center justify-center gap-2">
+              <i class="fa-brands fa-telegram text-sm"></i> Telegram Discussion
+            </a>
+          `}
+        </div>
+      </div>
+    `;
+  }
+
+  document.getElementById("detailView")?.classList.remove("hidden");
+}
 // Modal Lightbox Viewer
 function openMaterialModalByIndex(index) {
   const item = filteredResources[index];
