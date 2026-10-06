@@ -1,7 +1,8 @@
-// Published Google Sheets CSV Endpoint
-const sheetCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQLGKfaC9WUePvCArs7YAxYP9tmoPYkCdfJviR2pdOnlSZ6gVLEqgtAEga4XLQpubVTfEsHo2eWBWx7/pub?output=csv';
+// Google Sheets Published CSV Endpoint & CORS Proxy Fallback
+const primaryCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQLGKfaC9WUePvCArs7YAxYP9tmoPYkCdfJviR2pdOnlSZ6gVLEqgtAEga4XLQpubVTfEsHo2eWBWx7/pub?output=csv';
+const fallbackCsvUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(primaryCsvUrl);
 
-// Full Subject List 
+// Full Subject List
 const subjectsList = [
   "All",
   "Physics",
@@ -27,7 +28,7 @@ const subjectsList = [
   "Other Subjects"
 ];
 
-// Custom FontAwesome Icon Mappings
+// Custom Icons Mapping
 const subjectIcons = {
   "All": "fa-layer-group",
   "Physics": "fa-atom",
@@ -58,7 +59,7 @@ let currentCategory = "All";
 let allResources = [];
 let filteredResources = [];
 
-// Initialize Subject Cards into Landing Grid
+// Render Subject Grid Immediately (Prevents Blank Screen)
 function initSubjectCards() {
   const grid = document.getElementById('mainSubjectGrid');
   if (!grid) return;
@@ -76,31 +77,40 @@ function initSubjectCards() {
   }).join('');
 }
 
-// Fetch CSV Data from Google Sheets & Check Hash Route
+// Resilient Fetch Logic with Fallback Proxy
 async function fetchSheetData() {
   const statusEl = document.getElementById('statusMessage');
+  let csvText = '';
+
   try {
-    const response = await fetch(sheetCsvUrl);
-    if (!response.ok) throw new Error('Network response failed');
-    const csvText = await response.text();
-    
-    allResources = parseCSV(csvText);
-
-    if (statusEl) {
-      statusEl.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400"></i> <span>Loaded ${allResources.length} resources from database.</span>`;
-    }
-
-    // Auto-open subject page if URL contains hash (e.g. #subject-Home%20Science or #subject-Physics)
-    checkHashRoute();
-  } catch (error) {
-    console.error('Fetch error:', error);
-    if (statusEl) {
-      statusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-red-400"></i> <span class="text-red-400">Failed to load database. Refresh to try again.</span>`;
+    const res = await fetch(primaryCsvUrl);
+    if (!res.ok) throw new Error('Primary CSV blocked');
+    csvText = await res.text();
+  } catch (err) {
+    console.warn('Primary fetch failed, trying fallback proxy...', err);
+    try {
+      const fallbackRes = await fetch(fallbackCsvUrl);
+      if (!fallbackRes.ok) throw new Error('Fallback CSV blocked');
+      csvText = await fallbackRes.text();
+    } catch (fallbackErr) {
+      console.error('All CSV sources failed:', fallbackErr);
+      if (statusEl) {
+        statusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-red-400"></i> <span class="text-red-400">Failed to load database. Please reload the page.</span>`;
+      }
+      return;
     }
   }
+
+  allResources = parseCSV(csvText);
+
+  if (statusEl) {
+    statusEl.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400"></i> <span>Loaded ${allResources.length} materials from database.</span>`;
+  }
+
+  checkHashRoute();
 }
 
-// Check Hash Route on Load or Hash Change
+// Deep Link Route Checker
 function checkHashRoute() {
   const hash = window.location.hash;
   if (hash && hash.startsWith('#subject-')) {
@@ -157,7 +167,7 @@ function parseCSV(text) {
   return data;
 }
 
-// Subject Selection Handler with URL Hash Updates
+// Select Subject Handler
 function selectSubject(subjectName, updateHash = true) {
   currentSubject = subjectName;
   
@@ -181,7 +191,7 @@ function selectSubject(subjectName, updateHash = true) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Case-Insensitive Multi-Condition Filter Engine
+// Filtering Logic
 function filterResources() {
   const searchVal = (document.getElementById("searchInput")?.value || "").toLowerCase().trim();
 
@@ -220,8 +230,7 @@ function filterResources() {
         subMatch = itemSubject.includes("commercial app");
       } else if (target === "commercial studies") {
         subMatch = itemSubject.includes("commercial stud");
-      } else if (target === "eco
-                 nomic applications") {
+      } else if (target === "economic applications") {
         subMatch = itemSubject.includes("economic");
       } else {
         subMatch = itemSubject.includes(target);
@@ -247,14 +256,14 @@ function setCategoryFilter(category, event) {
   filterResources();
 }
 
-// Close Detail View and Clear Hash
+// Close Detail View
 function closeSubjectSubPage() {
   document.getElementById('subjectDetailView')?.classList.add('hidden');
   document.getElementById('mainLandingView')?.classList.remove('hidden');
   history.pushState("", document.title, window.location.pathname + window.location.search);
 }
 
-// Render Filtered Cards Grid with Full Metadata
+// Render Grid
 function renderGrid(data) {
   const grid = document.getElementById("resourceGrid");
   const countEl = document.getElementById("itemCount");
@@ -283,7 +292,6 @@ function renderGrid(data) {
     return `
       <div class="p-4 rounded-2xl bg-gray-900/60 border border-gray-800 hover:border-amber-500/40 transition flex flex-col justify-between gap-3 shadow-lg">
         <div class="space-y-2">
-          <!-- Category, Edition & Publisher Row -->
           <div class="flex items-center justify-between text-[10px] gap-2">
             <span class="px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold shrink-0">
               ${item["Category"] || "General"}
@@ -294,13 +302,10 @@ function renderGrid(data) {
             </div>
           </div>
 
-          <!-- Book Title -->
           <h3 class="font-bold text-sm text-white line-clamp-2 leading-snug">${item["Book Name"] || "Resource File"}</h3>
           
-          <!-- Scope / Description -->
           ${item["Scope"] ? `<p class="text-xs text-gray-400 line-clamp-2">${item["Scope"]}</p>` : ''}
 
-          <!-- Latest Edition Info Tag -->
           ${isLatestAvailable ? `
             <div class="pt-1 text-[11px]">
               <span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check text-[10px]"></i> Latest Edition: ${isLatestAvailable}</span>${latestEdLink ? `<a href="${latestEdLink}" target="_blank" class="ml-1 text-amber-400 underline hover:text-amber-300 font-bold">(Get Book)</a>` : ''}
@@ -308,7 +313,6 @@ function renderGrid(data) {
           ` : ''}
         </div>
         
-        <!-- Action Buttons -->
         <div class="grid grid-cols-2 gap-2 pt-2 border-t border-gray-800/80">
           <button onclick="openMaterialModalByIndex(${index})" class="py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-200 font-bold text-xs text-center transition flex items-center justify-center gap-1.5">
             <i class="fa-solid fa-eye"></i> Preview
@@ -329,7 +333,7 @@ function renderGrid(data) {
   }).join("");
 }
 
-// Modal Lightbox Viewer
+// Lightbox Modal
 function openMaterialModalByIndex(index) {
   const item = filteredResources[index];
   if (!item) return;
@@ -401,59 +405,20 @@ function openMaterialModalByIndex(index) {
 
   document.getElementById("detailView")?.classList.remove("hidden");
 }
-// Modal Lightbox Viewer
-function openMaterialModalByIndex(index) {
-  const item = filteredResources[index];
-  if (!item) return;
-
-  const modalBadge = document.getElementById("modalSubjectBadge");
-  const modalTitle = document.getElementById("modalTitle");
-  const container = document.getElementById("detailContent");
-
-  if (modalBadge) modalBadge.innerText = item["Subject"] || 'General';
-  if (modalTitle) modalTitle.innerText = item["Book Name"] || 'Material Document';
-
-  const rawDrive = item["Google Drive Link"] || item["Google Drive Direct View / Download Link"] || item["Link"] || "";
-  let driveLink = rawDrive.trim();
-  if (driveLink && !driveLink.startsWith('http')) driveLink = 'https://' + driveLink;
-
-  let embedHtml = "";
-  if (driveLink && driveLink.includes("drive.google.com")) {
-    const previewUrl = driveLink.replace(/\/view(\?.*)?$/, '/preview');
-    embedHtml = `
-      <div class="w-full h-[55vh] sm:h-[62vh] rounded-xl overflow-hidden border border-gray-800 bg-black relative">
-        <iframe src="${previewUrl}" class="w-full h-full border-0" allow="autoplay" loading="lazy"></iframe>
-      </div>`;
-  }
-
-  if (container) {
-    container.innerHTML = `
-      <div class="space-y-4">
-        ${embedHtml}
-        <div class="p-3 rounded-xl bg-gray-950 border border-gray-800 text-xs text-gray-300 space-y-1">
-          <p><strong class="text-amber-400">Publisher:</strong> ${item["Publisher/Company"] || item["Publisher"] || 'N/A'}</p>
-          <p><strong class="text-amber-400">Category:</strong> ${item["Category"] || 'N/A'}</p>
-          <p><strong class="text-amber-400">Scope:</strong> ${item["Scope"] || 'N/A'}</p>
-        </div>
-        <a href="${driveLink}" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 rounded-xl bg-amber-500 text-black font-bold text-xs text-center hover:bg-amber-400 transition flex items-center justify-center gap-2">
-          <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Drive Link
-        </a>
-      </div>
-    `;
-  }
-
-  document.getElementById("detailView")?.classList.remove("hidden");
-}
 
 function closeMaterialModal() {
   document.getElementById("detailView")?.classList.add("hidden");
 }
 
-// Listen to Hash Changes in Browser History
 window.addEventListener('hashchange', checkHashRoute);
 
-// DOM Ready Listener
-document.addEventListener("DOMContentLoaded", () => {
+// Execute immediately when script executes or DOMReady
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    initSubjectCards();
+    fetchSheetData();
+  });
+} else {
   initSubjectCards();
   fetchSheetData();
-});
+}
