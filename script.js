@@ -2,6 +2,7 @@
 const sheetCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQLGKfaC9WUePvCArs7YAxYP9tmoPYkCdfJviR2pdOnlSZ6gVLEqgtAEga4XLQpubVTfEsHo2eWBWx7/pub?output=csv';
 
 let allResources = [];
+let currentFilteredItems = [];
 let currentSubject = '';
 let currentCategory = 'All';
 
@@ -169,14 +170,13 @@ function filterResources() {
   const selectedSubjectLower = currentSubject.toLowerCase().trim();
   const selectedCategoryLower = currentCategory.toLowerCase().trim();
 
-  const filtered = allResources.filter(item => {
+  currentFilteredItems = allResources.filter(item => {
     const sheetSubjectLower = (item["Subject"] || "").toLowerCase().trim();
     const sheetCategoryLower = (item["Category"] || "").toLowerCase().trim();
     const sheetBookNameLower = (item["Book Name"] || "").toLowerCase().trim();
     const sheetScopeLower = (item["Scope"] || "").toLowerCase().trim();
     const sheetPublisherLower = (item["Publisher/Company"] || "").toLowerCase().trim();
 
-    // Subject Match
     let matchSubject = !currentSubject || 
                        sheetSubjectLower.includes(selectedSubjectLower) || 
                        selectedSubjectLower.includes(sheetSubjectLower);
@@ -185,13 +185,11 @@ function filterResources() {
       matchSubject = matchSubject || sheetSubjectLower.includes("pe") || sheetSubjectLower.includes("phys ed");
     }
 
-    // Category Match (Handles Textbooks / Reference Books)
     let matchCategory = selectedCategoryLower === 'all' || sheetCategoryLower.includes(selectedCategoryLower);
     if (selectedCategoryLower.includes('textbook') || selectedCategoryLower.includes('reference')) {
       matchCategory = sheetCategoryLower.includes('textbook') || sheetCategoryLower.includes('reference') || sheetCategoryLower.includes('book');
     }
 
-    // Search Match
     const matchSearch = !searchQuery || 
       sheetBookNameLower.includes(searchQuery) || 
       sheetScopeLower.includes(searchQuery) ||
@@ -201,7 +199,17 @@ function filterResources() {
     return matchSubject && matchCategory && matchSearch;
   });
 
-  renderResourceGrid(filtered);
+  renderResourceGrid(currentFilteredItems);
+}
+
+function sanitizeUrl(rawUrl) {
+  if (!rawUrl) return '';
+  let url = rawUrl.trim();
+  if (!url || url === '#') return '';
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    url = 'https://' + url;
+  }
+  return url;
 }
 
 // 6. Render Resource Grid
@@ -221,8 +229,6 @@ function renderResourceGrid(items) {
     `;
     return;
   }
-
-  window.currentFilteredItems = items;
 
   grid.innerHTML = items.map((item, index) => {
     const editionText = item["Edition"] && item["Edition"] !== "Not Specified" ? `Edition: ${item["Edition"]}` : '';
@@ -260,7 +266,7 @@ function renderResourceGrid(items) {
 
 // 7. Open Detail Modal View
 function openMaterialModalByIndex(index) {
-  const item = window.currentFilteredItems[index];
+  const item = currentFilteredItems[index];
   if (!item) return;
 
   const container = document.getElementById("detailContent");
@@ -271,6 +277,16 @@ function openMaterialModalByIndex(index) {
 
   const driveLink = sanitizeUrl(rawDrive);
   const lectureLink = sanitizeUrl(rawLecture);
+
+  // Generate Embedded Viewer
+  let embedHtml = "";
+  if (driveLink && driveLink.includes("drive.google.com")) {
+    const previewUrl = driveLink.replace(/\/view(\?.*)?$/, '/preview');
+    embedHtml = `
+      <div class="w-full h-72 sm:h-96 rounded-xl overflow-hidden border border-gray-800 bg-gray-950 my-3">
+        <iframe src="${previewUrl}" class="w-full h-full border-0" allow="autoplay" loading="lazy"></iframe>
+      </div>`;
+  }
 
   const driveBtnHtml = driveLink
     ? `<a href="${driveLink}" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 px-4 rounded-xl text-xs font-bold bg-brand-500 text-black hover:bg-brand-400 text-center transition flex items-center justify-center gap-2">
@@ -288,34 +304,30 @@ function openMaterialModalByIndex(index) {
          <i class="fa-brands fa-telegram text-sm"></i> Open in Telegram
        </a>`;
 
-  // Edition Details Block
-  const editionInfoHtml = `
-    <p><strong class="text-brand-400">Current File Edition:</strong> ${item["Edition"] || 'Not Specified'}</p>
-    ${item["Latest Edition Available?"] ? `<p><strong class="text-brand-400">Latest Edition Available?:</strong> ${item["Latest Edition Available?"]}</p>` : ''}
-    ${latestEditionLink && latestEditionLink !== '#' ? `<p class="pt-1"><a href="${latestEditionLink}" target="_blank" class="text-amber-400 underline font-semibold hover:text-amber-300 flex items-center gap-1"><i class="fa-solid fa-cart-shopping text-xs"></i> Get Latest Edition Book Link</a></p>` : ''}
-  `;
-
   if (container) {
     container.innerHTML = `
-      <div class="space-y-4">
+      <div class="space-y-3">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-brand-500/10 text-brand-400 border border-brand-500/20 max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
           <i class="fa-solid fa-folder-open shrink-0"></i> 
           <span class="truncate">${item["Subject"] || 'General'}</span>
         </div>
 
-        <h2 class="text-xl sm:text-2xl font-black text-white leading-tight">
+        <h2 class="text-lg sm:text-xl font-black text-white leading-tight">
           ${item["Book Name"] || 'Material File'}
         </h2>
 
-        <div class="p-4 rounded-xl bg-gray-950/60 border border-gray-800 text-xs text-gray-300 space-y-2">
+        ${embedHtml}
+
+        <div class="p-3 rounded-xl bg-gray-950/60 border border-gray-800 text-xs text-gray-300 space-y-1">
           <p><strong class="text-brand-400">Category:</strong> ${item["Category"] || 'N/A'}</p>
           <p><strong class="text-brand-400">Publisher / Company:</strong> ${item["Publisher/Company"] || 'N/A'}</p>
           <p><strong class="text-brand-400">Scope:</strong> ${item["Scope"] || 'N/A'}</p>
-          <p><strong class="text-brand-400">Format:</strong> ${item["Format"] || 'PDF'}</p>
-          ${editionInfoHtml}
+          <p><strong class="text-brand-400">Current File Edition:</strong> ${item["Edition"] || 'Not Specified'}</p>
+          ${item["Latest Edition Available?"] ? `<p><strong class="text-brand-400">Latest Edition Available?:</strong> ${item["Latest Edition Available?"]}</p>` : ''}
+          ${latestEditionLink && latestEditionLink !== '#' ? `<p class="pt-1"><a href="${latestEditionLink}" target="_blank" class="text-amber-400 underline font-semibold hover:text-amber-300 flex items-center gap-1"><i class="fa-solid fa-cart-shopping text-xs"></i> Get Latest Edition Book Link</a></p>` : ''}
         </div>
 
-        <div class="pt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div class="pt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
           ${driveBtnHtml}
           ${lectureBtnHtml}
         </div>
@@ -323,5 +335,15 @@ function openMaterialModalByIndex(index) {
     `;
   }
 
-  document.getElementById("detailView")?.classList.remove("hidden");
+  const modalEl = document.getElementById("detailView");
+  if (modalEl) {
+    modalEl.classList.remove("hidden");
+  }
+}
+
+function closeMaterialModal() {
+  const modalEl = document.getElementById("detailView");
+  if (modalEl) {
+    modalEl.classList.add("hidden");
+  }
 }
