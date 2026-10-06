@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   
-  <!-- SEO & Primary Metadata -->
+  <!-- SEO & Primary Meta Tags -->
   <title>ICSE Class 10 Study Materials, Question Banks & Notes | ICSE MasterClass</title>
   <meta name="title" content="ICSE Class 10 Study Materials, Question Banks & Notes | ICSE MasterClass">
   <meta name="description" content="Free educational resource vault for ICSE Class 10 students. Download Oswaal, Arihant, Goyal Brothers Prakashan, and Educart question banks, PYQs, revision notes, and video lectures.">
@@ -17,17 +17,10 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://icse-cbse-10-12.github.io/icse-class-10-materials/">
   <meta property="og:title" content="ICSE Class 10 Study Materials & Notes Vault">
-  <meta property="og:description" content="Access free ICSE question banks from Oswaal, Arihant, Goyal, PYQs, and chapter notes for all ICSE subjects.">
+  <meta property="og:description" content="Access free ICSE question banks from Oswaal, Arihant, Goyal, PYQs, and chapter notes for Physics, Chemistry, Maths, Physical Education, English, and more.">
   <meta property="og:image" content="https://icse-cbse-10-12.github.io/icse-class-10-materials/icseYtLogo.png">
 
-  <!-- Twitter Preview -->
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://icse-cbse-10-12.github.io/icse-class-10-materials/">
-  <meta property="twitter:title" content="ICSE Class 10 Study Materials & Notes Vault">
-  <meta property="twitter:description" content="Free study material vault with question banks, PYQs, and notes for ICSE board exams.">
-  <meta property="twitter:image" content="https://icse-cbse-10-12.github.io/icse-class-10-materials/icseYtLogo.png">
-
-  <!-- Schema.org Structured Data -->
+  <!-- Structured Data (Schema.org) -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -35,8 +28,7 @@
     "name": "ICSE MasterClass",
     "url": "https://icse-cbse-10-12.github.io/icse-class-10-materials/",
     "logo": "https://icse-cbse-10-12.github.io/icse-class-10-materials/icseYtLogo.png",
-    "description": "Comprehensive digital vault providing free study materials and question banks for ICSE Class 10 students.",
-    "educationalLevel": ["ICSE Class 10"]
+    "description": "Comprehensive digital vault providing free study materials, question banks, and notes for ICSE Class 10 students."
   }
   </script>
 
@@ -59,14 +51,14 @@
     }
   </script>
 
-  <!-- FontAwesome & Custom CSS -->
+  <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body class="bg-gray-950 text-gray-100 font-sans min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black pb-20 sm:pb-12">
 
-  <!-- Header Navigation -->
+  <!-- Header -->
   <header class="sticky top-0 z-40 bg-gray-950/90 backdrop-blur-md border-b border-gray-800/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <a href="#" onclick="closeSubjectSubPage()" class="flex items-center gap-3 group">
@@ -87,10 +79,10 @@
     </div>
   </header>
 
-  <!-- Main View Area -->
+  <!-- Main Container -->
   <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
     
-    <!-- Sync Status -->
+    <!-- Status Message Indicator -->
     <div id="statusMessage" class="text-center py-2.5 mb-6 glass-card rounded-2xl border border-gray-800/80 text-xs text-gray-400 flex items-center justify-center gap-2">
       <i class="fa-solid fa-circle-notch fa-spin text-amber-500"></i>
       <span>Syncing latest resource database...</span>
@@ -110,12 +102,11 @@
         </p>
       </div>
 
-      <!-- Subject Cards Grid -->
+      <!-- Bento Subject Grid -->
       <div id="mainSubjectGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
-        <!-- Rendered via JavaScript -->
+        <!-- Rendered dynamically by script.js -->
       </div>
-
-      <!-- SEO / AI Readable Information -->
+   <!-- SEO / AI Readable Information -->
       <section class="mt-12 pt-8 border-t border-gray-800/80 max-w-5xl mx-auto space-y-6 text-gray-400 text-xs leading-relaxed">
         <div class="p-6 rounded-2xl bg-gray-900/40 border border-gray-800/80 space-y-4">
           <h2 class="text-lg font-bold text-white flex items-center gap-2">
@@ -171,12 +162,32 @@
       </div>
 
       <!-- Resource Grid -->
-      <div id="resourceGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+      <div id="resourceGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Rendered dynamically by script.js -->
+      </div>
     </section>
 
   </main>
 
-  <!-- Mobile Floating Telegram CTA -->
+  <!-- MATERIAL DETAIL MODAL VIEW -->
+  <div id="detailView" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex items-center justify-center p-3 sm:p-6 transition-opacity">
+    <div class="bg-gray-900 border border-gray-800 rounded-2xl max-w-4xl w-full max-h-[92vh] flex flex-col relative shadow-2xl overflow-hidden">
+      <div class="p-4 border-b border-gray-800 flex items-center justify-between bg-gray-900/80 shrink-0">
+        <div class="flex items-center gap-2 overflow-hidden pr-4">
+          <span id="modalSubjectBadge" class="px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-amber-500/10 text-amber-400 border border-amber-500/20 shrink-0">Subject</span>
+          <h2 id="modalTitle" class="text-sm sm:text-base font-bold text-white truncate">Document Viewer</h2>
+        </div>
+        <button onclick="closeMaterialModal()" class="w-8 h-8 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white flex items-center justify-center transition shrink-0">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div id="detailContent" class="p-4 sm:p-5 overflow-y-auto space-y-4 flex-grow">
+        <!-- Embedded viewer dynamically injected -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Mobile Action Button -->
   <a href="https://t.me/ICSEMasterClass10" target="_blank" rel="noopener noreferrer" 
      class="fixed bottom-4 right-4 z-40 bg-sky-500 hover:bg-sky-400 text-white font-bold text-xs px-4 py-3 rounded-full shadow-lg shadow-sky-500/25 flex items-center gap-2 transition-all active:scale-95 sm:hidden">
     <i class="fa-brands fa-telegram text-base"></i>
@@ -195,7 +206,7 @@
     </div>
   </footer>
 
-  <!-- Core Scripts -->
+  <!-- Single JavaScript Entry Point -->
   <script src="script.js"></script>
 </body>
 </html>
