@@ -59,7 +59,7 @@ let currentCategory = "All";
 let allResources = [];
 let filteredResources = [];
 
-// Render Subject Grid Immediately (Prevents Blank Screen)
+// Render Subject Grid Immediately
 function initSubjectCards() {
   const grid = document.getElementById('mainSubjectGrid');
   if (!grid) return;
@@ -77,7 +77,7 @@ function initSubjectCards() {
   }).join('');
 }
 
-// Resilient Fetch Logic with Fallback Proxy
+// Fetch Data from CSV
 async function fetchSheetData() {
   const statusEl = document.getElementById('statusMessage');
   let csvText = '';
@@ -410,15 +410,32 @@ function closeMaterialModal() {
   document.getElementById("detailView")?.classList.add("hidden");
 }
 
+// Welcome Popup Trigger logic
+function checkWelcomePopup() {
+  const hasSeenPopup = localStorage.getItem('hasSeenMasterclassWelcome');
+  if (!hasSeenPopup) {
+    setTimeout(() => {
+      document.getElementById('welcomePopup')?.classList.remove('hidden');
+    }, 1200);
+  }
+}
+
+function closeWelcomePopup() {
+  document.getElementById('welcomePopup')?.classList.add('hidden');
+  localStorage.setItem('hasSeenMasterclassWelcome', 'true');
+}
+
 window.addEventListener('hashchange', checkHashRoute);
 
-// Execute immediately when script executes or DOMReady
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    initSubjectCards();
-    fetchSheetData();
-  });
-} else {
+// App Execution Start
+const startApp = () => {
   initSubjectCards();
   fetchSheetData();
+  checkWelcomePopup();
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', startApp);
+} else {
+  startApp();
 }
