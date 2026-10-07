@@ -1,13 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
+:root {
+  --site-bg: #090d16;
+  --glass-bg: rgba(15, 23, 42, 0.6);
+  --scrollbar-thumb: #1f2937;
+  --brand-amber: #f59e0b;
+  --black: #000000;
+}
+
 body {
   font-family: 'Inter', sans-serif;
-  background-color: #090d16;
+  background-color: var(--site-bg);
 }
 
 /* Glassmorphism card styling */
 .glass-card {
-  background: rgba(15, 23, 42, 0.6);
+  background: var(--glass-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
@@ -19,21 +27,22 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #090d16;
+  background: var(--site-bg);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1f2937;
+  background: var(--scrollbar-thumb);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #f59e0b;
+  background: var(--brand-amber);
 }
 
 .scrollbar-none::-webkit-scrollbar {
   display: none;
 }
+
 .scrollbar-none {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -41,7 +50,7 @@ body {
 
 /* Tab Active Class Override */
 .cat-btn.active-tab {
-  background-color: #f59e0b !important;
-  color: #000000 !important;
-  border-color: #f59e0b !important;
+  background-color: var(--brand-amber) !important;
+  color: var(--black) !important;
+  border-color: var(--brand-amber) !important;
 }
