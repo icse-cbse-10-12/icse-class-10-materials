@@ -24,7 +24,6 @@ const subjectsList = [
   "Second Language - Malayalam",
   "Second Language - Kannada",
   "Second Language - Hindi",
-  "Notes",
   "Other Subjects"
 ];
 
@@ -67,9 +66,14 @@ function initSubjectCards() {
   grid.innerHTML = subjectsList.map(subject => {
     const icon = subjectIcons[subject] || 'fa-book';
     return `
-      <button onclick="selectSubject('${subject}')" class="p-4 rounded-2xl bg-gray-900/60 border border-gray-800 hover:border-amber-500/50 hover:bg-gray-900/80 transition flex flex-col items-center justify-center gap-2 text-center group cursor-pointer">
-        <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-black transition">
-          <i class="fa-solid ${icon} text-base"></i>
+      <button
+        onclick="selectSubject('${subject}')"
+        class="p-4 rounded-2xl bg-gray-900/60 border border-gray-800 hover:border-amber-500/50 hover:bg-gray-900/80 transition flex flex-col items-center justify-center gap-2 text-center group cursor-pointer"
+        type="button"
+        aria-label="Open ${subject} subject materials"
+      >
+        <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-black transition" aria-hidden="true">
+          <i class="fa-solid ${icon} text-base" aria-hidden="true"></i>
         </div>
         <span class="text-xs font-bold text-gray-200 group-hover:text-white">${subject}</span>
       </button>
@@ -95,7 +99,7 @@ async function fetchSheetData() {
     } catch (fallbackErr) {
       console.error('All CSV sources failed:', fallbackErr);
       if (statusEl) {
-        statusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-red-400"></i> <span class="text-red-400">Failed to load database. Please reload the page.</span>`;
+        statusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-red-400" aria-hidden="true"></i> <span class="text-red-400">Failed to load database. Please reload the page.</span>`;
       }
       return;
     }
@@ -104,7 +108,7 @@ async function fetchSheetData() {
   allResources = parseCSV(csvText);
 
   if (statusEl) {
-    statusEl.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400"></i> <span>Loaded ${allResources.length} materials from database.</span>`;
+    statusEl.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400" aria-hidden="true"></i> <span>Loaded ${allResources.length} materials from database.</span>`;
   }
 
   checkHashRoute();
@@ -249,10 +253,16 @@ function filterResources() {
 // Category Filter Tabs
 function setCategoryFilter(category, event) {
   currentCategory = category;
-  document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active-tab', 'bg-amber-500', 'text-black'));
+  document.querySelectorAll('.cat-btn').forEach(btn => {
+    btn.classList.remove('active-tab', 'bg-amber-500', 'text-black');
+    btn.setAttribute('aria-pressed', 'false');
+  });
+
   if (event && event.target) {
     event.target.classList.add('active-tab', 'bg-amber-500', 'text-black');
+    event.target.setAttribute('aria-pressed', 'true');
   }
+
   filterResources();
 }
 
@@ -272,7 +282,7 @@ function renderGrid(data) {
   if (!grid) return;
 
   if (data.length === 0) {
-    grid.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500 text-xs">No study materials matched your search or category filter.</div>`;
+    grid.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500 text-xs" role="status">No study materials matched your search or category filter.</div>`;
     return;
   }
 
@@ -289,42 +299,64 @@ function renderGrid(data) {
     const isLatestAvailable = item["Latest Edition Available?"] || "";
     const editionText = item["Edition"] && item["Edition"] !== "Not Specified" ? `Ed: ${item["Edition"]}` : "";
 
+    const resourceName = item["Book Name"] || "Resource File";
+    const publisherName = item["Publisher/Company"] || item["Publisher"] || item["Subject"] || "";
+    const categoryName = item["Category"] || "General";
+
     return `
-      <div class="p-4 rounded-2xl bg-gray-900/60 border border-gray-800 hover:border-amber-500/40 transition flex flex-col justify-between gap-3 shadow-lg">
+      <div class="p-4 rounded-2xl bg-gray-900/60 border border-gray-800 hover:border-amber-500/40 transition flex flex-col justify-between gap-3 shadow-lg" role="listitem">
         <div class="space-y-2">
           <div class="flex items-center justify-between text-[10px] gap-2">
             <span class="px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold shrink-0">
-              ${item["Category"] || "General"}
+              ${categoryName}
             </span>
             <div class="flex items-center gap-1 overflow-hidden truncate text-gray-400">
               ${editionText ? `<span class="px-1.5 py-0.5 rounded bg-gray-800 text-amber-300 font-mono font-semibold">${editionText}</span>` : ""}
-              <span class="truncate">${item["Publisher/Company"] || item["Publisher"] || item["Subject"] || ""}</span>
+              <span class="truncate">${publisherName}</span>
             </div>
           </div>
 
-          <h3 class="font-bold text-sm text-white line-clamp-2 leading-snug">${item["Book Name"] || "Resource File"}</h3>
+          <h3 class="font-bold text-sm text-white line-clamp-2 leading-snug">${resourceName}</h3>
           
           ${item["Scope"] ? `<p class="text-xs text-gray-400 line-clamp-2">${item["Scope"]}</p>` : ''}
 
           ${isLatestAvailable ? `
             <div class="pt-1 text-[11px]">
-              <span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check text-[10px]"></i> Latest Edition: ${isLatestAvailable}</span>${latestEdLink ? `<a href="${latestEdLink}" target="_blank" class="ml-1 text-amber-400 underline hover:text-amber-300 font-bold">(Get Book)</a>` : ''}
+              <span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check text-[10px]" aria-hidden="true"></i> Latest Edition: ${isLatestAvailable}</span>${latestEdLink ? `<a href="${latestEdLink}" target="_blank" rel="noopener noreferrer" class="ml-1 text-amber-400 underline hover:text-amber-300 font-bold" aria-label="Get latest edition for ${resourceName}">(Get Book)</a>` : ''}
             </div>
           ` : ''}
         </div>
         
         <div class="grid grid-cols-2 gap-2 pt-2 border-t border-gray-800/80">
-          <button onclick="openMaterialModalByIndex(${index})" class="py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-200 font-bold text-xs text-center transition flex items-center justify-center gap-1.5">
-            <i class="fa-solid fa-eye"></i> Preview
+
+          <button
+            onclick="openMaterialModalByIndex(${index})"
+            class="py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-200 font-bold text-xs text-center transition flex items-center justify-center gap-1.5"
+            type="button"
+            aria-label="Preview ${resourceName}"
+          >
+            <i class="fa-solid fa-eye" aria-hidden="true"></i> Preview
           </button>
 
-          <a href="${driveLink}" target="_blank" rel="noopener noreferrer" class="py-2 rounded-xl bg-amber-500 text-black font-bold text-xs text-center hover:bg-amber-400 transition flex items-center justify-center gap-1.5">
-            <i class="fa-solid fa-download"></i> Material
+          <a
+            href="${driveLink}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="py-2 rounded-xl bg-amber-500 text-black font-bold text-xs text-center hover:bg-amber-400 transition flex items-center justify-center gap-1.5"
+            aria-label="Open material: ${resourceName}"
+          >
+            <i class="fa-solid fa-download" aria-hidden="true"></i> Material
           </a>
 
           ${lectureLink ? `
-            <a href="${lectureLink}" target="_blank" rel="noopener noreferrer" class="col-span-2 py-2 rounded-xl bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500 hover:text-white font-bold text-xs text-center transition flex items-center justify-center gap-1.5">
-              <i class="fa-brands fa-youtube text-sm"></i> Watch Lecture
+            <a
+              href="${lectureLink}"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="col-span-2 py-2 rounded-xl bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500 hover:text-white font-bold text-xs text-center transition flex items-center justify-center gap-1.5"
+              aria-label="Watch lecture for ${resourceName}"
+            >
+              <i class="fa-brands fa-youtube text-sm" aria-hidden="true"></i> Watch Lecture
             </a>
           ` : ''}
         </div>
@@ -360,7 +392,13 @@ function openMaterialModalByIndex(index) {
     const previewUrl = driveLink.replace(/\/view(\?.*)?$/, '/preview');
     embedHtml = `
       <div class="w-full h-[55vh] sm:h-[62vh] rounded-xl overflow-hidden border border-gray-800 bg-black relative">
-        <iframe src="${previewUrl}" class="w-full h-full border-0" allow="autoplay" loading="lazy"></iframe>
+        <iframe
+          src="${previewUrl}"
+          class="w-full h-full border-0"
+          allow="autoplay"
+          loading="lazy"
+          title="Preview of ${item["Book Name"] || 'Material Document'}"
+        ></iframe>
       </div>`;
   }
 
@@ -379,23 +417,42 @@ function openMaterialModalByIndex(index) {
           ${item["Latest Edition Available?"] ? `
             <p class="col-span-full pt-1 border-t border-gray-800/80">
               <strong class="text-amber-400">Latest Edition Status:</strong> ${item["Latest Edition Available?"]}
-              ${latestEdLink ? `<a href="${latestEdLink}" target="_blank" class="ml-2 text-amber-400 underline font-bold"><i class="fa-solid fa-cart-shopping text-xs"></i> Get Latest Edition Book</a>` : ''}
+              ${latestEdLink ? `<a href="${latestEdLink}" target="_blank" rel="noopener noreferrer" class="ml-2 text-amber-400 underline font-bold" aria-label="Get latest edition book for ${item["Book Name"] || 'this material'}"><i class="fa-solid fa-cart-shopping text-xs" aria-hidden="true"></i> Get Latest Edition Book</a>` : ''}
             </p>
           ` : ''}
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
-          <a href="${driveLink}" target="_blank" rel="noopener noreferrer" class="py-2.5 rounded-xl bg-amber-500 text-black font-bold text-xs text-center hover:bg-amber-400 transition flex items-center justify-center gap-2">
-            <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Drive Link
+
+          <a
+            href="${driveLink}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="py-2.5 rounded-xl bg-amber-500 text-black font-bold text-xs text-center hover:bg-amber-400 transition flex items-center justify-center gap-2"
+            aria-label="Open Drive Link for ${item["Book Name"] || 'this material'}"
+          >
+            <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> Open Drive Link
           </a>
           
           ${lectureLink ? `
-            <a href="${lectureLink}" target="_blank" rel="noopener noreferrer" class="py-2.5 rounded-xl bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500 hover:text-white font-bold text-xs text-center transition flex items-center justify-center gap-2">
-              <i class="fa-brands fa-youtube text-sm"></i> Watch Video Lecture
+            <a
+              href="${lectureLink}"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="py-2.5 rounded-xl bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500 hover:text-white font-bold text-xs text-center transition flex items-center justify-center gap-2"
+              aria-label="Watch video lecture for ${item["Book Name"] || 'this material'}"
+            >
+              <i class="fa-brands fa-youtube text-sm" aria-hidden="true"></i> Watch Video Lecture
             </a>
           ` : `
-            <a href="https://t.me/ICSEMasterClass10" target="_blank" rel="noopener noreferrer" class="py-2.5 rounded-xl bg-sky-500/20 text-sky-400 border border-sky-500/30 hover:bg-sky-500 hover:text-white font-bold text-xs text-center transition flex items-center justify-center gap-2">
-              <i class="fa-brands fa-telegram text-sm"></i> Telegram Discussion
+            <a
+              href="https://t.me/ICSEMasterClass10"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="py-2.5 rounded-xl bg-sky-500/20 text-sky-400 border border-sky-500/30 hover:bg-sky-500 hover:text-white font-bold text-xs text-center transition flex items-center justify-center gap-2"
+              aria-label="Open Telegram Discussion"
+            >
+              <i class="fa-brands fa-telegram text-sm" aria-hidden="true"></i> Telegram Discussion
             </a>
           `}
         </div>
@@ -403,25 +460,47 @@ function openMaterialModalByIndex(index) {
     `;
   }
 
-  document.getElementById("detailView")?.classList.remove("hidden");
+  const detailView = document.getElementById("detailView");
+
+  if (detailView) {
+    detailView.classList.remove("hidden");
+    detailView.setAttribute("aria-hidden", "false");
+  }
 }
 
 function closeMaterialModal() {
-  document.getElementById("detailView")?.classList.add("hidden");
+  const detailView = document.getElementById("detailView");
+
+  if (detailView) {
+    detailView.classList.add("hidden");
+    detailView.setAttribute("aria-hidden", "true");
+  }
 }
 
 // Welcome Popup Trigger logic
 function checkWelcomePopup() {
   const hasSeenPopup = localStorage.getItem('hasSeenMasterclassWelcome');
+
   if (!hasSeenPopup) {
     setTimeout(() => {
-      document.getElementById('welcomePopup')?.classList.remove('hidden');
+      const popup = document.getElementById('welcomePopup');
+
+      if (popup) {
+        popup.classList.remove('hidden');
+        popup.setAttribute('aria-hidden', 'false');
+      }
     }, 1200);
   }
 }
 
 function closeWelcomePopup() {
-  document.getElementById('welcomePopup')?.classList.add('hidden');
+  const popup = document.getElementById('welcomePopup');
+
+  if (popup) {
+    popup.classList.add('hidden');
+    popup.setAttribute('aria-hidden', 'true');
+  }
+
   localStorage.setItem('hasSeenMasterclassWelcome', 'true');
 }
 
