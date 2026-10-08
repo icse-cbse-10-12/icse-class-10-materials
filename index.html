@@ -130,43 +130,122 @@
       <div id="mainSubjectGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
         <!-- Rendered dynamically by script.js -->
       </div>
-
-      <!-- About Section -->
-      <section class="mt-12 pt-8 border-t border-gray-800/80 max-w-5xl mx-auto space-y-6 text-gray-400 text-xs leading-relaxed">
-        <div class="p-6 sm:p-8 rounded-lg bg-gray-900/40 border border-gray-800/80 space-y-6">
-          <div class="space-y-1">
-            <h2 class="text-xl font-bold text-white flex items-center gap-2">
-              <i class="fa-solid fa-book-bookmark text-amber-500" aria-hidden="true"></i>
-              About ICSE MasterClass Study Vault
-            </h2>
-            <p class="text-amber-400 font-semibold text-[11px]">The Ultimate Free Educational Index for ICSE Class 10 Board Preparation</p>
-          </div>
-
-          <div class="space-y-3 text-gray-300">
-            <p>
-              Welcome to the official digital resource library by <strong>ICSE MasterClass</strong>. Designed explicitly for Class 10 students preparing for the Indian Certificate of Secondary Education (ICSE) Board Examinations, this platform acts as a centralized index for high-yield study materials, chapter-wise revision notes, solved previous years' question papers (PYQs), and publisher question banks.
-            </p>
-          </div>
-
-          <!-- Legal Disclaimer Notice Box -->
-          <div class="p-4 sm:p-5 rounded-lg bg-amber-500/5 border border-amber-500/20 text-xs text-gray-300 space-y-3 mt-4">
-            <p class="font-bold text-amber-400 flex items-center gap-1.5 text-xs">
-              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> Aggregation Notice, Fair Use & Copyright Disclaimer
-            </p>
-            <div class="space-y-2 text-[11px] text-gray-300 leading-normal">
-              <p>
-                <strong>1. Content Aggregation Notice:</strong> All study materials, question banks, notes, sample papers, and reference documents indexed on this platform are aggregated from publicly available online sources. <strong>ICSE MasterClass does NOT produce, author, publish, host, or claim original ownership of any of these files.</strong>
-              </p>
-              <p>
-                📧 <strong>Email Support:</strong> 
-                <a href="mailto:icsemasterclass@gmail.com" class="text-amber-400 font-bold underline hover:text-amber-300">icsemasterclass@gmail.com</a>
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
     </section>
 
+    <!-- SUBJECT DETAIL VIEW -->
+    <section id="subjectDetailView" class="hidden space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-800/80">
+        <div class="flex items-center gap-3">
+          <button onclick="closeSubjectSubPage()" class="w-9 h-9 rounded-xl bg-gray-900 border border-gray-800 hover:border-gray-700 text-gray-300 hover:text-white flex items-center justify-center transition">
+            <i class="fa-solid fa-arrow-left"></i>
+          </button>
+          <div>
+            <h2 id="selectedSubjectTitle" class="text-xl sm:text-2xl font-black text-white">Subject Vault</h2>
+            <p id="itemCount" class="text-xs text-gray-400">0 Materials Found</p>
+          </div>
+        </div>
+
+        <div class="relative w-full sm:w-72">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xs"></i>
+          <input type="text" id="searchInput" oninput="filterResources()" placeholder="Search book, topic, publisher..." 
+                 class="w-full bg-gray-900 border border-gray-800 rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 transition">
+        </div>
+      </div>
+
+      <!-- Filter Buttons -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+        <button onclick="setCategoryFilter('All', event)" class="cat-btn active-tab px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition bg-amber-500 text-black">All Materials</button>
+        <button onclick="setCategoryFilter('Special Notes', event)" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30 hover:border-amber-400 whitespace-nowrap transition"><i class="fa-solid fa-star text-[10px] mr-1"></i> Special Notes</button>
+        <button onclick="setCategoryFilter('Official CISCE Materials', event)" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/30 hover:border-blue-400 whitespace-nowrap transition"><i class="fa-solid fa-shield-halved text-[10px] mr-1"></i> Official CISCE Materials</button>
+        <button onclick="setCategoryFilter('Question Banks', event)" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition">Question Banks</button>
+        <button onclick="setCategoryFilter('Notes', event)" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition">Notes</button>
+        <button onclick="setCategoryFilter('Textbooks / Reference Books', event)" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition">Textbooks / Reference Books</button>
+        <button onclick="setCategoryFilter('Sample Papers', event)" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition">Sample Papers</button>
+        <button onclick="setCategoryFilter('PYQ', event)" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition">PYQs</button>
+      </div>
+
+      <!-- Resource Grid -->
+      <div id="resourceGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Rendered dynamically by script.js -->
+      </div>
+    </section>
+
+    <!-- ALWAYS-VISIBLE ABOUT & LEGAL DISCLAIMER SECTION -->
+    <section class="mt-12 pt-8 border-t border-gray-800/80 max-w-5xl mx-auto space-y-6 text-gray-400 text-xs leading-relaxed">
+      <div class="p-6 sm:p-8 rounded-lg bg-gray-900/40 border border-gray-800/80 space-y-6">
+        
+        <!-- Title -->
+        <div class="space-y-1">
+          <h2 class="text-xl font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-book-bookmark text-amber-500" aria-hidden="true"></i>
+            About ICSE MasterClass Study Vault
+          </h2>
+          <p class="text-amber-400 font-semibold text-[11px]">The Ultimate Free Educational Index for ICSE Class 10 Board Preparation</p>
+        </div>
+
+        <!-- Core Overview -->
+        <div class="space-y-3 text-gray-300">
+          <p>
+            Welcome to the official digital resource library by <strong>ICSE MasterClass</strong>. Designed explicitly for Class 10 students preparing for the Indian Certificate of Secondary Education (ICSE) Board Examinations, this platform acts as a centralized index for high-yield study materials, chapter-wise revision notes, solved previous years' question papers (PYQs), and publisher question banks.
+          </p>
+          <p>
+            Our mission is to democratize quality educational resources for every ICSE student across India and abroad. Whether you are revising core concepts in Physics and Mathematics, practicing diagram-based questions in Biology, mastering Java programming for Computer Applications, or reviewing grammar rules for English Language, our vault simplifies resource discovery without paywalls or forced registrations.
+          </p>
+        </div>
+
+        <!-- Key Offerings Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+          <div class="p-4 rounded-lg bg-gray-950/60 border border-gray-800/80 space-y-1.5">
+            <h3 class="font-bold text-white text-xs flex items-center gap-2">
+              <i class="fa-solid fa-layer-group text-amber-400" aria-hidden="true"></i> Extensive Subject Support
+            </h3>
+            <p class="text-gray-400 text-[11px]">
+              Covers 15+ subjects including Physics, Chemistry, Biology, Mathematics, History & Civics, Geography, Computer Applications, Commercial Studies, Economic Applications, Environmental Applications, Home Science, Physical Education, English Literature, English Language, and Second Languages (Hindi, Tamil, Malayalam, Kannada).
+            </p>
+          </div>
+
+          <div class="p-4 rounded-lg bg-gray-950/60 border border-gray-800/80 space-y-1.5">
+            <h3 class="font-bold text-white text-xs flex items-center gap-2">
+              <i class="fa-solid fa-file-pdf text-amber-400" aria-hidden="true"></i> Curated Resource Formats
+            </h3>
+            <p class="text-gray-400 text-[11px]">
+              Instant access to publisher sample papers, chapter-by-chapter summaries, formula compendiums, top publisher question banks (Oswaal, Educart, Arihant, Goyal Brothers, Selina Solutions), and curated YouTube video lectures.
+            </p>
+          </div>
+        </div>
+
+        <!-- Legal Disclaimer Notice Box -->
+        <div class="p-4 sm:p-5 rounded-lg bg-amber-500/5 border border-amber-500/20 text-xs text-gray-300 space-y-3 mt-4">
+          <p class="font-bold text-amber-400 flex items-center gap-1.5 text-xs">
+            <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> Aggregation Notice, Fair Use & Copyright Disclaimer
+          </p>
+          <div class="space-y-2 text-[11px] text-gray-300 leading-normal">
+            <p>
+              <strong>1. Content Aggregation Notice:</strong> All study materials, question banks, notes, sample papers, and reference documents indexed on this platform are aggregated from publicly available online sources. <strong>ICSE MasterClass does NOT produce, author, publish, host, or claim original ownership of any of these files.</strong> We function purely as a non-profit search index and organizational portal to assist students in locating existing study resources.
+            </p>
+            <p>
+              <strong>2. Non-Affiliation:</strong> ICSE MasterClass is an independent educational initiative. We are NOT affiliated with, authorized, endorsed by, or in any way officially connected with the Council for the Indian School Certificate Examinations (CISCE). "ICSE" is a registered trademark of CISCE.
+            </p>
+            <p>
+              <strong>3. Intellectual Property & Fair Use:</strong> All third-party study materials, publisher excerpts, book covers, and trademarked names (including Oswaal Books, Educart, Arihant Publications, Selina Publishers, Goyal Brothers Prakashan, etc.) indexed or linked on this platform remain the sole intellectual property of their respective original authors and publishers. They are indexed strictly for individual student reference, fair educational evaluation, and guidance under fair use principles.
+            </p>
+            <p>
+              <strong>4. Takedown Request Policy (DMCA):</strong> If you are a copyright owner or an authorized representative and believe that any material linked through this platform infringes upon your copyright rights, please send a formal removal request to:
+            </p>
+            <p class="pt-1">
+              📧 <strong>Email Support:</strong> 
+              <a href="mailto:icsemasterclass@gmail.com" class="text-amber-400 font-bold underline hover:text-amber-300">icsemasterclass@gmail.com</a>
+            </p>
+            <p class="text-gray-400 text-[10px]">
+              *Upon receipt of a valid removal notice, the identified resource link will be reviewed and permanently removed within 5 Days.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
     <!-- SUBJECT DETAIL VIEW -->
     <section id="subjectDetailView" class="hidden space-y-6">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-800/80">
