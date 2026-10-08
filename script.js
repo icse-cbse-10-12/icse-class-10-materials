@@ -1,4 +1,4 @@
-// Google Sheets Published CSV Endpoint & CORS Proxy Fallback
+// Published Google Sheets CSV Endpoint & Proxy Fallback
 const primaryCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQLGKfaC9WUePvCArs7YAxYP9tmoPYkCdfJviR2pdOnlSZ6gVLEqgtAEga4XLQpubVTfEsHo2eWBWx7/pub?output=csv';
 const fallbackCsvUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(primaryCsvUrl);
 
@@ -58,7 +58,32 @@ let currentCategory = "All";
 let allResources = [];
 let filteredResources = [];
 
-// Render Subject Grid Immediately
+// PWA Deferred Prompt Variable
+let deferredPwaPrompt = null;
+
+// Listen for PWA Install Prompt
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPwaPrompt = e;
+  const pwaBtn = document.getElementById('pwaInstallBtn');
+  if (pwaBtn) pwaBtn.classList.remove('hidden');
+});
+
+// Trigger PWA Installation
+function installPwaApp() {
+  if (!deferredPwaPrompt) return;
+  deferredPwaPrompt.prompt();
+  deferredPwaPrompt.userChoice.then((choiceResult) => {
+    if (choiceResult.outcome === 'accepted') {
+      console.log('User accepted the PWA install prompt');
+    }
+    deferredPwaPrompt = null;
+    const pwaBtn = document.getElementById('pwaInstallBtn');
+    if (pwaBtn) pwaBtn.classList.add('hidden');
+  });
+}
+
+// Render Subject Grid
 function initSubjectCards() {
   const grid = document.getElementById('mainSubjectGrid');
   if (!grid) return;
@@ -68,11 +93,11 @@ function initSubjectCards() {
     return `
       <button
         onclick="selectSubject('${subject}')"
-        class="p-4 rounded-2xl bg-gray-900/60 border border-gray-800 hover:border-amber-500/50 hover:bg-gray-900/80 transition flex flex-col items-center justify-center gap-2 text-center group cursor-pointer"
+        class="p-4 rounded-xl bg-gray-900/60 border border-gray-800 hover:border-amber-500/50 hover:bg-gray-900/80 transition flex flex-col items-center justify-center gap-2 text-center group cursor-pointer"
         type="button"
         aria-label="Open ${subject} subject materials"
       >
-        <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-black transition" aria-hidden="true">
+        <div class="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-black transition" aria-hidden="true">
           <i class="fa-solid ${icon} text-base" aria-hidden="true"></i>
         </div>
         <span class="text-xs font-bold text-gray-200 group-hover:text-white">${subject}</span>
@@ -122,8 +147,13 @@ function checkHashRoute() {
     const matchedSubject = subjectsList.find(s => s.toLowerCase() === rawSubject.toLowerCase());
     if (matchedSubject) {
       selectSubject(matchedSubject, false);
+      return;
     }
   }
+
+  // Default to Main Landing View if no valid hash route exists
+  document.getElementById('mainLandingView')?.classList.remove('hidden');
+  document.getElementById('subjectDetailView')?.classList.add('hidden');
 }
 
 // CSV Parser
@@ -183,19 +213,22 @@ function selectSubject(subjectName, updateHash = true) {
     }
   }
 
+  const landingView = document.getElementById('mainLandingView');
+  const detailView = document.getElementById('subjectDetailView');
   const titleEl = document.getElementById('selectedSubjectTitle');
+
   if (titleEl) {
     titleEl.innerText = subjectName === "All" ? "All Subjects Vault" : subjectName;
   }
 
-  document.getElementById('mainLandingView')?.classList.add('hidden');
-  document.getElementById('subjectDetailView')?.classList.remove('hidden');
+  if (landingView) landingView.classList.add('hidden');
+  if (detailView) detailView.classList.remove('hidden');
   
   filterResources();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Filtering Logic
+// Filter Resources Engine
 function filterResources() {
   const searchVal = (document.getElementById("searchInput")?.value || "").toLowerCase().trim();
 
@@ -205,8 +238,8 @@ function filterResources() {
     const bookName = (item["Book Name"] || "").toLowerCase().trim();
     const publisher = (item["Publisher/Company"] || item["Publisher"] || "").toLowerCase().trim();
 
+    // 1. Subject Matching
     let subMatch = false;
-
     if (currentSubject === "All") {
       subMatch = true;
     } else {
@@ -241,7 +274,19 @@ function filterResources() {
       }
     }
                    
-    let catMatch = currentCategory === "All" || itemCategory.includes(currentCategory.toLowerCase());
+    // 2. Category & Publisher Rule Matching
+    let catMatch = false;
+    if (currentCategory === "All") {
+      catMatch = true;
+    } else if (currentCategory === "Special Notes") {
+      catMatch = publisher.includes("icse masterclass") || publisher.includes("wiseplex");
+    } else if (currentCategory === "Official CISCE Materials") {
+      catMatch = publisher.includes("cisce");
+    } else {
+      catMatch = itemCategory.includes(currentCategory.toLowerCase());
+    }
+
+    // 3. Search Term Matching
     let srchMatch = !searchVal || bookName.includes(searchVal) || itemSubject.includes(searchVal) || publisher.includes(searchVal);
 
     return subMatch && catMatch && srchMatch;
@@ -255,25 +300,23 @@ function setCategoryFilter(category, event) {
   currentCategory = category;
   document.querySelectorAll('.cat-btn').forEach(btn => {
     btn.classList.remove('active-tab', 'bg-amber-500', 'text-black');
-    btn.setAttribute('aria-pressed', 'false');
   });
-
   if (event && event.target) {
-    event.target.classList.add('active-tab', 'bg-amber-500', 'text-black');
-    event.target.setAttribute('aria-pressed', 'true');
+    const btn = event.target.closest('.cat-btn') || event.target;
+    btn.classList.add('active-tab', 'bg-amber-500', 'text-black');
   }
-
   filterResources();
 }
 
-// Close Detail View
+// Close Detail View & Return Home
 function closeSubjectSubPage() {
   document.getElementById('subjectDetailView')?.classList.add('hidden');
   document.getElementById('mainLandingView')?.classList.remove('hidden');
+  currentSubject = "All";
   history.pushState("", document.title, window.location.pathname + window.location.search);
 }
 
-// Render Grid
+// Render Resource Cards Grid
 function renderGrid(data) {
   const grid = document.getElementById("resourceGrid");
   const countEl = document.getElementById("itemCount");
@@ -282,7 +325,7 @@ function renderGrid(data) {
   if (!grid) return;
 
   if (data.length === 0) {
-    grid.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500 text-xs" role="status">No study materials matched your search or category filter.</div>`;
+    grid.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500 text-xs">No study materials matched your search or category filter.</div>`;
     return;
   }
 
@@ -299,63 +342,41 @@ function renderGrid(data) {
     const isLatestAvailable = item["Latest Edition Available?"] || "";
     const editionText = item["Edition"] && item["Edition"] !== "Not Specified" ? `Ed: ${item["Edition"]}` : "";
 
-    const resourceName = item["Book Name"] || "Resource File";
-    const publisherName = item["Publisher/Company"] || item["Publisher"] || item["Subject"] || "";
-    const categoryName = item["Category"] || "General";
-
     return `
-      <div class="p-4 rounded-2xl bg-gray-900/60 border border-gray-800 hover:border-amber-500/40 transition flex flex-col justify-between gap-3 shadow-lg" role="listitem">
+      <div class="p-4 rounded-xl bg-gray-900/60 border border-gray-800 hover:border-amber-500/40 transition flex flex-col justify-between gap-3 shadow-lg">
         <div class="space-y-2">
           <div class="flex items-center justify-between text-[10px] gap-2">
-            <span class="px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold shrink-0">
-              ${categoryName}
+            <span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold shrink-0">
+              ${item["Category"] || "General"}
             </span>
             <div class="flex items-center gap-1 overflow-hidden truncate text-gray-400">
               ${editionText ? `<span class="px-1.5 py-0.5 rounded bg-gray-800 text-amber-300 font-mono font-semibold">${editionText}</span>` : ""}
-              <span class="truncate">${publisherName}</span>
+              <span class="truncate">${item["Publisher/Company"] || item["Publisher"] || item["Subject"] || ""}</span>
             </div>
           </div>
 
-          <h3 class="font-bold text-sm text-white line-clamp-2 leading-snug">${resourceName}</h3>
+          <h3 class="font-bold text-sm text-white line-clamp-2 leading-snug">${item["Book Name"] || "Resource File"}</h3>
           
           ${item["Scope"] ? `<p class="text-xs text-gray-400 line-clamp-2">${item["Scope"]}</p>` : ''}
 
           ${isLatestAvailable ? `
             <div class="pt-1 text-[11px]">
-              <span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check text-[10px]" aria-hidden="true"></i> Latest Edition: ${isLatestAvailable}</span>${latestEdLink ? `<a href="${latestEdLink}" target="_blank" rel="noopener noreferrer" class="ml-1 text-amber-400 underline hover:text-amber-300 font-bold" aria-label="Get latest edition for ${resourceName}">(Get Book)</a>` : ''}
+              <span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check text-[10px]" aria-hidden="true"></i> Latest Edition: ${isLatestAvailable}</span>${latestEdLink ? `<a href="${latestEdLink}" target="_blank" rel="noopener noreferrer" class="ml-1 text-amber-400 underline hover:text-amber-300 font-bold">(Get Book)</a>` : ''}
             </div>
           ` : ''}
         </div>
         
         <div class="grid grid-cols-2 gap-2 pt-2 border-t border-gray-800/80">
-
-          <button
-            onclick="openMaterialModalByIndex(${index})"
-            class="py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-200 font-bold text-xs text-center transition flex items-center justify-center gap-1.5"
-            type="button"
-            aria-label="Preview ${resourceName}"
-          >
+          <button onclick="openMaterialModalByIndex(${index})" aria-label="Preview ${item["Book Name"] || "material"}" class="py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-200 font-bold text-xs text-center transition flex items-center justify-center gap-1.5 cursor-pointer">
             <i class="fa-solid fa-eye" aria-hidden="true"></i> Preview
           </button>
 
-          <a
-            href="${driveLink}"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="py-2 rounded-xl bg-amber-500 text-black font-bold text-xs text-center hover:bg-amber-400 transition flex items-center justify-center gap-1.5"
-            aria-label="Open material: ${resourceName}"
-          >
+          <a href="${driveLink}" target="_blank" rel="noopener noreferrer" aria-label="Open download link for ${item["Book Name"] || "material"}" class="py-2 rounded-lg bg-amber-500 text-black font-bold text-xs text-center hover:bg-amber-400 transition flex items-center justify-center gap-1.5">
             <i class="fa-solid fa-download" aria-hidden="true"></i> Material
           </a>
 
           ${lectureLink ? `
-            <a
-              href="${lectureLink}"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="col-span-2 py-2 rounded-xl bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500 hover:text-white font-bold text-xs text-center transition flex items-center justify-center gap-1.5"
-              aria-label="Watch lecture for ${resourceName}"
-            >
+            <a href="${lectureLink}" target="_blank" rel="noopener noreferrer" aria-label="Watch lecture video" class="col-span-2 py-2 rounded-lg bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500 hover:text-white font-bold text-xs text-center transition flex items-center justify-center gap-1.5">
               <i class="fa-brands fa-youtube text-sm" aria-hidden="true"></i> Watch Lecture
             </a>
           ` : ''}
@@ -365,7 +386,7 @@ function renderGrid(data) {
   }).join("");
 }
 
-// Lightbox Modal
+// Lightbox Document Preview Modal
 function openMaterialModalByIndex(index) {
   const item = filteredResources[index];
   if (!item) return;
@@ -391,14 +412,8 @@ function openMaterialModalByIndex(index) {
   if (driveLink && driveLink.includes("drive.google.com")) {
     const previewUrl = driveLink.replace(/\/view(\?.*)?$/, '/preview');
     embedHtml = `
-      <div class="w-full h-[55vh] sm:h-[62vh] rounded-xl overflow-hidden border border-gray-800 bg-black relative">
-        <iframe
-          src="${previewUrl}"
-          class="w-full h-full border-0"
-          allow="autoplay"
-          loading="lazy"
-          title="Preview of ${item["Book Name"] || 'Material Document'}"
-        ></iframe>
+      <div class="w-full h-[55vh] sm:h-[62vh] rounded-lg overflow-hidden border border-gray-800 bg-black relative">
+        <iframe src="${previewUrl}" title="Google Drive Document Preview" class="w-full h-full border-0" allow="autoplay" loading="lazy"></iframe>
       </div>`;
   }
 
@@ -407,7 +422,7 @@ function openMaterialModalByIndex(index) {
       <div class="space-y-4">
         ${embedHtml}
         
-        <div class="p-3.5 rounded-xl bg-gray-950 border border-gray-800 text-xs text-gray-300 grid grid-cols-1 sm:grid-cols-2 gap-2">
+        <div class="p-3.5 rounded-lg bg-gray-950 border border-gray-800 text-xs text-gray-300 grid grid-cols-1 sm:grid-cols-2 gap-2">
           <p><strong class="text-amber-400">Publisher:</strong> ${item["Publisher/Company"] || item["Publisher"] || 'N/A'}</p>
           <p><strong class="text-amber-400">Category:</strong> ${item["Category"] || 'N/A'}</p>
           <p><strong class="text-amber-400">Edition:</strong> ${item["Edition"] || 'Not Specified'}</p>
@@ -417,41 +432,22 @@ function openMaterialModalByIndex(index) {
           ${item["Latest Edition Available?"] ? `
             <p class="col-span-full pt-1 border-t border-gray-800/80">
               <strong class="text-amber-400">Latest Edition Status:</strong> ${item["Latest Edition Available?"]}
-              ${latestEdLink ? `<a href="${latestEdLink}" target="_blank" rel="noopener noreferrer" class="ml-2 text-amber-400 underline font-bold" aria-label="Get latest edition book for ${item["Book Name"] || 'this material'}"><i class="fa-solid fa-cart-shopping text-xs" aria-hidden="true"></i> Get Latest Edition Book</a>` : ''}
+              ${latestEdLink ? `<a href="${latestEdLink}" target="_blank" rel="noopener noreferrer" class="ml-2 text-amber-400 underline font-bold"><i class="fa-solid fa-cart-shopping text-xs" aria-hidden="true"></i> Get Latest Edition Book</a>` : ''}
             </p>
           ` : ''}
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
-
-          <a
-            href="${driveLink}"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="py-2.5 rounded-xl bg-amber-500 text-black font-bold text-xs text-center hover:bg-amber-400 transition flex items-center justify-center gap-2"
-            aria-label="Open Drive Link for ${item["Book Name"] || 'this material'}"
-          >
+          <a href="${driveLink}" target="_blank" rel="noopener noreferrer" class="py-2.5 rounded-lg bg-amber-500 text-black font-bold text-xs text-center hover:bg-amber-400 transition flex items-center justify-center gap-2">
             <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> Open Drive Link
           </a>
           
           ${lectureLink ? `
-            <a
-              href="${lectureLink}"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="py-2.5 rounded-xl bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500 hover:text-white font-bold text-xs text-center transition flex items-center justify-center gap-2"
-              aria-label="Watch video lecture for ${item["Book Name"] || 'this material'}"
-            >
+            <a href="${lectureLink}" target="_blank" rel="noopener noreferrer" class="py-2.5 rounded-lg bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500 hover:text-white font-bold text-xs text-center transition flex items-center justify-center gap-2">
               <i class="fa-brands fa-youtube text-sm" aria-hidden="true"></i> Watch Video Lecture
             </a>
           ` : `
-            <a
-              href="https://t.me/ICSEMasterClass10"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="py-2.5 rounded-xl bg-sky-500/20 text-sky-400 border border-sky-500/30 hover:bg-sky-500 hover:text-white font-bold text-xs text-center transition flex items-center justify-center gap-2"
-              aria-label="Open Telegram Discussion"
-            >
+            <a href="https://t.me/ICSEMasterClass10" target="_blank" rel="noopener noreferrer" class="py-2.5 rounded-lg bg-sky-500/20 text-sky-400 border border-sky-500/30 hover:bg-sky-500 hover:text-white font-bold text-xs text-center transition flex items-center justify-center gap-2">
               <i class="fa-brands fa-telegram text-sm" aria-hidden="true"></i> Telegram Discussion
             </a>
           `}
@@ -460,53 +456,31 @@ function openMaterialModalByIndex(index) {
     `;
   }
 
-  const detailView = document.getElementById("detailView");
-
-  if (detailView) {
-    detailView.classList.remove("hidden");
-    detailView.setAttribute("aria-hidden", "false");
-  }
+  document.getElementById("detailView")?.classList.remove("hidden");
 }
 
 function closeMaterialModal() {
-  const detailView = document.getElementById("detailView");
-
-  if (detailView) {
-    detailView.classList.add("hidden");
-    detailView.setAttribute("aria-hidden", "true");
-  }
+  document.getElementById("detailView")?.classList.add("hidden");
 }
 
-// Welcome Popup Trigger logic
+// Welcome Popup Trigger Logic
 function checkWelcomePopup() {
   const hasSeenPopup = localStorage.getItem('hasSeenMasterclassWelcome');
-
   if (!hasSeenPopup) {
     setTimeout(() => {
-      const popup = document.getElementById('welcomePopup');
-
-      if (popup) {
-        popup.classList.remove('hidden');
-        popup.setAttribute('aria-hidden', 'false');
-      }
+      document.getElementById('welcomePopup')?.classList.remove('hidden');
     }, 1200);
   }
 }
 
 function closeWelcomePopup() {
-  const popup = document.getElementById('welcomePopup');
-
-  if (popup) {
-    popup.classList.add('hidden');
-    popup.setAttribute('aria-hidden', 'true');
-  }
-
+  document.getElementById('welcomePopup')?.classList.add('hidden');
   localStorage.setItem('hasSeenMasterclassWelcome', 'true');
 }
 
 window.addEventListener('hashchange', checkHashRoute);
 
-// App Execution Start
+// App Execution Entrance Point
 const startApp = () => {
   initSubjectCards();
   fetchSheetData();
