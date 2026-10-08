@@ -1,26 +1,42 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
+/* ==========================================================================
+   ICSE MasterClass Custom Design System & Glassmorphism Tokens
+   ========================================================================== */
+
 :root {
   --site-bg: #090d16;
   --glass-bg: rgba(15, 23, 42, 0.6);
+  --border-dark: rgba(31, 41, 55, 0.8);
   --scrollbar-thumb: #1f2937;
   --brand-amber: #f59e0b;
+  --sky-blue: #0284c7;
+  --emerald-green: #10b981;
   --black: #000000;
+}
+
+/* Base Body Styling & Smooth Scroll */
+html {
+  scroll-behavior: smooth;
+  background-color: var(--site-bg);
 }
 
 body {
   font-family: 'Inter', sans-serif;
   background-color: var(--site-bg);
+  color: #f3f4f6;
+  overflow-x: hidden;
 }
 
-/* Glassmorphism card styling */
+/* Glassmorphism Card Styling */
 .glass-card {
   background: var(--glass-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-dark);
 }
 
-/* Custom scrollbars */
+/* Custom Scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -53,4 +69,28 @@ body {
   background-color: var(--brand-amber) !important;
   color: var(--black) !important;
   border-color: var(--brand-amber) !important;
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+}
+
+/* Hover Animations */
+.group:hover .group-hover\:scale-105 {
+  transform: scale(1.05);
+}
+
+.group:hover .group-hover\:scale-110 {
+  transform: scale(1.10);
+}
+
+/* Pulse Glow Keyframes for Install/Special Buttons */
+@keyframes goldPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(245, 158, 11, 0);
+  }
+}
+
+.pulse-glow {
+  animation: goldPulse 2s infinite;
 }
