@@ -58,11 +58,9 @@ let currentSubject = "All";
 let currentCategory = "All";
 let allResources = [];
 let filteredResources = [];
-
-// PWA Deferred Prompt Variable
 let deferredPwaPrompt = null;
 
-// Listen for PWA Install Prompt
+// PWA Install Prompt
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPwaPrompt = e;
@@ -70,14 +68,15 @@ window.addEventListener('beforeinstallprompt', (e) => {
   if (pwaBtn) pwaBtn.classList.remove('hidden');
 });
 
-// Trigger PWA Installation
 function installPwaApp() {
   if (!deferredPwaPrompt) return;
+
   deferredPwaPrompt.prompt();
   deferredPwaPrompt.userChoice.then((choiceResult) => {
     if (choiceResult.outcome === 'accepted') {
       console.log('User accepted the PWA install prompt');
     }
+
     deferredPwaPrompt = null;
     const pwaBtn = document.getElementById('pwaInstallBtn');
     if (pwaBtn) pwaBtn.classList.add('hidden');
@@ -91,6 +90,7 @@ function initSubjectCards() {
 
   grid.innerHTML = subjectsList.map(subject => {
     const icon = subjectIcons[subject] || 'fa-book';
+
     return `
       <button
         onclick="selectSubject('${subject}')"
@@ -107,7 +107,7 @@ function initSubjectCards() {
   }).join('');
 }
 
-// Fetch Data from CSV
+// Fetch Data from Google Sheets CSV
 async function fetchSheetData() {
   const statusEl = document.getElementById('statusMessage');
   let csvText = '';
@@ -118,14 +118,19 @@ async function fetchSheetData() {
     csvText = await res.text();
   } catch (err) {
     console.warn('Primary fetch failed, trying fallback proxy...', err);
+
     try {
       const fallbackRes = await fetch(fallbackCsvUrl);
       if (!fallbackRes.ok) throw new Error('Fallback CSV blocked');
       csvText = await fallbackRes.text();
     } catch (fallbackErr) {
       console.error('All CSV sources failed:', fallbackErr);
+
       if (statusEl) {
-        statusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-red-400" aria-hidden="true"></i> <span class="text-red-400">Failed to load database. Please reload the page.</span>`;
+        statusEl.innerHTML = `
+          <i class="fa-solid fa-triangle-exclamation text-red-400" aria-hidden="true"></i>
+          <span class="text-red-400">Failed to load database. Please reload the page.</span>
+        `;
       }
       return;
     }
@@ -134,25 +139,46 @@ async function fetchSheetData() {
   allResources = parseCSV(csvText);
 
   if (statusEl) {
-    statusEl.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400" aria-hidden="true"></i> <span>Loaded ${allResources.length} materials from database.</span>`;
+    statusEl.innerHTML = `
+      <i class="fa-solid fa-circle-check text-emerald-400" aria-hidden="true"></i>
+      <span>Loaded ${allResources.length} materials from database.</span>
+    `;
   }
 
   checkHashRoute();
 }
 
-// Deep Link Route Checker
+// Route Handler
 function checkHashRoute() {
+  const sharedId = new URLSearchParams(window.location.search).get('material');
+
+  if (sharedId) {
+    showSharedMaterialPage(sharedId);
+    return;
+  }
+
+  document.body.classList.remove('shared-material-mode');
+
+  const sharedPage = document.getElementById('sharedMaterialPage');
+  if (sharedPage) sharedPage.style.display = 'none';
+
   const hash = window.location.hash;
+
   if (hash && hash.startsWith('#subject-')) {
-    const rawSubject = decodeURIComponent(hash.replace('#subject-', '')).trim();
-    const matchedSubject = subjectsList.find(s => s.toLowerCase() === rawSubject.toLowerCase());
+    const rawSubject = decodeURIComponent(
+      hash.replace('#subject-', '')
+    ).trim();
+
+    const matchedSubject = subjectsList.find(
+      s => s.toLowerCase() === rawSubject.toLowerCase()
+    );
+
     if (matchedSubject) {
       selectSubject(matchedSubject, false);
       return;
     }
   }
 
-  // Default to Main Landing View if no valid hash route exists
   document.getElementById('mainLandingView')?.classList.remove('hidden');
   document.getElementById('subjectDetailView')?.classList.add('hidden');
 }
@@ -169,6 +195,7 @@ function parseCSV(text) {
 
     for (let i = 0; i < row.length; i++) {
       const char = row[i];
+
       if (char === '"' && row[i + 1] === '"') {
         current += '"';
         i++;
@@ -181,34 +208,46 @@ function parseCSV(text) {
         current += char;
       }
     }
+
     result.push(current.trim());
     return result;
   }
 
-  const headers = splitRow(lines[0]).map(h => h.replace(/^"|"$/g, '').trim());
+  const headers = splitRow(lines[0]).map(
+    h => h.replace(/^"|"$/g, '').trim()
+  );
+
   const data = [];
 
   for (let i = 1; i < lines.length; i++) {
     const row = splitRow(lines[i]);
-    let item = {};
+    const item = {};
+
     headers.forEach((header, index) => {
-      item[header] = (row[index] || "").replace(/^"|"$/g, '').trim();
+      item[header] = (row[index] || '')
+        .replace(/^"|"$/g, '')
+        .trim();
     });
 
     if (item["Book Name"] || item["Subject"]) {
       data.push(item);
     }
   }
+
   return data;
 }
 
-// Select Subject Handler
+// Select Subject
 function selectSubject(subjectName, updateHash = true) {
   currentSubject = subjectName;
-  
+
   if (updateHash) {
     if (subjectName === "All") {
-      history.pushState("", document.title, window.location.pathname + window.location.search);
+      history.pushState(
+        "",
+        document.title,
+        window.location.pathname + window.location.search
+      );
     } else {
       window.location.hash = `subject-${encodeURIComponent(subjectName)}`;
     }
@@ -219,37 +258,47 @@ function selectSubject(subjectName, updateHash = true) {
   const titleEl = document.getElementById('selectedSubjectTitle');
 
   if (titleEl) {
-    titleEl.innerText = subjectName === "All" ? "All Subjects Vault" : subjectName;
+    titleEl.innerText =
+      subjectName === "All" ? "All Subjects Vault" : subjectName;
   }
 
   if (landingView) landingView.classList.add('hidden');
   if (detailView) detailView.classList.remove('hidden');
-  
+
   filterResources();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Filter Resources Engine
+// Filter Resources
 function filterResources() {
-  const searchVal = (document.getElementById("searchInput")?.value || "").toLowerCase().trim();
+  const searchVal = (
+    document.getElementById("searchInput")?.value || ""
+  ).toLowerCase().trim();
 
   filteredResources = allResources.filter(item => {
     const itemSubject = (item["Subject"] || "").toLowerCase().trim();
     const itemCategory = (item["Category"] || "").toLowerCase().trim();
     const bookName = (item["Book Name"] || "").toLowerCase().trim();
-    const publisher = (item["Publisher/Company"] || item["Publisher"] || "").toLowerCase().trim();
+    const publisher = (
+      item["Publisher/Company"] || item["Publisher"] || ""
+    ).toLowerCase().trim();
 
-    // 1. Subject Matching
     let subMatch = false;
+
     if (currentSubject === "All") {
       subMatch = true;
     } else {
       const target = currentSubject.toLowerCase().trim();
-      
+
       if (target === "physical education") {
-        subMatch = itemSubject.includes("physical education") || itemSubject.includes("physical eduaction") || itemSubject.includes("pe");
+        subMatch =
+          itemSubject.includes("physical education") ||
+          itemSubject.includes("physical eduaction") ||
+          itemSubject.includes("pe");
       } else if (target === "home science") {
-        subMatch = itemSubject.includes("home science") || itemSubject.includes("homescience");
+        subMatch =
+          itemSubject.includes("home science") ||
+          itemSubject.includes("homescience");
       } else if (target === "second language - tamil") {
         subMatch = itemSubject.includes("tamil");
       } else if (target === "second language - malayalam") {
@@ -259,9 +308,13 @@ function filterResources() {
       } else if (target === "second language - hindi") {
         subMatch = itemSubject.includes("hindi");
       } else if (target === "english literature") {
-        subMatch = itemSubject.includes("english literature") || itemSubject.includes("lit");
+        subMatch =
+          itemSubject.includes("english literature") ||
+          itemSubject.includes("lit");
       } else if (target === "english language") {
-        subMatch = itemSubject.includes("english language") || itemSubject.includes("lang");
+        subMatch =
+          itemSubject.includes("english language") ||
+          itemSubject.includes("lang");
       } else if (target === "environmental applications") {
         subMatch = itemSubject.includes("environmental");
       } else if (target === "commercial applications") {
@@ -274,21 +327,26 @@ function filterResources() {
         subMatch = itemSubject.includes(target);
       }
     }
-                   
-    // 2. Category & Publisher Rule Matching
+
     let catMatch = false;
+
     if (currentCategory === "All") {
       catMatch = true;
     } else if (currentCategory === "Special Notes") {
-      catMatch = publisher.includes("icse masterclass") || publisher.includes("wiseplex");
+      catMatch =
+        publisher.includes("icse masterclass") ||
+        publisher.includes("wiseplex");
     } else if (currentCategory === "Official CISCE Materials") {
       catMatch = publisher.includes("cisce");
     } else {
       catMatch = itemCategory.includes(currentCategory.toLowerCase());
     }
 
-    // 3. Search Term Matching
-    let srchMatch = !searchVal || bookName.includes(searchVal) || itemSubject.includes(searchVal) || publisher.includes(searchVal);
+    const srchMatch =
+      !searchVal ||
+      bookName.includes(searchVal) ||
+      itemSubject.includes(searchVal) ||
+      publisher.includes(searchVal);
 
     return subMatch && catMatch && srchMatch;
   });
@@ -299,176 +357,374 @@ function filterResources() {
 // Category Filter Tabs
 function setCategoryFilter(category, event) {
   currentCategory = category;
+
   document.querySelectorAll('.cat-btn').forEach(btn => {
     btn.classList.remove('active-tab', 'bg-amber-500', 'text-black');
   });
+
   if (event && event.target) {
     const btn = event.target.closest('.cat-btn') || event.target;
     btn.classList.add('active-tab', 'bg-amber-500', 'text-black');
   }
+
   filterResources();
 }
 
-// Close Detail View & Return Home
+// Return Home
 function closeSubjectSubPage() {
+  document.body.classList.remove('shared-material-mode');
+
+  const sharedPage = document.getElementById('sharedMaterialPage');
+  if (sharedPage) sharedPage.style.display = 'none';
+
   document.getElementById('subjectDetailView')?.classList.add('hidden');
   document.getElementById('mainLandingView')?.classList.remove('hidden');
+
   currentSubject = "All";
-  history.pushState("", document.title, window.location.pathname + window.location.search);
+  history.pushState("", document.title, window.location.pathname);
 }
 
-// Render Resource Cards Grid
+// Render Resource Cards
 function renderGrid(data) {
   const grid = document.getElementById("resourceGrid");
   const countEl = document.getElementById("itemCount");
-  
+
   if (countEl) countEl.innerText = `${data.length} Materials Found`;
   if (!grid) return;
 
   if (data.length === 0) {
-    grid.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500 text-xs">No study materials matched your search or category filter.</div>`;
+    grid.innerHTML = `
+      <div class="col-span-full text-center py-12 text-gray-500 text-xs">
+        No study materials matched your search or category filter.
+      </div>
+    `;
     return;
   }
 
   grid.innerHTML = data.map((item, index) => {
-    const rawDrive = item["Google Drive Link"] || item["Google Drive Direct View / Download Link"] || item["Link"] || "#";
-    const driveLink = rawDrive.startsWith('http') ? rawDrive : 'https://' + rawDrive;
+    const rawDrive =
+      item["Google Drive Link"] ||
+      item["Google Drive Direct View / Download Link"] ||
+      item["Link"] ||
+      "#";
 
-    const rawLecture = item["Lecture Link"] || item["Telegram Channel Post Link"] || "";
-    const lectureLink = rawLecture ? (rawLecture.startsWith('http') ? rawLecture : 'https://' + rawLecture) : "";
+    const driveLink = rawDrive.startsWith('http')
+      ? rawDrive
+      : 'https://' + rawDrive;
+
+    const rawLecture =
+      item["Lecture Link"] ||
+      item["Telegram Channel Post Link"] ||
+      "";
+
+    const lectureLink = rawLecture
+      ? (rawLecture.startsWith('http') ? rawLecture : 'https://' + rawLecture)
+      : "";
 
     const rawLatestEdLink = item["Latest Edition Link"] || "";
-    const latestEdLink = rawLatestEdLink ? (rawLatestEdLink.startsWith('http') ? rawLatestEdLink : 'https://' + rawLatestEdLink) : "";
+    const latestEdLink = rawLatestEdLink
+      ? (rawLatestEdLink.startsWith('http') ? rawLatestEdLink : 'https://' + rawLatestEdLink)
+      : "";
 
     const isLatestAvailable = item["Latest Edition Available?"] || "";
-    const editionText = item["Edition"] && item["Edition"] !== "Not Specified" ? `Ed: ${item["Edition"]}` : "";
+    const editionText =
+      item["Edition"] && item["Edition"] !== "Not Specified"
+        ? `Ed: ${item["Edition"]}`
+        : "";
 
     return `
-      <div data-icse-share-added="1" class="p-4 rounded-xl bg-gray-900/60 border border-gray-800 hover:border-amber-500/40 transition flex flex-col justify-between gap-3 shadow-lg">
+      <div class="p-4 rounded-xl bg-gray-900/60 border border-gray-800 hover:border-amber-500/40 transition flex flex-col justify-between gap-3 shadow-lg">
         <div class="space-y-2">
           <div class="flex items-center justify-between text-[10px] gap-2">
             <span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold shrink-0">
               ${item["Category"] || "General"}
             </span>
+
             <div class="flex items-center gap-1 overflow-hidden truncate text-gray-400">
               ${editionText ? `<span class="px-1.5 py-0.5 rounded bg-gray-800 text-amber-300 font-mono font-semibold">${editionText}</span>` : ""}
               <span class="truncate">${item["Publisher/Company"] || item["Publisher"] || item["Subject"] || ""}</span>
             </div>
           </div>
 
-          <h3 class="font-bold text-sm text-white line-clamp-2 leading-snug">${item["Book Name"] || "Resource File"}</h3>
-          
+          <h3 class="font-bold text-sm text-white line-clamp-2 leading-snug">
+            ${item["Book Name"] || "Resource File"}
+          </h3>
+
           ${item["Scope"] ? `<p class="text-xs text-gray-400 line-clamp-2">${item["Scope"]}</p>` : ''}
 
           ${isLatestAvailable ? `
             <div class="pt-1 text-[11px]">
-              <span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check text-[10px]" aria-hidden="true"></i> Latest Edition: ${isLatestAvailable}</span>${latestEdLink ? `<a href="${latestEdLink}" target="_blank" rel="noopener noreferrer" class="ml-1 text-amber-400 underline hover:text-amber-300 font-bold">(Get Book)</a>` : ''}
+              <span class="text-emerald-400 font-semibold">
+                <i class="fa-solid fa-circle-check text-[10px]" aria-hidden="true"></i>
+                Latest Edition: ${isLatestAvailable}
+              </span>
+              ${latestEdLink ? `<a href="${latestEdLink}" target="_blank" rel="noopener noreferrer" class="ml-1 text-amber-400 underline hover:text-amber-300 font-bold">(Get Book)</a>` : ''}
             </div>
           ` : ''}
         </div>
-        
+
         <div class="grid grid-cols-2 gap-2 pt-2 border-t border-gray-800/80">
-          <button onclick="openMaterialModalByIndex(${index})" aria-label="Preview ${item["Book Name"] || "material"}" class="py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-200 font-bold text-xs text-center transition flex items-center justify-center gap-1.5 cursor-pointer">
+          <button
+            onclick="openMaterialModalByIndex(${index})"
+            aria-label="Preview ${item["Book Name"] || "material"}"
+            class="py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-200 font-bold text-xs text-center transition flex items-center justify-center gap-1.5 cursor-pointer"
+          >
             <i class="fa-solid fa-eye" aria-hidden="true"></i> Preview
           </button>
 
-          <a href="${driveLink}" target="_blank" rel="noopener noreferrer" aria-label="Open download link for ${item["Book Name"] || "material"}" class="py-2 rounded-lg bg-amber-500 text-black font-bold text-xs text-center hover:bg-amber-400 transition flex items-center justify-center gap-1.5">
+          <a
+            href="${driveLink}"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Open download link for ${item["Book Name"] || "material"}"
+            class="py-2 rounded-lg bg-amber-500 text-black font-bold text-xs text-center hover:bg-amber-400 transition flex items-center justify-center gap-1.5"
+          >
             <i class="fa-solid fa-download" aria-hidden="true"></i> Material
           </a>
 
           ${lectureLink ? `
-            <a href="${lectureLink}" target="_blank" rel="noopener noreferrer" aria-label="Watch lecture video" class="col-span-2 py-2 rounded-lg bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500 hover:text-white font-bold text-xs text-center transition flex items-center justify-center gap-1.5">
+            <a
+              href="${lectureLink}"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Watch lecture video"
+              class="col-span-2 py-2 rounded-lg bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500 hover:text-white font-bold text-xs text-center transition flex items-center justify-center gap-1.5"
+            >
               <i class="fa-brands fa-youtube text-sm" aria-hidden="true"></i> Watch Lecture
             </a>
           ` : ''}
-          <button type="button" onclick="openSharePageByIndex(${index})" class="icse-share-btn col-span-1">
-            <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> Share Page
-          </button>
-          <button type="button" onclick="shareMaterialByIndex(${index})" class="icse-share-btn col-span-1">
-            <i class="fa-solid fa-share-nodes" aria-hidden="true"></i> Share
-          </button>
         </div>
+
+        ${item["Share ID"] ? `
+          <div class="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              data-share-id="${item["Share ID"]}"
+              class="js-open-share-page py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-200 font-bold text-xs text-center transition"
+            >
+              <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+              Share Page
+            </button>
+
+            <button
+              type="button"
+              data-share-id="${item["Share ID"]}"
+              class="js-share-material py-2 rounded-lg border border-amber-500/40 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 font-bold text-xs text-center transition"
+            >
+              <i class="fa-solid fa-share-nodes" aria-hidden="true"></i>
+              Share
+            </button>
+          </div>
+        ` : ""}
       </div>
     `;
   }).join("");
+
+  grid.querySelectorAll(".js-open-share-page").forEach(button => {
+    button.addEventListener("click", () => {
+      openSharePageById(button.dataset.shareId);
+    });
+  });
+
+  grid.querySelectorAll(".js-share-material").forEach(button => {
+    button.addEventListener("click", () => {
+      shareMaterialById(button.dataset.shareId);
+    });
+  });
 }
 
-// Shareable resource pages
-const SHARE_SITE_BASE = "https://icse-cbse-10-12.github.io/icse-class-10-materials/";
-const SHARE_PAGE_PREFIX = "#/shared-material/";
+// Short Individual Material Links
+const SITE_BASE_URL =
+  "https://icse-cbse-10-12.github.io/icse-class-10-materials/";
 
-function normalizeResourceUrl(value) {
-  const raw = String(value || "").trim();
-  if (!raw || raw === "#") return "";
-  const candidate = /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
-  try {
-    const parsed = new URL(candidate);
-    return ["http:", "https:"].includes(parsed.protocol) ? parsed.href : "";
-  } catch {
-    return "";
-  }
+function getMaterialShareUrl(shareId) {
+  const url = new URL(SITE_BASE_URL);
+  url.searchParams.set("material", shareId);
+  return url.href;
 }
 
-function getShareMaterial(item) {
-  const rawUrl = item["Google Drive Link"] ||
+function getMaterialResourceUrl(item) {
+  const raw =
+    item["Google Drive Link"] ||
     item["Google Drive Direct View / Download Link"] ||
-    item["Link"] || "";
-  const subject = String(item["Subject"] || currentSubject || "ICSE Class 10").trim();
-  const title = String(item["Book Name"] || "Study Material").trim();
-  const category = String(item["Category"] || "").trim();
-  const publisher = String(item["Publisher/Company"] || item["Publisher"] || "").trim();
-  const scope = String(item["Scope"] || "").trim();
-  const details = [category, publisher, scope].filter(Boolean).join(" • ");
+    item["Link"] ||
+    "";
 
-  return {
-    id: `${subject}-${title}`.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 90),
-    title,
-    subject,
-    description: details,
-    resourceUrl: normalizeResourceUrl(rawUrl)
-  };
+  if (!raw.trim() || raw.trim() === "#") return "";
+
+  return /^https?:\/\//i.test(raw.trim())
+    ? raw.trim()
+    : `https://${raw.trim()}`;
 }
 
-function createSharePageUrl(material) {
-  const base = new URL(SHARE_SITE_BASE);
-  base.hash = SHARE_PAGE_PREFIX + encodeURIComponent(JSON.stringify(material));
-  return base.href;
+function openSharePageById(shareId) {
+  if (!shareId) {
+    alert("This material does not have a Share ID yet.");
+    return;
+  }
+
+  window.location.href = getMaterialShareUrl(shareId);
 }
 
-function openSharePageByIndex(index) {
-  const item = filteredResources[index];
-  if (!item) return;
-  window.location.hash = SHARE_PAGE_PREFIX + encodeURIComponent(JSON.stringify(getShareMaterial(item)));
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
+// Share Material
+async function shareMaterialById(shareId) {
+  const item = allResources.find(
+    resource => resource["Share ID"] === shareId
+  );
 
-async function shareMaterialByIndex(index) {
-  const item = filteredResources[index];
-  if (!item) return;
+  if (!item || !shareId) {
+    alert("This material does not have a valid Share ID.");
+    return;
+  }
 
-  const material = getShareMaterial(item);
-  const shareUrl = createSharePageUrl(material);
+  const shareUrl = getMaterialShareUrl(shareId);
+  const title = item["Book Name"] || "ICSE Class 10 Study Material";
+  const subject = item["Subject"] || "ICSE Class 10";
+
   try {
     if (navigator.share) {
       await navigator.share({
-        title: material.title,
-        text: `${material.subject} — ${material.title} | ICSE MasterClass`,
+        title,
+        text: `${subject} — ${title} | ICSE MasterClass`,
         url: shareUrl
       });
-    } else if (navigator.clipboard && window.isSecureContext) {
-      await navigator.clipboard.writeText(shareUrl);
-      alert("Shareable link copied!");
     } else {
-      window.prompt("Copy this share link:", shareUrl);
+      await copyShareLink(shareUrl);
+      alert("Short share link copied!");
     }
   } catch (error) {
     if (error && error.name !== "AbortError") {
-      window.prompt("Copy this share link:", shareUrl);
+      window.prompt("Copy this short share link:", shareUrl);
     }
   }
 }
 
-// Lightbox Document Preview Modal
+// Copy Link
+async function copyShareLink(value) {
+  try {
+    await navigator.clipboard.writeText(value);
+  } catch {
+    window.prompt("Copy this link:", value);
+  }
+}
+
+// Show Shared Material Page
+function showSharedMaterialPage(shareId) {
+  const page = document.getElementById("sharedMaterialPage");
+  if (!page) return;
+
+  const item = allResources.find(resource =>
+    String(resource["Share ID"] || "").trim() ===
+    String(shareId || "").trim()
+  );
+
+  document.body.classList.add("shared-material-mode");
+  page.style.display = "block";
+
+  const titleEl = document.getElementById("sharedMaterialTitle");
+  const subjectEl = document.getElementById("sharedMaterialSubject");
+  const descriptionEl = document.getElementById("sharedMaterialDescription");
+  const openButton = document.getElementById("sharedMaterialOpen");
+  const statusEl = document.getElementById("sharedMaterialStatus");
+  const backLink = document.getElementById("sharedBackLink");
+  const shareButton = document.getElementById("sharedMaterialShare");
+  const copyButton = document.getElementById("sharedMaterialCopy");
+
+  if (!item) {
+    if (titleEl) titleEl.textContent = "Material Not Found";
+    if (subjectEl) subjectEl.textContent = "ICSE MasterClass";
+
+    if (descriptionEl) {
+      descriptionEl.textContent =
+        "This Share ID was not found in the current resource database. Please check the link or return to the main vault.";
+    }
+
+    if (openButton) {
+      openButton.href = "#";
+      openButton.classList.add("opacity-50", "pointer-events-none");
+      openButton.setAttribute("aria-disabled", "true");
+    }
+
+    if (statusEl) {
+      statusEl.textContent = "Invalid or outdated Share ID.";
+    }
+  } else {
+    const resourceUrl = getMaterialResourceUrl(item);
+
+    if (titleEl) {
+      titleEl.textContent = item["Book Name"] || "Study Material";
+    }
+
+    if (subjectEl) {
+      subjectEl.textContent = item["Subject"] || "ICSE Class 10";
+    }
+
+    const details = [
+      item["Scope"],
+      item["Category"] ? `Category: ${item["Category"]}` : "",
+      item["Publisher/Company"] || item["Publisher"]
+        ? `Publisher: ${item["Publisher/Company"] || item["Publisher"]}`
+        : "",
+      item["Edition"] && item["Edition"] !== "Not Specified"
+        ? `Edition: ${item["Edition"]}`
+        : ""
+    ].filter(Boolean);
+
+    if (descriptionEl) {
+      descriptionEl.textContent = details.join(" • ") ||
+        "Open the resource using the button below, or share this short link with another student.";
+    }
+
+    if (openButton) {
+      if (resourceUrl) {
+        openButton.href = resourceUrl;
+        openButton.classList.remove("opacity-50", "pointer-events-none");
+        openButton.setAttribute("aria-disabled", "false");
+      } else {
+        openButton.href = "#";
+        openButton.classList.add("opacity-50", "pointer-events-none");
+        openButton.setAttribute("aria-disabled", "true");
+      }
+    }
+
+    if (statusEl) statusEl.textContent = "";
+  }
+
+  if (backLink) {
+    backLink.onclick = event => {
+      event.preventDefault();
+
+      const url = new URL(SITE_BASE_URL);
+      history.pushState({}, "", url.pathname);
+
+      document.body.classList.remove("shared-material-mode");
+      page.style.display = "none";
+
+      document.getElementById("mainLandingView")?.classList.remove("hidden");
+      document.getElementById("subjectDetailView")?.classList.add("hidden");
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+  }
+
+  const currentShareId = shareId;
+
+  if (shareButton) {
+    shareButton.onclick = () => shareMaterialById(currentShareId);
+  }
+
+  if (copyButton) {
+    copyButton.onclick = async () => {
+      await copyShareLink(getMaterialShareUrl(currentShareId));
+
+      if (statusEl) {
+        statusEl.textContent = "Short link copied! Share it with your friends.";
+      }
+    };
+  }
+}
+
+// Preview Modal
 function openMaterialModalByIndex(index) {
   const item = filteredResources[index];
   if (!item) return;
@@ -477,60 +733,137 @@ function openMaterialModalByIndex(index) {
   const modalTitle = document.getElementById("modalTitle");
   const container = document.getElementById("detailContent");
 
-  if (modalBadge) modalBadge.innerText = item["Subject"] || 'General';
-  if (modalTitle) modalTitle.innerText = item["Book Name"] || 'Material Document';
+  if (modalBadge) modalBadge.innerText = item["Subject"] || "General";
+  if (modalTitle) modalTitle.innerText = item["Book Name"] || "Material Document";
 
-  const rawDrive = item["Google Drive Link"] || item["Google Drive Direct View / Download Link"] || item["Link"] || "";
+  const rawDrive =
+    item["Google Drive Link"] ||
+    item["Google Drive Direct View / Download Link"] ||
+    item["Link"] ||
+    "";
+
   let driveLink = rawDrive.trim();
-  if (driveLink && !driveLink.startsWith('http')) driveLink = 'https://' + driveLink;
 
-  const rawLecture = item["Lecture Link"] || item["Telegram Channel Post Link"] || "";
-  const lectureLink = rawLecture ? (rawLecture.startsWith('http') ? rawLecture : 'https://' + rawLecture) : "";
+  if (driveLink && !driveLink.startsWith("http")) {
+    driveLink = "https://" + driveLink;
+  }
+
+  const rawLecture =
+    item["Lecture Link"] ||
+    item["Telegram Channel Post Link"] ||
+    "";
+
+  const lectureLink = rawLecture
+    ? (rawLecture.startsWith("http") ? rawLecture : "https://" + rawLecture)
+    : "";
 
   const rawLatestEdLink = item["Latest Edition Link"] || "";
-  const latestEdLink = rawLatestEdLink ? (rawLatestEdLink.startsWith('http') ? rawLatestEdLink : 'https://' + rawLatestEdLink) : "";
+
+  const latestEdLink = rawLatestEdLink
+    ? (rawLatestEdLink.startsWith("http")
+        ? rawLatestEdLink
+        : "https://" + rawLatestEdLink)
+    : "";
 
   let embedHtml = "";
+
   if (driveLink && driveLink.includes("drive.google.com")) {
-    const previewUrl = driveLink.replace(/\/view(\?.*)?$/, '/preview');
+    const previewUrl = driveLink.replace(/\/view(\?.*)?$/, "/preview");
+
     embedHtml = `
       <div class="w-full h-[55vh] sm:h-[62vh] rounded-lg overflow-hidden border border-gray-800 bg-black relative">
-        <iframe src="${previewUrl}" title="Google Drive Document Preview" class="w-full h-full border-0" allow="autoplay" loading="lazy"></iframe>
-      </div>`;
+        <iframe
+          src="${previewUrl}"
+          title="Google Drive Document Preview"
+          class="w-full h-full border-0"
+          allow="autoplay"
+          loading="lazy"
+        ></iframe>
+      </div>
+    `;
   }
 
   if (container) {
     container.innerHTML = `
       <div class="space-y-4">
         ${embedHtml}
-        
+
         <div class="p-3.5 rounded-lg bg-gray-950 border border-gray-800 text-xs text-gray-300 grid grid-cols-1 sm:grid-cols-2 gap-2">
-          <p><strong class="text-amber-400">Publisher:</strong> ${item["Publisher/Company"] || item["Publisher"] || 'N/A'}</p>
-          <p><strong class="text-amber-400">Category:</strong> ${item["Category"] || 'N/A'}</p>
-          <p><strong class="text-amber-400">Edition:</strong> ${item["Edition"] || 'Not Specified'}</p>
-          <p><strong class="text-amber-400">Format:</strong> ${item["Format"] || 'PDF'}</p>
-          <p class="col-span-full"><strong class="text-amber-400">Scope:</strong> ${item["Scope"] || 'N/A'}</p>
-          
+          <p>
+            <strong class="text-amber-400">Publisher:</strong>
+            ${item["Publisher/Company"] || item["Publisher"] || "N/A"}
+          </p>
+
+          <p>
+            <strong class="text-amber-400">Category:</strong>
+            ${item["Category"] || "N/A"}
+          </p>
+
+          <p>
+            <strong class="text-amber-400">Edition:</strong>
+            ${item["Edition"] || "Not Specified"}
+          </p>
+
+          <p>
+            <strong class="text-amber-400">Format:</strong>
+            ${item["Format"] || "PDF"}
+          </p>
+
+          <p class="col-span-full">
+            <strong class="text-amber-400">Scope:</strong>
+            ${item["Scope"] || "N/A"}
+          </p>
+
           ${item["Latest Edition Available?"] ? `
             <p class="col-span-full pt-1 border-t border-gray-800/80">
-              <strong class="text-amber-400">Latest Edition Status:</strong> ${item["Latest Edition Available?"]}
-              ${latestEdLink ? `<a href="${latestEdLink}" target="_blank" rel="noopener noreferrer" class="ml-2 text-amber-400 underline font-bold"><i class="fa-solid fa-cart-shopping text-xs" aria-hidden="true"></i> Get Latest Edition Book</a>` : ''}
+              <strong class="text-amber-400">Latest Edition Status:</strong>
+              ${item["Latest Edition Available?"]}
+
+              ${latestEdLink ? `
+                <a
+                  href="${latestEdLink}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="ml-2 text-amber-400 underline font-bold"
+                >
+                  <i class="fa-solid fa-cart-shopping text-xs" aria-hidden="true"></i>
+                  Get Latest Edition Book
+                </a>
+              ` : ""}
             </p>
-          ` : ''}
+          ` : ""}
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
-          <a href="${driveLink}" target="_blank" rel="noopener noreferrer" class="py-2.5 rounded-lg bg-amber-500 text-black font-bold text-xs text-center hover:bg-amber-400 transition flex items-center justify-center gap-2">
-            <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> Open Drive Link
+          <a
+            href="${driveLink}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="py-2.5 rounded-lg bg-amber-500 text-black font-bold text-xs text-center hover:bg-amber-400 transition flex items-center justify-center gap-2"
+          >
+            <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+            Open Drive Link
           </a>
-          
+
           ${lectureLink ? `
-            <a href="${lectureLink}" target="_blank" rel="noopener noreferrer" class="py-2.5 rounded-lg bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500 hover:text-white font-bold text-xs text-center transition flex items-center justify-center gap-2">
-              <i class="fa-brands fa-youtube text-sm" aria-hidden="true"></i> Watch Video Lecture
+            <a
+              href="${lectureLink}"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="py-2.5 rounded-lg bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500 hover:text-white font-bold text-xs text-center transition flex items-center justify-center gap-2"
+            >
+              <i class="fa-brands fa-youtube text-sm" aria-hidden="true"></i>
+              Watch Video Lecture
             </a>
           ` : `
-            <a href="https://t.me/ICSEMasterClass10" target="_blank" rel="noopener noreferrer" class="py-2.5 rounded-lg bg-sky-500/20 text-sky-400 border border-sky-500/30 hover:bg-sky-500 hover:text-white font-bold text-xs text-center transition flex items-center justify-center gap-2">
-              <i class="fa-brands fa-telegram text-sm" aria-hidden="true"></i> Telegram Discussion
+            <a
+              href="https://t.me/ICSEMasterClass10"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="py-2.5 rounded-lg bg-sky-500/20 text-sky-400 border border-sky-500/30 hover:bg-sky-500 hover:text-white font-bold text-xs text-center transition flex items-center justify-center gap-2"
+            >
+              <i class="fa-brands fa-telegram" aria-hidden="true"></i>
+              Telegram Discussion
             </a>
           `}
         </div>
@@ -545,32 +878,35 @@ function closeMaterialModal() {
   document.getElementById("detailView")?.classList.add("hidden");
 }
 
-// Welcome Popup Trigger Logic
+// Welcome Popup
 function checkWelcomePopup() {
-  const hasSeenPopup = localStorage.getItem('hasSeenMasterclassWelcome');
+  const hasSeenPopup = localStorage.getItem("hasSeenMasterclassWelcome");
+
   if (!hasSeenPopup) {
     setTimeout(() => {
-      document.getElementById('welcomePopup')?.classList.remove('hidden');
+      document.getElementById("welcomePopup")?.classList.remove("hidden");
     }, 1200);
   }
 }
 
 function closeWelcomePopup() {
-  document.getElementById('welcomePopup')?.classList.add('hidden');
-  localStorage.setItem('hasSeenMasterclassWelcome', 'true');
+  document.getElementById("welcomePopup")?.classList.add("hidden");
+  localStorage.setItem("hasSeenMasterclassWelcome", "true");
 }
 
-window.addEventListener('hashchange', checkHashRoute);
+// Navigation Events
+window.addEventListener("hashchange", checkHashRoute);
+window.addEventListener("popstate", checkHashRoute);
 
-// App Execution Entrance Point
+// App Startup
 const startApp = () => {
   initSubjectCards();
   fetchSheetData();
   checkWelcomePopup();
 };
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', startApp);
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", startApp);
 } else {
   startApp();
 }
