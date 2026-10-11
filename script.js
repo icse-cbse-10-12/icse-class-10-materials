@@ -1,3 +1,4 @@
+
 // Published Google Sheets CSV Endpoint & Proxy Fallback
 const primaryCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQLGKfaC9WUePvCArs7YAxYP9tmoPYkCdfJviR2pdOnlSZ6gVLEqgtAEga4XLQpubVTfEsHo2eWBWx7/pub?output=csv';
 const fallbackCsvUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(primaryCsvUrl);
@@ -343,7 +344,7 @@ function renderGrid(data) {
     const editionText = item["Edition"] && item["Edition"] !== "Not Specified" ? `Ed: ${item["Edition"]}` : "";
 
     return `
-      <div class="p-4 rounded-xl bg-gray-900/60 border border-gray-800 hover:border-amber-500/40 transition flex flex-col justify-between gap-3 shadow-lg">
+      <div data-icse-share-added="1" class="p-4 rounded-xl bg-gray-900/60 border border-gray-800 hover:border-amber-500/40 transition flex flex-col justify-between gap-3 shadow-lg">
         <div class="space-y-2">
           <div class="flex items-center justify-between text-[10px] gap-2">
             <span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold shrink-0">
@@ -380,10 +381,91 @@ function renderGrid(data) {
               <i class="fa-brands fa-youtube text-sm" aria-hidden="true"></i> Watch Lecture
             </a>
           ` : ''}
+          <button type="button" onclick="openSharePageByIndex(${index})" class="icse-share-btn col-span-1">
+            <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> Share Page
+          </button>
+          <button type="button" onclick="shareMaterialByIndex(${index})" class="icse-share-btn col-span-1">
+            <i class="fa-solid fa-share-nodes" aria-hidden="true"></i> Share
+          </button>
         </div>
       </div>
     `;
   }).join("");
+}
+
+// Shareable resource pages
+const SHARE_SITE_BASE = "https://icse-cbse-10-12.github.io/icse-class-10-materials/";
+const SHARE_PAGE_PREFIX = "#/shared-material/";
+
+function normalizeResourceUrl(value) {
+  const raw = String(value || "").trim();
+  if (!raw || raw === "#") return "";
+  const candidate = /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
+  try {
+    const parsed = new URL(candidate);
+    return ["http:", "https:"].includes(parsed.protocol) ? parsed.href : "";
+  } catch {
+    return "";
+  }
+}
+
+function getShareMaterial(item) {
+  const rawUrl = item["Google Drive Link"] ||
+    item["Google Drive Direct View / Download Link"] ||
+    item["Link"] || "";
+  const subject = String(item["Subject"] || currentSubject || "ICSE Class 10").trim();
+  const title = String(item["Book Name"] || "Study Material").trim();
+  const category = String(item["Category"] || "").trim();
+  const publisher = String(item["Publisher/Company"] || item["Publisher"] || "").trim();
+  const scope = String(item["Scope"] || "").trim();
+  const details = [category, publisher, scope].filter(Boolean).join(" • ");
+
+  return {
+    id: `${subject}-${title}`.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 90),
+    title,
+    subject,
+    description: details,
+    resourceUrl: normalizeResourceUrl(rawUrl)
+  };
+}
+
+function createSharePageUrl(material) {
+  const base = new URL(SHARE_SITE_BASE);
+  base.hash = SHARE_PAGE_PREFIX + encodeURIComponent(JSON.stringify(material));
+  return base.href;
+}
+
+function openSharePageByIndex(index) {
+  const item = filteredResources[index];
+  if (!item) return;
+  window.location.hash = SHARE_PAGE_PREFIX + encodeURIComponent(JSON.stringify(getShareMaterial(item)));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+async function shareMaterialByIndex(index) {
+  const item = filteredResources[index];
+  if (!item) return;
+
+  const material = getShareMaterial(item);
+  const shareUrl = createSharePageUrl(material);
+  try {
+    if (navigator.share) {
+      await navigator.share({
+        title: material.title,
+        text: `${material.subject} — ${material.title} | ICSE MasterClass`,
+        url: shareUrl
+      });
+    } else if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(shareUrl);
+      alert("Shareable link copied!");
+    } else {
+      window.prompt("Copy this share link:", shareUrl);
+    }
+  } catch (error) {
+    if (error && error.name !== "AbortError") {
+      window.prompt("Copy this share link:", shareUrl);
+    }
+  }
 }
 
 // Lightbox Document Preview Modal
