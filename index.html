@@ -221,7 +221,30 @@
       <i class="fa-solid fa-circle-notch fa-spin text-amber-500"></i>
       <span>Syncing latest resource database...</span>
     </div>
+    
+<!-- Global Search -->
+<div class="max-w-2xl mx-auto w-full mb-7">
+  <label for="globalSearchInput"
+    class="block text-xs font-bold text-gray-300 mb-2">
+    🔍 Search all study materials
+  </label>
 
+  <input
+    id="globalSearchInput"
+    type="search"
+    oninput="searchAllMaterials()"
+    placeholder="Search by topic, book, subject or publisher..."
+    autocomplete="off"
+    class="w-full bg-gray-900 border border-gray-800 rounded-2xl
+    px-4 py-3.5 text-sm text-white placeholder-gray-500
+    focus:outline-none focus:border-amber-500"
+  >
+
+  <p class="text-xs text-gray-500 mt-2">
+    Search across subjects, books, categories and publishers.
+  </p>
+</div>
+    
     <!-- Landing Page -->
     <section id="mainLandingView" class="space-y-8">
 
