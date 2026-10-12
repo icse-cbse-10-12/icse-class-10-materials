@@ -1,4 +1,3 @@
-
 /* ============================================================
    ICSE MasterClass — Study Materials
    Google Sheets database, global search, previews and sharing
@@ -22,6 +21,7 @@ const subjectsList = [
   "History & Civics",
   "Geography",
   "Environmental Applications",
+  "Environmental Science",
   "English Literature",
   "English Language",
   "Economic Applications",
@@ -47,6 +47,7 @@ const subjectIcons = {
   "History & Civics": "fa-landmark",
   "Geography": "fa-earth-americas",
   "Environmental Applications": "fa-leaf",
+  "Environmental Science": "fa-leaf",
   "English Literature": "fa-book-open",
   "English Language": "fa-pen-nib",
   "Economic Applications": "fa-chart-line",
@@ -496,7 +497,9 @@ function filterResources() {
           itemSubject.includes("english language") ||
           itemSubject.includes("lang");
       } else if (target === "environmental applications") {
-        subMatch = itemSubject.includes("environmental");
+        subMatch = itemSubject.includes("environmental applications");
+      } else if (target === "environmental science") {
+        subMatch = itemSubject.includes("environmental science");
       } else if (target === "commercial applications") {
         subMatch = itemSubject.includes("commercial app");
       } else if (target === "commercial studies") {
