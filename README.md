@@ -16,14 +16,14 @@
 
 <!-- BADGES -->
 
-[![Study Vault](https://img.shields.io/badge/🎓_ICSE-Study_Vault-0A192F?style=for-the-badge&labelColor=F59E0B)](https://icse-cbse-10-12.github.io/icse-class-10-materials/)
-[![YouTube](https://img.shields.io/badge/▶_YouTube-ICSE_MasterClass-red?style=for-the-badge&logo=youtube)](https://www.youtube.com/@ICSEMasterClass10)
+[![Study Vault](https://img.shields.io/badge/ð_ICSE-Study_Vault-0A192F?style=for-the-badge&labelColor=F59E0B)](https://icse-cbse-10-12.github.io/icse-class-10-materials/)
+[![YouTube](https://img.shields.io/badge/â¶_YouTube-ICSE_MasterClass-red?style=for-the-badge&logo=youtube)](https://www.youtube.com/@ICSEMasterClass10)
 [![Telegram](https://img.shields.io/badge/Telegram-Join_Community-229ED9?style=for-the-badge&logo=telegram)](https://t.me/ICSEMasterClass10)
 [![License](https://img.shields.io/badge/License-MIT-F59E0B?style=for-the-badge)](LICENSE)
 
 <br><br>
 
-### 📚 One Place. Every Subject. Better Preparation.
+### ð One Place. Every Subject. Better Preparation.
 
 **A free digital study vault built for ICSE Class 10 students.**
 
@@ -31,177 +31,177 @@
 
 ---
 
-## 🚀 Welcome to ICSE MasterClass
+## ð Welcome to ICSE MasterClass
 
 > **Stop searching. Start studying.**
 
 ICSE MasterClass brings important Class 10 learning resources together in one organized digital vault.
 
-Instead of spending hours searching across different websites, PDFs, videos and folders, students can quickly **find → open → study → practise → improve**.
+Instead of spending hours searching across different websites, PDFs, videos and folders, students can quickly **find â open â study â practise â improve**.
 
 ---
 
-## ⚡ The Learning Journey
+## â¡ The Learning Journey
 
 ```text
-             📚 FIND
-                │
-                ▼
-        🔎 SEARCH / FILTER
-                │
-                ▼
-          📖 SELECT
-                │
-                ▼
-          👀 PREVIEW
-                │
-                ▼
-          📥 STUDY
-                │
-                ▼
-          ✍️ PRACTICE
-                │
-                ▼
-           📝 TEST
-                │
-                ▼
-          🔍 ANALYSE
-                │
-                ▼
-          🎯 IMPROVE
-                │
-                └───────────────↺
+             ð FIND
+                â
+                â¼
+        ð SEARCH / FILTER
+                â
+                â¼
+          ð SELECT
+                â
+                â¼
+          ð PREVIEW
+                â
+                â¼
+          ð¥ STUDY
+                â
+                â¼
+          âï¸ PRACTICE
+                â
+                â¼
+           ð TEST
+                â
+                â¼
+          ð ANALYSE
+                â
+                â¼
+          ð¯ IMPROVE
+                â
+                âââââââââââââââââº
 ```
 
-### 🔥 The goal
+### ð¥ The goal
 
-**Less time finding resources → More time actually learning.**
+**Less time finding resources â More time actually learning.**
 
 ---
 
-## 🌐 Open the Vault
+## ð Open the Vault
 
 <div align="center">
 
-### 🎓 [ENTER ICSE MASTERCLASS](https://icse-cbse-10-12.github.io/icse-class-10-materials/)
+### ð [ENTER ICSE MASTERCLASS](https://icse-cbse-10-12.github.io/icse-class-10-materials/)
 
 <br>
 
-**📚 Study Materials**  
-**📝 Question Banks**  
-**📄 Previous Year Questions**  
-**📑 Sample Papers**  
-**📖 Notes & Reference Material**  
-**🎥 Video Lectures**
+**ð Study Materials**  
+**ð Question Banks**  
+**ð Previous Year Questions**  
+**ð Sample Papers**  
+**ð Notes & Reference Material**  
+**ð¥ Video Lectures**
 
 </div>
 
 ---
 
-# 🎯 What You Can Find
+# ð¯ What You Can Find
 
 | Resource | Purpose |
 |---|---|
-| 📚 **Notes** | Learn and revise concepts |
-| 📝 **Question Banks** | Build question-solving ability |
-| 📄 **PYQs** | Understand previous exam patterns |
-| 📑 **Sample Papers** | Practise complete papers |
-| 📖 **Reference Books** | Explore additional material |
-| 🎥 **Video Lectures** | Learn concepts visually |
-| ⭐ **Special Notes** | Quick revision and focused preparation |
-| 🏛️ **Official CISCE Materials** | Access relevant official resources |
+| ð **Notes** | Learn and revise concepts |
+| ð **Question Banks** | Build question-solving ability |
+| ð **PYQs** | Understand previous exam patterns |
+| ð **Sample Papers** | Practise complete papers |
+| ð **Reference Books** | Explore additional material |
+| ð¥ **Video Lectures** | Learn concepts visually |
+| â­ **Special Notes** | Quick revision and focused preparation |
+| ðï¸ **Official CISCE Materials** | Access relevant official resources |
 
 ---
 
-# 🧠 Built Around How Students Actually Study
+# ð§  Built Around How Students Actually Study
 
-### 01 — Learn
+### 01 â Learn
 
 Understand the concept.
 
-⬇️
+â¬ï¸
 
-### 02 — Practise
+### 02 â Practise
 
 Solve questions immediately.
 
-⬇️
+â¬ï¸
 
-### 03 — Test
+### 03 â Test
 
 Attempt structured questions and papers.
 
-⬇️
+â¬ï¸
 
-### 04 — Analyse
+### 04 â Analyse
 
 Find weak areas.
 
-⬇️
+â¬ï¸
 
-### 05 — Improve
+### 05 â Improve
 
 Revise specifically where you need it.
 
 ---
 
-# 📚 Subjects
+# ð Subjects
 
 The vault is organized around the subjects available in the project.
 
-### 🔬 Science
+### ð¬ Science
 
-- ⚡ Physics
-- 🧪 Chemistry
-- 🧬 Biology
+- â¡ Physics
+- ð§ª Chemistry
+- ð§¬ Biology
 
-### ➗ Mathematics
+### â Mathematics
 
 - Mathematics
 
-### 🌍 Humanities
+### ð Humanities
 
-- 🏛️ History & Civics
-- 🌏 Geography
-- 🌱 Environmental Applications
+- ðï¸ History & Civics
+- ð Geography
+- ð± Environmental Applications
 
-### 💻 Applications & Commerce
+### ð» Applications & Commerce
 
-- 💻 Computer Applications
-- 💼 Commercial Studies
-- 📊 Commercial Applications
-- 💰 Economic Applications
-- 🏠 Home Science
-- 🏃 Physical Education
+- ð» Computer Applications
+- ð¼ Commercial Studies
+- ð Commercial Applications
+- ð° Economic Applications
+- ð  Home Science
+- ð Physical Education
 
-### 📖 Languages
+### ð Languages
 
-- 📘 English Language
-- 📕 English Literature
-- 🇮🇳 Hindi
-- 🌴 Malayalam
-- 🌿 Tamil
-- 🌳 Kannada
+- ð English Language
+- ð English Literature
+- ð®ð³ Hindi
+- ð´ Malayalam
+- ð¿ Tamil
+- ð³ Kannada
 
-### 📦 Other
+### ð¦ Other
 
 - Other Subjects
 
 ---
 
-# 🔎 Smart Resource Discovery
+# ð Smart Resource Discovery
 
 The website is designed around **searching and filtering instead of endless scrolling**.
 
 ```text
 Choose Subject
-      ↓
+      â
 Choose Category
-      ↓
+      â
 Filter Resources
-      ↓
+      â
 Find What You Need
-      ↓
+      â
 Open Material
 ```
 
@@ -209,28 +209,28 @@ For example:
 
 ```text
 Physics
-   ↓
+   â
 Question Banks
-   ↓
+   â
 Chapter / Topic
-   ↓
+   â
 Select Resource
-   ↓
+   â
 Study
 ```
 
 ---
 
-# 🏗️ How The Vault Works
+# ðï¸ How The Vault Works
 
 ```mermaid
 flowchart LR
 
-    A["📊 Google Sheets<br/>Resource Database"]
-    B["⚙️ script.js"]
-    C["🔎 Search & Filters"]
-    D["📚 Resource Cards"]
-    E["👨‍🎓 Student"]
+    A["ð Google Sheets<br/>Resource Database"]
+    B["âï¸ script.js"]
+    C["ð Search & Filters"]
+    D["ð Resource Cards"]
+    E["ð¨âð Student"]
 
     A --> B
     B --> C
@@ -242,33 +242,33 @@ flowchart LR
 
 ### Simple architecture
 
-**Google Sheets → JavaScript → Search/Filter → Resource Cards → Student**
+**Google Sheets â JavaScript â Search/Filter â Resource Cards â Student**
 
 This makes it possible to update resources without manually rebuilding every resource card on the website.
 
 ---
 
-# 📂 Repository Structure
+# ð Repository Structure
 
 ```text
 icse-cbse-10-12-icse-class-10-materials/
-│
-├── 📄 README.md
-├── 🚫 404.html
-├── 🔐 google15cd0558d5c0d3f8.html
-├── 🏠 index.html
-├── ⚖️ LICENSE
-├── 📱 manifest.json
-├── 🤖 robots.txt
-├── ⚙️ script.js
-├── 🗺️ sitemap.xml
-├── 🎨 style.css
-└── ⚡ sw.js
+â
+âââ ð README.md
+âââ ð« 404.html
+âââ ð google15cd0558d5c0d3f8.html
+âââ ð  index.html
+âââ âï¸ LICENSE
+âââ ð± manifest.json
+âââ ð¤ robots.txt
+âââ âï¸ script.js
+âââ ðºï¸ sitemap.xml
+âââ ð¨ style.css
+âââ â¡ sw.js
 ```
 
 ---
 
-# 🧩 File Responsibilities
+# ð§© File Responsibilities
 
 | File | Purpose |
 |---|---|
@@ -286,20 +286,20 @@ icse-cbse-10-12-icse-class-10-materials/
 
 ---
 
-# 📱 Install It Like an App
+# ð± Install It Like an App
 
 The project includes **Progressive Web App functionality**.
 
 That means supported devices can install the vault and access it more like an application.
 
 ```text
-🌐 Open Website
-       ↓
-📱 Install
-       ↓
-🎓 ICSE MasterClass
-       ↓
-📚 Study Vault
+ð Open Website
+       â
+ð± Install
+       â
+ð ICSE MasterClass
+       â
+ð Study Vault
 ```
 
 The project includes:
@@ -312,116 +312,116 @@ The project includes:
 
 ---
 
-# 🎨 Design Philosophy
+# ð¨ Design Philosophy
 
 The interface follows a premium educational visual language:
 
 ```text
-┌─────────────────────────────────────────────┐
-│                                             │
-│        🎓 ICSE MASTERCLASS                  │
-│                                             │
-│       Dark • Premium • Focused              │
-│                                             │
-│        🟨 Amber Accent                      │
-│        ⬜ Clear Typography                   │
-│        🟦 Deep Navy Background              │
-│                                             │
-└─────────────────────────────────────────────┘
+âââââââââââââââââââââââââââââââââââââââââââââââ
+â                                             â
+â        ð ICSE MASTERCLASS                  â
+â                                             â
+â       Dark â¢ Premium â¢ Focused              â
+â                                             â
+â        ð¨ Amber Accent                      â
+â        â¬ Clear Typography                   â
+â        ð¦ Deep Navy Background              â
+â                                             â
+âââââââââââââââââââââââââââââââââââââââââââââââ
 ```
 
 ### Core visual direction
 
-- 🌑 Deep navy / dark interface
-- 🟨 Amber-gold accent
-- ⬜ High-contrast typography
-- 🧊 Glass-style cards
-- 📱 Responsive design
-- 🎓 Education-first interface
+- ð Deep navy / dark interface
+- ð¨ Amber-gold accent
+- â¬ High-contrast typography
+- ð§ Glass-style cards
+- ð± Responsive design
+- ð Education-first interface
 
 ---
 
-# 🔗 The ICSE MasterClass Ecosystem
+# ð The ICSE MasterClass Ecosystem
 
 ```text
-                    🎓
+                    ð
              ICSE MASTERCLASS
-                    │
-       ┌────────────┼────────────┐
-       │            │            │
-       ▼            ▼            ▼
-   🌐 WEBSITE    ▶️ YOUTUBE    💬 TELEGRAM
-       │            │            │
-       ▼            ▼            ▼
+                    â
+       ââââââââââââââ¼âââââââââââââ
+       â            â            â
+       â¼            â¼            â¼
+   ð WEBSITE    â¶ï¸ YOUTUBE    ð¬ TELEGRAM
+       â            â            â
+       â¼            â¼            â¼
    Resources     Lectures      Community
    & Notes       & Concepts    & Support
 ```
 
-### 🌐 Website
+### ð Website
 
 Central study-material vault.
 
-### ▶️ YouTube
+### â¶ï¸ YouTube
 
 Concept explanations, One Shots, revision and exam-focused content.
 
-### 💬 Telegram
+### ð¬ Telegram
 
 Resources, updates, support and community communication.
 
 ---
 
-# 📖 Recommended Study Workflow
+# ð Recommended Study Workflow
 
 ### Before a chapter
 
 ```text
-📚 Read the concept
-        ↓
-🎥 Watch explanation
-        ↓
-📝 Make / review notes
+ð Read the concept
+        â
+ð¥ Watch explanation
+        â
+ð Make / review notes
 ```
 
 ### During preparation
 
 ```text
-✍️ Solve questions
-        ↓
-📄 Attempt PYQs
-        ↓
-📝 Attempt sample papers
+âï¸ Solve questions
+        â
+ð Attempt PYQs
+        â
+ð Attempt sample papers
 ```
 
 ### Before examination
 
 ```text
-🔁 Revise
-   ↓
-🧠 Active recall
-   ↓
-⏱️ Timed practice
-   ↓
-🔍 Analyse mistakes
-   ↓
-🎯 Fix weak areas
+ð Revise
+   â
+ð§  Active recall
+   â
+â±ï¸ Timed practice
+   â
+ð Analyse mistakes
+   â
+ð¯ Fix weak areas
 ```
 
 ---
 
-# 💡 The ICSE MasterClass Philosophy
+# ð¡ The ICSE MasterClass Philosophy
 
 <div align="center">
 
-## ❌ Don't collect resources.
+## â Don't collect resources.
 
-## ✅ Use them.
+## â Use them.
 
 <br>
 
 ### Finding a PDF is not preparation.
 
-### Understanding → Practising → Testing → Analysing
+### Understanding â Practising â Testing â Analysing
 
 ### **That is preparation.**
 
@@ -429,7 +429,7 @@ Resources, updates, support and community communication.
 
 ---
 
-# ⚡ Why This Project Exists
+# â¡ Why This Project Exists
 
 Students often lose valuable study time because useful material is scattered across:
 
@@ -447,49 +447,49 @@ ICSE MasterClass aims to make the discovery process simpler.
 
 ---
 
-# 🤝 Community
+# ð¤ Community
 
 <div align="center">
 
-### 🎓 ICSE MasterClass
+### ð ICSE MasterClass
 
 **Learn. Practise. Improve.**
 
 <br>
 
-[▶️ YouTube](https://www.youtube.com/@ICSEMasterClass10)
+[â¶ï¸ YouTube](https://www.youtube.com/@ICSEMasterClass10)
 
-[💬 Telegram](https://t.me/ICSEMasterClass10)
+[ð¬ Telegram](https://t.me/ICSEMasterClass10)
 
-[🌐 Study Vault](https://icse-cbse-10-12.github.io/icse-class-10-materials/)
+[ð Study Vault](https://icse-cbse-10-12.github.io/icse-class-10-materials/)
 
 </div>
 
 ---
 
-# 🛠️ Technology
+# ð ï¸ Technology
 
 The project uses a lightweight web stack:
 
 ```text
 HTML
- │
- ├── Tailwind CSS
- │
- ├── Custom CSS
- │
- ├── Vanilla JavaScript
- │
- ├── Google Sheets
- │
- └── Progressive Web App
+ â
+ âââ Tailwind CSS
+ â
+ âââ Custom CSS
+ â
+ âââ Vanilla JavaScript
+ â
+ âââ Google Sheets
+ â
+ âââ Progressive Web App
 ```
 
 No heavy frontend framework is required for the core vault.
 
 ---
 
-# 🔐 Legal & Copyright Notice
+# ð Legal & Copyright Notice
 
 ICSE MasterClass is an independent educational project.
 
@@ -497,12 +497,12 @@ The website aggregates and organizes educational resources that are publicly ava
 
 Third-party:
 
-- 📚 Books
-- 📄 PDFs
-- 🖼️ Publisher material
-- ™️ Trademarks
-- 🏷️ Brand names
-- 📖 Excerpts
+- ð Books
+- ð PDFs
+- ð¼ï¸ Publisher material
+- â¢ï¸ Trademarks
+- ð·ï¸ Brand names
+- ð Excerpts
 
 remain the intellectual property of their respective owners.
 
@@ -510,49 +510,49 @@ ICSE MasterClass is **not affiliated with, endorsed by, or officially associated
 
 For copyright or takedown concerns:
 
-📧 **icsemasterclass@gmail.com**
+ð§ **icsemasterclass@gmail.com**
 
 Valid removal requests are reviewed according to the project's stated takedown policy.
 
 ---
 
-# 📜 License
+# ð License
 
 The **source code** of this project is released under the **MIT License**.
 
 See [`LICENSE`](LICENSE) for details.
 
-> ⚠️ The MIT License applies to the project's source code, not automatically to third-party educational materials or copyrighted resources linked/aggregated by the website.
+> â ï¸ The MIT License applies to the project's source code, not automatically to third-party educational materials or copyrighted resources linked/aggregated by the website.
 
 ---
 
-# 🌟 Final Goal
+# ð Final Goal
 
 <div align="center">
 
-## 📚 Learn
+## ð Learn
 
-↓
+â
 
-## ✍️ Practise
+## âï¸ Practise
 
-↓
+â
 
-## 📝 Test
+## ð Test
 
-↓
+â
 
-## 🔍 Analyse
+## ð Analyse
 
-↓
+â
 
-## 🎯 Improve
+## ð¯ Improve
 
 <br>
 
 ### **ICSE MasterClass**
 
-### *Study Smarter. Search Less. Achieve More.* 🚀
+### *Study Smarter. Search Less. Achieve More.* ð
 
 <br>
 
@@ -561,3 +561,95 @@ See [`LICENSE`](LICENSE) for details.
 </a>
 
 </div>
+
+
+---
+
+# Complete User Guide and Project Details
+
+## Live links
+
+- **Study Vault:** https://icse-cbse-10-12.github.io/icse-class-10-materials/
+- **YouTube lessons:** https://www.youtube.com/@ICSEMasterClass10
+- **Telegram community:** https://t.me/ICSEMasterClass10
+- **Feedback / suggestions:** https://t.me/ICSEMasterClass10/1320
+- **Copyright, correction or takedown requests:** icsemasterclass@gmail.com
+
+## Who is this for?
+
+This project is an independent discovery portal for ICSE Class 10 learners. It brings resource listings into one searchable interface so students can spend less time hunting for materials and more time learning and practising. It is a resource index, not a replacement for the official syllabus, school instruction or a student's own study.
+
+## Website guide
+
+1. Open the website and choose a subject card.
+2. Use the search box to find a topic, book, publisher or other listed term.
+3. Filter by resource category (for example, notes, question banks, sample papers or PYQs) and use the year filter where available.
+4. Review the resource title, edition/year and publisher information before opening an external link.
+5. Use a material's share control, where provided, to share its individual page.
+6. Use the Settings control for supported appearance preferences, including accent colour; reset to defaults if needed.
+7. On supported browsers, choose **Install App** to install the Progressive Web App.
+
+## Resource categories and how to use them
+
+| Category | Suggested use |
+|---|---|
+| Notes / revision notes | Review concepts and consolidate class learning |
+| Question banks | Practise chapter-wise and topic-wise questions |
+| Sample papers | Practise exam-style papers under timed conditions |
+| Previous-year question papers (PYQs) | Understand past question patterns and practise retrieval |
+| Textbooks / reference books | Consult alongside syllabus and teacher guidance |
+| Official CISCE materials | Find official resources and verify details at the original source |
+| Latest Materials | Find records marked with a recent edition/year in the database |
+| Special Notes | Access specially highlighted resources when available |
+
+The categories and resource availability depend on the current database. A listing is not a guarantee that an external file is still online, current, complete or free of access restrictions.
+
+## Search, data and individual material links
+
+Resource records are loaded from a published Google Sheets CSV database. The website uses those records to display resource details and apply search/category/subject/year filters. External file and lecture URLs are maintained as resource data. The database can change independently of the website source code.
+
+Where supported, each material has an individual shareable page/link. If a link stops working, a listing is inaccurate, or a newer edition is known to be available, report the resource title and its URL using the feedback channel or contact email.
+
+## Settings and accessibility
+
+The website includes appearance settings intended to make the interface easier to read, including supported accent-colour customisation and a reset option. Use a colour combination with clear text contrast. The interface is responsive, and the PWA installation option depends on browser/device support. Third-party fonts, icons, external links and hosted resources may depend on network availability.
+
+## How to contribute or report a problem
+
+This repository maintains the website code and documentation; the resource catalogue is maintained separately in the connected spreadsheet. Before proposing a code change:
+
+1. Check the current `index.html`, `style.css` and `script.js` to understand the existing layout and interactions.
+2. Keep the mobile layout, keyboard focus and text contrast usable.
+3. Do not add a resource unless its title, subject, category and URL have been checked as far as possible.
+4. Do not represent third-party material as owned by ICSE MasterClass.
+5. Test search, subject navigation, category/year filters, settings, individual material links and the mobile view after changes.
+
+For feedback and resource corrections, use https://t.me/ICSEMasterClass10/1320. For copyright or takedown requests, email **icsemasterclass@gmail.com** and include the exact resource URL, the reason for the request, and enough information to explain your authority or relationship to the material. Additional information may be requested. Complete requests are reviewed promptly; removal is not automatic and depends on review.
+
+## Copyright, affiliation and takedown policy
+
+ICSE MasterClass is an independent educational initiative and is not affiliated with, authorized by or endorsed by the Council for the Indian School Certificate Examinations (CISCE). Names, logos and trademarks are used only to identify relevant organisations or resources and remain the property of their respective owners.
+
+The site indexes and organises links to educational resources. Third-party books, PDFs, covers, videos, logos, trademarks and other publications remain the intellectual property of their respective owners. A listing or link does not mean ICSE MasterClass owns the material, has verified all permissions, or grants permission to download, copy, modify, redistribute or commercially use it. Users should follow the original source's terms and applicable law.
+
+To request review, correction or removal of a listing, email **icsemasterclass@gmail.com** with:
+
+- The exact URL of the listing and/or external resource.
+- The title and enough details to identify the material.
+- The reason for the request and the specific concern.
+- Your name and contact details, plus an explanation of your relationship to the material or authority to act for the rights holder.
+- Any additional information needed to locate and assess the issue.
+
+We aim to review complete notices promptly and may remove or correct a listing when a concern is verified. We may request clarification; submitting a request does not guarantee removal. This policy concerns listings and links controlled by this project and cannot guarantee removal of content hosted by third parties.
+
+## Privacy and external services
+
+The site relies on external services for some resources and integrations, including a published spreadsheet feed, external file/lecture links, and third-party web assets. Those services may have their own privacy policies, availability rules and access requirements. Avoid submitting passwords, private student records or other sensitive information through public feedback channels. This project documentation does not claim that every external service has been independently audited.
+
+## Licensing
+
+The repository's source code is licensed under the **MIT License**; see [`LICENSE`](LICENSE). This licence applies to the project code only. It does not grant rights to third-party educational materials, book scans, publisher content, trademarks or linked files.
+
+## Disclaimer
+
+The website is provided as an educational discovery tool. Resource availability, correctness, edition, syllabus relevance and external permissions may change. Students should verify important details against the current CISCE syllabus, their teachers and the original source. No examination result or academic outcome is guaranteed.
