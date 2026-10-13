@@ -229,7 +229,6 @@ async function fetchSheetData() {
   }
 
   allResources = parseCSV(csvText);
-  renderLatestMaterials();
 
   if (statusEl) {
     statusEl.innerHTML = `
@@ -255,7 +254,10 @@ function renderLatestMaterials() {
     const edition = String(item["Edition"] || "").trim();
     const scope = String(item["Scope"] || "").toLowerCase();
     const title = String(item["Book Name"] || "").toLowerCase();
-    return edition === "2027" || scope.includes("2027") || title.includes("2027");
+    const itemSubject = String(item["Subject"] || "").trim().toLowerCase();
+    const targetSubject = String(currentSubject || "All").trim().toLowerCase();
+    const subjectMatches = targetSubject === "all" || itemSubject === targetSubject;
+    return subjectMatches && (edition === "2027" || scope.includes("2027") || title.includes("2027"));
   });
 
   const unique = [];
@@ -292,7 +294,7 @@ function renderLatestMaterials() {
   }
 
   const escapeText = value => String(value || "").replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
-  grid.innerHTML = unique.slice(0, 9).map(({ item, title, link }) => {
+  grid.innerHTML = unique.map(({ item, title, link }) => {
     const subject = item["Subject"] || "Study Material";
     const category = item["Category"] || "Resource";
     const publisher = item["Publisher/Company"] || "ICSE MasterClass resource vault";
@@ -457,6 +459,7 @@ function selectSubject(subjectName, updateHash = true) {
   detailView?.classList.remove("hidden");
 
   filterResources();
+  renderLatestMaterials();
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
