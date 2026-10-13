@@ -116,5 +116,26 @@
     document.addEventListener("DOMContentLoaded", initUX, { once: true });
   } else {
     initUX();
+     
+    // Improve accessibility announcements for database status.
+    const statusMessage = document.getElementById("statusMessage");
+
+    if (statusMessage) {
+      statusMessage.setAttribute("role", "status");
+      statusMessage.setAttribute("aria-live", "polite");
+    }
+
+    // Ensure external resource links opened in new tabs are safer.
+    document.querySelectorAll('a[target="_blank"]').forEach(link => {
+      const relValues = new Set(
+        (link.getAttribute("rel") || "").split(/\s+/).filter(Boolean)
+      );
+
+      relValues.add("noopener");
+      relValues.add("noreferrer");
+
+      link.setAttribute("rel", [...relValues].join(" "));
+    });
+
   }
 })();
