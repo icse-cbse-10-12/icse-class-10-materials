@@ -186,7 +186,6 @@ function initSubjectCards() {
           aria-hidden="true"
         >
           <span class="text-xl leading-none" aria-hidden="true">${subjectEmoji[subject] || "📘"}</span>
-          <i class="fa-solid ${icon} text-sm" aria-hidden="true"></i>
         </div>
 
         <span class="text-xs font-bold text-gray-200 group-hover:text-white">
