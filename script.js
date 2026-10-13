@@ -585,21 +585,36 @@ function filterResources() {
       }
     }
 
-    let catMatch = false;
+  
+let catMatch = false;
 
-    if (currentCategory === "All") {
-      catMatch = true;
-    } else if (currentCategory === "Special Notes") {
-      catMatch =
-        publisher.includes("icse masterclass") ||
-        publisher.includes("wiseplex");
-    } else if (currentCategory === "Official CISCE Materials") {
-      catMatch = publisher.includes("cisce");
-    } else {
-      catMatch = itemCategory.includes(
-        currentCategory.toLowerCase()
-      );
-    }
+if (currentCategory === "All") {
+  catMatch = true;
+
+} else if (currentCategory === "Latest Materials") {
+  const edition = String(item["Edition"] || "").trim();
+  const scope = String(item["Scope"] || "").toLowerCase();
+  const title = String(item["Book Name"] || "").toLowerCase();
+
+  catMatch =
+    edition === "2027" ||
+    scope.includes("2027") ||
+    title.includes("2027");
+
+} else if (currentCategory === "Special Notes") {
+  catMatch =
+    publisher.includes("icse masterclass") ||
+    publisher.includes("wiseplex");
+
+} else if (currentCategory === "Official CISCE Materials") {
+  catMatch = publisher.includes("cisce");
+
+} else {
+  catMatch = itemCategory.includes(
+    currentCategory.toLowerCase()
+  );
+}
+
 
     // Search across more fields than just book name and subject.
     const searchableText = [
