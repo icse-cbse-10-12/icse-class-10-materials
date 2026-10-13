@@ -37,6 +37,16 @@ const subjectsList = [
   "Other Subjects"
 ];
 
+// Emoji fallback icons remain visible even when the Font Awesome CDN is blocked.
+const subjectEmoji = {
+  "All":"📚", "Physics":"⚛️", "Physical Education":"🏃", "Mathematics":"📐", "Home Science":"🏠",
+  "History & Civics":"🏛️", "Geography":"🌍", "Environmental Applications":"🌿", "Environmental Science":"🌱",
+  "English Literature":"📖", "English Language":"✍️", "Economic Applications":"📈", "Computer Applications":"💻",
+  "Commercial Studies":"💼", "Commercial Applications":"🏢", "Chemistry":"🧪", "Biology":"🧬",
+  "Second Language - Tamil":"🗣️", "Second Language - Malayalam":"🗣️", "Second Language - Kannada":"🗣️",
+  "Second Language - Hindi":"🗣️", "Other Subjects":"📁"
+};
+
 // Custom Icons Mapping
 const subjectIcons = {
   "All": "fa-layer-group",
@@ -175,7 +185,8 @@ function initSubjectCards() {
           class="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-black transition"
           aria-hidden="true"
         >
-          <i class="fa-solid ${icon} text-base" aria-hidden="true"></i>
+          <span class="text-xl leading-none" aria-hidden="true">${subjectEmoji[subject] || "📘"}</span>
+          <i class="fa-solid ${icon} text-sm" aria-hidden="true"></i>
         </div>
 
         <span class="text-xs font-bold text-gray-200 group-hover:text-white">

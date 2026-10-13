@@ -20,6 +20,9 @@
   <meta name="twitter:description" content="Discover ICSE study materials, revision notes, question banks, specimen papers and previous-year resources.">
   <meta name="twitter:image" content="https://icse-cbse-10-12.github.io/icse-class-10-materials/icseYtLogo.png">
   <meta name="theme-color" content="#090d16">
+  <meta property="og:site_name" content="ICSE MasterClass">
+  <meta property="og:locale" content="en_IN">
+  <meta name="twitter:site" content="@ICSEMasterClass10">
 
   <!-- Progressive Web App -->
   <link rel="manifest" href="manifest.json">
@@ -76,6 +79,8 @@
     #mainSubjectGrid .fa-solid { display: inline-block; min-width: 1em; text-align: center; }
     #mainSubjectGrid button:focus-visible { outline: 2px solid #f59e0b; outline-offset: 3px; }
   </style>
+
+    <style>#mainSubjectGrid button > div { gap:3px; } #mainSubjectGrid button:focus-visible { outline:2px solid #f59e0b; outline-offset:3px; }</style>
 
   <!-- Shareable Material Page Styles -->
   <style>
@@ -514,8 +519,8 @@
 ></div>
 
 
-    <!-- About and Legal Disclaimer -->
-    <section class="mt-12 pt-8 border-t border-gray-800/80 max-w-5xl mx-auto space-y-6 text-gray-400 text-xs leading-relaxed">
+    <!-- About, Copyright, Disclaimer and Takedown Policy -->
+    <section id="legal-disclaimer" aria-label="About, copyright disclaimer and takedown policy" class="mt-12 pt-8 border-t border-gray-800/80 max-w-5xl mx-auto space-y-6 text-gray-400 text-xs leading-relaxed">
 
       <div class="p-6 sm:p-8 rounded-lg bg-gray-900/40 border border-gray-800/80 space-y-6">
 
@@ -857,6 +862,8 @@
         >
           Feedback / Suggestions
         </a>
+
+        <a href="#legal-disclaimer" class="hover:text-amber-400 transition">Disclaimer &amp; Takedown Policy</a>
 
         <a
           href="mailto:icsemasterclass@gmail.com"
