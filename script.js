@@ -459,7 +459,6 @@ function selectSubject(subjectName, updateHash = true) {
   detailView?.classList.remove("hidden");
 
   filterResources();
-  renderLatestMaterials();
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
@@ -601,6 +600,11 @@ if (currentCategory === "All") {
     scope.includes("2027") ||
     title.includes("2027");
 
+} else if (currentCategory === "PYQ" || currentCategory === "PYQs / Specimen Papers") {
+  const title = String(item["Book Name"] || "").toLowerCase();
+  const scope = String(item["Scope"] || "").toLowerCase();
+  catMatch = itemCategory.includes("pyq") || itemCategory.includes("previous year") || itemCategory.includes("specimen") || itemCategory.includes("sample paper") || title.includes("specimen paper") || title.includes("previous year") || title.includes("board question paper") || title.includes("board paper") || scope.includes("previous year");
+
 } else if (currentCategory === "Special Notes") {
   catMatch =
     publisher.includes("icse masterclass") ||
@@ -637,6 +641,12 @@ if (currentCategory === "All") {
     return subMatch && catMatch && srchMatch;
   });
 
+  if (currentCategory === "PYQ" || currentCategory === "PYQs / Specimen Papers") {
+    filteredResources.sort((a, b) => {
+      const yearOf = item => { const text = `${item["Edition"] || ""} ${item["Book Name"] || ""} ${item["Scope"] || ""}`; const matches = text.match(/20(?:2[2-7])/g) || []; return matches.length ? Math.max(...matches.map(Number)) : 0; };
+      return yearOf(b) - yearOf(a);
+    });
+  }
   renderGrid(filteredResources);
 }
 
