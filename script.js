@@ -1337,6 +1337,52 @@ function closeWelcomePopup() {
 }
 
 /* ============================================================
+   PERSONALISATION SETTINGS
+   ============================================================ */
+const siteSettingsDefaults = { mode: "dark", accent: "amber", fontSize: "100" };
+function readSiteSettings() {
+  try { return { ...siteSettingsDefaults, ...JSON.parse(localStorage.getItem("icseMasterclassSiteSettings") || "{}") }; }
+  catch (_) { return { ...siteSettingsDefaults }; }
+}
+function saveSiteSettings(settings) {
+  try { localStorage.setItem("icseMasterclassSiteSettings", JSON.stringify(settings)); } catch (_) {}
+}
+function applySiteSettings() {
+  const settings = readSiteSettings();
+  document.body.dataset.siteMode = settings.mode;
+  document.body.dataset.siteAccent = settings.accent;
+  document.documentElement.style.fontSize = `${settings.fontSize}%`;
+  const range = document.getElementById("fontSizeControl");
+  const label = document.getElementById("fontSizeLabel");
+  if (range) range.value = settings.fontSize;
+  if (label) label.textContent = `${settings.fontSize}%`;
+  document.querySelectorAll("[data-mode]").forEach(el => el.classList.toggle("active", el.dataset.mode === settings.mode));
+  document.querySelectorAll("[data-accent]").forEach(el => el.classList.toggle("active", el.dataset.accent === settings.accent));
+}
+function setSiteMode(mode) {
+  const settings = readSiteSettings(); settings.mode = ["dark", "light", "midnight"].includes(mode) ? mode : "dark";
+  saveSiteSettings(settings); applySiteSettings();
+}
+function setSiteAccent(accent) {
+  const settings = readSiteSettings(); settings.accent = ["amber", "blue", "emerald", "violet", "rose"].includes(accent) ? accent : "amber";
+  saveSiteSettings(settings); applySiteSettings();
+}
+function setSiteFontSize(size) {
+  const settings = readSiteSettings(); settings.fontSize = String(Math.min(115, Math.max(90, Number(size) || 100)));
+  saveSiteSettings(settings); applySiteSettings();
+}
+function resetSiteSettings() {
+  saveSiteSettings({ ...siteSettingsDefaults }); applySiteSettings();
+}
+function toggleSettings(open) {
+  const overlay = document.getElementById("settingsOverlay"); if (!overlay) return;
+  overlay.classList.toggle("hidden", !open);
+  document.body.style.overflow = open ? "hidden" : "";
+  if (open) document.getElementById("settingsTitle")?.focus();
+}
+document.addEventListener("keydown", event => { if (event.key === "Escape") toggleSettings(false); });
+
+/* ============================================================
    NAVIGATION EVENTS AND APP STARTUP
    ============================================================ */
 
@@ -1344,6 +1390,7 @@ window.addEventListener("hashchange", checkHashRoute);
 window.addEventListener("popstate", checkHashRoute);
 
 const startApp = () => {
+  applySiteSettings();
   initSubjectCards();
   fetchSheetData();
   checkWelcomePopup();
