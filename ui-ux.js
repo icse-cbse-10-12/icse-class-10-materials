@@ -7,45 +7,56 @@
 (() => {
   "use strict";
 
+  function secureExternalLinks(root = document) {
+    if (!root || typeof root.querySelectorAll !== "function") {
+      return;
+    }
+
+    root.querySelectorAll('a[target="_blank"]').forEach(link => {
+      const relValues = new Set(
+        (link.getAttribute("rel") || "")
+          .split(/\s+/)
+          .filter(Boolean)
+      );
+
+      relValues.add("noopener");
+      relValues.add("noreferrer");
+
+      link.setAttribute("rel", [...relValues].join(" "));
+    });
+  }
+
   function initUX() {
-    // Prevent duplicate initialisation.
+    // Prevent duplicate initialization.
     if (document.documentElement.dataset.uxReady === "true") {
       return;
     }
 
     document.documentElement.dataset.uxReady = "true";
 
-    const globalSearch = document.getElementById("globalSearchInput");
-    const settingsOverlay = document.getElementById("settingsOverlay");
-    const settingsToggle = document.getElementById("settingsToggle");
-    const statusMessage = document.getElementById("statusMessage");
+    const globalSearch =
+      document.getElementById("globalSearchInput");
 
-    // Announce database status updates to assistive technology.
+    const settingsOverlay =
+      document.getElementById("settingsOverlay");
+
+    const settingsToggle =
+      document.getElementById("settingsToggle");
+
+    const statusMessage =
+      document.getElementById("statusMessage");
+
+    // Announce database status to assistive technologies.
     if (statusMessage) {
       statusMessage.setAttribute("role", "status");
       statusMessage.setAttribute("aria-live", "polite");
       statusMessage.setAttribute("aria-atomic", "true");
     }
 
-    // Make all links opening new tabs safer.
-    function secureExternalLinks(root = document) {
-      root.querySelectorAll('a[target="_blank"]').forEach(link => {
-        const relValues = new Set(
-          (link.getAttribute("rel") || "")
-            .split(/\s+/)
-            .filter(Boolean)
-        );
-
-        relValues.add("noopener");
-        relValues.add("noreferrer");
-
-        link.setAttribute("rel", [...relValues].join(" "));
-      });
-    }
-
+    // Secure links that already exist.
     secureExternalLinks();
 
-    // / focuses global search; Escape closes settings or clears search.
+    // Keyboard shortcuts.
     document.addEventListener("keydown", event => {
       const target = event.target;
 
@@ -53,26 +64,31 @@
         target instanceof HTMLElement &&
         (
           target.isContentEditable ||
-          ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName)
+          ["INPUT", "TEXTAREA", "SELECT"].includes(
+            target.tagName
+          )
         );
 
+      // Press "/" to focus global search.
       if (
         event.key === "/" &&
         !isTyping &&
         !event.ctrlKey &&
         !event.metaKey &&
-        !event.altKey
+        !event.altKey &&
+        globalSearch
       ) {
-        if (globalSearch) {
-          event.preventDefault();
-          globalSearch.focus();
-          globalSearch.scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-          });
-        }
+        event.preventDefault();
+
+        globalSearch.focus();
+
+        globalSearch.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
       }
 
+      // Escape closes settings or clears the active search.
       if (event.key === "Escape") {
         if (
           settingsOverlay &&
@@ -91,19 +107,24 @@
         ) {
           globalSearch.value = "";
 
-          if (typeof window.searchAllMaterials === "function") {
+          if (
+            typeof window.searchAllMaterials === "function"
+          ) {
             window.searchAllMaterials();
           }
         }
       }
     });
 
-    // Display a keyboard shortcut hint beside the search label.
+    // Add a keyboard shortcut hint beside the search label.
     const searchLabel = document.querySelector(
       'label[for="globalSearchInput"]'
     );
 
-    if (searchLabel && !searchLabel.querySelector(".ux-shortcut")) {
+    if (
+      searchLabel &&
+      !searchLabel.querySelector(".ux-shortcut")
+    ) {
       const hint = document.createElement("span");
 
       hint.className = "ux-shortcut";
@@ -124,8 +145,9 @@
       searchLabel.appendChild(hint);
     }
 
-    // Observe newly rendered resource links as well.
-    const resourceGrid = document.getElementById("resourceGrid");
+    // Secure links whenever material cards are rendered.
+    const resourceGrid =
+      document.getElementById("resourceGrid");
 
     if (resourceGrid && "MutationObserver" in window) {
       const observer = new MutationObserver(() => {
@@ -138,17 +160,20 @@
       });
     }
 
-    // Keep the page usable after browser history restoration.
+    // Recheck links after browser history restoration.
     window.addEventListener("pageshow", () => {
-      document.documentElement.dataset.uxReady = "true";
       secureExternalLinks();
     });
   }
 
+  // Correctly initialize whether this script loads before
+  // or after the DOM is ready.
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initUX, {
-      once: true
-    });
+    document.addEventListener(
+      "DOMContentLoaded",
+      initUX,
+      { once: true }
+    );
   } else {
     initUX();
   }
