@@ -314,91 +314,136 @@
         </div>
       </div>
 
-      <!-- Resource Category Filters -->
-      <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+     
+<!-- Resource Category Filters -->
+<div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
 
-        <button
-          onclick="setCategoryFilter('All', event)"
-          class="cat-btn active-tab px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition bg-amber-500 text-black"
-        >
-          All Materials
-        </button>
+  <!-- All Materials -->
+  <button
+    onclick="setCategoryFilter('All', event)"
+    class="cat-btn active-tab px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition bg-amber-500 text-black"
+  >
+    All Materials
+  </button>
 
-        <button
-          onclick="setCategoryFilter('Special Notes', event)"
-          class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30 hover:border-amber-400 whitespace-nowrap transition"
-        >
-          <i class="fa-solid fa-star text-[10px] mr-1"></i>
-          Special Notes
-        </button>
+  <!-- Latest Materials -->
+  <button
+    onclick="setCategoryFilter('Latest Materials', event)"
+    class="cat-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition bg-violet-500/10 text-violet-300 border border-violet-500/30 hover:bg-violet-500/20 hover:border-violet-400"
+  >
+    <i class="fa-solid fa-sparkles text-[10px] mr-1"></i>
+    Latest Materials
+  </button>
 
-        <button
-          onclick="setCategoryFilter('Official CISCE Materials', event)"
-          class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/30 hover:border-blue-400 whitespace-nowrap transition"
-        >
-          <i class="fa-solid fa-shield-halved text-[10px] mr-1"></i>
-          Official CISCE Materials
-        </button>
+  <!-- Special Notes -->
+  <button
+    onclick="setCategoryFilter('Special Notes', event)"
+    class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30 hover:border-amber-400 whitespace-nowrap transition"
+  >
+    <i class="fa-solid fa-star text-[10px] mr-1"></i>
+    Special Notes
+  </button>
 
-        <button
-          onclick="setCategoryFilter('Question Banks', event)"
-          class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition"
-        >
-          Question Banks
-        </button>
+  <!-- Official CISCE Materials -->
+  <button
+    onclick="setCategoryFilter('Official CISCE Materials', event)"
+    class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/30 hover:border-blue-400 whitespace-nowrap transition"
+  >
+    <i class="fa-solid fa-shield-halved text-[10px] mr-1"></i>
+    Official CISCE Materials
+  </button>
 
-        <button
-          onclick="setCategoryFilter('Notes', event)"
-          class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition"
-        >
-          Notes
-        </button>
+  <!-- Question Banks -->
+  <button
+    onclick="setCategoryFilter('Question Banks', event)"
+    class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition"
+  >
+    Question Banks
+  </button>
 
-        <button
-          onclick="setCategoryFilter('Textbooks / Reference Books', event)"
-          class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition"
-        >
-          Textbooks / Reference Books
-        </button>
+  <!-- Notes -->
+  <button
+    onclick="setCategoryFilter('Notes', event)"
+    class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition"
+  >
+    Notes
+  </button>
 
-        <button
-          onclick="setCategoryFilter('Sample Papers', event)"
-          class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition"
-        >
-          Sample Papers
-        </button>
+  <!-- Textbooks / Reference Books -->
+  <button
+    onclick="setCategoryFilter('Textbooks / Reference Books', event)"
+    class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition"
+  >
+    Textbooks / Reference Books
+  </button>
 
-        <button
-          onclick="setCategoryFilter('PYQ', event)"
-          class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition"
-        >
-          PYQs
-        </button>
+  <!-- Sample Papers -->
+  <button
+    onclick="setCategoryFilter('Sample Papers', event)"
+    class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition"
+  >
+    Sample Papers
+  </button>
 
-      </div>
+  <!-- PYQs -->
+  <button
+    onclick="setCategoryFilter('PYQ', event)"
+    class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition"
+  >
+    PYQs
+  </button>
 
-      <!-- Latest Materials: dynamically populated from the Google Sheets database -->
-      <section id="latestMaterialsSection" class="mt-10 space-y-4" aria-labelledby="latestMaterialsTitle">
-        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2">
-          <div>
-            <span class="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-amber-400"><i class="fa-solid fa-sparkles"></i> Fresh for your preparation</span>
-            <h2 id="latestMaterialsTitle" class="text-xl sm:text-2xl font-black text-white mt-1">Latest Materials <span class="text-amber-400">· 2027</span></h2>
-            <p class="text-xs sm:text-sm text-gray-400 mt-1">Explore available resources tagged for the 2027 examination year.</p>
-          </div>
-          <span id="latestMaterialsCount" class="text-xs text-gray-500">Loading 2027 resources…</span>
-        </div>
-        <div id="latestMaterialsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4" aria-live="polite">
-          <div class="rounded-2xl border border-gray-800 bg-gray-900/60 p-4 text-sm text-gray-400"><i class="fa-solid fa-circle-notch fa-spin text-amber-400 mr-2"></i>Finding 2027 materials…</div>
-        </div>
-      </section>
+</div>
 
-            <!-- Resource Cards: Populated by script.js -->
-      <div
-        id="resourceGrid"
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
-      ></div>
+<!-- Latest Materials: 2027 -->
+<section
+  id="latestMaterialsSection"
+  class="mt-10 space-y-4"
+  aria-labelledby="latestMaterialsTitle"
+>
+  <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2">
+    <div>
+      <span class="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-violet-300">
+        <i class="fa-solid fa-sparkles"></i>
+        Fresh for your preparation
+      </span>
 
-    </section>
+      <h2
+        id="latestMaterialsTitle"
+        class="text-xl sm:text-2xl font-black text-white mt-1"
+      >
+        Latest Materials
+        <span class="text-violet-300">· 2027</span>
+      </h2>
+
+      <p class="text-xs sm:text-sm text-gray-400 mt-1">
+        Explore available resources tagged for the 2027 examination year.
+      </p>
+    </div>
+
+    <span id="latestMaterialsCount" class="text-xs text-gray-500">
+      Loading 2027 resources…
+    </span>
+  </div>
+
+  <div
+    id="latestMaterialsGrid"
+    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4"
+    aria-live="polite"
+  >
+    <div class="rounded-2xl border border-gray-800 bg-gray-900/60 p-4 text-sm text-gray-400">
+      <i class="fa-solid fa-circle-notch fa-spin text-violet-300 mr-2"></i>
+      Finding 2027 materials…
+    </div>
+  </div>
+</section>
+
+<!-- Resource Cards -->
+<div
+  id="resourceGrid"
+  class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+></div>
+
 
     <!-- About and Legal Disclaimer -->
     <section class="mt-12 pt-8 border-t border-gray-800/80 max-w-5xl mx-auto space-y-6 text-gray-400 text-xs leading-relaxed">
