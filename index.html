@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Primary SEO Metadata -->
+  <title>ICSE Class 10 Study Materials, Question Banks & Notes | ICSE MasterClass</title>
+  <meta name="title" content="ICSE Class 10 Study Materials, Question Banks & Notes | ICSE MasterClass">
+  <meta name="description" content="Free educational resource vault for ICSE Class 10 students. Explore question banks, previous-year papers, revision notes and video lectures.">
+  <meta name="keywords" content="ICSE Class 10 materials, Oswaal question bank PDF, Arihant ICSE books, Goyal Brothers Prakashan, Educart ICSE solved papers, ICSE Physics revision notes, ICSE MasterClass">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="ICSE MasterClass">
+  <meta name="theme-color" content="#090d16">
+
+  <!-- Progressive Web App -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="ICSE Vault">
+  <link rel="apple-touch-icon" href="icseYtLogo.png">
+
+  <!-- Social Sharing Metadata -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://icse-cbse-10-12.github.io/icse-class-10-materials/">
+  <meta property="og:title" content="ICSE Class 10 Study Materials & Notes Vault">
+  <meta property="og:description" content="Access ICSE question banks, revision notes, previous-year papers and educational resources.">
+  <meta property="og:image" content="https://icse-cbse-10-12.github.io/icse-class-10-materials/icseYtLogo.png">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    "name": "ICSE MasterClass",
+    "url": "https://icse-cbse-10-12.github.io/icse-class-10-materials/",
+    "logo": "https://icse-cbse-10-12.github.io/icse-class-10-materials/icseYtLogo.png",
+    "description": "A digital resource index providing study materials, question banks and revision notes for ICSE Class 10 students."
+  }
+  </script>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              400: "#f59e0b",
+              500: "#d97706",
+              600: "#b45309"
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Icons and Styles -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Shareable Material Page Styles -->
+  <style>
+    #sharedMaterialPage {
+      display: none;
+    }
+
+    body.shared-material-mode main,
+    body.shared-material-mode #subjectDetailView,
+    body.shared-material-mode #detailView,
+    body.shared-material-mode #welcomePopup,
+    body.shared-material-mode footer,
+    body.shared-material-mode .fixed.bottom-4.right-4 {
+      display: none !important;
+    }
+
+    body.shared-material-mode #sharedMaterialPage {
+      display: block !important;
+    }
+
+    .icse-share-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      padding: 0.6rem 0.85rem;
+      border-radius: 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: #fbbf24;
+      background: rgba(245, 158, 11, 0.09);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      cursor: pointer;
+      transition: background 0.18s ease, transform 0.18s ease;
+    }
+
+    .icse-share-btn:hover {
+      background: rgba(245, 158, 11, 0.18);
+      transform: translateY(-1px);
+    }
+
+    .icse-card-share-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+
+    #sharedMaterialPage .share-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.8rem 1rem;
+      border-radius: 0.8rem;
+      font-size: 0.875rem;
+      font-weight: 800;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid rgba(245, 158, 11, 0.35);
+    }
+
+    #sharedMaterialPage .share-primary {
+      background: #f59e0b;
+      color: #111827;
+    }
+
+    #sharedMaterialPage .share-secondary {
+      background: #111827;
+      color: #fbbf24;
+    }
+
+    #sharedMaterialPage .share-wrap {
+      overflow-wrap: anywhere;
+    }
+
+    @media (max-width: 600px) {
+      #sharedMaterialPage .share-action {
+        width: 100%;
+        box-sizing: border-box;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-gray-950 text-gray-100 font-sans min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black pb-20 sm:pb-12">
+
+  <!-- Header Navigation -->
+  <header class="sticky top-0 z-40 bg-gray-950/90 backdrop-blur-md border-b border-gray-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+
+      <a href="./" onclick="closeSubjectSubPage()" class="flex items-center gap-3 group">
+        <img
+          src="icseYtLogo.png"
+          alt="ICSE MasterClass Logo"
+          class="w-10 h-10 object-contain rounded-full border border-amber-500/30 group-hover:scale-105 transition-transform"
+          onerror="this.style.display='none'"
+        >
+
+        <div class="flex flex-col">
+          <span class="font-black text-lg tracking-tight text-white leading-none">
+            ICSE <span class="text-amber-500">MasterClass</span>
+          </span>
+          <span class="text-[10px] font-bold text-gray-400 tracking-widest uppercase mt-0.5">
+            CLASS 10 PORTAL
+          </span>
+        </div>
+      </a>
+
+      <!-- Header Actions -->
+      <div class="flex items-center gap-2 sm:gap-3">
+
+        <button
+          id="pwaInstallBtn"
+          onclick="installPwaApp()"
+          class="hidden py-2 px-3 sm:px-4 rounded-xl text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500 hover:text-black transition flex items-center gap-1.5"
+        >
+          <i class="fa-solid fa-download text-sm"></i>
+          <span class="hidden sm:inline">Install App</span>
+          <span class="sm:hidden">App</span>
+        </button>
+
+        <a
+          href="https://t.me/ICSEMasterClass10/1320"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="py-2 px-3 sm:px-4 rounded-xl text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20 hover:bg-amber-500 hover:text-black transition flex items-center gap-1.5"
+        >
+          <i class="fa-solid fa-comment-dots text-sm"></i>
+          <span class="hidden sm:inline">Feedback / Suggestions</span>
+          <span class="sm:hidden">Feedback</span>
+        </a>
+
+        <a
+          href="https://t.me/ICSEMasterClass10"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="py-2 px-3 sm:px-4 rounded-xl text-xs font-bold bg-sky-500/10 text-sky-400 border border-sky-500/20 hover:bg-sky-500 hover:text-white transition flex items-center gap-1.5"
+        >
+          <i class="fa-brands fa-telegram text-sm"></i>
+          <span class="hidden sm:inline">Join Telegram</span>
+          <span class="sm:hidden">Telegram</span>
+        </a>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Website Content -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- Database Status -->
+    <div
+      id="statusMessage"
+      class="text-center py-2.5 mb-6 glass-card rounded-2xl border border-gray-800/80 text-xs text-gray-400 flex items-center justify-center gap-2"
+    >
+      <i class="fa-solid fa-circle-notch fa-spin text-amber-500"></i>
+      <span>Syncing latest resource database...</span>
+    </div>
+    
+
+
+<!-- Global Search — right aligned -->
+<div class="w-full flex justify-end mb-4">
+  <div class="w-full max-w-xs">
+    <label
+      for="globalSearchInput"
+      class="block text-xs font-bold text-gray-300 mb-2"
+    >
+      🔍 Search all study materials
+    </label>
+
+    <input
+      id="globalSearchInput"
+      type="search"
+      oninput="searchAllMaterials()"
+      placeholder="Search topics, books, subjects..."
+      autocomplete="off"
+      class="w-full bg-gray-900 border border-gray-800 rounded-xl
+      px-4 py-2.5 text-sm text-white placeholder-gray-500
+      focus:outline-none focus:border-amber-500"
+    />
+
+    <p class="text-xs text-gray-500 mt-1.5">
+      Search all subjects and materials.
+    </p>
+  </div>
+</div>
+
+    
+    <!-- Landing Page -->
+    <section id="mainLandingView" class="space-y-8">
+
+      <div class="text-center space-y-3 py-2 max-w-3xl mx-auto">
+        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20 inline-block">
+          Free ICSE Class 10 Study Material Vault
+        </span>
+
+        <h1 class="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
+          Master Your ICSE Exams with Direct Access Notes
+        </h1>
+
+        <p class="text-xs sm:text-sm text-gray-400 max-w-xl mx-auto">
+          Explore chapter-wise notes, publisher question banks, solved past papers and video lectures sorted by subject.
+        </p>
+      </div>
+
+      <!-- Subject Grid: Populated by script.js -->
+      <div
+        id="mainSubjectGrid"
+        class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4"
+      ></div>
+
+
+
+    </section>
+
+    <!-- Subject Detail View: Single Instance -->
+    <section id="subjectDetailView" class="hidden space-y-6">
+
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-800/80">
+
+        <div class="flex items-center gap-3">
+          <button
+            onclick="closeSubjectSubPage()"
+            class="w-9 h-9 rounded-xl bg-gray-900 border border-gray-800 hover:border-gray-700 text-gray-300 hover:text-white flex items-center justify-center transition"
+            aria-label="Back to subjects"
+          >
+            <i class="fa-solid fa-arrow-left"></i>
+          </button>
+
+          <div>
+            <h2 id="selectedSubjectTitle" class="text-xl sm:text-2xl font-black text-white">
+              Subject Vault
+            </h2>
+            <p id="itemCount" class="text-xs text-gray-400">0 Materials Found</p>
+          </div>
+        </div>
+
+        <div class="relative w-full sm:w-72">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xs"></i>
+
+          <input
+            type="text"
+            id="searchInput"
+            oninput="filterResources()"
+            placeholder="Search book, topic, publisher..."
+            class="w-full bg-gray-900 border border-gray-800 rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 transition"
+          >
+        </div>
+      </div>
+
+     
+<!-- Resource Category Filters -->
+<div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+
+  <!-- All Materials -->
+  <button
+    onclick="setCategoryFilter('All', event)"
+    class="cat-btn active-tab px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition bg-amber-500 text-black"
+  >
+    All Materials
+  </button>
+
+  <!-- Latest Materials -->
+  <button
+    onclick="setCategoryFilter('Latest Materials', event)"
+    class="cat-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition bg-violet-500/10 text-violet-300 border border-violet-500/30 hover:bg-violet-500/20 hover:border-violet-400"
+  >
+    <i class="fa-solid fa-sparkles text-[10px] mr-1"></i>
+    Latest Materials
+  </button>
+
+  <!-- Special Notes -->
+  <button
+    onclick="setCategoryFilter('Special Notes', event)"
+    class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30 hover:border-amber-400 whitespace-nowrap transition"
+  >
+    <i class="fa-solid fa-star text-[10px] mr-1"></i>
+    Special Notes
+  </button>
+
+  <!-- Official CISCE Materials -->
+  <button
+    onclick="setCategoryFilter('Official CISCE Materials', event)"
+    class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/30 hover:border-blue-400 whitespace-nowrap transition"
+  >
+    <i class="fa-solid fa-shield-halved text-[10px] mr-1"></i>
+    Official CISCE Materials
+  </button>
+
+  <!-- Question Banks -->
+  <button
+    onclick="setCategoryFilter('Question Banks', event)"
+    class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition"
+  >
+    Question Banks
+  </button>
+
+  <!-- Notes -->
+  <button
+    onclick="setCategoryFilter('Notes', event)"
+    class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition"
+  >
+    Notes
+  </button>
+
+  <!-- Textbooks / Reference Books -->
+  <button
+    onclick="setCategoryFilter('Textbooks / Reference Books', event)"
+    class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition"
+  >
+    Textbooks / Reference Books
+  </button>
+
+  <!-- Sample Papers -->
+  <button
+    onclick="setCategoryFilter('Sample Papers', event)"
+    class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition"
+  >
+    Sample Papers
+  </button>
+
+  <!-- PYQs -->
+  <button
+    onclick="setCategoryFilter('PYQ', event)"
+    class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition"
+  >
+    PYQs
+  </button>
+
+</div>
+
+<!-- Material year filter -->
+<div class="flex flex-wrap items-center justify-between gap-3 py-3">
+  <label for="yearFilter" class="text-xs font-semibold text-gray-400">Browse materials by year</label>
+  <select id="yearFilter" onchange="filterResources()" aria-label="Filter materials by year" class="w-full sm:w-48 bg-gray-900 border border-gray-800 rounded-xl px-3 py-2 text-xs font-semibold text-white focus:outline-none focus:border-amber-500 transition">
+    <option value="all">All Years</option>
+  </select>
+</div>
+
+<!-- Resource Cards: all category views render here -->
+
+<div
+  id="resourceGrid"
+  class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+></div>
+
+
+    <!-- About and Legal Disclaimer -->
+    <section class="mt-12 pt-8 border-t border-gray-800/80 max-w-5xl mx-auto space-y-6 text-gray-400 text-xs leading-relaxed">
+
+      <div class="p-6 sm:p-8 rounded-lg bg-gray-900/40 border border-gray-800/80 space-y-6">
+
+        <div class="space-y-1">
+          <h2 class="text-xl font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-book-bookmark text-amber-500" aria-hidden="true"></i>
+            About ICSE MasterClass Study Vault
+          </h2>
+
+          <p class="text-amber-400 font-semibold text-[11px]">
+            The Free Educational Index for ICSE Class 10 Board Preparation
+          </p>
+        </div>
+
+        <div class="space-y-3 text-gray-300">
+          <p>
+            Welcome to the digital resource library by <strong>ICSE MasterClass</strong>.
+            Designed for Class 10 students preparing for the Indian Certificate of Secondary Education examinations, this platform acts as a centralized index for study materials, revision notes, previous-year question papers and publisher question banks.
+          </p>
+
+          <p>
+            Our mission is to make educational resources easier to discover.
+            Whether you are revising Physics and Mathematics, practicing Biology diagrams, learning Java programming for Computer Applications, or reviewing English grammar, our vault helps students find relevant learning resources.
+          </p>
+        </div>
+
+        <!-- Key Offerings -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+
+          <div class="p-4 rounded-lg bg-gray-950/60 border border-gray-800/80 space-y-1.5">
+            <h3 class="font-bold text-white text-xs flex items-center gap-2">
+              <i class="fa-solid fa-layer-group text-amber-400" aria-hidden="true"></i>
+              Extensive Subject Support
+            </h3>
+
+            <p class="text-gray-400 text-[11px]">
+              Resources across subjects including Physics, Chemistry, Biology, Mathematics, History and Civics, Geography, Computer Applications, Commercial Studies, Economic Applications, Environmental Applications, Home Science, Physical Education, English Language, English Literature and Second Languages.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-lg bg-gray-950/60 border border-gray-800/80 space-y-1.5">
+            <h3 class="font-bold text-white text-xs flex items-center gap-2">
+              <i class="fa-solid fa-file-pdf text-amber-400" aria-hidden="true"></i>
+              Curated Resource Formats
+            </h3>
+
+            <p class="text-gray-400 text-[11px]">
+              Discover sample papers, chapter summaries, formula sheets, question banks, reference resources and educational video lectures.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- Copyright and Legal Disclaimer -->
+        <div class="p-4 sm:p-5 rounded-lg bg-amber-500/5 border border-amber-500/20 text-xs text-gray-300 space-y-3 mt-4">
+
+          <p class="font-bold text-amber-400 flex items-center gap-1.5 text-xs">
+            <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+            Resource Index, Copyright and Disclaimer
+          </p>
+
+          <div class="space-y-2 text-[11px] text-gray-300 leading-normal">
+
+            <p>
+              <strong>1. Resource Index:</strong>
+              This website indexes and organizes links to educational resources.
+              The availability, ownership and distribution permissions of external materials depend on their respective sources.
+            </p>
+
+            <p>
+              <strong>2. Non-Affiliation:</strong>
+              ICSE MasterClass is an independent educational initiative and is not affiliated with, authorized by or endorsed by the Council for the Indian School Certificate Examinations (CISCE).
+            </p>
+
+            <p>
+              <strong>3. Intellectual Property:</strong>
+              Third-party materials, book covers, trademarks and publications remain the property of their respective owners. Linking to a resource does not imply ownership or permission to redistribute it.
+            </p>
+
+            <p>
+              <strong>4. Removal Requests:</strong>
+              Copyright owners or authorized representatives may contact us to request a review or removal of a resource link.
+            </p>
+
+            <p class="pt-1">
+              <i class="fa-solid fa-envelope mr-1" aria-hidden="true"></i>
+              <strong>Email Support:</strong>
+              <a
+                href="mailto:icsemasterclass@gmail.com"
+                class="text-amber-400 font-bold underline hover:text-amber-300"
+              >
+                icsemasterclass@gmail.com
+              </a>
+            </p>
+
+            <p class="text-gray-400 text-[10px]">
+              Removal requests will be reviewed promptly. Any stated processing time is subject to verification and the circumstances of the request.
+            </p>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Individual Shareable Material Page -->
+  <!-- Populated by script.js using ?material=Share-ID -->
+  <section
+    id="sharedMaterialPage"
+    class="max-w-4xl mx-auto w-full px-4 sm:px-6 py-10"
+    aria-labelledby="sharedMaterialTitle"
+  >
+    <div class="rounded-3xl border border-gray-800 bg-gray-900/70 p-5 sm:p-8 shadow-2xl">
+
+      <a
+        id="sharedBackLink"
+        href="./"
+        class="inline-flex items-center gap-2 text-sm font-bold text-gray-400 hover:text-amber-400 mb-6"
+      >
+        <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+        Back to ICSE Vault
+      </a>
+
+      <div class="inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-500/10 px-3 py-1 text-xs font-bold text-amber-400">
+        <i class="fa-solid fa-book-open" aria-hidden="true"></i>
+        ICSE MasterClass · Shared Material
+      </div>
+
+      <h1
+        id="sharedMaterialTitle"
+        class="mt-4 text-2xl sm:text-4xl font-black tracking-tight text-white"
+      >
+        Study Material
+      </h1>
+
+      <p
+        id="sharedMaterialSubject"
+        class="mt-2 text-sm font-bold text-amber-400"
+      ></p>
+
+      <p
+        id="sharedMaterialDescription"
+        class="mt-4 text-sm leading-7 text-gray-300"
+      >
+        Open the resource using the button below, or share this page with another student.
+      </p>
+
+      <div class="mt-6 flex flex-col sm:flex-row gap-3">
+
+        <a
+          id="sharedMaterialOpen"
+          class="share-action share-primary"
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+          Open Material
+        </a>
+
+        <button
+          id="sharedMaterialShare"
+          class="share-action share-secondary"
+          type="button"
+        >
+          <i class="fa-solid fa-share-nodes" aria-hidden="true"></i>
+          Share This Page
+        </button>
+
+        <button
+          id="sharedMaterialCopy"
+          class="share-action share-secondary"
+          type="button"
+        >
+          <i class="fa-solid fa-link" aria-hidden="true"></i>
+          Copy Link
+        </button>
+
+      </div>
+
+      <p
+        id="sharedMaterialStatus"
+        class="mt-4 text-sm text-amber-400"
+        aria-live="polite"
+      ></p>
+
+      <p class="mt-8 border-t border-gray-800 pt-5 text-xs leading-6 text-gray-500">
+        Materials may belong to their respective authors or publishers.
+        ICSE MasterClass provides this page as an index for student reference.
+      </p>
+
+    </div>
+  </section>
+
+  <!-- Material Detail Modal -->
+  <div
+    id="detailView"
+    class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex items-center justify-center p-3 sm:p-6 transition-opacity"
+  >
+    <div class="bg-gray-900 border border-gray-800 rounded-2xl max-w-4xl w-full max-h-[92vh] flex flex-col relative shadow-2xl overflow-hidden">
+
+      <div class="p-4 border-b border-gray-800 flex items-center justify-between bg-gray-900/80 shrink-0">
+
+        <div class="flex items-center gap-2 overflow-hidden pr-4">
+          <span
+            id="modalSubjectBadge"
+            class="px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-amber-500/10 text-amber-400 border border-amber-500/20 shrink-0"
+          >
+            Subject
+          </span>
+
+          <h2
+            id="modalTitle"
+            class="text-sm sm:text-base font-bold text-white truncate"
+          >
+            Document Viewer
+          </h2>
+        </div>
+
+        <button
+          onclick="closeMaterialModal()"
+          class="w-8 h-8 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white flex items-center justify-center transition shrink-0"
+          aria-label="Close material viewer"
+        >
+          <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+        </button>
+
+      </div>
+
+      <div
+        id="detailContent"
+        class="p-4 sm:p-5 overflow-y-auto space-y-4 flex-grow"
+      >
+        <!-- Viewer content injected by script.js -->
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Welcome Popup -->
+  <div
+    id="welcomePopup"
+    class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4"
+  >
+    <div class="bg-gray-900 border border-amber-500/30 rounded-3xl max-w-md w-full p-6 relative shadow-2xl space-y-5 text-center transform transition-all scale-100">
+
+      <button
+        onclick="closeWelcomePopup()"
+        class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700 flex items-center justify-center transition"
+        aria-label="Close welcome popup"
+      >
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+
+      <div class="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mx-auto text-amber-400 text-2xl">
+        <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
+      </div>
+
+      <div class="space-y-2">
+        <h3 class="text-xl font-black text-white">
+          Welcome to ICSE MasterClass
+        </h3>
+
+        <p class="text-xs text-gray-400 leading-relaxed">
+          Get access to study notes, question banks and educational resources.
+          Connect with our community for updates and support.
+        </p>
+      </div>
+
+      <div class="space-y-3 pt-2">
+
+        <a
+          href="https://www.youtube.com/@ICSEMasterClass10?sub_confirmation=1"
+          target="_blank"
+          rel="noopener noreferrer"
+          onclick="closeWelcomePopup()"
+          class="w-full py-3 px-4 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-red-600/20 transition"
+        >
+          <i class="fa-brands fa-youtube text-base" aria-hidden="true"></i>
+          <span>Subscribe on YouTube</span>
+        </a>
+
+        <a
+          href="https://t.me/ICSEMasterClass10"
+          target="_blank"
+          rel="noopener noreferrer"
+          onclick="closeWelcomePopup()"
+          class="w-full py-3 px-4 rounded-xl bg-sky-500 hover:bg-sky-400 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-sky-500/20 transition"
+        >
+          <i class="fa-brands fa-telegram text-base" aria-hidden="true"></i>
+          <span>Join Telegram Community</span>
+        </a>
+
+      </div>
+
+      <button
+        onclick="closeWelcomePopup()"
+        class="text-[11px] text-gray-500 hover:text-gray-300 underline font-medium transition"
+      >
+        Continue to Website
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Floating Mobile Telegram Button -->
+  <a
+    href="https://t.me/ICSEMasterClass10"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="fixed bottom-4 right-4 z-40 bg-sky-500 hover:bg-sky-400 text-white font-bold text-xs px-4 py-3 rounded-full shadow-lg shadow-sky-500/25 flex items-center gap-2 transition-all active:scale-95 sm:hidden"
+  >
+    <i class="fa-brands fa-telegram text-base" aria-hidden="true"></i>
+    <span>Join Group</span>
+  </a>
+
+  <!-- Footer -->
+  <footer class="mt-auto border-t border-gray-800/80 bg-gray-950 py-6 text-center text-xs text-gray-500">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+
+      <p>
+        © ICSE MasterClass. Educational materials remain the property of their respective owners.
+      </p>
+
+      <div class="flex items-center gap-4 flex-wrap justify-center">
+
+        <a
+          href="https://t.me/ICSEMasterClass10/1320"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hover:text-amber-400 transition font-semibold text-amber-400/90"
+        >
+          Feedback / Suggestions
+        </a>
+
+        <a
+          href="mailto:icsemasterclass@gmail.com"
+          class="hover:text-amber-400 transition"
+        >
+          Contact / Takedown
+        </a>
+
+        <a
+          href="https://t.me/ICSEMasterClass10"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hover:text-amber-400 transition"
+        >
+          Telegram
+        </a>
+
+        <a
+          href="https://www.youtube.com/@ICSEMasterClass10"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hover:text-amber-400 transition"
+        >
+          YouTube
+        </a>
+
+      </div>
+    </div>
+  </footer>
+
+  <!-- Service Worker Registration -->
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker
+          .register("./sw.js")
+          .catch(error => {
+            console.error("Service worker registration failed:", error);
+          });
+      });
+    }
+  </script>
+
+  <!-- Main JavaScript: Resource Database, Search, Sharing and PWA -->
+  <script src="script.js"></script>
+
+</body>
+</html>
