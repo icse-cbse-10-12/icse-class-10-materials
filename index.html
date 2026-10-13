@@ -203,11 +203,24 @@
     body[data-site-accent="violet"] { --site-accent:#a78bfa;--site-accent-soft:rgba(167,139,250,.14); }
     body[data-site-accent="rose"] { --site-accent:#fb7185;--site-accent-soft:rgba(251,113,133,.14); }
     body[data-site-accent="amber"] { --site-accent:#f59e0b;--site-accent-soft:rgba(245,158,11,.13); }
-    body [class*="text-amber-"] { color:var(--site-accent) !important; }
-    body [class*="border-amber-"] { border-color:var(--site-accent) !important; }
-    body [class*="bg-amber-500"] { background-color:var(--site-accent) !important; }
-    body [class*="hover:border-amber-"]:hover { border-color:var(--site-accent) !important; }
-    body [class*="focus:border-amber-"]:focus { border-color:var(--site-accent) !important; }
+    .cat-btn.active-tab { background:var(--site-accent) !important; color:#111827 !important; border-color:var(--site-accent) !important; }
+    #settingsToggle:hover, .settings-close:hover { border-color:var(--site-accent); color:var(--site-accent); }
+    .settings-done { background:var(--site-accent); }
+    #globalSearchWrap { margin-bottom:1rem; }
+    #globalSearchWrap input, #searchInput { border-color:#334155 !important; }
+    #globalSearchWrap input:focus, #searchInput:focus { border-color:var(--site-accent) !important; }
+    #resourceGrid > div:not(.col-span-full) { min-width:0; overflow-wrap:anywhere; }
+    #resourceGrid > div > div:first-child > div:first-child > span:first-child { max-width:58%; overflow-wrap:anywhere; }
+    #resourceGrid h3 { overflow-wrap:anywhere; }
+    @media(max-width:520px) { #globalSearchWrap { margin-bottom:.5rem; } #resourceGrid { grid-template-columns:minmax(0,1fr) !important; } }
+    .cat-btn.active-tab { background:var(--site-accent) !important; color:#111827 !important; border-color:var(--site-accent) !important; }
+    #settingsToggle:hover, .settings-close:hover { border-color:var(--site-accent); color:var(--site-accent); }
+    .settings-done { background:var(--site-accent); }
+    #globalSearchWrap { margin-bottom:1rem; }
+    #globalSearchWrap input:focus, #searchInput:focus { border-color:var(--site-accent) !important; }
+    #resourceGrid > div:not(.col-span-full) { min-width:0; overflow-wrap:anywhere; }
+    #resourceGrid h3 { overflow-wrap:anywhere; }
+    @media(max-width:520px) { #globalSearchWrap { margin-bottom:.5rem; } #resourceGrid { grid-template-columns:minmax(0,1fr) !important; } }
     @media(max-width:520px) { .settings-panel { padding:20px 16px; } .settings-overlay { justify-content:stretch; } }
 
   </style>
@@ -333,7 +346,7 @@
 
 
 <!-- Global Search — right aligned -->
-<div class="w-full flex justify-end mb-4">
+<div id="globalSearchWrap" class="w-full flex justify-end mb-4">
   <div class="w-full max-w-xs">
     <label
       for="globalSearchInput"

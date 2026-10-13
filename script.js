@@ -447,6 +447,9 @@ function parseCSV(text) {
    ============================================================ */
 
 function selectSubject(subjectName, updateHash = true) {
+  const globalWrap = document.getElementById("globalSearchWrap");
+  if (subjectName === "All") globalWrap?.classList.remove("hidden");
+  else globalWrap?.classList.add("hidden");
   currentSubject = subjectName;
 
   if (updateHash) {
@@ -489,6 +492,7 @@ function searchAllMaterials() {
   const landingView = document.getElementById("mainLandingView");
   const detailView = document.getElementById("subjectDetailView");
   const title = document.getElementById("selectedSubjectTitle");
+  const globalWrap = document.getElementById("globalSearchWrap");
 
   const query = globalInput?.value || "";
 
@@ -516,6 +520,7 @@ function searchAllMaterials() {
   if (landingView && !landingView.classList.contains("hidden")) {
     landingView.classList.add("hidden");
     detailView?.classList.remove("hidden");
+    globalWrap?.classList.add("hidden");
 
     history.pushState(
       "",
