@@ -1,225 +1,114 @@
 
-/* ==================================================
-   ICSE MASTERCLASS — UI/UX UPGRADE
-   Premium navy + amber design
-   ================================================== */
+/* ==========================================
+   ICSE MASTERCLASS — HYBRID UI UPGRADE
+   Dark header + light content + amber accents
+   ========================================== */
 
 :root {
-  --ux-bg: #090d16;
-  --ux-surface: #111827;
-  --ux-surface-hover: #172235;
-  --ux-border: rgba(148, 163, 184, 0.16);
-  --ux-text: #f8fafc;
-  --ux-muted: #a1aab9;
-  --ux-accent: #f59e0b;
-  --ux-radius: 18px;
-  --ux-shadow: 0 12px 35px rgba(0, 0, 0, 0.18);
+  --hybrid-bg: #f1f5f9;
+  --hybrid-card: #ffffff;
+  --hybrid-text: #0f172a;
+  --hybrid-muted: #64748b;
+  --hybrid-border: #e2e8f0;
+  --hybrid-accent: #f59e0b;
+  --hybrid-navy: #0a192f;
 }
 
-html {
-  scroll-padding-top: 90px;
-}
-
+/* Smooth and consistent typography */
 body {
-  line-height: 1.55;
-  text-rendering: optimizeLegibility;
+  font-family: Inter, system-ui, sans-serif;
+  line-height: 1.6;
 }
 
-::selection {
-  background: var(--ux-accent);
-  color: #090d16;
-}
-
-/* Better keyboard accessibility */
-:where(a, button, input, select, textarea):focus-visible {
-  outline: 2px solid var(--ux-accent);
-  outline-offset: 3px;
-}
-
-/* Header */
-body > header {
-  border-bottom-color: var(--ux-border);
-  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.12);
-}
-
-body > header a,
-body > header button {
-  transition:
-    color 180ms ease,
-    background-color 180ms ease,
-    border-color 180ms ease;
-}
-
-/* Landing hero */
-#mainLandingView > div:first-child {
-  padding-top: clamp(24px, 5vw, 54px);
-  padding-bottom: clamp(16px, 3vw, 30px);
-}
-
-#mainLandingView h1 {
-  max-width: 900px;
-  margin-inline: auto;
+h1, h2, h3 {
+  letter-spacing: -0.025em;
   text-wrap: balance;
-  letter-spacing: -0.035em;
 }
 
-#mainLandingView > div:first-child > p {
-  font-size: clamp(13px, 1.4vw, 16px);
-  line-height: 1.8;
-}
-
-/* Search */
-#globalSearchWrap {
-  justify-content: center;
-  margin: 8px auto 24px;
-}
-
-#globalSearchWrap > div {
-  max-width: 720px;
-  position: relative;
-}
-
-#globalSearchWrap label {
-  font-size: 13px;
-  letter-spacing: 0.01em;
-}
-
-#globalSearchInput,
-#searchInput {
-  min-height: 46px;
-  border-color: var(--ux-border);
-  transition:
-    border-color 180ms ease,
-    box-shadow 180ms ease,
-    background-color 180ms ease;
-}
-
-#globalSearchInput:hover,
-#searchInput:hover {
-  border-color: rgba(245, 158, 11, 0.45);
-}
-
-#globalSearchInput:focus,
-#searchInput:focus {
-  border-color: var(--ux-accent);
-  box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.10);
-}
-
-/* Subject cards */
+/* Premium card interactions */
 #mainSubjectGrid > button,
-#mainSubjectGrid > a {
-  min-height: 112px;
-  border-radius: var(--ux-radius);
-  border: 1px solid var(--ux-border);
-  background:
-    linear-gradient(
-      145deg,
-      rgba(30, 41, 59, 0.74),
-      rgba(15, 23, 42, 0.72)
-    );
+#mainSubjectGrid > a,
+#resourceGrid > div:not(.col-span-full) {
+  border-radius: 18px;
   transition:
     transform 180ms ease,
     border-color 180ms ease,
-    background-color 180ms ease,
     box-shadow 180ms ease;
 }
 
 #mainSubjectGrid > button:hover,
-#mainSubjectGrid > a:hover {
-  transform: translateY(-3px);
-  border-color: rgba(245, 158, 11, 0.58);
-  background-color: var(--ux-surface-hover);
-  box-shadow: var(--ux-shadow);
-}
-
-/* Subject icons */
-#mainSubjectGrid .fa-solid {
-  transition: transform 180ms ease;
-}
-
-#mainSubjectGrid > button:hover .fa-solid,
-#mainSubjectGrid > a:hover .fa-solid {
-  transform: scale(1.08);
-}
-
-/* Resource cards — targets existing resource containers */
-#resourceGrid > div:not(.col-span-full) {
-  min-width: 0;
-  overflow-wrap: anywhere;
-  border-color: var(--ux-border);
-  border-radius: var(--ux-radius);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  transition:
-    transform 180ms ease,
-    border-color 180ms ease,
-    box-shadow 180ms ease;
-}
-
+#mainSubjectGrid > a:hover,
 #resourceGrid > div:not(.col-span-full):hover {
-  border-color: rgba(245, 158, 11, 0.48);
-  box-shadow: var(--ux-shadow);
+  transform: translateY(-3px);
+  border-color: rgba(245, 158, 11, 0.65);
+  box-shadow: 0 14px 35px rgba(15, 23, 42, 0.12);
 }
 
+/* Search should feel like the main action */
+#globalSearchWrap {
+  width: 100%;
+  max-width: 760px;
+  margin-inline: auto;
+}
+
+#globalSearchInput,
+#searchInput {
+  min-height: 50px;
+  border-radius: 14px;
+  font-size: 16px;
+}
+
+#globalSearchInput:focus,
+#searchInput:focus {
+  outline: none;
+  border-color: var(--hybrid-accent);
+  box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.15);
+}
+
+/* Clear active filter styling */
+.cat-btn {
+  border-radius: 12px;
+  min-height: 42px;
+  padding-inline: 15px;
+  font-weight: 700;
+}
+
+/* More comfortable resource titles */
 #resourceGrid h3 {
+  font-size: 0.95rem;
   line-height: 1.55;
   overflow-wrap: anywhere;
-  text-wrap: pretty;
 }
 
-#resourceGrid a {
-  min-height: 42px;
+/* Buttons: visible hover and keyboard focus */
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* Filter chips */
-.cat-btn {
-  min-height: 40px;
-  border-radius: 12px;
-  transition:
-    background-color 160ms ease,
-    color 160ms ease,
-    border-color 160ms ease;
+:where(button, a, input, select, textarea):focus-visible {
+  outline: 3px solid var(--hybrid-accent);
+  outline-offset: 3px;
 }
 
-.cat-btn:not(.active-tab):hover {
-  border-color: rgba(245, 158, 11, 0.5);
+/* Avoid unwanted horizontal overflow */
+html,
+body {
+  max-width: 100%;
+  overflow-x: clip;
 }
 
-/* Database status */
-#statusMessage {
-  border-radius: 14px;
-  min-height: 42px;
+img,
+iframe,
+video {
+  max-width: 100%;
 }
 
-/* Settings panel */
-.settings-panel {
-  border-radius: 24px;
-  border: 1px solid var(--ux-border);
-  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
-}
-
-/* Footer */
-footer {
-  line-height: 1.8;
-}
-
-footer a {
-  text-underline-offset: 4px;
-}
-
-/* Responsive layout */
-@media (min-width: 768px) {
-  #mainSubjectGrid {
-    gap: 16px;
-  }
-}
-
+/* Mobile layout */
 @media (max-width: 640px) {
-  #mainLandingView {
-    gap: 22px;
-  }
-
   #mainLandingView h1 {
-    font-size: clamp(26px, 8vw, 36px);
+    font-size: clamp(1.8rem, 8vw, 2.4rem);
+    line-height: 1.15;
   }
 
   #mainSubjectGrid {
@@ -242,23 +131,23 @@ footer a {
   }
 
   .cat-btn {
-    min-height: 42px;
+    min-height: 44px;
   }
 }
 
-/* Respect device accessibility preferences */
+/* Respect reduced-motion preferences */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
 
   #mainSubjectGrid > button:hover,
-  #mainSubjectGrid > a:hover {
+  #mainSubjectGrid > a:hover,
+  #resourceGrid > div:hover {
     transform: none;
   }
 }
