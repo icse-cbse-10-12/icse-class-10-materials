@@ -61,7 +61,12 @@ const subjectIcons = {
   "Second Language - Kannada": "fa-language",
   "Second Language - Hindi": "fa-language",
   "Notes": "fa-note-sticky",
-  "Other Subjects": "fa-folder-open"
+  "Other Subjects": "fa-folder-open",
+  "English": "fa-book-open",
+  "Economics": "fa-chart-pie",
+  "Accounts": "fa-calculator",
+  "Art": "fa-palette",
+  "Sanskrit": "fa-language",
 };
 
 let currentSubject = "All";
