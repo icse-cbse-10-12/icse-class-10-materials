@@ -229,6 +229,7 @@ async function fetchSheetData() {
   }
 
   allResources = parseCSV(csvText);
+  renderLatestMaterials();
 
   if (statusEl) {
     statusEl.innerHTML = `
@@ -239,6 +240,76 @@ async function fetchSheetData() {
   }
 
   checkHashRoute();
+}
+
+/* ============================================================
+   LATEST MATERIALS — 2027 RESOURCES
+   ============================================================ */
+
+function renderLatestMaterials() {
+  const grid = document.getElementById("latestMaterialsGrid");
+  const count = document.getElementById("latestMaterialsCount");
+  if (!grid) return;
+
+  const latest = allResources.filter(item => {
+    const edition = String(item["Edition"] || "").trim();
+    const scope = String(item["Scope"] || "").toLowerCase();
+    const title = String(item["Book Name"] || "").toLowerCase();
+    return edition === "2027" || scope.includes("2027") || title.includes("2027");
+  });
+
+  const unique = [];
+  const seen = new Set();
+  latest.forEach(item => {
+    const title = String(item["Book Name"] || "Untitled material").trim();
+    const link = normalizeExternalUrl(item["Google Drive Link"] || item["Latest Edition Link"]);
+    const key = `${title.toLowerCase()}|${link}`;
+    if (!seen.has(key)) {
+      seen.add(key);
+      unique.push({ item, title, link });
+    }
+  });
+
+  // Show newer question banks and reference documents before repeated syllabus entries.
+  unique.sort((a, b) => {
+    const score = entry => {
+      const text = `${entry.title} ${entry.item["Category"] || ""} ${entry.item["Scope"] || ""}`.toLowerCase();
+      let value = 0;
+      if (text.includes("question bank")) value -= 5;
+      if (text.includes("competency")) value -= 4;
+      if (text.includes("sample paper") || text.includes("specimen")) value -= 3;
+      if (text.includes("official syllabus")) value += 3;
+      return value;
+    };
+    return score(a) - score(b) || a.title.localeCompare(b.title);
+  });
+
+  if (count) count.textContent = `${unique.length} resource${unique.length === 1 ? "" : "s"} tagged 2027`;
+
+  if (!unique.length) {
+    grid.innerHTML = '<div class="rounded-2xl border border-gray-800 bg-gray-900/60 p-5 text-sm text-gray-400">No 2027 resources are tagged in the database yet. Add them to Google Sheets with Edition set to 2027.</div>';
+    return;
+  }
+
+  const escapeText = value => String(value || "").replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
+  grid.innerHTML = unique.slice(0, 9).map(({ item, title, link }) => {
+    const subject = item["Subject"] || "Study Material";
+    const category = item["Category"] || "Resource";
+    const publisher = item["Publisher/Company"] || "ICSE MasterClass resource vault";
+    const hasLink = Boolean(link);
+    return `
+      <article class="group rounded-2xl border border-gray-800 bg-gray-900/70 p-4 sm:p-5 hover:border-amber-500/50 hover:bg-gray-900 transition flex flex-col min-h-[190px]">
+        <div class="flex items-center justify-between gap-2 mb-3">
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 px-2.5 py-1 text-[10px] font-black uppercase tracking-wide text-amber-300"><i class="fa-regular fa-calendar-check"></i> 2027</span>
+          <span class="text-[10px] text-gray-500 truncate">${escapeText(subject)}</span>
+        </div>
+        <h3 class="text-sm font-extrabold leading-snug text-white group-hover:text-amber-300 transition">${escapeText(title)}</h3>
+        <p class="text-xs text-gray-400 mt-2">${escapeText(category)} · ${escapeText(publisher)}</p>
+        <div class="mt-auto pt-4">
+          ${hasLink ? `<a href="${escapeText(link)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 w-full rounded-xl bg-amber-500 hover:bg-amber-400 text-gray-950 font-extrabold text-xs px-4 py-3 transition"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open Material</a>` : '<span class="block rounded-xl border border-gray-700 px-4 py-3 text-center text-xs text-gray-500">Link not available yet</span>'}
+        </div>
+      </article>`;
+  }).join("");
 }
 
 /* ============================================================
