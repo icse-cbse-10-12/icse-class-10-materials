@@ -89,6 +89,12 @@ let deferredPwaPrompt = null;
    URL VALIDATION
    ============================================================ */
 
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[char]));
+}
+
 function normalizeExternalUrl(value, rejectGenericCisceHome = false) {
   const raw = String(value || "").trim();
 
@@ -113,7 +119,9 @@ function normalizeExternalUrl(value, rejectGenericCisceHome = false) {
   if (
     !["https:", "http:"].includes(url.protocol) ||
     !url.hostname ||
-    !url.hostname.includes(".")
+    !url.hostname.includes(".") ||
+    url.username ||
+    url.password
   ) {
     return "";
   }
@@ -172,28 +180,23 @@ function initSubjectCards() {
   if (!grid) return;
 
   grid.innerHTML = subjectsList.map(subject => {
-    const icon = subjectIcons[subject] || "fa-book";
-
     return `
       <button
-        onclick="selectSubject('${subject}')"
+        data-subject="${escapeHTML(subject)}"
         class="p-4 rounded-xl bg-gray-900/60 border border-gray-800 hover:border-amber-500/50 hover:bg-gray-900/80 transition flex flex-col items-center justify-center gap-2 text-center group cursor-pointer"
         type="button"
-        aria-label="Open ${subject} subject materials"
+        aria-label="Open ${escapeHTML(subject)} subject materials"
       >
-        <div
-          class="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-black transition"
-          aria-hidden="true"
-        >
-          <span class="text-xl leading-none" aria-hidden="true">${subjectEmoji[subject] || "📘"}</span>
+        <div class="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-black transition" aria-hidden="true">
+          <span class="text-xl leading-none" aria-hidden="true">${escapeHTML(subjectEmoji[subject] || "📘")}</span>
         </div>
-
-        <span class="text-xs font-bold text-gray-200 group-hover:text-white">
-          ${subject}
-        </span>
-      </button>
-    `;
+        <span class="text-xs font-bold text-gray-200 group-hover:text-white">${escapeHTML(subject)}</span>
+      </button>`;
   }).join("");
+
+  grid.querySelectorAll("button[data-subject]").forEach(button => {
+    button.addEventListener("click", () => selectSubject(button.dataset.subject));
+  });
 }
 
 /* ============================================================
@@ -308,7 +311,6 @@ function renderLatestMaterials() {
     return;
   }
 
-  const escapeText = value => String(value || "").replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
   grid.innerHTML = unique.map(({ item, title, link }) => {
     const subject = item["Subject"] || "Study Material";
     const category = item["Category"] || "Resource";
@@ -318,12 +320,12 @@ function renderLatestMaterials() {
       <article class="group rounded-2xl border border-gray-800 bg-gray-900/70 p-4 sm:p-5 hover:border-amber-500/50 hover:bg-gray-900 transition flex flex-col min-h-[190px]">
         <div class="flex items-center justify-between gap-2 mb-3">
           <span class="inline-flex items-center gap-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 px-2.5 py-1 text-[10px] font-black uppercase tracking-wide text-amber-300"><i class="fa-regular fa-calendar-check"></i> 2027</span>
-          <span class="text-[10px] text-gray-500 truncate">${escapeText(subject)}</span>
+          <span class="text-[10px] text-gray-500 truncate">${escapeHTML(subject)}</span>
         </div>
-        <h3 class="text-sm font-extrabold leading-snug text-white group-hover:text-amber-300 transition">${escapeText(title)}</h3>
-        <p class="text-xs text-gray-400 mt-2">${escapeText(category)} · ${escapeText(publisher)}</p>
+        <h3 class="text-sm font-extrabold leading-snug text-white group-hover:text-amber-300 transition">${escapeHTML(title)}</h3>
+        <p class="text-xs text-gray-400 mt-2">${escapeHTML(category)} · ${escapeHTML(publisher)}</p>
         <div class="mt-auto pt-4">
-          ${hasLink ? `<a href="${escapeText(link)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 w-full rounded-xl bg-amber-500 hover:bg-amber-400 text-gray-950 font-extrabold text-xs px-4 py-3 transition"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open Material</a>` : '<span class="block rounded-xl border border-gray-700 px-4 py-3 text-center text-xs text-gray-500">Link not available yet</span>'}
+          ${hasLink ? `<a href="${escapeHTML(link)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 w-full rounded-xl bg-amber-500 hover:bg-amber-400 text-gray-950 font-extrabold text-xs px-4 py-3 transition"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open Material</a>` : '<span class="block rounded-xl border border-gray-700 px-4 py-3 text-center text-xs text-gray-500">Link not available yet</span>'}
         </div>
       </article>`;
   }).join("");
@@ -385,60 +387,46 @@ function checkHashRoute() {
    ============================================================ */
 
 function parseCSV(text) {
-  const lines = text
-    .replace(/^\uFEFF/, "")
-    .split(/\r?\n/)
-    .filter(line => line.trim() !== "");
+  const source = String(text || "").replace(/^\uFEFF/, "");
+  if (!source.trim()) return [];
 
-  if (lines.length < 2) return [];
+  const rows = [];
+  let row = [];
+  let field = "";
+  let inQuotes = false;
 
-  function splitRow(row) {
-    const result = [];
-    let current = "";
-    let inQuotes = false;
-
-    for (let i = 0; i < row.length; i++) {
-      const char = row[i];
-
-      if (char === '"' && row[i + 1] === '"') {
-        current += '"';
+  for (let i = 0; i < source.length; i++) {
+    const char = source[i];
+    if (char === '"') {
+      if (inQuotes && source[i + 1] === '"') {
+        field += '"';
         i++;
-      } else if (char === '"') {
-        inQuotes = !inQuotes;
-      } else if (char === "," && !inQuotes) {
-        result.push(current.trim());
-        current = "";
       } else {
-        current += char;
+        inQuotes = !inQuotes;
       }
+    } else if (char === "," && !inQuotes) {
+      row.push(field.trim());
+      field = "";
+    } else if ((char === "\n" || char === "\r") && !inQuotes) {
+      if (char === "\r" && source[i + 1] === "\n") i++;
+      row.push(field.trim());
+      if (row.some(value => value !== "")) rows.push(row);
+      row = [];
+      field = "";
+    } else {
+      field += char;
     }
-
-    result.push(current.trim());
-    return result;
   }
+  row.push(field.trim());
+  if (row.some(value => value !== "")) rows.push(row);
+  if (rows.length < 2) return [];
 
-  const headers = splitRow(lines[0]).map(
-    header => header.replace(/^"|"$/g, "").trim()
-  );
-
-  const data = [];
-
-  for (let i = 1; i < lines.length; i++) {
-    const row = splitRow(lines[i]);
+  const headers = rows[0].map(value => value.trim());
+  return rows.slice(1).map(values => {
     const item = {};
-
-    headers.forEach((header, index) => {
-      item[header] = (row[index] || "")
-        .replace(/^"|"$/g, "")
-        .trim();
-    });
-
-    if (item["Book Name"] || item["Subject"]) {
-      data.push(item);
-    }
-  }
-
-  return data;
+    headers.forEach((header, index) => { item[header] = String(values[index] ?? "").trim(); });
+    return item;
+  }).filter(item => item["Book Name"] || item["Subject"]);
 }
 
 /* ============================================================
@@ -810,28 +798,28 @@ function renderGrid(data) {
         <div class="space-y-2">
           <div class="flex items-center justify-between text-[10px] gap-2">
             <span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold shrink-0">
-              ${item["Category"] || "General"}
+              ${escapeHTML(item["Category"] || "General")}
             </span>
 
             <div class="flex items-center gap-1 overflow-hidden truncate text-gray-400">
               ${
                 editionText
-                  ? `<span class="px-1.5 py-0.5 rounded bg-gray-800 text-amber-300 font-mono font-semibold">${editionText}</span>`
+                  ? `<span class="px-1.5 py-0.5 rounded bg-gray-800 text-amber-300 font-mono font-semibold">${escapeHTML(editionText)}</span>`
                   : ""
               }
               <span class="truncate">
-                ${item["Publisher/Company"] || item["Publisher"] || item["Subject"] || ""}
+                ${escapeHTML(item["Publisher/Company"] || item["Publisher"] || item["Subject"] || "")}
               </span>
             </div>
           </div>
 
           <h3 class="font-bold text-sm text-white line-clamp-2 leading-snug">
-            ${item["Book Name"] || "Resource File"}
+            ${escapeHTML(item["Book Name"] || "Resource File")}
           </h3>
 
           ${
             item["Scope"]
-              ? `<p class="text-xs text-gray-400 line-clamp-2">${item["Scope"]}</p>`
+              ? `<p class="text-xs text-gray-400 line-clamp-2">${escapeHTML(item["Scope"])}</p>`
               : ""
           }
 
@@ -841,11 +829,11 @@ function renderGrid(data) {
                 <div class="pt-1 text-[11px]">
                   <span class="text-emerald-400 font-semibold">
                     <i class="fa-solid fa-circle-check text-[10px]" aria-hidden="true"></i>
-                    Latest Edition: ${isLatestAvailable}
+                    Latest Edition: ${escapeHTML(isLatestAvailable)}
                   </span>
                   ${
                     latestEdLink
-                      ? `<a href="${latestEdLink}" target="_blank" rel="noopener noreferrer" class="ml-1 text-amber-400 underline hover:text-amber-300 font-bold">(Get Book)</a>`
+                      ? `<a href="${escapeHTML(latestEdLink)}" target="_blank" rel="noopener noreferrer" class="ml-1 text-amber-400 underline hover:text-amber-300 font-bold">(Get Book)</a>`
                       : ""
                   }
                 </div>
@@ -857,7 +845,7 @@ function renderGrid(data) {
         <div class="grid grid-cols-2 gap-2 pt-2 border-t border-gray-800/80">
           <button
             onclick="openMaterialModalByIndex(${index})"
-            aria-label="Preview ${item["Book Name"] || "material"}"
+            aria-label="Preview ${escapeHTML(item["Book Name"] || "material")}"
             type="button"
             class="py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-200 font-bold text-xs text-center transition flex items-center justify-center gap-1.5 cursor-pointer"
           >
@@ -866,7 +854,7 @@ function renderGrid(data) {
           </button>
 
           <a
-            href="${driveLink || "#"}"
+            href="${escapeHTML(driveLink || "#")}"
             ${
               driveLink
                 ? 'target="_blank" rel="noopener noreferrer"'
@@ -886,7 +874,7 @@ function renderGrid(data) {
             lectureLink
               ? `
                 <a
-                  href="${lectureLink}"
+                  href="${escapeHTML(lectureLink)}"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Watch lecture video"
@@ -906,7 +894,7 @@ function renderGrid(data) {
               <div class="grid grid-cols-2 gap-2">
                 <button
                   type="button"
-                  data-share-id="${item["Share ID"]}"
+                  data-share-id="${escapeHTML(item["Share ID"])}"
                   class="js-open-share-page py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-200 font-bold text-xs text-center transition"
                 >
                   <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
@@ -915,7 +903,7 @@ function renderGrid(data) {
 
                 <button
                   type="button"
-                  data-share-id="${item["Share ID"]}"
+                  data-share-id="${escapeHTML(item["Share ID"])}"
                   class="js-share-material py-2 rounded-lg border border-amber-500/40 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 font-bold text-xs text-center transition"
                 >
                   <i class="fa-solid fa-share-nodes" aria-hidden="true"></i>
@@ -1189,7 +1177,7 @@ function openMaterialModalByIndex(index) {
 
   let embedHtml = "";
 
-  if (driveLink && driveLink.includes("drive.google.com")) {
+  if (driveLink && new URL(driveLink).hostname === "drive.google.com") {
     const previewUrl = driveLink.replace(
       /\/view(\?.*)?$/,
       "/preview"
@@ -1198,7 +1186,7 @@ function openMaterialModalByIndex(index) {
     embedHtml = `
       <div class="w-full h-[55vh] sm:h-[62vh] rounded-lg overflow-hidden border border-gray-800 bg-black relative">
         <iframe
-          src="${previewUrl}"
+          src="${escapeHTML(previewUrl)}"
           title="Google Drive Document Preview"
           class="w-full h-full border-0"
           allow="autoplay"
@@ -1216,27 +1204,27 @@ function openMaterialModalByIndex(index) {
         <div class="p-3.5 rounded-lg bg-gray-950 border border-gray-800 text-xs text-gray-300 grid grid-cols-1 sm:grid-cols-2 gap-2">
           <p>
             <strong class="text-amber-400">Publisher:</strong>
-            ${item["Publisher/Company"] || item["Publisher"] || "N/A"}
+            ${escapeHTML(item["Publisher/Company"] || item["Publisher"] || "N/A")}
           </p>
 
           <p>
             <strong class="text-amber-400">Category:</strong>
-            ${item["Category"] || "N/A"}
+            ${escapeHTML(item["Category"] || "N/A")}
           </p>
 
           <p>
             <strong class="text-amber-400">Edition:</strong>
-            ${item["Edition"] || "Not Specified"}
+            ${escapeHTML(item["Edition"] || "Not Specified")}
           </p>
 
           <p>
             <strong class="text-amber-400">Format:</strong>
-            ${item["Format"] || "PDF"}
+            ${escapeHTML(item["Format"] || "PDF")}
           </p>
 
           <p class="col-span-full">
             <strong class="text-amber-400">Scope:</strong>
-            ${item["Scope"] || "N/A"}
+            ${escapeHTML(item["Scope"] || "N/A")}
           </p>
 
           ${
@@ -1244,13 +1232,13 @@ function openMaterialModalByIndex(index) {
               ? `
                 <p class="col-span-full pt-1 border-t border-gray-800/80">
                   <strong class="text-amber-400">Latest Edition Status:</strong>
-                  ${item["Latest Edition Available?"]}
+                  ${escapeHTML(item["Latest Edition Available?"])}
 
                   ${
                     latestEdLink
                       ? `
                         <a
-                          href="${latestEdLink}"
+                          href="${escapeHTML(latestEdLink)}"
                           target="_blank"
                           rel="noopener noreferrer"
                           class="ml-2 text-amber-400 underline font-bold"
@@ -1269,7 +1257,7 @@ function openMaterialModalByIndex(index) {
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
           <a
-            href="${driveLink || "#"}"
+            href="${escapeHTML(driveLink || "#")}"
             ${
               driveLink
                 ? 'target="_blank" rel="noopener noreferrer"'
@@ -1289,7 +1277,7 @@ function openMaterialModalByIndex(index) {
             lectureLink
               ? `
                 <a
-                  href="${lectureLink}"
+                  href="${escapeHTML(lectureLink)}"
                   target="_blank"
                   rel="noopener noreferrer"
                   class="py-2.5 rounded-lg bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500 hover:text-white font-bold text-xs text-center transition flex items-center justify-center gap-2"
@@ -1361,8 +1349,16 @@ function closeWelcomePopup() {
    ============================================================ */
 const siteSettingsDefaults = { mode: "dark", accent: "amber", fontSize: "100" };
 function readSiteSettings() {
-  try { return { ...siteSettingsDefaults, ...JSON.parse(localStorage.getItem("icseMasterclassSiteSettings") || "{}") }; }
-  catch (_) { return { ...siteSettingsDefaults }; }
+  try {
+    const saved = JSON.parse(localStorage.getItem("icseMasterclassSiteSettings") || "{}");
+    const mode = ["dark", "light", "midnight"].includes(saved.mode) ? saved.mode : siteSettingsDefaults.mode;
+    const accent = ["amber", "blue", "emerald", "violet", "rose"].includes(saved.accent) ? saved.accent : siteSettingsDefaults.accent;
+    const parsedSize = Number(saved.fontSize);
+    const fontSize = Number.isFinite(parsedSize) ? String(Math.max(90, Math.min(115, Math.round(parsedSize / 5) * 5))) : siteSettingsDefaults.fontSize;
+    return { mode, accent, fontSize };
+  } catch (_) {
+    return { ...siteSettingsDefaults };
+  }
 }
 function saveSiteSettings(settings) {
   try { localStorage.setItem("icseMasterclassSiteSettings", JSON.stringify(settings)); } catch (_) {}
