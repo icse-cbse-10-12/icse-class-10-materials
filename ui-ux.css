@@ -151,3 +151,87 @@ video {
     transform: none;
   }
 }
+
+
+/* ==========================================
+   GLASS DESIGN — premium navy / amber finish
+   ========================================== */
+:root {
+  --glass-surface: rgba(15, 23, 42, .66);
+  --glass-surface-strong: rgba(15, 23, 42, .82);
+  --glass-line: rgba(148, 163, 184, .20);
+  --glass-highlight: rgba(255, 255, 255, .07);
+  --glass-glow: rgba(245, 158, 11, .12);
+}
+
+body {
+  background: radial-gradient(ellipse at 12% 0%, rgba(30, 64, 175, .18), transparent 38%),
+              radial-gradient(ellipse at 88% 18%, rgba(245, 158, 11, .08), transparent 32%),
+              #090d16 !important;
+  color: #f3f4f6;
+}
+
+header.sticky {
+  background: rgba(9, 13, 22, .76) !important;
+  border-bottom-color: rgba(148, 163, 184, .16) !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, .16);
+  -webkit-backdrop-filter: blur(20px) saturate(145%);
+  backdrop-filter: blur(20px) saturate(145%);
+}
+
+.glass-card,
+#mainSubjectGrid > button,
+#mainSubjectGrid > a,
+#resourceGrid > div:not(.col-span-full) {
+  background: linear-gradient(145deg, rgba(255,255,255,.065), rgba(255,255,255,.018)), var(--glass-surface) !important;
+  border: 1px solid var(--glass-line) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.055), 0 12px 32px rgba(0,0,0,.12);
+  -webkit-backdrop-filter: blur(16px) saturate(135%);
+  backdrop-filter: blur(16px) saturate(135%);
+}
+
+#mainSubjectGrid > button:hover,
+#mainSubjectGrid > a:hover,
+#resourceGrid > div:not(.col-span-full):hover {
+  transform: translateY(-3px);
+  border-color: rgba(245,158,11,.58) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 18px 42px rgba(0,0,0,.24), 0 0 0 1px rgba(245,158,11,.08);
+}
+
+#globalSearchInput, #searchInput {
+  background: rgba(15,23,42,.72) !important;
+  border: 1px solid rgba(148,163,184,.25) !important;
+  color: #f8fafc !important;
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+
+.cat-btn {
+  background: rgba(15,23,42,.58);
+  border: 1px solid rgba(148,163,184,.2);
+  color: #cbd5e1;
+  transition: background-color 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+.cat-btn:hover {
+  background: rgba(245,158,11,.10);
+  border-color: rgba(245,158,11,.42);
+}
+.cat-btn.active-tab {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b) !important;
+  color: #111827 !important;
+  border-color: rgba(251,191,36,.85) !important;
+  box-shadow: 0 5px 22px rgba(245,158,11,.20) !important;
+}
+
+#mainLandingView h1 { text-shadow: 0 8px 35px rgba(0,0,0,.24); }
+:where(button,a,input,select,textarea):focus-visible { outline-color: #fbbf24; }
+
+@supports not ((backdrop-filter: blur(1px))) {
+  .glass-card, #mainSubjectGrid > button, #mainSubjectGrid > a, #resourceGrid > div:not(.col-span-full) { background: #111827 !important; }
+}
+@media (max-width: 640px) {
+  .glass-card, #mainSubjectGrid > button, #mainSubjectGrid > a, #resourceGrid > div:not(.col-span-full) { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  #mainSubjectGrid > button:hover, #mainSubjectGrid > a:hover, #resourceGrid > div:not(.col-span-full):hover { transform: none; }
+}
