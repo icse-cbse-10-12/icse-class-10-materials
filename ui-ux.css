@@ -1,153 +1,51 @@
-
-/* ==========================================
-   ICSE MASTERCLASS — HYBRID UI UPGRADE
-   Dark header + light content + amber accents
-   ========================================== */
-
+/* ICSE MasterClass — Class 10 Study Vault responsive UI */
 :root {
-  --hybrid-bg: #f1f5f9;
-  --hybrid-card: #ffffff;
-  --hybrid-text: #0f172a;
-  --hybrid-muted: #64748b;
-  --hybrid-border: #e2e8f0;
-  --hybrid-accent: #f59e0b;
-  --hybrid-navy: #0a192f;
+  --hybrid-bg:#f1f5f9; --hybrid-card:#fff; --hybrid-text:#0f172a;
+  --hybrid-muted:#64748b; --hybrid-border:#e2e8f0; --hybrid-accent:#f59e0b;
+  --hybrid-navy:#0a192f; --glasscore-panel:#0b1220;
 }
-
-/* Smooth and consistent typography */
-body {
-  font-family: Inter, system-ui, sans-serif;
-  line-height: 1.6;
+body { font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; line-height:1.6; }
+h1,h2,h3 { letter-spacing:-.025em; text-wrap:balance; }
+#mainSubjectGrid>button,#mainSubjectGrid>a,#resourceGrid>div:not(.col-span-full) {
+  border-radius:18px; transition:transform 180ms ease,border-color 180ms ease,box-shadow 180ms ease;
+  background-color:var(--glasscore-panel); border-color:rgba(148,163,184,.2);
+  box-shadow:0 8px 24px rgba(0,0,0,.12);
 }
-
-h1, h2, h3 {
-  letter-spacing: -0.025em;
-  text-wrap: balance;
+#mainSubjectGrid>button:hover,#mainSubjectGrid>a:hover,#resourceGrid>div:not(.col-span-full):hover {
+  transform:translateY(-2px); border-color:rgba(245,158,11,.65);
+  box-shadow:0 14px 35px rgba(15,23,42,.2);
 }
-
-/* Premium card interactions */
-#mainSubjectGrid > button,
-#mainSubjectGrid > a,
-#resourceGrid > div:not(.col-span-full) {
-  border-radius: 18px;
-  transition:
-    transform 180ms ease,
-    border-color 180ms ease,
-    box-shadow 180ms ease;
+@supports ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))) {
+  .glass-card { background:rgba(11,18,32,.88); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); }
 }
-
-#mainSubjectGrid > button:hover,
-#mainSubjectGrid > a:hover,
-#resourceGrid > div:not(.col-span-full):hover {
-  transform: translateY(-3px);
-  border-color: rgba(245, 158, 11, 0.65);
-  box-shadow: 0 14px 35px rgba(15, 23, 42, 0.12);
+#globalSearchWrap { width:100%;max-width:760px;margin-inline:auto; }
+#globalSearchInput,#searchInput { display:block;width:100%;max-width:100%;min-width:0;min-height:50px;border-radius:14px;font-size:16px; }
+#globalSearchInput:focus,#searchInput:focus { outline:none;border-color:var(--hybrid-accent);box-shadow:0 0 0 4px rgba(245,158,11,.15); }
+.cat-btn { border-radius:12px;min-height:44px;padding-inline:15px;font-weight:700; }
+#resourceGrid h3 { font-size:.95rem;line-height:1.55;overflow-wrap:anywhere; }
+button,a { -webkit-tap-highlight-color:transparent; }
+:where(button,a,input,select,textarea,[tabindex]:not([tabindex="-1"])):focus-visible {
+  outline:3px solid var(--hybrid-accent);outline-offset:3px;
 }
-
-/* Search should feel like the main action */
-#globalSearchWrap {
-  width: 100%;
-  max-width: 760px;
-  margin-inline: auto;
+html,body { max-width:100%;overflow-x:clip; }
+img,iframe,video { max-width:100%; }
+main,main>section,#aboutSection,#aboutContent { min-width:0;overflow-wrap:anywhere; }
+small,.text-xs,.text-sm { overflow-wrap:anywhere; }
+@media(max-width:640px) {
+  #mainLandingView h1 { font-size:clamp(1.8rem,8vw,2.4rem);line-height:1.15; }
+  #mainSubjectGrid { gap:10px; }
+  #mainSubjectGrid>button,#mainSubjectGrid>a { min-height:100px;padding:12px; }
+  #resourceGrid { grid-template-columns:minmax(0,1fr)!important;gap:12px; }
+  #resourceGrid>div:not(.col-span-full) { padding:16px;border-radius:16px; }
+  .cat-btn,nav a,nav button { min-height:44px; }
+  body { font-size:15px; }
+  header,nav,footer { max-width:100%; }
+  #aboutSection,#aboutContent,main>section { padding-inline:clamp(12px,4vw,20px); }
 }
-
-#globalSearchInput,
-#searchInput {
-  min-height: 50px;
-  border-radius: 14px;
-  font-size: 16px;
+@media(prefers-reduced-motion:reduce) {
+  *,*::before,*::after { scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important; }
+  #mainSubjectGrid>button:hover,#mainSubjectGrid>a:hover,#resourceGrid>div:hover { transform:none; }
 }
-
-#globalSearchInput:focus,
-#searchInput:focus {
-  outline: none;
-  border-color: var(--hybrid-accent);
-  box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.15);
-}
-
-/* Clear active filter styling */
-.cat-btn {
-  border-radius: 12px;
-  min-height: 42px;
-  padding-inline: 15px;
-  font-weight: 700;
-}
-
-/* More comfortable resource titles */
-#resourceGrid h3 {
-  font-size: 0.95rem;
-  line-height: 1.55;
-  overflow-wrap: anywhere;
-}
-
-/* Buttons: visible hover and keyboard focus */
-button,
-a {
-  -webkit-tap-highlight-color: transparent;
-}
-
-:where(button, a, input, select, textarea):focus-visible {
-  outline: 3px solid var(--hybrid-accent);
-  outline-offset: 3px;
-}
-
-/* Avoid unwanted horizontal overflow */
-html,
-body {
-  max-width: 100%;
-  overflow-x: clip;
-}
-
-img,
-iframe,
-video {
-  max-width: 100%;
-}
-
-/* Mobile layout */
-@media (max-width: 640px) {
-  #mainLandingView h1 {
-    font-size: clamp(1.8rem, 8vw, 2.4rem);
-    line-height: 1.15;
-  }
-
-  #mainSubjectGrid {
-    gap: 10px;
-  }
-
-  #mainSubjectGrid > button,
-  #mainSubjectGrid > a {
-    min-height: 100px;
-    padding: 12px;
-  }
-
-  #resourceGrid {
-    grid-template-columns: minmax(0, 1fr) !important;
-    gap: 12px;
-  }
-
-  #resourceGrid > div:not(.col-span-full) {
-    padding: 16px;
-  }
-
-  .cat-btn {
-    min-height: 44px;
-  }
-}
-
-/* Respect reduced-motion preferences */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    scroll-behavior: auto !important;
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-  }
-
-  #mainSubjectGrid > button:hover,
-  #mainSubjectGrid > a:hover,
-  #resourceGrid > div:hover {
-    transform: none;
-  }
+@media(prefers-reduced-transparency:reduce) {
+  .glass-card { background:#0b1220;-webkit-backdrop-filter:none;backdrop-filter:none; }
 }
