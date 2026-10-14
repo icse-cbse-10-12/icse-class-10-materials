@@ -366,3 +366,32 @@ html body[data-site-mode="light"] #mainSubjectGrid button:not(.cat-btn) { backgr
 html body[data-site-mode="light"] #mainLandingView #mainSubjectGrid > button *, html body[data-site-mode="light"] #mainLandingView #mainSubjectGrid > a *, html body[data-site-mode="light"] #mainSubjectGrid button:not(.cat-btn) * { color:#243247 !important; }
 html body[data-site-mode="light"] #mainLandingView #mainSubjectGrid > button:hover, html body[data-site-mode="light"] #mainLandingView #mainSubjectGrid > a:hover, html body[data-site-mode="light"] #mainSubjectGrid button:not(.cat-btn):hover { background-image:linear-gradient(135deg,rgba(255,255,255,.99),rgba(255,250,235,.84)) !important; border-color:rgba(245,158,11,.62) !important; transform:translateY(-3px) !important; box-shadow:inset 0 1px 0 #fff,0 18px 38px rgba(30,41,59,.14) !important; }
 html body[data-site-mode="light"] #mainSubjectGrid button .rounded-lg, html body[data-site-mode="light"] #mainSubjectGrid button .rounded-xl { background:rgba(245,158,11,.08) !important; border-color:rgba(217,119,6,.28) !important; }
+
+
+/* Accessible light-mode resource actions: improve contrast without changing layout or dark mode. */
+html body[data-site-mode="light"] #resourceGrid button[aria-label^="Preview"],
+html body[data-site-mode="light"] #resourceGrid a[aria-disabled="true"][tabindex="-1"] {
+  background: #e8edf4 !important;
+  background-color: #e8edf4 !important;
+  color: #172033 !important;
+  border: 1px solid #cbd5e1 !important;
+  opacity: 1 !important;
+}
+html body[data-site-mode="light"] #resourceGrid button[aria-label^="Preview"] *,
+html body[data-site-mode="light"] #resourceGrid a[aria-disabled="true"][tabindex="-1"] * {
+  color: #172033 !important;
+}
+html body[data-site-mode="light"] #resourceGrid button[aria-label^="Preview"]:hover,
+html body[data-site-mode="light"] #resourceGrid a[aria-disabled="true"][tabindex="-1"]:hover {
+  background: #dbe4ef !important;
+  border-color: #94a3b8 !important;
+}
+html body[data-site-mode="light"] #resourceGrid a[href]:not([aria-label^="Watch lecture"]),
+html body[data-site-mode="light"] #resourceGrid button.js-share-material {
+  opacity: 1;
+}
+html body[data-site-mode="light"] #resourceGrid .js-share-material {
+  color: #854d0e !important;
+  border-color: #f4c66b !important;
+}
+html body[data-site-mode="light"] #resourceGrid .js-share-material * { color: #854d0e !important; }
