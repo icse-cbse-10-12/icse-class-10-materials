@@ -235,3 +235,54 @@ header.sticky {
 @media (prefers-reduced-motion: reduce) {
   #mainSubjectGrid > button:hover, #mainSubjectGrid > a:hover, #resourceGrid > div:not(.col-span-full):hover { transform: none; }
 }
+
+
+/* GLASSCORE visibility fix — high-specificity rules for the live Tailwind markup */
+html body[data-site-mode="dark"] {
+  background-color: #070b14 !important;
+  background-image: radial-gradient(ellipse at 15% 0%, rgba(37,99,235,.24), transparent 42%), radial-gradient(ellipse at 88% 20%, rgba(245,158,11,.13), transparent 34%), linear-gradient(160deg,#080d18 0%,#0b1220 55%,#080d16 100%) !important;
+  background-attachment: fixed !important;
+}
+html body[data-site-mode="dark"] header.sticky {
+  background: rgba(8,13,24,.72) !important;
+  border-bottom: 1px solid rgba(148,163,184,.28) !important;
+  box-shadow: 0 10px 36px rgba(0,0,0,.32) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(170%) !important;
+  backdrop-filter: blur(24px) saturate(170%) !important;
+}
+html body[data-site-mode="dark"] #mainSubjectGrid > button,
+html body[data-site-mode="dark"] #mainSubjectGrid > a,
+html body[data-site-mode="dark"] #resourceGrid > div:not(.col-span-full),
+html body[data-site-mode="dark"] .glass-card {
+  background: linear-gradient(135deg,rgba(255,255,255,.105),rgba(255,255,255,.025) 58%,rgba(245,158,11,.045)), rgba(15,23,42,.72) !important;
+  border: 1px solid rgba(186,202,224,.34) !important;
+  border-radius: 18px !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 14px 36px rgba(0,0,0,.28) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(155%) !important;
+  backdrop-filter: blur(20px) saturate(155%) !important;
+  transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease !important;
+}
+html body[data-site-mode="dark"] #mainSubjectGrid > button:hover,
+html body[data-site-mode="dark"] #mainSubjectGrid > a:hover,
+html body[data-site-mode="dark"] #resourceGrid > div:not(.col-span-full):hover {
+  transform: translateY(-4px) !important;
+  border-color: rgba(251,191,36,.9) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.16), 0 20px 48px rgba(0,0,0,.38), 0 0 0 1px rgba(245,158,11,.18) !important;
+}
+html body[data-site-mode="dark"] #globalSearchInput,
+html body[data-site-mode="dark"] #searchInput {
+  background: rgba(15,23,42,.78) !important;
+  border: 1px solid rgba(186,202,224,.38) !important;
+  border-radius: 14px !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 8px 24px rgba(0,0,0,.18) !important;
+}
+html body[data-site-mode="dark"] .cat-btn {
+  background: rgba(30,41,59,.62) !important;
+  border: 1px solid rgba(148,163,184,.32) !important;
+  border-radius: 999px !important;
+}
+html body[data-site-mode="dark"] .cat-btn.active-tab {
+  background: linear-gradient(135deg,#fcd34d,#f59e0b) !important;
+  border-color: #fde68a !important;
+  box-shadow: 0 6px 24px rgba(245,158,11,.3) !important;
+}
