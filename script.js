@@ -573,48 +573,37 @@ function filterResources() {
     if (currentSubject === "All") {
       subMatch = true;
     } else {
-      const target = currentSubject.toLowerCase().trim();
+      const target = currentSubject.toLowerCase().trim().replace(/\s+/g, " ");
+      // Sheet subjects are comma-separated. Match complete subject names only;
+      // substring checks such as "pe", "lit", and "lang" caused cross-subject leaks.
+      const entries = itemSubject.split(/[,;|\n]+/).map(value => value.trim().replace(/\s+/g, " ")).filter(Boolean);
+      const has = (...names) => entries.some(entry => names.includes(entry));
 
       if (target === "physical education") {
-        subMatch =
-          itemSubject.includes("physical education") ||
-          itemSubject.includes("physical eduaction") ||
-          itemSubject.includes("pe");
+        subMatch = has("physical education", "physical eduaction");
       } else if (target === "home science") {
-        subMatch =
-          itemSubject.includes("home science") ||
-          itemSubject.includes("homescience");
-      } else if (target === "second language - tamil") {
-        subMatch = itemSubject.includes("tamil");
-      } else if (target === "second language - malayalam") {
-        subMatch = itemSubject.includes("malayalam");
-      } else if (target === "second language - kannada") {
-        subMatch = itemSubject.includes("kannada");
-      } else if (target === "second language - hindi") {
-        subMatch = itemSubject.includes("hindi");
-      } else if (target === "english literature") {
-        subMatch =
-          itemSubject.includes("english literature") ||
-          itemSubject.includes("lit");
+        subMatch = has("home science", "homescience");
+      } else if (target.startsWith("second language - ")) {
+        const language = target.replace("second language - ", "");
+        subMatch = has(language, `second language (${language})`, `second language - ${language}`);
       } else if (target === "english language") {
-        subMatch =
-          itemSubject.includes("english language") ||
-          itemSubject.includes("lang");
+        subMatch = has("english language", "english paper 1", "paper 1 - english");
+      } else if (target === "english literature") {
+        subMatch = has("english literature", "english paper 2", "paper 2 - english");
       } else if (target === "environmental applications") {
-        subMatch = itemSubject.includes("environmental applications");
+        subMatch = has("environmental applications", "environmental application");
       } else if (target === "environmental science") {
-        subMatch = itemSubject.includes("environmental science");
+        subMatch = has("environmental science");
       } else if (target === "commercial applications") {
-        subMatch = itemSubject.includes("commercial app");
+        subMatch = has("commercial applications", "commercial application");
       } else if (target === "commercial studies") {
-        subMatch = itemSubject.includes("commercial stud");
+        subMatch = has("commercial studies", "commercial study");
       } else if (target === "economic applications") {
-        subMatch = itemSubject.includes("economic");
+        subMatch = has("economic applications", "economic application");
       } else {
-        subMatch = itemSubject.includes(target);
+        subMatch = has(target);
       }
     }
-
   
 let catMatch = false;
 
