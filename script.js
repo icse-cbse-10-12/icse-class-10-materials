@@ -549,6 +549,24 @@ function populateYearFilter() {
   select.value = years.includes(selected) ? selected : "all";
 }
 
+// Recognised subjects include the existing website labels and common sheet aliases.
+const knownSubjectNames = new Set([
+  ...subjectsList.filter(subject => subject !== "All").map(subject =>
+    String(subject).toLowerCase().trim().replace(/\\s+/g, " ")
+  ),
+  "second language - tamil", "second language - malayalam",
+  "second language - kannada", "second language - hindi",
+  "second language (tamil)", "second language (malayalam)",
+  "second language (kannada)", "second language (hindi)",
+  "tamil", "malayalam", "kannada", "hindi",
+  "english paper 1", "english paper 2", "paper 1 - english", "paper 2 - english"
+]);
+
+function isKnownSubjectEntry(value) {
+  const entry = String(value || "").toLowerCase().trim().replace(/\\s+/g, " ");
+  return knownSubjectNames.has(entry);
+}
+
 function filterResources() {
   if (document.getElementById("yearFilter") && document.getElementById("yearFilter").options.length <= 1 && allResources.length) {
     populateYearFilter();
@@ -579,7 +597,9 @@ function filterResources() {
       const entries = itemSubject.split(/[,;|\n]+/).map(value => value.trim().replace(/\s+/g, " ")).filter(Boolean);
       const has = (...names) => entries.some(entry => names.includes(entry));
 
-      if (target === "physical education") {
+      if (target === "other subjects") {
+        subMatch = entries.some(entry => !isKnownSubjectEntry(entry));
+      } else if (target === "physical education") {
         subMatch = has("physical education", "physical eduaction");
       } else if (target === "home science") {
         subMatch = has("home science", "homescience");
