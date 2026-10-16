@@ -395,3 +395,102 @@ html body[data-site-mode="light"] #resourceGrid .js-share-material {
   border-color: #f4c66b !important;
 }
 html body[data-site-mode="light"] #resourceGrid .js-share-material * { color: #854d0e !important; }
+
+/* MOBILE USABILITY PATCH — October 2026
+   Targeted responsive overrides; keeps the existing ICSE MasterClass design. */
+@media (max-width: 640px) {
+  html { -webkit-text-size-adjust: 100%; }
+
+  /* Let the existing header actions wrap instead of squeezing the logo. */
+  header.sticky > div {
+    height: auto !important;
+    min-height: 4rem;
+    flex-wrap: wrap;
+    row-gap: 0.5rem;
+    padding-top: 0.55rem;
+    padding-bottom: 0.55rem;
+  }
+
+  header.sticky > div > a:first-child {
+    min-width: 0;
+    flex: 1 1 9.5rem;
+  }
+
+  header.sticky > div > a:first-child img {
+    flex: 0 0 auto;
+  }
+
+  header.sticky > div > a:first-child span:first-child {
+    font-size: clamp(0.9rem, 4vw, 1.125rem);
+    overflow-wrap: anywhere;
+  }
+
+  header.sticky > div > div {
+    max-width: 100%;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  /* Keep the landing subject tiles readable and easy to tap. */
+  #mainSubjectGrid > button,
+  #mainSubjectGrid > a {
+    min-width: 0;
+    min-height: 6.25rem;
+    padding: 0.75rem;
+    overflow-wrap: anywhere;
+  }
+
+  /* Comfortable touch targets without changing the desktop layout. */
+  button, select {
+    touch-action: manipulation;
+  }
+
+  .cat-btn {
+    min-height: 2.75rem;
+    flex: 0 0 auto;
+  }
+
+  #globalSearchWrap {
+    width: 100%;
+  }
+
+  #globalSearchWrap > div {
+    width: 100%;
+    max-width: none;
+  }
+
+  #resourceGrid h3,
+  #resourceGrid p,
+  #resourceGrid a {
+    overflow-wrap: anywhere;
+    word-break: normal;
+  }
+
+  main {
+    padding-left: max(0.875rem, env(safe-area-inset-left));
+    padding-right: max(0.875rem, env(safe-area-inset-right));
+  }
+}
+
+@media (max-width: 380px) {
+  #mainSubjectGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.625rem;
+  }
+
+  #mainSubjectGrid > button,
+  #mainSubjectGrid > a {
+    padding: 0.625rem;
+    font-size: 0.875rem;
+  }
+
+  header.sticky > div > div {
+    gap: 0.375rem;
+  }
+}
+
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  body {
+    padding-bottom: max(5rem, env(safe-area-inset-bottom));
+  }
+}
