@@ -1,93 +1,222 @@
-/* Strong, reliable scrim for the global navigation drawer. */
+/* Navigation drawer: scale with the visual viewport so it remains usable at browser zoom levels. */
 .site-nav-overlay {
   position: fixed !important;
   inset: 0 !important;
   z-index: 9998 !important;
+  display: flex !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  overflow: hidden !important;
   background: rgba(0, 0, 0, 0.78) !important;
   -webkit-backdrop-filter: blur(5px) brightness(0.55) !important;
   backdrop-filter: blur(5px) brightness(0.55) !important;
   isolation: isolate;
 }
-.site-nav-panel {
-  position: relative;
-  z-index: 1;
-}
-
-/* Keep the sidebar balanced and usable at different desktop zoom levels. */
-.site-nav-overlay {
-  align-items: stretch !important;
-  justify-content: flex-start !important;
-  overflow: hidden !important;
+.site-nav-overlay[hidden] {
+  display: none !important;
 }
 .site-nav-panel {
+  position: relative !important;
+  z-index: 1 !important;
   box-sizing: border-box !important;
-  width: min(360px, 88vw) !important;
-  max-width: 88vw !important;
-  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  width: 34vw !important;
+  min-width: 280px !important;
+  max-width: none !important;
   height: 100vh !important;
   height: 100dvh !important;
+  margin: 0 !important;
+  padding: clamp(18px, 2.2vw, 30px) !important;
   overflow-x: hidden !important;
   overflow-y: auto !important;
-  flex: 0 0 min(360px, 88vw) !important;
-  padding: clamp(12px, 2vw, 22px) !important;
+  flex: 0 0 34vw !important;
+  color: #f3f4f6 !important;
+  background: linear-gradient(180deg, #101827 0%, #080d17 100%) !important;
+  border-right: 1px solid rgba(245, 158, 11, 0.35) !important;
+  box-shadow: 18px 0 55px rgba(0, 0, 0, 0.42) !important;
+  scrollbar-width: thin;
 }
-.site-nav-heading,
-.site-nav-brand {
+.site-nav-heading {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  gap: 14px !important;
   min-width: 0 !important;
-  max-width: 100% !important;
+  width: 100% !important;
+  margin-bottom: 28px !important;
 }
 .site-nav-brand {
   display: flex !important;
   align-items: center !important;
-  gap: 10px !important;
+  gap: 12px !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
 }
 .site-nav-brand img {
-  width: 44px !important;
-  height: 44px !important;
-  min-width: 44px !important;
-  max-width: 44px !important;
+  display: block !important;
+  width: clamp(42px, 4.4vw, 56px) !important;
+  height: clamp(42px, 4.4vw, 56px) !important;
+  min-width: 42px !important;
+  max-width: none !important;
   object-fit: contain !important;
-  flex: 0 0 44px !important;
+  flex: 0 0 auto !important;
 }
 .site-nav-brand > div {
   min-width: 0 !important;
   overflow-wrap: anywhere !important;
 }
+.site-nav-eyebrow {
+  margin: 0 0 4px !important;
+  color: #fbbf24 !important;
+  font-size: clamp(11px, 0.95vw, 13px) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.09em !important;
+  line-height: 1.35 !important;
+}
 #siteNavTitle {
-  font-size: clamp(16px, 1.2rem, 20px) !important;
+  margin: 0 !important;
+  color: #fff !important;
+  font-size: clamp(20px, 1.65vw, 27px) !important;
+  font-weight: 800 !important;
   line-height: 1.2 !important;
 }
+.site-nav-subtitle {
+  display: block !important;
+  margin-top: 5px !important;
+  color: #aeb8c8 !important;
+  font-size: clamp(12px, 1vw, 15px) !important;
+  line-height: 1.4 !important;
+}
+.site-nav-close {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+  border: 1px solid rgba(148, 163, 184, 0.28) !important;
+  border-radius: 10px !important;
+  color: #f8fafc !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  cursor: pointer !important;
+}
 .site-nav-links {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 7px !important;
   min-width: 0 !important;
   width: 100% !important;
 }
+.site-nav-section-label {
+  margin: 18px 0 5px !important;
+  color: #fbbf24 !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.12em !important;
+  line-height: 1.4 !important;
+}
 .site-nav-links a,
 .site-nav-links button {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
   box-sizing: border-box !important;
   min-width: 0 !important;
+  width: 100% !important;
   max-width: 100% !important;
+  min-height: 46px !important;
+  padding: 11px 13px !important;
+  border: 1px solid rgba(148, 163, 184, 0.14) !important;
+  border-radius: 12px !important;
+  color: #e5e7eb !important;
+  background: rgba(255, 255, 255, 0.035) !important;
+  font: inherit !important;
+  font-size: clamp(13px, 1.05vw, 15px) !important;
+  line-height: 1.35 !important;
+  text-align: left !important;
+  text-decoration: none !important;
   white-space: normal !important;
   overflow-wrap: anywhere !important;
+  cursor: pointer !important;
+  transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease !important;
+}
+.site-nav-links a:hover,
+.site-nav-links button:hover,
+.site-nav-links a:focus-visible,
+.site-nav-links button:focus-visible {
+  color: #fff !important;
+  background: rgba(245, 158, 11, 0.12) !important;
+  border-color: rgba(245, 158, 11, 0.5) !important;
+  outline: none !important;
 }
 .site-nav-links a > span,
 .site-nav-links button > span {
   min-width: 0 !important;
   flex: 1 1 auto !important;
 }
-.site-nav-chevron {
-  flex: 0 0 auto !important;
+.site-nav-links a > i:first-child,
+.site-nav-links button > i:first-child {
+  width: 20px !important;
+  flex: 0 0 20px !important;
+  color: #fbbf24 !important;
+  text-align: center !important;
 }
-@media (max-width: 420px) {
+.site-nav-chevron,
+.site-nav-external {
+  flex: 0 0 auto !important;
+  margin-left: auto !important;
+  color: #94a3b8 !important;
+  font-size: 12px !important;
+}
+.site-nav-footer {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 12px !important;
+  margin-top: auto !important;
+  padding: 18px 0 0 !important;
+  color: #cbd5e1 !important;
+}
+.site-nav-footer-mark {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+  border-radius: 11px !important;
+  color: #111827 !important;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b) !important;
+}
+.site-nav-footer strong {
+  display: block !important;
+  color: #fff !important;
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+}
+.site-nav-footer p {
+  margin: 5px 0 0 !important;
+  color: #9ca3af !important;
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+}
+@media (max-width: 640px) {
   .site-nav-panel {
-    width: min(340px, 90vw) !important;
-    max-width: 90vw !important;
-    flex-basis: min(340px, 90vw) !important;
+    width: 86vw !important;
+    min-width: 0 !important;
+    flex-basis: 86vw !important;
+    padding: 18px !important;
   }
   .site-nav-brand img {
-    width: 38px !important;
-    height: 38px !important;
-    min-width: 38px !important;
-    max-width: 38px !important;
-    flex-basis: 38px !important;
+    width: 42px !important;
+    height: 42px !important;
+  }
+  .site-nav-heading {
+    margin-bottom: 18px !important;
+  }
+  .site-nav-links a,
+  .site-nav-links button {
+    min-height: 44px !important;
+    font-size: 14px !important;
   }
 }
