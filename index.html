@@ -303,17 +303,23 @@
   <div id="siteNavOverlay" class="site-nav-overlay" hidden onclick="if(event.target===this)toggleSiteNav(false)" aria-hidden="true">
     <aside id="siteNavPanel" class="site-nav-panel" role="dialog" aria-modal="true" aria-labelledby="siteNavTitle" tabindex="-1">
       <div class="site-nav-heading">
-        <div><p class="site-nav-eyebrow">ICSE MASTERCLASS</p><h2 id="siteNavTitle">Study Vault Menu</h2></div>
+        <div class="site-nav-brand">
+          <img src="icseYtLogo.png" alt="" onerror="this.style.display='none'">
+          <div><p class="site-nav-eyebrow">ICSE MASTERCLASS</p><h2 id="siteNavTitle">Study Vault</h2><span class="site-nav-subtitle">Your learning space</span></div>
+        </div>
         <button type="button" class="site-nav-close" aria-label="Close navigation menu" onclick="toggleSiteNav(false)"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
       </div>
       <nav class="site-nav-links" aria-label="Main navigation">
-        <a href="./" onclick="toggleSiteNav(false)"><i class="fa-solid fa-house" aria-hidden="true"></i><span>Home</span></a>
-        <a href="#mainSubjectGrid" onclick="toggleSiteNav(false)"><i class="fa-solid fa-book-open" aria-hidden="true"></i><span>Browse Subjects</span></a>
-        <a href="#globalSearchWrap" onclick="toggleSiteNav(false)"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><span>Search Materials</span></a>
-        <button type="button" onclick="toggleSiteNav(false);toggleSettings(true)"><i class="fa-solid fa-sliders" aria-hidden="true"></i><span>Website Settings</span></button>
+        <p class="site-nav-section-label">OVERVIEW</p>
+        <a href="./" onclick="toggleSiteNav(false)"><i class="fa-solid fa-house" aria-hidden="true"></i><span>Home</span><i class="fa-solid fa-chevron-right site-nav-chevron" aria-hidden="true"></i></a>
+        <p class="site-nav-section-label">LEARN & EXPLORE</p>
+        <a href="#mainSubjectGrid" onclick="toggleSiteNav(false)"><i class="fa-solid fa-book-open" aria-hidden="true"></i><span>Browse Subjects</span><i class="fa-solid fa-chevron-right site-nav-chevron" aria-hidden="true"></i></a>
+        <a href="#globalSearchWrap" onclick="toggleSiteNav(false)"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><span>Search Materials</span><i class="fa-solid fa-chevron-right site-nav-chevron" aria-hidden="true"></i></a>
+        <p class="site-nav-section-label">YOUR EXPERIENCE</p>
+        <button type="button" onclick="toggleSiteNav(false);toggleSettings(true)"><i class="fa-solid fa-sliders" aria-hidden="true"></i><span>Website Settings</span><i class="fa-solid fa-chevron-right site-nav-chevron" aria-hidden="true"></i></button>
         <a href="https://t.me/ICSEMasterClass10" target="_blank" rel="noopener noreferrer" onclick="toggleSiteNav(false)"><i class="fa-brands fa-telegram" aria-hidden="true"></i><span>Join Telegram</span><i class="fa-solid fa-arrow-up-right-from-square site-nav-external" aria-hidden="true"></i></a>
       </nav>
-      <p class="site-nav-footer">Your studies. Your resources. One Study Vault.</p>
+      <div class="site-nav-footer"><span class="site-nav-footer-mark"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i></span><div><strong>Keep learning. Keep growing.</strong><p>Your studies. Your resources. One Study Vault.</p></div></div>
     </aside>
   </div>
 
