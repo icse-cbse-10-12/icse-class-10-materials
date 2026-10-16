@@ -1452,3 +1452,25 @@ function toggleSiteNav(open) {
 document.addEventListener("keydown", event => {
   if (event.key === "Escape" && !document.getElementById("siteNavOverlay")?.hidden) toggleSiteNav(false);
 });
+
+
+/* Make global search discoverable from the navigation menu. */
+function showGlobalSearch() {
+  const wrap = document.getElementById("globalSearchWrap");
+  const input = document.getElementById("globalSearchInput");
+  const landingView = document.getElementById("mainLandingView");
+  const detailView = document.getElementById("subjectDetailView");
+  if (!wrap || !input) return;
+  // Return to the all-materials landing view so the global search is not hidden by subject navigation.
+  if (wrap.classList.contains("hidden")) {
+    currentSubject = "All";
+    wrap.classList.remove("hidden");
+    landingView?.classList.remove("hidden");
+    detailView?.classList.add("hidden");
+    if (typeof initSubjectCards === "function") initSubjectCards();
+  }
+  window.setTimeout(() => {
+    wrap.scrollIntoView({ behavior: "smooth", block: "center" });
+    input.focus({ preventScroll: true });
+  }, 80);
+}

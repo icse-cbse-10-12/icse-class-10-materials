@@ -314,7 +314,7 @@
         <a href="./" onclick="toggleSiteNav(false)"><i class="fa-solid fa-house" aria-hidden="true"></i><span>Home</span><i class="fa-solid fa-chevron-right site-nav-chevron" aria-hidden="true"></i></a>
         <p class="site-nav-section-label">LEARN & EXPLORE</p>
         <a href="#mainSubjectGrid" onclick="toggleSiteNav(false)"><i class="fa-solid fa-book-open" aria-hidden="true"></i><span>Browse Subjects</span><i class="fa-solid fa-chevron-right site-nav-chevron" aria-hidden="true"></i></a>
-        <a href="#globalSearchWrap" onclick="toggleSiteNav(false)"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><span>Search Materials</span><i class="fa-solid fa-chevron-right site-nav-chevron" aria-hidden="true"></i></a>
+        <a href="#globalSearchInput" onclick="toggleSiteNav(false);showGlobalSearch()"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><span>Search Materials</span><i class="fa-solid fa-chevron-right site-nav-chevron" aria-hidden="true"></i></a>
         <p class="site-nav-section-label">YOUR EXPERIENCE</p>
         <button type="button" onclick="toggleSiteNav(false);toggleSettings(true)"><i class="fa-solid fa-sliders" aria-hidden="true"></i><span>Website Settings</span><i class="fa-solid fa-chevron-right site-nav-chevron" aria-hidden="true"></i></button>
         <a href="https://t.me/ICSEMasterClass10" target="_blank" rel="noopener noreferrer" onclick="toggleSiteNav(false)"><i class="fa-brands fa-telegram" aria-hidden="true"></i><span>Join Telegram</span><i class="fa-solid fa-arrow-up-right-from-square site-nav-external" aria-hidden="true"></i></a>
@@ -531,7 +531,7 @@
   <!-- Sample Papers -->
   <button
     onclick="setCategoryFilter('Sample Papers', event)"
-    class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap transition"
+    class="cat-btn cat-btn-sample-papers px-4 py-2 rounded-xl text-xs font-bold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 transition"
   >
     Sample Papers
   </button>

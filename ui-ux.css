@@ -548,3 +548,12 @@ html body[data-site-mode="light"] #resourceGrid .js-share-material * { color: #8
 .site-nav-footer strong { display:block; color:#e5edf8; font-size:.78rem; }
 .site-nav-footer p { margin:.25rem 0 0; color:#94a3b8; font-size:.7rem; line-height:1.5; }
 @media (max-width:640px) { .site-nav-panel { width:min(23rem,92vw); padding:calc(1.1rem + env(safe-area-inset-top)) 1.1rem calc(1.1rem + env(safe-area-inset-bottom)); } }
+
+
+/* QA fixes: keep search/filter navigation discoverable and labels readable */
+.cat-btn-sample-papers { white-space:normal !important; text-align:center; line-height:1.25; overflow-wrap:anywhere; }
+/* Keep the category filter row from clipping long labels on narrow screens. */
+#categoryFilters, .category-filters, .filter-buttons { min-width:0; }
+.cat-btn { max-width:100%; }
+/* Ensure the navigation scrim visibly dims the page behind the drawer. */
+.site-nav-overlay { background:rgba(2,6,23,.72) !important; backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); }
