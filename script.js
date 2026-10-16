@@ -1426,3 +1426,29 @@ if (document.readyState === "loading") {
 } else {
   startApp();
 }
+
+
+/* GLOBAL SLIDE-OUT NAVIGATION */
+function toggleSiteNav(open) {
+  const overlay = document.getElementById("siteNavOverlay");
+  const toggle = document.getElementById("siteNavToggle");
+  const panel = document.getElementById("siteNavPanel");
+  if (!overlay || !toggle || !panel) return;
+  const shouldOpen = Boolean(open);
+  overlay.hidden = !shouldOpen;
+  overlay.setAttribute("aria-hidden", String(!shouldOpen));
+  toggle.setAttribute("aria-expanded", String(shouldOpen));
+  toggle.setAttribute("aria-label", shouldOpen ? "Close navigation menu" : "Open navigation menu");
+  document.body.classList.toggle("site-nav-open", shouldOpen);
+  if (shouldOpen) {
+    panel.focus();
+    const firstLink = panel.querySelector("a, button");
+    if (firstLink) firstLink.focus({ preventScroll: true });
+  } else {
+    toggle.focus({ preventScroll: true });
+  }
+}
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape" && !document.getElementById("siteNavOverlay")?.hidden) toggleSiteNav(false);
+});

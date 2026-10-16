@@ -250,6 +250,12 @@
         </div>
       </a>
 
+      <!-- Global Navigation Toggle -->
+      <button type="button" id="siteNavToggle" class="site-nav-toggle" aria-label="Open navigation menu" aria-controls="siteNavOverlay" aria-expanded="false" onclick="toggleSiteNav(true)">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+        <span>Menu</span>
+      </button>
+
       <!-- Header Actions -->
       <div class="flex items-center gap-2 sm:gap-3">
 
@@ -292,6 +298,24 @@
       </div>
     </div>
   </header>
+
+  <!-- Global slide-out navigation (desktop, tablet and mobile) -->
+  <div id="siteNavOverlay" class="site-nav-overlay" hidden onclick="if(event.target===this)toggleSiteNav(false)" aria-hidden="true">
+    <aside id="siteNavPanel" class="site-nav-panel" role="dialog" aria-modal="true" aria-labelledby="siteNavTitle" tabindex="-1">
+      <div class="site-nav-heading">
+        <div><p class="site-nav-eyebrow">ICSE MASTERCLASS</p><h2 id="siteNavTitle">Study Vault Menu</h2></div>
+        <button type="button" class="site-nav-close" aria-label="Close navigation menu" onclick="toggleSiteNav(false)"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+      </div>
+      <nav class="site-nav-links" aria-label="Main navigation">
+        <a href="./" onclick="toggleSiteNav(false)"><i class="fa-solid fa-house" aria-hidden="true"></i><span>Home</span></a>
+        <a href="#mainSubjectGrid" onclick="toggleSiteNav(false)"><i class="fa-solid fa-book-open" aria-hidden="true"></i><span>Browse Subjects</span></a>
+        <a href="#globalSearchWrap" onclick="toggleSiteNav(false)"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><span>Search Materials</span></a>
+        <button type="button" onclick="toggleSiteNav(false);toggleSettings(true)"><i class="fa-solid fa-sliders" aria-hidden="true"></i><span>Website Settings</span></button>
+        <a href="https://t.me/ICSEMasterClass10" target="_blank" rel="noopener noreferrer" onclick="toggleSiteNav(false)"><i class="fa-brands fa-telegram" aria-hidden="true"></i><span>Join Telegram</span><i class="fa-solid fa-arrow-up-right-from-square site-nav-external" aria-hidden="true"></i></a>
+      </nav>
+      <p class="site-nav-footer">Your studies. Your resources. One Study Vault.</p>
+    </aside>
+  </div>
 
   <!-- Website Settings -->
   <div id="settingsOverlay" class="settings-overlay hidden" onclick="if(event.target===this)toggleSettings(false)">
