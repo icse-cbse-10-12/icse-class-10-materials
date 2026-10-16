@@ -12,3 +12,82 @@
   position: relative;
   z-index: 1;
 }
+
+/* Keep the sidebar balanced and usable at different desktop zoom levels. */
+.site-nav-overlay {
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  overflow: hidden !important;
+}
+.site-nav-panel {
+  box-sizing: border-box !important;
+  width: min(360px, 88vw) !important;
+  max-width: 88vw !important;
+  min-width: 0 !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  flex: 0 0 min(360px, 88vw) !important;
+  padding: clamp(12px, 2vw, 22px) !important;
+}
+.site-nav-heading,
+.site-nav-brand {
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+.site-nav-brand {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+.site-nav-brand img {
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  max-width: 44px !important;
+  object-fit: contain !important;
+  flex: 0 0 44px !important;
+}
+.site-nav-brand > div {
+  min-width: 0 !important;
+  overflow-wrap: anywhere !important;
+}
+#siteNavTitle {
+  font-size: clamp(16px, 1.2rem, 20px) !important;
+  line-height: 1.2 !important;
+}
+.site-nav-links {
+  min-width: 0 !important;
+  width: 100% !important;
+}
+.site-nav-links a,
+.site-nav-links button {
+  box-sizing: border-box !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+}
+.site-nav-links a > span,
+.site-nav-links button > span {
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+}
+.site-nav-chevron {
+  flex: 0 0 auto !important;
+}
+@media (max-width: 420px) {
+  .site-nav-panel {
+    width: min(340px, 90vw) !important;
+    max-width: 90vw !important;
+    flex-basis: min(340px, 90vw) !important;
+  }
+  .site-nav-brand img {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    max-width: 38px !important;
+    flex-basis: 38px !important;
+  }
+}
