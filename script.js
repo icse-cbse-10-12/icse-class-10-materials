@@ -34,6 +34,7 @@ const subjectsList = [
   "Second Language - Malayalam",
   "Second Language - Kannada",
   "Second Language - Hindi",
+  "Second Language: Telugu",
   "Other Subjects"
 ];
 
@@ -44,7 +45,7 @@ const subjectEmoji = {
   "English Literature":"📖", "English Language":"✍️", "Economic Applications":"📈", "Computer Applications":"💻",
   "Commercial Studies":"💼", "Commercial Applications":"🏢", "Chemistry":"🧪", "Biology":"🧬",
   "Second Language - Tamil":"🗣️", "Second Language - Malayalam":"🗣️", "Second Language - Kannada":"🗣️",
-  "Second Language - Hindi":"🗣️", "Other Subjects":"📁"
+  "Second Language - Hindi":"🗣️", "Second Language: Telugu":"🗣️", "Other Subjects":"📁"
 };
 
 // Custom Icons Mapping
@@ -70,6 +71,7 @@ const subjectIcons = {
   "Second Language - Malayalam": "fa-language",
   "Second Language - Kannada": "fa-language",
   "Second Language - Hindi": "fa-language",
+  "Second Language: Telugu": "fa-language",
   "Notes": "fa-note-sticky",
   "Other Subjects": "fa-folder-open",
   "English": "fa-book-open",
@@ -555,10 +557,11 @@ const knownSubjectNames = new Set([
     String(subject).toLowerCase().trim().replace(/\\s+/g, " ")
   ),
   "second language - tamil", "second language - malayalam",
-  "second language - kannada", "second language - hindi",
+  "second language - kannada", "second language - hindi", "second language - telugu",
+  "second language: telugu",
   "second language (tamil)", "second language (malayalam)",
-  "second language (kannada)", "second language (hindi)",
-  "tamil", "malayalam", "kannada", "hindi",
+  "second language (kannada)", "second language (hindi)", "second language (telugu)",
+  "tamil", "malayalam", "kannada", "hindi", "telugu",
   "english paper 1", "english paper 2", "paper 1 - english", "paper 2 - english"
 ]);
 
@@ -603,8 +606,8 @@ function filterResources() {
         subMatch = has("physical education", "physical eduaction");
       } else if (target === "home science") {
         subMatch = has("home science", "homescience");
-      } else if (target.startsWith("second language - ")) {
-        const language = target.replace("second language - ", "");
+      } else if (target.startsWith("second language - ") || target.startsWith("second language: ")) {
+        const language = target.replace(/^second language\s*[-:]\s*/, "");
         subMatch = has(language, `second language (${language})`, `second language - ${language}`);
       } else if (target === "english language") {
         subMatch = has("english language", "english paper 1", "paper 1 - english");
