@@ -312,6 +312,8 @@
       <nav class="site-nav-links" aria-label="Main navigation">
         <p class="site-nav-section-label">OVERVIEW</p>
         <a href="./" onclick="toggleSiteNav(false)"><i class="fa-solid fa-house" aria-hidden="true"></i><span>Home</span><i class="fa-solid fa-chevron-right site-nav-chevron" aria-hidden="true"></i></a>
+        <p class="site-nav-section-label">YOUR EXPERIENCE</p>
+        <button type="button" onclick="toggleSiteNav(false);openStudentDashboard()"><i class="fa-solid fa-chart-line" aria-hidden="true"></i><span>Student Dashboard</span><i class="fa-solid fa-chevron-right site-nav-chevron" aria-hidden="true"></i></button>
         <p class="site-nav-section-label">LEARN & EXPLORE</p>
         <a href="#mainSubjectGrid" onclick="toggleSiteNav(false)"><i class="fa-solid fa-book-open" aria-hidden="true"></i><span>Browse Subjects</span><i class="fa-solid fa-chevron-right site-nav-chevron" aria-hidden="true"></i></a>
         <a href="#globalSearchInput" onclick="toggleSiteNav(false);showGlobalSearch()"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><span>Search Materials</span><i class="fa-solid fa-chevron-right site-nav-chevron" aria-hidden="true"></i></a>
@@ -360,6 +362,24 @@
       <div class="flex gap-2 pt-4"><button class="settings-reset" onclick="resetSiteSettings()">Reset to defaults</button><button class="settings-done" onclick="toggleSettings(false)">Done</button></div>
     </section>
   </div>
+
+
+  <!-- Student Dashboard: private, browser-local study planning -->
+  <section id="studentDashboard" class="hidden max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6" aria-labelledby="dashboardTitle">
+    <div class="dashboard-hero rounded-3xl p-5 sm:p-8 mb-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4"><div><p class="dashboard-eyebrow">YOUR PERSONAL STUDY SPACE</p><h1 id="dashboardTitle" class="text-2xl sm:text-3xl font-black text-white mt-2">Student Dashboard</h1><p class="text-sm text-gray-300 mt-2">Plan today, tick off tasks, and see your progress build.</p></div><button type="button" class="dashboard-secondary" onclick="closeStudentDashboard()"><i class="fa-solid fa-arrow-left mr-2"></i>Back to Study Vault</button></div>
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-7"><article class="dashboard-stat"><span>Tasks completed</span><strong id="dashboardTasksDone">0</strong><small id="dashboardTasksTotal">0 tasks planned</small></article><article class="dashboard-stat"><span>Completion rate</span><strong id="dashboardCompletion">0%</strong><small>Across your task list</small></article><article class="dashboard-stat"><span>Study sessions</span><strong id="dashboardSessions">0</strong><small>Sessions you log</small></article><article class="dashboard-stat"><span>Study time</span><strong id="dashboardMinutes">0 min</strong><small>Total logged minutes</small></article></div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-5"><div class="lg:col-span-3 space-y-5">
+      <section class="dashboard-card"><div class="flex items-center justify-between gap-3 mb-4"><div><p class="dashboard-eyebrow">DAILY PLAN</p><h2 class="text-lg font-extrabold text-white mt-1">My tasks</h2></div><span id="dashboardDate" class="text-xs text-gray-400"></span></div>
+        <form id="dashboardTaskForm" class="grid grid-cols-1 sm:grid-cols-5 gap-2"><label class="sm:col-span-3"><span class="dashboard-label">Task</span><input id="dashboardTaskTitle" maxlength="120" required placeholder="e.g. Revise refraction numericals" class="dashboard-input"></label><label><span class="dashboard-label">Subject</span><select id="dashboardTaskSubject" class="dashboard-input"><option>Physics</option><option>Chemistry</option><option>Biology</option><option>Mathematics</option><option>English Language</option><option>English Literature</option><option>History & Civics</option><option>Geography</option><option>Computer Applications</option><option>Other</option></select></label><label><span class="dashboard-label">Due date</span><input id="dashboardTaskDue" type="date" class="dashboard-input"></label><button type="submit" class="dashboard-primary sm:col-span-5"><i class="fa-solid fa-plus mr-2"></i>Add task</button></form>
+        <div class="flex flex-wrap gap-2 mt-4" role="group" aria-label="Task filters"><button type="button" class="dashboard-filter active" data-task-filter="all">All</button><button type="button" class="dashboard-filter" data-task-filter="open">To do</button><button type="button" class="dashboard-filter" data-task-filter="done">Completed</button></div><div id="dashboardTaskList" class="space-y-2 mt-3" aria-live="polite"></div><p id="dashboardTaskEmpty" class="text-sm text-gray-500 py-5 text-center">No tasks here yet. Add one small, clear task to get started.</p>
+      </section>
+      <section class="dashboard-card"><p class="dashboard-eyebrow">BUILD A ROUTINE</p><h2 class="text-lg font-extrabold text-white mt-1">Log a study session</h2><p class="text-sm text-gray-400 mt-1 mb-4">Record focused study time, even if you studied offline.</p><form id="dashboardSessionForm" class="grid grid-cols-1 sm:grid-cols-3 gap-3"><label><span class="dashboard-label">Subject</span><select id="dashboardSessionSubject" class="dashboard-input"><option>Physics</option><option>Chemistry</option><option>Biology</option><option>Mathematics</option><option>English Language</option><option>English Literature</option><option>History & Civics</option><option>Geography</option><option>Computer Applications</option><option>Other</option></select></label><label><span class="dashboard-label">Minutes</span><input id="dashboardSessionMinutes" type="number" min="1" max="600" value="25" required class="dashboard-input"></label><button type="submit" class="dashboard-primary self-end"><i class="fa-solid fa-check mr-2"></i>Log session</button></form></section>
+    </div><div class="lg:col-span-2 space-y-5"><section class="dashboard-card"><p class="dashboard-eyebrow">YOUR MOMENTUM</p><h2 class="text-lg font-extrabold text-white mt-1">Subject progress</h2><p class="text-xs text-gray-400 mt-1">Based on tasks you complete for each subject.</p><div id="dashboardSubjectProgress" class="space-y-4 mt-5"></div></section>
+      <section class="dashboard-card"><p class="dashboard-eyebrow">YOUR DATA, YOUR CHOICE</p><h2 class="text-lg font-extrabold text-white mt-1">Save & move your progress</h2><p class="text-sm text-gray-400 mt-2">Your progress stays in this browser by default. Export a backup to move it manually to another device.</p><div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-4"><button type="button" class="dashboard-secondary" onclick="exportDashboardData()"><i class="fa-solid fa-download mr-2"></i>Export backup</button><label class="dashboard-secondary text-center cursor-pointer"><i class="fa-solid fa-upload mr-2"></i>Import backup<input id="dashboardImportFile" type="file" accept="application/json,.json" class="sr-only"></label></div><div class="dashboard-account mt-4"><div class="flex gap-3"><i class="fa-solid fa-user-shield text-amber-400 mt-1"></i><div><strong class="text-sm text-white">Optional account sync</strong><p class="text-xs text-gray-400 mt-1">Automatic cross-device login needs a secure authentication provider and cloud database. Neither is configured yet, so this version does not simulate sign-in or send your data anywhere.</p><a class="text-xs text-amber-400 underline inline-block mt-2" href="https://github.com/icse-cbse-10-12/icse-class-10-materials/issues" target="_blank" rel="noopener noreferrer">Request account sync</a></div></div></div><p id="dashboardStatus" class="text-xs text-emerald-400 mt-3" role="status" aria-live="polite">Your progress is stored locally in this browser.</p><button type="button" class="dashboard-danger mt-4" onclick="clearDashboardData()">Clear dashboard data</button></section>
+    </div></div>
+  </section>
 
   <!-- Main Website Content -->
   <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -951,6 +971,7 @@
  <script src="script.js"></script>
 <script src="study-tools.js" defer></script>
 <script src="ui-ux.js" defer></script>
+<script src="student-dashboard.js" defer></script>
   
 </body>
 </html>
