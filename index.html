@@ -380,6 +380,18 @@
         <div class="dashboard-stat-grid"><article class="dashboard-stat"><span class="dashboard-stat-icon"><i class="fa-regular fa-circle-check"></i></span><span class="dashboard-stat-label">Completion</span><strong id="dashboardCompletion">0%</strong><small>Tasks finished</small></article><article class="dashboard-stat"><span class="dashboard-stat-icon"><i class="fa-solid fa-stopwatch"></i></span><span class="dashboard-stat-label">Study sessions</span><strong id="dashboardSessions">0</strong><small>Sessions logged</small></article><article class="dashboard-stat"><span class="dashboard-stat-icon"><i class="fa-regular fa-clock"></i></span><span class="dashboard-stat-label">Focus time</span><strong id="dashboardMinutes">0 min</strong><small>Total logged time</small></article></div>
       </div>
     </div>
+    <!-- ICSE syllabus tracker -->
+    <section id="syllabusTrackerPanel" class="dashboard-card mb-6" aria-labelledby="syllabusTrackerTitle">
+      <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+        <div><p class="dashboard-eyebrow">ICSE SYLLABUS TRACKER · EXAM YEAR 2027</p><h2 id="syllabusTrackerTitle" class="text-xl sm:text-2xl font-black text-white mt-1">Your syllabus, made manageable.</h2><p class="text-sm text-gray-400 mt-2 max-w-2xl">Track chapters across all eight subjects. Mark what you have studied and flag topics for revision. Your progress is saved in this browser.</p></div>
+        <a class="syllabus-source-link" href="https://cisce.org/wp-content/uploads/2025/03/0.1-ICSE-Contents2.pdf" target="_blank" rel="noopener noreferrer">Official ICSE syllabus index <i class="fa-solid fa-arrow-up-right-from-square ml-1" aria-hidden="true"></i></a>
+      </div>
+      <div class="syllabus-overview mt-5"><div class="syllabus-overview-top"><div><span class="syllabus-overview-label">Overall syllabus coverage</span><p id="syllabusProgressCaption" class="text-xs text-gray-400 mt-1">No topics marked completed yet.</p></div><strong id="syllabusOverallPercent">0%</strong></div><div class="syllabus-track" role="progressbar" aria-label="Overall syllabus coverage" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="syllabusOverallTrack"><span id="syllabusOverallFill"></span></div><div class="syllabus-legend"><span><i class="syllabus-dot syllabus-dot-done"></i>Completed</span><span><i class="syllabus-dot syllabus-dot-learning"></i>Learning</span><span><i class="syllabus-dot syllabus-dot-revision"></i>Needs revision</span></div></div>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4"><article class="syllabus-mini-stat"><span>Topics completed</span><strong id="syllabusTopicsDone">0</strong></article><article class="syllabus-mini-stat"><span>Still to study</span><strong id="syllabusTopicsRemaining">0</strong></article><article class="syllabus-mini-stat"><span>Flagged for revision</span><strong id="syllabusTopicsRevision">0</strong></article></div>
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mt-7 mb-3"><div><h3 class="text-lg font-extrabold text-white">Your eight subjects</h3><p class="text-xs text-gray-400 mt-1">Open a subject to see its syllabus checklist.</p></div><label class="syllabus-search-wrap"><span class="sr-only">Search syllabus topics</span><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><input id="syllabusSearch" type="search" placeholder="Find a chapter or topic…" autocomplete="off"></label></div>
+      <div id="syllabusSubjectGrid" class="syllabus-subject-grid"></div>
+      <p class="syllabus-footnote mt-4">Syllabus reference: ICSE Examination Year 2027. Confirm prescribed portions with your school. Topic status measures your own tracking—not exam mastery. Your data stays in this browser and is included in the dashboard JSON backup.</p><p id="syllabusTrackerStatus" class="text-xs text-emerald-400 mt-2" role="status" aria-live="polite">Ready to track your syllabus.</p>
+    </section>
     <div class="dashboard-layout">
       <div class="dashboard-main-column">
         <section class="dashboard-card dashboard-tasks-card"><div class="dashboard-section-heading"><div><span class="dashboard-kicker">MAKE IT HAPPEN</span><h2>Today's plan</h2><p>Keep tasks specific and small enough to start.</p></div><span id="dashboardDate" class="dashboard-date-chip"></span></div>
@@ -985,6 +997,7 @@
 <script src="study-tools.js" defer></script>
 <script src="ui-ux.js" defer></script>
 <script src="student-dashboard.js" defer></script>
+<script src="syllabus-tracker.js" defer></script>
   
 </body>
 </html>
