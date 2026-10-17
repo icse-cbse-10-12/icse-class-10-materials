@@ -220,3 +220,25 @@
     font-size: 14px !important;
   }
 }
+
+
+/* Student dashboard — matches the Study Vault navy and amber palette. */
+.dashboard-hero{background:radial-gradient(ellipse at top right,rgba(245,158,11,.16),transparent 48%),linear-gradient(135deg,#111c2e,#080d17);border:1px solid rgba(245,158,11,.25)}
+.dashboard-eyebrow{color:#fbbf24;font-size:10px;font-weight:900;letter-spacing:.15em}
+.dashboard-stat{padding:15px;border:1px solid rgba(148,163,184,.16);border-radius:16px;background:rgba(2,6,23,.45);min-width:0}
+.dashboard-stat span,.dashboard-stat small{display:block;color:#9ca3af;font-size:11px}
+.dashboard-stat strong{display:block;color:#fff;font-size:clamp(22px,3vw,30px);font-weight:900;margin:5px 0;overflow-wrap:anywhere}
+.dashboard-card{min-width:0;padding:20px;border-radius:20px;border:1px solid #263244;background:rgba(15,23,42,.72)}
+.dashboard-label{display:block;color:#cbd5e1;font-size:11px;font-weight:700;margin-bottom:6px}
+.dashboard-input{width:100%;min-width:0;box-sizing:border-box;padding:10px 11px;border-radius:10px;border:1px solid #334155;background:#0b1220;color:#f8fafc;font-size:13px}
+.dashboard-input:focus{outline:2px solid #f59e0b;outline-offset:1px}
+.dashboard-primary,.dashboard-secondary,.dashboard-danger{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:11px 13px;border-radius:11px;font-size:12px;font-weight:800;transition:background .18s,border-color .18s}
+.dashboard-primary{background:#f59e0b;color:#111827}.dashboard-primary:hover{background:#fbbf24}
+.dashboard-secondary{color:#e2e8f0;background:#111c2d;border:1px solid #334155}.dashboard-secondary:hover{border-color:#f59e0b;background:rgba(245,158,11,.1)}
+.dashboard-danger{color:#fca5a5;border:1px solid rgba(248,113,113,.25);background:rgba(127,29,29,.12)}
+.dashboard-filter{padding:7px 11px;border-radius:9px;border:1px solid #334155;color:#cbd5e1;background:#111827;font-size:11px;font-weight:800}.dashboard-filter.active{color:#111827;background:#f59e0b;border-color:#f59e0b}
+.dashboard-task{display:flex;align-items:flex-start;gap:11px;padding:12px;border:1px solid rgba(148,163,184,.15);border-radius:12px;background:rgba(2,6,23,.3)}.dashboard-task.is-done{opacity:.72}
+.dashboard-task-check{margin-top:3px;width:17px;height:17px;accent-color:#f59e0b;flex:0 0 auto}.dashboard-task-title{color:#f8fafc;font-size:13px;font-weight:700;overflow-wrap:anywhere}.dashboard-task.is-done .dashboard-task-title{text-decoration:line-through;color:#9ca3af}
+.dashboard-task-meta{color:#9ca3af;font-size:10px;margin-top:5px}.dashboard-task-delete{color:#9ca3af;padding:5px 7px;border-radius:8px;flex:0 0 auto}.dashboard-task-delete:hover{color:#fca5a5;background:rgba(127,29,29,.25)}
+.dashboard-progress-track{height:7px;overflow:hidden;border-radius:999px;background:#263244}.dashboard-progress-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#d97706,#fbbf24);transition:width .25s ease}.dashboard-account{padding:13px;border-radius:13px;border:1px solid rgba(245,158,11,.2);background:rgba(245,158,11,.05)}
+@media(max-width:640px){#studentDashboard{padding-top:1rem}.dashboard-card{padding:15px}.dashboard-stat{padding:12px}}
