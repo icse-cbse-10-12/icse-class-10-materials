@@ -86,6 +86,64 @@ let currentCategory = "All";
 let allResources = [];
 let filteredResources = [];
 let deferredPwaPrompt = null;
+let currentPersonalView = "all";
+const SAVED_MATERIALS_KEY = "icseMasterClass.savedMaterials.v1";
+const RECENT_MATERIALS_KEY = "icseMasterClass.recentMaterials.v1";
+
+function readPersonalList(storageKey) {
+  try {
+    const value = JSON.parse(localStorage.getItem(storageKey) || "[]");
+    return Array.isArray(value) ? value.filter(item => typeof item === "string") : [];
+  } catch (error) { return []; }
+}
+function writePersonalList(storageKey, values) {
+  try { localStorage.setItem(storageKey, JSON.stringify(values)); return true; }
+  catch (error) { console.warn("Personal library could not be saved in this browser.", error); return false; }
+}
+function getMaterialKey(item) {
+  const shareId = String(item?.["Share ID"] || "").trim();
+  if (shareId) return `share:${shareId}`;
+  return [item?.["Book Name"], item?.["Subject"], item?.["Category"], item?.["Edition"]].map(value => String(value || "").trim().toLowerCase()).join("|");
+}
+function isMaterialSaved(item) { return readPersonalList(SAVED_MATERIALS_KEY).includes(getMaterialKey(item)); }
+function updatePersonalLibraryUI() {
+  const savedCount = document.getElementById("savedMaterialCount");
+  if (savedCount) savedCount.textContent = String(readPersonalList(SAVED_MATERIALS_KEY).length);
+  document.querySelectorAll("[data-personal-view]").forEach(button => {
+    const active = button.dataset.personalView === currentPersonalView;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
+}
+function setPersonalView(view) {
+  currentPersonalView = ["all", "saved", "recent"].includes(view) ? view : "all";
+  if (currentPersonalView !== "all") {
+    currentSubject = "All"; currentCategory = "All";
+    const search = document.getElementById("searchInput"); const year = document.getElementById("yearFilter");
+    if (search) search.value = ""; if (year) year.value = "all";
+    document.querySelectorAll(".cat-btn").forEach(button => button.classList.remove("active-tab", "bg-amber-500", "text-black"));
+    document.querySelector(".cat-btn")?.classList.add("active-tab", "bg-amber-500", "text-black");
+    const title = document.getElementById("selectedSubjectTitle");
+    if (title) title.textContent = currentPersonalView === "saved" ? "Saved Materials" : "Recently Opened";
+    document.getElementById("mainLandingView")?.classList.add("hidden");
+    document.getElementById("subjectDetailView")?.classList.remove("hidden");
+  } else {
+    const title = document.getElementById("selectedSubjectTitle");
+    if (title && ["Saved Materials", "Recently Opened"].includes(title.textContent)) title.textContent = "All Subjects Vault";
+  }
+  updatePersonalLibraryUI(); filterResources();
+}
+function toggleSavedMaterial(key) {
+  if (!key) return;
+  const saved = readPersonalList(SAVED_MATERIALS_KEY);
+  writePersonalList(SAVED_MATERIALS_KEY, saved.includes(key) ? saved.filter(value => value !== key) : [key, ...saved]);
+  updatePersonalLibraryUI(); filterResources();
+}
+function recordRecentMaterial(item) {
+  const key = getMaterialKey(item); if (!key) return;
+  const recent = readPersonalList(RECENT_MATERIALS_KEY).filter(value => value !== key);
+  recent.unshift(key); writePersonalList(RECENT_MATERIALS_KEY, recent.slice(0, 20));
+}
 
 /* ============================================================
    URL VALIDATION
@@ -436,6 +494,7 @@ function parseCSV(text) {
    ============================================================ */
 
 function selectSubject(subjectName, updateHash = true) {
+  currentPersonalView = "all"; updatePersonalLibraryUI();
   const globalWrap = document.getElementById("globalSearchWrap");
   if (subjectName === "All") globalWrap?.classList.remove("hidden");
   else globalWrap?.classList.add("hidden");
@@ -476,6 +535,7 @@ function selectSubject(subjectName, updateHash = true) {
    ============================================================ */
 
 function searchAllMaterials() {
+  currentPersonalView = "all"; updatePersonalLibraryUI();
   const globalInput = document.getElementById("globalSearchInput");
   const detailInput = document.getElementById("searchInput");
   const landingView = document.getElementById("mainLandingView");
@@ -682,11 +742,17 @@ if (currentCategory === "All") {
       !searchVal || searchableText.includes(searchVal);
     const selectedYear = document.getElementById("yearFilter")?.value || "all";
     const yearMatch = selectedYear === "all" || getMaterialYear(item) === selectedYear;
+    const materialKey = getMaterialKey(item);
+    const personalKeys = currentPersonalView === "saved" ? readPersonalList(SAVED_MATERIALS_KEY) : currentPersonalView === "recent" ? readPersonalList(RECENT_MATERIALS_KEY) : null;
+    const personalMatch = currentPersonalView === "all" || personalKeys.includes(materialKey);
 
-    return subMatch && catMatch && srchMatch && yearMatch;
+    return subMatch && catMatch && srchMatch && yearMatch && personalMatch;
   });
 
-  if (currentCategory === "PYQ" || currentCategory === "PYQs / Specimen Papers") {
+  if (currentPersonalView === "recent") {
+    const recentOrder = readPersonalList(RECENT_MATERIALS_KEY);
+    filteredResources.sort((a, b) => recentOrder.indexOf(getMaterialKey(a)) - recentOrder.indexOf(getMaterialKey(b)));
+  } else if (currentCategory === "PYQ" || currentCategory === "PYQs / Specimen Papers") {
     filteredResources.sort((a, b) => {
       const yearOf = item => { const text = `${item["Edition"] || ""} ${item["Book Name"] || ""} ${item["Scope"] || ""}`; const matches = text.match(/20(?:2[2-7])/g) || []; return matches.length ? Math.max(...matches.map(Number)) : 0; };
       return yearOf(b) - yearOf(a);
@@ -700,6 +766,7 @@ if (currentCategory === "All") {
    ============================================================ */
 
 function setCategoryFilter(category, event) {
+  currentPersonalView = "all"; updatePersonalLibraryUI();
   currentCategory = category;
 
   document.querySelectorAll(".cat-btn").forEach(button => {
@@ -804,9 +871,17 @@ function renderGrid(data) {
       item["Edition"] && item["Edition"] !== "Not Specified"
         ? `Ed: ${item["Edition"]}`
         : "";
+    const materialKey = getMaterialKey(item);
+    const saved = isMaterialSaved(item);
 
     return `
       <div class="p-4 rounded-xl bg-gray-900/60 border border-gray-800 hover:border-amber-500/40 transition flex flex-col justify-between gap-3 shadow-lg">
+        <div class="flex justify-end -mb-1">
+          <button type="button" data-material-key="${escapeHTML(materialKey)}" aria-pressed="${saved}" class="js-toggle-save personal-save-btn ${saved ? "is-saved" : ""}">
+            <i class="fa-${saved ? "solid" : "regular"} fa-bookmark" aria-hidden="true"></i>
+            ${saved ? "Saved" : "Save"}
+          </button>
+        </div>
         <div class="space-y-2">
           <div class="flex items-center justify-between text-[10px] gap-2">
             <span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold shrink-0">
@@ -928,6 +1003,10 @@ function renderGrid(data) {
       </div>
     `;
   }).join("");
+
+  grid.querySelectorAll(".js-toggle-save").forEach(button => {
+    button.addEventListener("click", () => toggleSavedMaterial(button.dataset.materialKey));
+  });
 
   grid.querySelectorAll(".js-open-share-page").forEach(button => {
     button.addEventListener("click", () => {
@@ -1154,6 +1233,7 @@ function showSharedMaterialPage(shareId) {
 function openMaterialModalByIndex(index) {
   const item = filteredResources[index];
   if (!item) return;
+  recordRecentMaterial(item); updatePersonalLibraryUI();
 
   const modalBadge = document.getElementById("modalSubjectBadge");
   const modalTitle = document.getElementById("modalTitle");
@@ -1419,6 +1499,7 @@ window.addEventListener("popstate", checkHashRoute);
 
 const startApp = () => {
   applySiteSettings();
+  updatePersonalLibraryUI();
   initSubjectCards();
   fetchSheetData();
   checkWelcomePopup();

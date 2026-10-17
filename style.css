@@ -195,3 +195,18 @@ video {
     transition-duration: 0.01ms !important;
   }
 }
+
+
+/* Personal library controls — saved and recently opened materials */
+.personal-library-toolbar{display:flex;flex-direction:column;gap:12px;padding:14px;margin:4px 0 12px;border:1px solid rgba(245,158,11,.22);border-radius:16px;background:linear-gradient(120deg,rgba(15,23,42,.95),rgba(10,18,32,.88))}
+.personal-library-copy{display:flex;flex-direction:column;gap:4px}
+.personal-library-eyebrow{color:#fbbf24;font-size:10px;font-weight:900;letter-spacing:.16em}
+.personal-library-caption{color:#94a3b8;font-size:11px;line-height:1.5}
+.personal-library-actions{display:flex;flex-wrap:wrap;gap:8px}
+.personal-view-btn,.personal-save-btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:36px;padding:8px 11px;border:1px solid #334155;border-radius:10px;background:rgba(15,23,42,.9);color:#cbd5e1;font-size:11px;font-weight:800;transition:background .18s,border-color .18s,color .18s}
+.personal-view-btn:hover,.personal-save-btn:hover{border-color:rgba(245,158,11,.65);color:#fff}
+.personal-view-btn.active{border-color:#f59e0b;background:rgba(245,158,11,.14);color:#fbbf24}
+.personal-view-btn span{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 4px;border-radius:999px;background:rgba(245,158,11,.15);color:#fbbf24;font-size:10px}
+.personal-save-btn{min-height:30px;padding:6px 9px;color:#cbd5e1}
+.personal-save-btn.is-saved{border-color:rgba(245,158,11,.5);background:rgba(245,158,11,.1);color:#fbbf24}
+@media(min-width:640px){.personal-library-toolbar{flex-direction:row;align-items:center;justify-content:space-between}.personal-library-copy{max-width:48%}.personal-library-actions{justify-content:flex-end}}
