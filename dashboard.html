@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard | ICSE MasterClass Study Vault</title>
+  <meta name="description" content="Plan your ICSE study sessions, track syllabus progress, use a Pomodoro timer and manage daily tasks in your private student dashboard.">
+  <meta name="theme-color" content="#090d16">
+  <meta name="application-name" content="ICSE MasterClass Study Vault">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icseYtLogo.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:"class",theme:{extend:{colors:{brand:{400:"#f59e0b",500:"#d97706",600:"#b45309"}}}}};</script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="ui-ux.css">
+</head>
+<body class="bg-gray-950 text-gray-100 font-sans min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black pb-12">
+  <header class="sticky top-0 z-40 bg-gray-950/90 backdrop-blur-md border-b border-gray-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <a href="./" class="flex items-center gap-3 min-w-0 group">
+        <img src="icseYtLogo.png" alt="ICSE MasterClass logo" class="w-10 h-10 object-contain rounded-full border border-amber-500/30">
+        <span class="font-black text-lg tracking-tight text-white">ICSE <span class="text-amber-500">MasterClass</span><span class="block text-[10px] font-bold text-gray-400 tracking-widest uppercase mt-0.5">STUDENT DASHBOARD</span></span>
+      </a>
+      <a href="./" class="dashboard-secondary shrink-0"><i class="fa-solid fa-arrow-left mr-2" aria-hidden="true"></i><span>Study Vault</span></a>
+    </div>
+  </header>
+  <main class="flex-grow w-full">
+<!-- Student Dashboard: private, browser-local study planning -->
+  <section id="studentDashboard" class="dashboard-shell max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6" aria-labelledby="dashboardTitle">
+    <div class="dashboard-hero mb-6">
+      <div class="dashboard-hero-top">
+        <div class="dashboard-welcome">
+          <span class="dashboard-pill"><span class="dashboard-live-dot"></span> YOUR STUDY SPACE</span>
+          <h1 id="dashboardTitle">Small steps. Real progress.</h1>
+          <p>Your plan, your pace. Pick one useful task and get started.</p>
+        </div>
+        <a href="./" class="dashboard-secondary"><i class="fa-solid fa-arrow-left mr-2"></i>Study Vault</a>
+      </div>
+      <div class="dashboard-overview">
+        <div class="dashboard-overview-main"><div class="dashboard-overview-label">YOUR PROGRESS</div><div class="dashboard-overview-number"><strong id="dashboardTasksDone">0</strong><span>of <b id="dashboardTasksTotal">0 tasks planned</b> completed</span></div><div class="dashboard-progress-track dashboard-overview-track"><div id="dashboardOverallFill" class="dashboard-progress-fill" style="width:0%"></div></div><p id="dashboardEncouragement" class="dashboard-encouragement">Every task you finish is a step forward.</p></div>
+        <div class="dashboard-stat-grid"><article class="dashboard-stat"><span class="dashboard-stat-icon"><i class="fa-regular fa-circle-check"></i></span><span class="dashboard-stat-label">Completion</span><strong id="dashboardCompletion">0%</strong><small>Tasks finished</small></article><article class="dashboard-stat"><span class="dashboard-stat-icon"><i class="fa-solid fa-stopwatch"></i></span><span class="dashboard-stat-label">Study sessions</span><strong id="dashboardSessions">0</strong><small>Sessions logged</small></article><article class="dashboard-stat"><span class="dashboard-stat-icon"><i class="fa-regular fa-clock"></i></span><span class="dashboard-stat-label">Focus time</span><strong id="dashboardMinutes">0 min</strong><small>Total logged time</small></article></div>
+      </div>
+    </div>
+    <!-- ICSE syllabus tracker -->
+    <section id="syllabusTrackerPanel" class="dashboard-card mb-6" aria-labelledby="syllabusTrackerTitle">
+      <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+        <div><p class="dashboard-eyebrow">ICSE SYLLABUS TRACKER · EXAM YEAR 2027</p><h2 id="syllabusTrackerTitle" class="text-xl sm:text-2xl font-black text-white mt-1">Your syllabus, made manageable.</h2><p class="text-sm text-gray-400 mt-2 max-w-2xl">Track chapters across all eight subjects. Mark what you have studied and flag topics for revision. Your progress is saved in this browser.</p></div>
+        <a class="syllabus-source-link" href="https://cisce.org/wp-content/uploads/2025/03/0.1-ICSE-Contents2.pdf" target="_blank" rel="noopener noreferrer">Official ICSE syllabus index <i class="fa-solid fa-arrow-up-right-from-square ml-1" aria-hidden="true"></i></a>
+      </div>
+      <div class="syllabus-overview mt-5"><div class="syllabus-overview-top"><div><span class="syllabus-overview-label">Overall syllabus coverage</span><p id="syllabusProgressCaption" class="text-xs text-gray-400 mt-1">No topics marked completed yet.</p></div><strong id="syllabusOverallPercent">0%</strong></div><div class="syllabus-track" role="progressbar" aria-label="Overall syllabus coverage" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="syllabusOverallTrack"><span id="syllabusOverallFill"></span></div><div class="syllabus-legend"><span><i class="syllabus-dot syllabus-dot-done"></i>Completed</span><span><i class="syllabus-dot syllabus-dot-learning"></i>Learning</span><span><i class="syllabus-dot syllabus-dot-revision"></i>Needs revision</span></div></div>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4"><article class="syllabus-mini-stat"><span>Topics completed</span><strong id="syllabusTopicsDone">0</strong></article><article class="syllabus-mini-stat"><span>Still to study</span><strong id="syllabusTopicsRemaining">0</strong></article><article class="syllabus-mini-stat"><span>Flagged for revision</span><strong id="syllabusTopicsRevision">0</strong></article></div>
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mt-7 mb-3"><div><h3 class="text-lg font-extrabold text-white">Your eight subjects</h3><p class="text-xs text-gray-400 mt-1">Open a subject to see its syllabus checklist.</p></div><label class="syllabus-search-wrap"><span class="sr-only">Search syllabus topics</span><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><input id="syllabusSearch" type="search" placeholder="Find a chapter or topic…" autocomplete="off"></label></div>
+      <div id="syllabusSubjectGrid" class="syllabus-subject-grid"></div>
+      <p class="syllabus-footnote mt-4">Syllabus reference: ICSE Examination Year 2027. Confirm prescribed portions with your school. Topic status measures your own tracking—not exam mastery. Your data stays in this browser and is included in the dashboard JSON backup.</p><p id="syllabusTrackerStatus" class="text-xs text-emerald-400 mt-2" role="status" aria-live="polite">Ready to track your syllabus.</p>
+    </section>
+    <div class="dashboard-layout">
+      <div class="dashboard-main-column">
+        <section class="dashboard-card dashboard-tasks-card"><div class="dashboard-section-heading"><div><span class="dashboard-kicker">MAKE IT HAPPEN</span><h2>Today's plan</h2><p>Keep tasks specific and small enough to start.</p></div><span id="dashboardDate" class="dashboard-date-chip"></span></div>
+          <form id="dashboardTaskForm" class="dashboard-task-form"><label class="dashboard-task-title-field"><span class="dashboard-label">What do you want to work on?</span><input id="dashboardTaskTitle" maxlength="120" required placeholder="e.g. Solve 5 refraction numericals" class="dashboard-input"></label><div class="dashboard-task-options"><label><span class="dashboard-label">Subject</span><select id="dashboardTaskSubject" class="dashboard-input"><option>Physics</option><option>Chemistry</option><option>Biology</option><option>Mathematics</option><option>English Language</option><option>English Literature</option><option>History & Civics</option><option>Geography</option><option>Computer Applications</option><option>Other</option></select></label><label><span class="dashboard-label">Due date <span class="dashboard-optional">(optional)</span></span><input id="dashboardTaskDue" type="date" class="dashboard-input"></label></div><button type="submit" class="dashboard-primary"><i class="fa-solid fa-plus"></i><span>Add task</span></button></form>
+          <div class="dashboard-task-list-heading"><h3>Your tasks</h3><div class="dashboard-filter-group" role="group" aria-label="Task filters"><button type="button" class="dashboard-filter active" data-task-filter="all">All</button><button type="button" class="dashboard-filter" data-task-filter="open">To do</button><button type="button" class="dashboard-filter" data-task-filter="done">Done</button></div></div><div id="dashboardTaskList" class="dashboard-task-list" aria-live="polite"></div><p id="dashboardTaskEmpty" class="dashboard-empty-state"><span class="dashboard-empty-icon"><i class="fa-solid fa-seedling"></i></span><strong>Your next win starts here.</strong><span>Add one small task. You don't need a perfect plan to begin.</span></p>
+        </section>
+        <section class="dashboard-card dashboard-session-card"><div class="dashboard-section-heading"><div><span class="dashboard-kicker">NOTICE YOUR EFFORT</span><h2>Focus timer & study log</h2><p>Use a focus round, or log study time you completed offline.</p></div><span class="dashboard-section-icon"><i class="fa-solid fa-hourglass-half"></i></span></div>
+          <div class="dashboard-pomodoro" aria-labelledby="dashboardPomodoroTitle">
+            <div class="dashboard-pomodoro-intro"><span class="dashboard-kicker">POMODORO</span><h3 id="dashboardPomodoroTitle">One focused round at a time.</h3><p>Completed focus rounds are automatically added to your study history. Breaks are not counted as study time.</p></div>
+            <div class="dashboard-pomodoro-modes" role="group" aria-label="Timer mode"><button type="button" class="dashboard-pomodoro-mode active" data-pomodoro-mode="focus" aria-pressed="true">Focus · 25 min</button><button type="button" class="dashboard-pomodoro-mode" data-pomodoro-mode="shortBreak" aria-pressed="false">Short break · 5 min</button><button type="button" class="dashboard-pomodoro-mode" data-pomodoro-mode="longBreak" aria-pressed="false">Long break · 15 min</button></div>
+            <div class="dashboard-timer-display"><span id="dashboardTimerModeLabel">Focus session</span><strong id="dashboardTimerClock" role="timer" aria-label="25 minutes remaining">25:00</strong><div id="dashboardTimerTrack" class="dashboard-timer-track" role="progressbar" aria-label="Timer progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span id="dashboardTimerFill"></span></div></div>
+            <div class="dashboard-timer-controls"><label><span class="dashboard-label">Focus subject</span><select id="dashboardTimerSubject" class="dashboard-input"><option>Physics</option><option>Chemistry</option><option>Biology</option><option>Mathematics</option><option>English Language</option><option>English Literature</option><option>History & Civics</option><option>Geography</option><option>Computer Applications</option><option>Other</option></select></label><div class="dashboard-timer-buttons"><button type="button" id="dashboardTimerToggle" class="dashboard-primary"><i class="fa-solid fa-play" aria-hidden="true"></i> Start focus</button><button type="button" id="dashboardTimerReset" class="dashboard-secondary">Reset</button></div></div>
+            <p id="dashboardTimerHint" class="dashboard-timer-hint" role="status" aria-live="polite">Ready when you are. You can pause or reset any time.</p>
+          </div>
+          <div class="dashboard-manual-log-heading"><h3>Log time manually</h3><p>For textbook study, classes, or offline revision.</p></div><form id="dashboardSessionForm" class="dashboard-session-form"><label><span class="dashboard-label">Subject</span><select id="dashboardSessionSubject" class="dashboard-input"><option>Physics</option><option>Chemistry</option><option>Biology</option><option>Mathematics</option><option>English Language</option><option>English Literature</option><option>History & Civics</option><option>Geography</option><option>Computer Applications</option><option>Other</option></select></label><label><span class="dashboard-label">Minutes focused</span><input id="dashboardSessionMinutes" type="number" min="1" max="600" value="25" required class="dashboard-input"></label><button type="submit" class="dashboard-primary"><i class="fa-solid fa-check"></i> Log time</button></form></section>
+      </div>
+      <aside class="dashboard-side-column"><section class="dashboard-card dashboard-subject-card"><div class="dashboard-section-heading"><div><span class="dashboard-kicker">ONE STEP AT A TIME</span><h2>Progress by subject</h2><p>See what you've moved forward on.</p></div></div><div id="dashboardSubjectProgress" class="dashboard-subject-progress"></div></section>
+        <section class="dashboard-card dashboard-data-card"><span class="dashboard-data-icon"><i class="fa-solid fa-shield-heart"></i></span><span class="dashboard-kicker">PRIVATE BY DEFAULT</span><h2>Your progress belongs to you.</h2><p>Saved in this browser on this device. Export a backup if you want to move it elsewhere.</p><div class="dashboard-backup-actions"><button type="button" class="dashboard-secondary" onclick="exportDashboardData()"><i class="fa-solid fa-download"></i> Export backup</button><label class="dashboard-secondary dashboard-import-label"><i class="fa-solid fa-upload"></i> Import backup<input id="dashboardImportFile" type="file" accept="application/json,.json" class="sr-only"></label></div><div class="dashboard-account"><strong><i class="fa-solid fa-cloud-arrow-up"></i> Want cross-device sync?</strong><p>Secure account sync isn't connected yet. We won't pretend a sign-in works or upload your study data.</p><a href="https://github.com/icse-cbse-10-12/icse-class-10-materials/issues" target="_blank" rel="noopener noreferrer">Request this feature <i class="fa-solid fa-arrow-up-right-from-square"></i></a></div><p id="dashboardStatus" class="dashboard-status" role="status" aria-live="polite">Your progress is stored locally in this browser.</p><button type="button" class="dashboard-danger" onclick="clearDashboardData()">Clear dashboard data</button></section>
+      </aside>
+    </div>
+  </section>
+  </main>
+  <footer class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 text-xs text-gray-500">ICSE MasterClass Study Vault · Your study progress is stored locally in this browser.</footer>
+  <script src="student-dashboard.js" defer></script>
+  <script src="syllabus-tracker.js" defer></script>
+  <script>
+    if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+      window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(error => console.error('Service worker registration failed:', error)));
+    }
+  </script>
+</body>
+</html>

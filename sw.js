@@ -1,7 +1,8 @@
-const CACHE_NAME = 'icse-masterclass-v1.2.2';
+const CACHE_NAME = 'icse-masterclass-v1.2.3';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
+  './dashboard.html',
   './style.css',
   './script.js',
   './ui-ux.css',
