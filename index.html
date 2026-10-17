@@ -557,6 +557,19 @@
   </select>
 </div>
 
+<!-- Personal library: local-only saved and recent material views. -->
+<div class="personal-library-toolbar" aria-label="Personal material views">
+  <div class="personal-library-copy">
+    <span class="personal-library-eyebrow">YOUR LIBRARY</span>
+    <span class="personal-library-caption">Save useful resources for quick revision. Stored only in this browser.</span>
+  </div>
+  <div class="personal-library-actions">
+    <button type="button" class="personal-view-btn active" data-personal-view="all" onclick="setPersonalView('all')"><i class="fa-solid fa-layer-group" aria-hidden="true"></i> All</button>
+    <button type="button" class="personal-view-btn" data-personal-view="saved" onclick="setPersonalView('saved')"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Saved <span id="savedMaterialCount">0</span></button>
+    <button type="button" class="personal-view-btn" data-personal-view="recent" onclick="setPersonalView('recent')"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Recently opened</button>
+  </div>
+</div>
+
 <!-- Resource Cards: all category views render here -->
 
 <div
