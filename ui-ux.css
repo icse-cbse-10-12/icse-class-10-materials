@@ -242,3 +242,88 @@
 .dashboard-task-meta{color:#9ca3af;font-size:10px;margin-top:5px}.dashboard-task-delete{color:#9ca3af;padding:5px 7px;border-radius:8px;flex:0 0 auto}.dashboard-task-delete:hover{color:#fca5a5;background:rgba(127,29,29,.25)}
 .dashboard-progress-track{height:7px;overflow:hidden;border-radius:999px;background:#263244}.dashboard-progress-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#d97706,#fbbf24);transition:width .25s ease}.dashboard-account{padding:13px;border-radius:13px;border:1px solid rgba(245,158,11,.2);background:rgba(245,158,11,.05)}
 @media(max-width:640px){#studentDashboard{padding-top:1rem}.dashboard-card{padding:15px}.dashboard-stat{padding:12px}}
+
+
+/* Student dashboard refresh: calmer hierarchy, useful feedback, and low-pressure motivation. */
+#studentDashboard.dashboard-shell{--dash-ink:#f8fafc;--dash-muted:#9aa9bd;--dash-line:rgba(148,163,184,.16);--dash-panel:#101a2a;--dash-panel-2:#0b1422;--dash-mint:#6ee7b7;color:var(--dash-ink)}
+#studentDashboard .dashboard-hero{padding:clamp(20px,3vw,34px);border:1px solid rgba(110,231,183,.22);border-radius:26px;background:radial-gradient(ellipse at 80% 0%,rgba(110,231,183,.12),transparent 40%),radial-gradient(ellipse at 10% 100%,rgba(245,158,11,.10),transparent 38%),#0b1422;box-shadow:0 20px 60px rgba(0,0,0,.14)}
+#studentDashboard .dashboard-hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}
+#studentDashboard .dashboard-pill{display:inline-flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid rgba(110,231,183,.22);border-radius:999px;color:#a7f3d0;background:rgba(110,231,183,.07);font-size:10px;font-weight:850;letter-spacing:.12em}
+#studentDashboard .dashboard-live-dot{width:7px;height:7px;border-radius:50%;background:#6ee7b7;box-shadow:0 0 0 4px rgba(110,231,183,.12)}
+#studentDashboard .dashboard-welcome h1{margin:16px 0 7px;font-size:clamp(28px,4vw,42px);font-weight:900;letter-spacing:-.04em;line-height:1.08;color:#fff}
+#studentDashboard .dashboard-welcome p{margin:0;color:#a9b7ca;font-size:14px;line-height:1.6}
+#studentDashboard .dashboard-overview{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:24px;align-items:stretch;margin-top:28px;padding-top:24px;border-top:1px solid var(--dash-line)}
+#studentDashboard .dashboard-overview-main{display:flex;flex-direction:column;justify-content:center;min-width:0}
+#studentDashboard .dashboard-overview-label,#studentDashboard .dashboard-kicker{color:#8de8c4;font-size:10px;font-weight:850;letter-spacing:.13em}
+#studentDashboard .dashboard-overview-number{display:flex;align-items:baseline;flex-wrap:wrap;gap:9px;margin:8px 0 14px}
+#studentDashboard .dashboard-overview-number>strong{font-size:clamp(36px,5vw,54px);line-height:1;font-weight:900;letter-spacing:-.05em;color:#fff}
+#studentDashboard .dashboard-overview-number>span{font-size:13px;color:#a9b7ca}
+#studentDashboard .dashboard-overview-number b{font-weight:750;color:#e2e8f0}
+#studentDashboard .dashboard-overview-track{height:9px;background:#26364a}
+#studentDashboard .dashboard-overview-track .dashboard-progress-fill{background:linear-gradient(90deg,#34d399,#a7f3d0)}
+#studentDashboard .dashboard-encouragement{margin:11px 0 0;color:#a9b7ca;font-size:12px;line-height:1.5}
+#studentDashboard .dashboard-stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+#studentDashboard .dashboard-stat{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:14px 12px;border:1px solid var(--dash-line);border-radius:16px;background:rgba(255,255,255,.035)}
+#studentDashboard .dashboard-stat-icon{display:grid;place-items:center;width:30px;height:30px;margin-bottom:5px;border-radius:10px;color:#a7f3d0;background:rgba(110,231,183,.09)}
+#studentDashboard .dashboard-stat-label{color:#a9b7ca;font-size:11px;line-height:1.4}
+#studentDashboard .dashboard-stat strong{margin:2px 0;color:#fff;font-size:clamp(20px,2.4vw,28px);font-weight:850;letter-spacing:-.03em}
+#studentDashboard .dashboard-stat small{color:#8292a8;font-size:10px;line-height:1.4}
+#studentDashboard .dashboard-layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(270px,.85fr);gap:18px;align-items:start}
+#studentDashboard .dashboard-main-column,#studentDashboard .dashboard-side-column{display:grid;gap:18px;min-width:0}
+#studentDashboard .dashboard-card{padding:clamp(17px,2.2vw,24px);border:1px solid var(--dash-line);border-radius:21px;background:linear-gradient(160deg,rgba(17,28,45,.98),rgba(11,20,34,.98));box-shadow:0 10px 35px rgba(0,0,0,.08)}
+#studentDashboard .dashboard-section-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:20px}
+#studentDashboard .dashboard-section-heading h2{margin:6px 0 5px;color:#fff;font-size:21px;font-weight:850;letter-spacing:-.025em}
+#studentDashboard .dashboard-section-heading p{margin:0;color:var(--dash-muted);font-size:12px;line-height:1.55}
+#studentDashboard .dashboard-date-chip{flex:0 0 auto;padding:7px 9px;border:1px solid var(--dash-line);border-radius:10px;color:#cbd5e1;background:rgba(255,255,255,.035);font-size:10px;font-weight:750}
+#studentDashboard .dashboard-task-form{display:grid;gap:12px;padding:15px;border:1px solid rgba(148,163,184,.12);border-radius:16px;background:rgba(3,9,18,.32)}
+#studentDashboard .dashboard-task-options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#studentDashboard .dashboard-label{display:block;margin-bottom:7px;color:#d4deea;font-size:11px;font-weight:750}
+#studentDashboard .dashboard-optional{color:#7f91a8;font-weight:500}
+#studentDashboard .dashboard-input{min-height:43px;padding:11px 12px;border:1px solid #33445a;border-radius:11px;background:#0a1321;color:#f1f5f9;font-size:13px;transition:border-color .15s,box-shadow .15s}
+#studentDashboard .dashboard-input::placeholder{color:#6f8097}
+#studentDashboard .dashboard-input:focus{outline:none;border-color:#6ee7b7;box-shadow:0 0 0 3px rgba(110,231,183,.12)}
+#studentDashboard .dashboard-primary,#studentDashboard .dashboard-secondary,#studentDashboard .dashboard-danger{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:42px;padding:10px 13px;border-radius:11px;font-size:12px;font-weight:800;text-decoration:none;transition:transform .16s,border-color .16s,background .16s}
+#studentDashboard .dashboard-primary{border:1px solid #6ee7b7;background:#6ee7b7;color:#06251a}
+#studentDashboard .dashboard-primary:hover{background:#a7f3d0;transform:translateY(-1px)}
+#studentDashboard .dashboard-secondary{border:1px solid #35465b;background:#172437;color:#e2e8f0;cursor:pointer}
+#studentDashboard .dashboard-secondary:hover{border-color:#6ee7b7;background:#1a3040}
+#studentDashboard .dashboard-task-list-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:22px 0 11px}
+#studentDashboard .dashboard-task-list-heading h3{margin:0;color:#f1f5f9;font-size:14px;font-weight:800}
+#studentDashboard .dashboard-filter-group{display:flex;gap:4px;padding:3px;border:1px solid var(--dash-line);border-radius:11px;background:#0a1321}
+#studentDashboard .dashboard-filter{padding:7px 10px;border:1px solid transparent;border-radius:8px;background:transparent;color:#9aabc0;font-size:10px;font-weight:800;cursor:pointer}
+#studentDashboard .dashboard-filter.active{border-color:rgba(110,231,183,.18);background:rgba(110,231,183,.12);color:#a7f3d0}
+#studentDashboard .dashboard-task-list{display:grid;gap:8px}
+#studentDashboard .dashboard-task{align-items:center;padding:13px;border:1px solid rgba(148,163,184,.13);border-radius:13px;background:rgba(255,255,255,.025);transition:border-color .15s,background .15s}
+#studentDashboard .dashboard-task:hover{border-color:rgba(110,231,183,.25);background:rgba(110,231,183,.035)}
+#studentDashboard .dashboard-task-check{width:19px;height:19px;accent-color:#6ee7b7;cursor:pointer}
+#studentDashboard .dashboard-task-title{font-size:13px;line-height:1.5}
+#studentDashboard .dashboard-task-meta{font-size:10px;line-height:1.5;color:#91a1b6}
+#studentDashboard .dashboard-task-delete{width:32px;height:32px;border:1px solid transparent;color:#91a1b6}
+#studentDashboard .dashboard-empty-state{display:flex;flex-direction:column;align-items:center;gap:7px;padding:27px 15px;margin:0;border:1px dashed #34465b;border-radius:14px;text-align:center;color:#9aabc0;font-size:12px;line-height:1.55}
+#studentDashboard .dashboard-empty-state strong{color:#e2e8f0;font-size:13px}
+#studentDashboard .dashboard-empty-icon{display:grid;place-items:center;width:42px;height:42px;margin-bottom:3px;border-radius:14px;color:#a7f3d0;background:rgba(110,231,183,.1);font-size:18px}
+#studentDashboard .dashboard-session-form{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:end}
+#studentDashboard .dashboard-section-icon{display:grid;place-items:center;width:40px;height:40px;flex:0 0 auto;border-radius:13px;color:#fbbf24;background:rgba(245,158,11,.1)}
+#studentDashboard .dashboard-subject-progress{display:grid;gap:17px}
+#studentDashboard .dashboard-subject-progress>div{gap:8px!important}
+#studentDashboard .dashboard-progress-track{height:7px;background:#27374a}
+#studentDashboard .dashboard-progress-fill{background:linear-gradient(90deg,#34d399,#a7f3d0)}
+#studentDashboard .dashboard-subject-progress .text-gray-200{color:#e2e8f0;font-size:12px}
+#studentDashboard .dashboard-subject-progress .text-gray-400{color:#9aabc0;font-size:11px}
+#studentDashboard .dashboard-data-icon{display:grid;place-items:center;width:42px;height:42px;margin-bottom:14px;border-radius:14px;color:#a7f3d0;background:rgba(110,231,183,.1);font-size:18px}
+#studentDashboard .dashboard-data-card h2{margin:7px 0;color:#fff;font-size:20px;font-weight:850;letter-spacing:-.025em}
+#studentDashboard .dashboard-data-card>p{color:#a2b0c2;font-size:12px;line-height:1.65}
+#studentDashboard .dashboard-backup-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:15px}
+#studentDashboard .dashboard-import-label{cursor:pointer}
+#studentDashboard .dashboard-account{margin-top:17px;padding:13px;border:1px solid rgba(245,158,11,.18);border-radius:13px;background:rgba(245,158,11,.045)}
+#studentDashboard .dashboard-account strong{color:#f4d49a;font-size:11px}
+#studentDashboard .dashboard-account strong i{margin-right:5px}
+#studentDashboard .dashboard-account p{margin:7px 0;color:#9aabc0;font-size:11px;line-height:1.6}
+#studentDashboard .dashboard-account a{color:#f6c76b;font-size:11px;font-weight:800;text-decoration:none}
+#studentDashboard .dashboard-account a:hover{text-decoration:underline}
+#studentDashboard .dashboard-status{margin:13px 0 0;color:#8de8c4;font-size:10px;line-height:1.5;overflow-wrap:anywhere}
+#studentDashboard .dashboard-danger{margin-top:13px;min-height:36px;padding:7px 10px;border:1px solid rgba(248,113,113,.2);background:transparent;color:#fca5a5;font-size:10px}
+#studentDashboard .dashboard-danger:hover{background:rgba(248,113,113,.08)}
+@media(max-width:900px){#studentDashboard .dashboard-layout{grid-template-columns:minmax(0,1fr)}#studentDashboard .dashboard-side-column{grid-template-columns:1fr 1fr}#studentDashboard .dashboard-overview{grid-template-columns:1fr}#studentDashboard .dashboard-stat-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:600px){#studentDashboard.dashboard-shell{padding-top:14px}#studentDashboard .dashboard-hero{padding:19px;border-radius:21px}#studentDashboard .dashboard-hero-top{flex-direction:column-reverse;align-items:stretch}#studentDashboard .dashboard-hero-top>.dashboard-secondary{align-self:flex-start;min-height:36px}#studentDashboard .dashboard-welcome h1{font-size:31px}#studentDashboard .dashboard-overview{gap:18px;margin-top:22px;padding-top:19px}#studentDashboard .dashboard-stat-grid{gap:7px}#studentDashboard .dashboard-stat{padding:11px 9px;border-radius:13px}#studentDashboard .dashboard-stat-icon{width:27px;height:27px}#studentDashboard .dashboard-stat strong{font-size:20px}#studentDashboard .dashboard-stat-label{font-size:10px}#studentDashboard .dashboard-layout{gap:13px}#studentDashboard .dashboard-main-column,#studentDashboard .dashboard-side-column{gap:13px}#studentDashboard .dashboard-side-column{grid-template-columns:1fr}#studentDashboard .dashboard-card{padding:16px;border-radius:17px}#studentDashboard .dashboard-section-heading h2{font-size:19px}#studentDashboard .dashboard-date-chip{max-width:112px;white-space:normal;text-align:center}#studentDashboard .dashboard-task-options{grid-template-columns:1fr}#studentDashboard .dashboard-session-form{grid-template-columns:1fr 1fr}#studentDashboard .dashboard-session-form button{grid-column:1/-1}#studentDashboard .dashboard-task-list-heading{align-items:flex-start;flex-direction:column}#studentDashboard .dashboard-backup-actions{grid-template-columns:1fr}#studentDashboard .dashboard-overview-number>strong{font-size:42px}}
+@media(prefers-reduced-motion:reduce){#studentDashboard *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
