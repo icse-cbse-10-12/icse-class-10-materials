@@ -1,4 +1,4 @@
-const CACHE_NAME = 'icse-masterclass-v1.2.3';
+const CACHE_NAME = 'icse-masterclass-v1.2.6';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -6,6 +6,8 @@ const ASSETS_TO_CACHE = [
   './style.css',
   './script.js',
   './ui-ux.css',
+  './ui-ux.js',
+  './study-tools.js',
   './student-dashboard.js',
   './syllabus-tracker.js',
   './manifest.json',
@@ -19,7 +21,14 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       console.log('[Service Worker] Caching core static assets');
-      return cache.addAll(ASSETS_TO_CACHE);
+      // One unavailable CDN or optional asset must not prevent the service worker installing.
+      return Promise.all(
+        ASSETS_TO_CACHE.map(asset =>
+          cache.add(asset).catch(error => {
+            console.warn('[Service Worker] Could not precache:', asset, error);
+          })
+        )
+      );
     }).then(() => self.skipWaiting())
   );
 });

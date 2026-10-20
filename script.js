@@ -263,60 +263,70 @@ function initSubjectCards() {
    FETCH GOOGLE SHEETS DATA
    ============================================================ */
 
+async function requestResourceCsv(url) {
+  const response = await fetch(url, { cache: "no-store" });
+
+  if (!response.ok) {
+    throw new Error(`Resource CSV request failed (${response.status}).`);
+  }
+
+  const csvText = await response.text();
+  const resources = parseCSV(csvText);
+  const hasExpectedHeaders =
+    resources.length > 0 &&
+    Object.prototype.hasOwnProperty.call(resources[0], "Book Name") &&
+    Object.prototype.hasOwnProperty.call(resources[0], "Subject");
+
+  if (!hasExpectedHeaders) {
+    throw new Error("The response did not contain a valid study-material catalogue.");
+  }
+
+  return resources;
+}
+
 async function fetchSheetData() {
   const statusEl = document.getElementById("statusMessage");
-  let csvText = "";
+  let resources = null;
 
   try {
-    const response = await fetch(primaryCsvUrl);
-
-    if (!response.ok) {
-      throw new Error("Primary CSV blocked");
-    }
-
-    csvText = await response.text();
+    resources = await requestResourceCsv(primaryCsvUrl);
   } catch (error) {
-    console.warn(
-      "Primary fetch failed, trying fallback proxy...",
-      error
-    );
+    console.warn("Primary CSV fetch failed; trying fallback proxy.", error);
 
     try {
-      const fallbackResponse = await fetch(fallbackCsvUrl);
-
-      if (!fallbackResponse.ok) {
-        throw new Error("Fallback CSV blocked");
-      }
-
-      csvText = await fallbackResponse.text();
+      resources = await requestResourceCsv(fallbackCsvUrl);
     } catch (fallbackError) {
-      console.error("All CSV sources failed:", fallbackError);
-
-      if (statusEl) {
-        statusEl.innerHTML = `
-          <i class="fa-solid fa-triangle-exclamation text-red-400"
-             aria-hidden="true"></i>
-          <span class="text-red-400">
-            Failed to load database. Please reload the page.
-          </span>
-        `;
-      }
-
-      return;
+      console.error("All resource CSV sources failed:", fallbackError);
     }
   }
 
-  allResources = parseCSV(csvText);
+  if (!resources) {
+    if (statusEl) {
+      statusEl.innerHTML = `
+        <i class="fa-solid fa-triangle-exclamation text-red-400" aria-hidden="true"></i>
+        <span class="text-red-400">Could not load the study-material database. Check your connection and retry.</span>
+        <button type="button" onclick="fetchSheetData()" class="ml-2 rounded-lg border border-red-400/40 px-3 py-1 text-red-300 hover:bg-red-400/10">Retry</button>
+      `;
+    }
+    return;
+  }
+
+  allResources = resources;
 
   if (statusEl) {
     statusEl.innerHTML = `
-      <i class="fa-solid fa-circle-check text-emerald-400"
-         aria-hidden="true"></i>
+      <i class="fa-solid fa-circle-check text-emerald-400" aria-hidden="true"></i>
       <span>Loaded ${allResources.length} materials from database.</span>
     `;
   }
 
-  checkHashRoute();
+  // Preserve a search typed before the asynchronous CSV request completed.
+  const pendingQuery = document.getElementById("globalSearchInput")?.value?.trim();
+  if (pendingQuery) {
+    searchAllMaterials();
+  } else {
+    checkHashRoute();
+  }
 }
 
 /* ============================================================
@@ -614,7 +624,7 @@ function populateYearFilter() {
 // Recognised subjects include the existing website labels and common sheet aliases.
 const knownSubjectNames = new Set([
   ...subjectsList.filter(subject => subject !== "All").map(subject =>
-    String(subject).toLowerCase().trim().replace(/\\s+/g, " ")
+    String(subject).toLowerCase().trim().replace(/\s+/g, " ")
   ),
   "second language - tamil", "second language - malayalam",
   "second language - kannada", "second language - hindi", "second language - telugu",
@@ -626,7 +636,7 @@ const knownSubjectNames = new Set([
 ]);
 
 function isKnownSubjectEntry(value) {
-  const entry = String(value || "").toLowerCase().trim().replace(/\\s+/g, " ");
+  const entry = String(value || "").toLowerCase().trim().replace(/\s+/g, " ");
   return knownSubjectNames.has(entry);
 }
 
