@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Student Login | ICSE MasterClass</title>
+  <meta name="description" content="Sign in or create your ICSE MasterClass student account. Free study materials remain available to everyone.">
+  <meta name="theme-color" content="#090d16">
+  <link rel="icon" href="./icseYtLogo.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:"class",theme:{extend:{colors:{brand:{400:"#f59e0b",500:"#d97706",600:"#b45309"}}}}};</script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body class="min-h-screen bg-gray-950 text-gray-100 antialiased">
+  <header class="border-b border-gray-800 bg-gray-950/90">
+    <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4">
+      <a href="./" class="flex items-center gap-3">
+        <img src="./icseYtLogo.png" alt="" class="h-10 w-10 rounded-xl object-cover">
+        <span><strong class="block text-sm sm:text-base">ICSE MasterClass</strong><span class="text-xs text-gray-400">Student Account</span></span>
+      </a>
+      <a href="./" class="text-sm font-semibold text-amber-400 hover:text-amber-300"><i class="fa-solid fa-arrow-left mr-2"></i>Study Vault</a>
+    </div>
+  </header>
+
+  <main class="mx-auto grid min-h-[calc(100vh-74px)] max-w-6xl items-center gap-10 px-4 py-10 lg:grid-cols-2 lg:px-8">
+    <section class="hidden lg:block">
+      <p class="mb-3 text-xs font-black uppercase tracking-[.24em] text-amber-400">Your learning space</p>
+      <h1 class="max-w-xl text-4xl font-black leading-tight text-white xl:text-5xl">One account.<br><span class="text-amber-400">A better study routine.</span></h1>
+      <p class="mt-5 max-w-lg leading-7 text-gray-400">Sign in to access your student dashboard and keep your learning tools together. The public Study Vault and free materials stay open to everyone.</p>
+      <div class="mt-8 grid max-w-lg gap-3 sm:grid-cols-2">
+        <div class="rounded-2xl border border-gray-800 bg-gray-900/70 p-4"><i class="fa-solid fa-chart-line mb-3 text-xl text-amber-400"></i><h2 class="font-bold">Student dashboard</h2><p class="mt-1 text-sm text-gray-400">Study planning and progress tools.</p></div>
+        <div class="rounded-2xl border border-gray-800 bg-gray-900/70 p-4"><i class="fa-solid fa-book-open mb-3 text-xl text-amber-400"></i><h2 class="font-bold">Free Study Vault</h2><p class="mt-1 text-sm text-gray-400">Browse public materials without signing in.</p></div>
+      </div>
+    </section>
+
+    <section class="mx-auto w-full max-w-md">
+      <div class="rounded-3xl border border-gray-800 bg-gray-900/80 p-6 shadow-2xl shadow-black/20 sm:p-8">
+        <div class="mb-6 text-center">
+          <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-amber-500/30 bg-amber-500/10 text-2xl text-amber-400"><i class="fa-solid fa-graduation-cap"></i></div>
+          <h2 id="formTitle" class="text-2xl font-black text-white">Welcome back</h2>
+          <p id="formSubtitle" class="mt-2 text-sm text-gray-400">Sign in to your student account.</p>
+        </div>
+
+        <div id="authSetupNotice" class="mb-5 hidden rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-sm leading-6 text-amber-100" role="status">
+          <strong class="block">One-time setup required</strong>
+          Supabase authentication is not configured yet. Open <code>auth-config.js</code> in your GitHub repository and add your Supabase Project URL and publishable/anon key. Never use a service-role key here.
+        </div>
+
+        <div id="authNotice" class="mb-4 hidden rounded-xl border p-3 text-sm leading-5" role="status" aria-live="polite"></div>
+
+        <div id="authModeTabs" class="mb-5 grid grid-cols-2 gap-2">
+          <button type="button" data-mode="login" class="rounded-xl bg-amber-500 px-3 py-2.5 text-sm font-extrabold text-gray-950">Sign in</button>
+          <button type="button" data-mode="signup" class="rounded-xl border border-gray-700 px-3 py-2.5 text-sm font-bold text-gray-300 hover:border-amber-500">Create account</button>
+        </div>
+
+        <form id="authForm" class="space-y-4">
+          <label class="block text-sm font-semibold text-gray-200">Email address
+            <input id="authEmail" type="email" autocomplete="email" required maxlength="254" placeholder="you@example.com" class="mt-2 w-full rounded-xl border border-gray-700 bg-gray-950 px-4 py-3 text-base text-white outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20">
+          </label>
+          <label id="passwordLabel" class="block text-sm font-semibold text-gray-200">Password
+            <input id="authPassword" type="password" autocomplete="current-password" required minlength="8" placeholder="At least 8 characters" class="mt-2 w-full rounded-xl border border-gray-700 bg-gray-950 px-4 py-3 text-base text-white outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20">
+          </label>
+          <button id="authSubmit" type="submit" class="w-full rounded-xl bg-amber-500 px-4 py-3 font-black text-gray-950 transition hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-60">Sign in securely <i class="fa-solid fa-arrow-right ml-2"></i></button>
+        </form>
+
+        <form id="recoveryForm" class="hidden space-y-4">
+          <label class="block text-sm font-semibold text-gray-200">New password
+            <input id="newPassword" type="password" autocomplete="new-password" required minlength="8" placeholder="At least 8 characters" class="mt-2 w-full rounded-xl border border-gray-700 bg-gray-950 px-4 py-3 text-base text-white outline-none focus:border-amber-500">
+          </label>
+          <button type="submit" class="w-full rounded-xl bg-amber-500 px-4 py-3 font-black text-gray-950">Update password</button>
+        </form>
+
+        <button id="forgotPassword" type="button" class="mt-4 w-full text-center text-sm font-semibold text-gray-400 hover:text-amber-400">Forgot password?</button>
+        <p class="mt-6 border-t border-gray-800 pt-5 text-center text-xs leading-5 text-gray-500">Your account is for ICSE MasterClass student tools. Signing in is not required to view public study materials.</p>
+        <p class="mt-4 text-center text-xs text-gray-500"><a href="./" class="hover:text-amber-400">← Back to the free Study Vault</a></p>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./auth-config.js"></script>
+  <script src="./auth.js"></script>
+</body>
+</html>

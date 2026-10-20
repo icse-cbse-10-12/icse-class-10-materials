@@ -14,6 +14,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="ui-ux.css">
+  <script>document.documentElement.classList.add("auth-check-pending");</script>
+  <style>.auth-check-pending body{visibility:hidden}</style>
 </head>
 <body class="bg-gray-950 text-gray-100 font-sans min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black pb-12">
   <header class="sticky top-0 z-40 bg-gray-950/90 backdrop-blur-md border-b border-gray-800/80">
@@ -79,6 +81,9 @@
   <footer class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 text-xs text-gray-500">ICSE MasterClass Study Vault · Your study progress is stored locally in this browser.</footer>
   <script src="student-dashboard.js" defer></script>
   <script src="syllabus-tracker.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./auth-config.js"></script>
+  <script src="./dashboard-auth.js" defer></script>
   <script>
     if ('serviceWorker' in navigator && location.protocol !== 'file:') {
       window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(error => console.error('Service worker registration failed:', error)));
