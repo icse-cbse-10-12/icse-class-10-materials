@@ -232,6 +232,13 @@
   <header class="sticky top-0 z-40 bg-gray-950/90 backdrop-blur-md border-b border-gray-800/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
 
+      <!-- Global Navigation Toggle -->
+      <button type="button" id="siteNavToggle" class="site-nav-toggle" aria-label="Open navigation menu" aria-controls="siteNavOverlay" aria-expanded="false" onclick="toggleSiteNav(true)">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+        <span>Menu</span>
+      </button>
+
+
       <a href="./" onclick="closeSubjectSubPage()" class="flex items-center gap-3 group">
         <img
           src="icseYtLogo.png"
@@ -249,12 +256,6 @@
           </span>
         </div>
       </a>
-
-      <!-- Global Navigation Toggle -->
-      <button type="button" id="siteNavToggle" class="site-nav-toggle" aria-label="Open navigation menu" aria-controls="siteNavOverlay" aria-expanded="false" onclick="toggleSiteNav(true)">
-        <i class="fa-solid fa-bars" aria-hidden="true"></i>
-        <span>Menu</span>
-      </button>
 
       <!-- Header Actions -->
       <div class="flex items-center gap-2 sm:gap-3">
