@@ -25,6 +25,14 @@ button:hover,.btn:hover{transform:translateY(-2px)}button:active,.btn:active{tra
 .secondary{background:#172d49;color:white}.secondary:hover{background:#1d3858;border-color:#496487}.quiet{background:#0b1a2d7a;color:#d8e2f0}.quiet:hover{border-color:#607895;background:#122641}
 button:focus-visible,.btn:focus-visible{outline:3px solid #ffd17a;outline-offset:3px}button:disabled{opacity:.58;cursor:wait;transform:none}
 .message{min-height:24px;font-size:.88rem;margin:14px 0 0;overflow-wrap:anywhere}.message.error{color:#fda4af}.message.success{color:#86efac}
+.password-rules{margin-top:11px;padding:13px 14px;border:1px solid #2b4361;border-radius:12px;background:#06132680;animation:rise .2s ease both}
+.rules-title{margin:0 0 8px!important;color:#dce7f5;font-size:.78rem;font-weight:800}
+.password-rules ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.rule{display:flex;align-items:center;gap:9px;margin:0;color:#9aabc0;font-size:.78rem;transition:color .18s ease}
+.rule-mark{display:grid;place-items:center;flex:0 0 18px;width:18px;height:18px;border:1px solid #53657b;border-radius:50%;font-size:12px;line-height:1;color:transparent;transition:all .18s ease}
+.rule.met{color:#9ce7b2}.rule.met .rule-mark{background:#14532d;border-color:#4ade80;color:#bbf7d0}
+.rules-ready{margin:9px 0 0!important;color:#93a7c0;font-size:.74rem}.rules-ready.complete{color:#86efac}
+
 .divider{display:flex;align-items:center;gap:12px;color:#8193aa;font-size:.72rem;letter-spacing:.13em;margin:18px 0}.divider:before,.divider:after{content:"";height:1px;background:linear-gradient(90deg,transparent,var(--line));flex:1}.divider:after{transform:scaleX(-1)}
 .foot{font-size:.76rem;text-align:center;margin:20px 0 0;color:#8193aa}.hidden{display:none!important}.account{padding:16px;border:1px solid var(--line);border-radius:14px;background:#06132680;overflow-wrap:anywhere}.small{font-size:.78rem;line-height:1.6;margin:12px 0 0;color:#93a7c0}.account p{margin-top:7px}
 .back{display:block;text-align:center;color:#ffc04b;text-decoration:none;font-size:.88rem;font-weight:750;margin-top:20px;transition:color .2s}.back:hover{color:#fff}
@@ -44,7 +52,17 @@ button:focus-visible,.btn:focus-visible{outline:3px solid #ffd17a;outline-offset
 <form id="authForm">
 <div id="nameWrap" class="hidden"><label for="displayName">Your name</label><input id="displayName" name="displayName" autocomplete="name" maxlength="80" placeholder="Student name"></div>
 <label for="email">Email address</label><input id="email" name="email" type="email" autocomplete="email" required maxlength="254" placeholder="you@example.com">
-<label for="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password" required minlength="6" placeholder="At least 6 characters">
+<label for="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password" required minlength="6" placeholder="Create a strong password" aria-describedby="passwordRules">
+<div id="passwordRules" class="password-rules hidden" aria-live="polite">
+  <p class="rules-title">Make your password stronger</p>
+  <ul>
+    <li id="ruleLength" class="rule"><span class="rule-mark" aria-hidden="true">○</span><span>At least 8 characters</span></li>
+    <li id="ruleUpper" class="rule"><span class="rule-mark" aria-hidden="true">○</span><span>One uppercase letter (A–Z)</span></li>
+    <li id="ruleLower" class="rule"><span class="rule-mark" aria-hidden="true">○</span><span>One lowercase letter (a–z)</span></li>
+    <li id="ruleNumber" class="rule"><span class="rule-mark" aria-hidden="true">○</span><span>One number (0–9)</span></li>
+  </ul>
+  <p id="passwordReady" class="rules-ready" role="status">Complete all requirements to continue.</p>
+</div>
 <button id="submitBtn" class="primary" type="submit">Sign in</button>
 </form>
 <button id="googleBtn" class="secondary" type="button">Continue with Google</button>
@@ -80,17 +98,44 @@ function setMode(next) {
   $("title").textContent=signup?"Create your account":"Welcome back.";
   $("intro").textContent=signup?"Create an account to begin your ICSE MasterClass journey.":"Sign in to your student account, or create one to get started.";
   $("nameWrap").classList.toggle("hidden",!signup);
+  $("passwordRules").classList.toggle("hidden",!signup);
+  if (signup) checkPassword($("password").value);
   $("displayName").required=signup;
   $("password").autocomplete=signup?"new-password":"current-password";
   $("submitBtn").textContent=signup?"Create account":"Sign in";
   $("modeBtn").textContent=signup?"Already have an account? Sign in":"New here? Create an account";
   message("");
 }
+const passwordRequirements = [
+  ["ruleLength", value => value.length >= 8],
+  ["ruleUpper", value => /[A-Z]/.test(value)],
+  ["ruleLower", value => /[a-z]/.test(value)],
+  ["ruleNumber", value => /[0-9]/.test(value)]
+];
+function checkPassword(value) {
+  let passed = 0;
+  for (const [id, test] of passwordRequirements) {
+    const item = $(id);
+    const valid = test(value);
+    item.classList.toggle("met", valid);
+    item.querySelector(".rule-mark").textContent = valid ? "✓" : "○";
+    item.querySelector(".rule-mark").setAttribute("aria-label", valid ? "Met" : "Not met");
+    if (valid) passed++;
+  }
+  const complete = passed === passwordRequirements.length;
+  $("passwordReady").textContent = complete ? "✓ Password meets all requirements." : `${passed} of ${passwordRequirements.length} requirements met.`;
+  $("passwordReady").classList.toggle("complete", complete);
+  return complete;
+}
+$("password").addEventListener("input", () => {
+  if (mode === "signup") checkPassword($("password").value);
+});
 $("modeBtn").addEventListener("click",()=>setMode(mode==="login"?"signup":"login"));
 $("authForm").addEventListener("submit",async event=>{
   event.preventDefault(); const button=$("submitBtn"); button.disabled=true; message("");
   const email=$("email").value.trim(); const password=$("password").value;
   try {
+    if(mode==="signup" && !checkPassword(password)) { message("Please meet all password requirements before creating your account.","error"); return; }
     if(mode==="signup") {
       const name=$("displayName").value.trim();
       if(!name) throw new Error("Please enter your name.");
