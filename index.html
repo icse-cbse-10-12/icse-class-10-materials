@@ -72,7 +72,7 @@
 
   <!-- Icons and Styles -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="style.css?v=aurora-home-2">
+  <link rel="stylesheet" href="style.css?v=study-hub-layout-1">
 <link rel="stylesheet" href="ui-ux.css">
   <!-- Subject icons use Font Awesome; keep a visible fallback glyph if the CDN is unavailable. -->
   <style>
@@ -397,6 +397,30 @@
         <a href="https://www.youtube.com/@ICSEMasterClass10" target="_blank" rel="noopener noreferrer"><span class="dock-icon rose"><i class="fa-brands fa-youtube"></i></span><span><strong>Video Lessons</strong><small>Learn visually</small></span><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
       </nav>
       <div class="aurora-section-heading"><div><p class="aurora-eyebrow">EXPLORE YOUR LIBRARY</p><h2>Everything you need to <span>move forward.</span></h2></div><span class="aurora-heading-note"><i class="fa-solid fa-sparkles"></i> A little progress every day</span></div>
+    </section>
+
+    <!-- Reference-inspired study hub navigation -->
+    <nav class="study-hub-nav" aria-label="Study hub sections">
+      <a class="active" href="#mainLandingView"><i class="fa-solid fa-house"></i> Home</a>
+      <a href="#mainSubjectGrid"><i class="fa-solid fa-book-open"></i> Study Materials</a>
+      <a href="#globalSearchInput" onclick="showGlobalSearch()"><i class="fa-solid fa-magnifying-glass"></i> Search Library</a>
+      <a href="./dashboard.html"><i class="fa-solid fa-chart-line"></i> Student Dashboard</a>
+      <a href="https://www.youtube.com/@ICSEMasterClass10" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-youtube"></i> Video Masterclasses</a>
+      <a href="https://t.me/ICSEMasterClass10" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-telegram"></i> Community</a>
+    </nav>
+    <section class="study-hub-notice" aria-label="Study portal notice">
+      <span class="notice-icon"><i class="fa-solid fa-bullhorn"></i></span>
+      <div><strong>Your ICSE study hub is ready</strong><p>Browse chapter-wise resources, search the library, or open your student dashboard.</p></div>
+      <a href="#mainSubjectGrid" aria-label="Browse study materials"><i class="fa-solid fa-arrow-right"></i></a>
+    </section>
+    <section class="study-hub-tools" aria-labelledby="study-hub-tools-title">
+      <div class="study-hub-section-head"><div><p class="hub-eyebrow">QUICK ACCESS</p><h2 id="study-hub-tools-title">Your learning workspace</h2></div><span class="hub-caption"><i class="fa-solid fa-sparkles"></i> Made for focused study</span></div>
+      <div class="study-hub-tool-grid">
+        <a class="study-hub-tool search-tool" href="#globalSearchInput" onclick="showGlobalSearch()"><span class="hub-tool-icon"><i class="fa-solid fa-magnifying-glass"></i></span><span class="hub-tool-copy"><strong>Find a resource</strong><small>Search notes, topics and books</small></span><i class="fa-solid fa-arrow-up-right-from-square hub-tool-arrow"></i></a>
+        <a class="study-hub-tool materials-tool" href="#mainSubjectGrid"><span class="hub-tool-icon"><i class="fa-solid fa-layer-group"></i></span><span class="hub-tool-copy"><strong>Browse subjects</strong><small>Open your subject library</small></span><i class="fa-solid fa-arrow-up-right-from-square hub-tool-arrow"></i></a>
+        <a class="study-hub-tool dashboard-tool" href="./dashboard.html"><span class="hub-tool-icon"><i class="fa-solid fa-chart-pie"></i></span><span class="hub-tool-copy"><strong>Student dashboard</strong><small>Open your personal workspace</small></span><i class="fa-solid fa-arrow-up-right-from-square hub-tool-arrow"></i></a>
+        <a class="study-hub-tool videos-tool" href="https://www.youtube.com/@ICSEMasterClass10" target="_blank" rel="noopener noreferrer"><span class="hub-tool-icon"><i class="fa-brands fa-youtube"></i></span><span class="hub-tool-copy"><strong>Video lessons</strong><small>Learn with ICSE MasterClass</small></span><i class="fa-solid fa-arrow-up-right-from-square hub-tool-arrow"></i></a>
+      </div>
     </section>
 
     <!-- Database Status -->

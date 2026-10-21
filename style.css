@@ -407,3 +407,37 @@ footer { background:rgba(5,9,19,.85)!important;border-top-color:rgba(125,211,252
  .dock-icon { width:31px;height:31px; }
 }
 @media(prefers-reduced-motion:reduce) { .aurora-quick-dock>a,.aurora-primary-action,.aurora-secondary-action { transition:none; } }
+
+
+/* Study Hub layout: reference-inspired structure, responsive navigation and glass cards */
+.study-hub-nav{display:flex;align-items:center;gap:7px;overflow-x:auto;scrollbar-width:none;margin:0 0 18px;padding:8px;border:1px solid rgba(148,163,184,.14);border-radius:15px;background:rgba(8,14,28,.82);backdrop-filter:blur(18px);white-space:nowrap}
+.study-hub-nav::-webkit-scrollbar{display:none}
+.study-hub-nav a{display:inline-flex;align-items:center;gap:8px;padding:10px 13px;border:1px solid transparent;border-radius:10px;color:#91a2bb;text-decoration:none;font-size:11px;font-weight:800;transition:all .2s}
+.study-hub-nav a i{color:#7dd3fc}
+.study-hub-nav a:hover,.study-hub-nav a.active{color:#f8fafc;border-color:rgba(125,211,252,.18);background:linear-gradient(110deg,rgba(37,99,235,.19),rgba(8,145,178,.10))}
+.study-hub-notice{display:flex;align-items:center;gap:13px;margin:0 0 30px;padding:15px 17px;border:1px solid rgba(96,165,250,.22);border-radius:16px;background:linear-gradient(105deg,rgba(30,64,175,.17),rgba(15,23,42,.78) 60%,rgba(8,145,178,.09))}
+.study-hub-notice .notice-icon{display:grid;place-items:center;flex-shrink:0;width:39px;height:39px;border:1px solid rgba(125,211,252,.2);border-radius:12px;color:#7dd3fc;background:rgba(56,189,248,.12)}
+.study-hub-notice>div{flex:1;min-width:0}
+.study-hub-notice strong{display:block;color:#e5edf9;font-size:12px}
+.study-hub-notice p{margin:4px 0 0;color:#8b9bb3;font-size:10px;line-height:1.6}
+.study-hub-notice>a{display:grid;place-items:center;flex-shrink:0;width:34px;height:34px;border:1px solid rgba(148,163,184,.15);border-radius:10px;color:#7dd3fc;text-decoration:none}
+.study-hub-tools{margin:0 0 30px}
+.study-hub-section-head{display:flex;align-items:end;justify-content:space-between;gap:15px;margin-bottom:14px}
+.study-hub-section-head h2{margin:0;color:#f1f5f9;font-size:clamp(20px,2.8vw,28px);font-weight:900;letter-spacing:-.04em}
+.hub-eyebrow{margin:0 0 7px;color:#7dd3fc;font-size:9px;font-weight:900;letter-spacing:.17em}
+.hub-caption{color:#7e8ea7;font-size:10px;white-space:nowrap}
+.hub-caption i{color:#c4b5fd;margin-right:5px}
+.study-hub-tool-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.study-hub-tool{position:relative;display:flex;align-items:center;gap:11px;min-width:0;padding:15px 13px;border:1px solid rgba(148,163,184,.15);border-radius:16px;background:linear-gradient(145deg,rgba(17,27,46,.88),rgba(8,14,27,.92));text-decoration:none;box-shadow:0 12px 28px rgba(0,0,0,.12);transition:transform .2s,border-color .2s,box-shadow .2s}
+.study-hub-tool:hover{transform:translateY(-3px);border-color:rgba(125,211,252,.35);box-shadow:0 15px 34px rgba(14,165,233,.09)}
+.hub-tool-icon{display:grid;place-items:center;flex-shrink:0;width:39px;height:39px;border-radius:12px;color:#7dd3fc;background:rgba(56,189,248,.12);border:1px solid rgba(125,211,252,.12)}
+.materials-tool .hub-tool-icon{color:#c4b5fd;background:rgba(139,92,246,.13)}
+.dashboard-tool .hub-tool-icon{color:#fbbf24;background:rgba(245,158,11,.12)}
+.videos-tool .hub-tool-icon{color:#fda4af;background:rgba(244,63,94,.12)}
+.hub-tool-copy{display:flex;flex-direction:column;gap:5px;min-width:0}
+.hub-tool-copy strong{color:#e5edf9;font-size:11px;line-height:1.35}
+.hub-tool-copy small{color:#7f90a8;font-size:9px;line-height:1.5}
+.hub-tool-arrow{margin-left:auto;align-self:flex-start;color:#64748b;font-size:9px}
+@media(max-width:900px){.study-hub-tool-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.study-hub-nav{margin-left:-4px;margin-right:-4px}.study-hub-nav a{padding:9px 11px;font-size:10px}.study-hub-notice{padding:12px;gap:10px}.study-hub-section-head{align-items:flex-start;flex-direction:column;gap:7px}.hub-caption{white-space:normal}.study-hub-tool-grid{gap:8px}.study-hub-tool{padding:12px 9px;gap:8px;align-items:flex-start}.hub-tool-icon{width:32px;height:32px;border-radius:10px;font-size:12px}.hub-tool-copy strong{font-size:10px}.hub-tool-copy small{font-size:8px}.hub-tool-arrow{display:none}}
+@media(prefers-reduced-motion:reduce){.study-hub-nav a,.study-hub-tool{transition:none}}
