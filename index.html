@@ -394,7 +394,7 @@
         <a href="#globalSearchInput" onclick="showGlobalSearch()"><span class="dock-icon cyan"><i class="fa-solid fa-magnifying-glass"></i></span><span><strong>Quick Search</strong><small>Find resources</small></span><i class="fa-solid fa-chevron-right"></i></a>
         <a href="#mainSubjectGrid"><span class="dock-icon violet"><i class="fa-solid fa-book-open"></i></span><span><strong>Study Materials</strong><small>Browse subjects</small></span><i class="fa-solid fa-chevron-right"></i></a>
         <a href="./dashboard.html"><span class="dock-icon amber"><i class="fa-solid fa-chart-line"></i></span><span><strong>My Dashboard</strong><small>Study workspace</small></span><i class="fa-solid fa-chevron-right"></i></a>
-        <a href="https://www.youtube.com/@ICSEMasterClass10" target="_blank" rel="noopener noreferrer"><span class="dock-icon rose"><i class="fa-brands fa-youtube"></i></span><span><strong>Video Lessons</strong><small>Learn visually</small></span><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+        <a href="#icseAiTutor"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Tutor</a>\n      <a href="https://www.youtube.com/@ICSEMasterClass10" target="_blank" rel="noopener noreferrer"><span class="dock-icon rose"><i class="fa-brands fa-youtube"></i></span><span><strong>Video Lessons</strong><small>Learn visually</small></span><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
       </nav>
       <div class="aurora-section-heading"><div><p class="aurora-eyebrow">EXPLORE YOUR LIBRARY</p><h2>Everything you need to <span>move forward.</span></h2></div><span class="aurora-heading-note"><i class="fa-solid fa-sparkles"></i> A little progress every day</span></div>
     </section>
@@ -1008,7 +1008,15 @@
   </script>
 
   <!-- Main JavaScript: Resource Database, Search, Sharing and PWA -->
- <script src="script.js"></script>
+ 
+<section id="icseAiTutor" class="icse-ai-tutor" aria-labelledby="icseAiTutorTitle">
+ <div class="icse-ai-tutor-head"><div><span class="icse-ai-eyebrow">YOUR STUDY COMPANION</span><h2 id="icseAiTutorTitle">✨ Velora AI Tutor</h2><p>Ask doubts, understand concepts, practise questions, and get step-by-step ICSE Class 10 explanations.</p></div><span class="icse-ai-online">● AI study mode</span></div>
+ <div class="icse-ai-presets"><button type="button" data-ai-prompt="Explain this concept in simple language with an ICSE example: ">Explain a concept</button><button type="button" data-ai-prompt="Give me 5 ICSE practice questions with answers on: ">Practice questions</button><button type="button" data-ai-prompt="Teach me this topic step by step, then recap it: ">Teach step by step</button></div>
+ <div class="icse-ai-chat" id="icseAiChat" role="log" aria-live="polite"><div class="icse-ai-message assistant"><div class="icse-ai-avatar">✦</div><div class="icse-ai-bubble"><strong>Hey! I'm Velora.</strong><p>Tell me the subject, chapter, or question you're stuck on.</p></div></div></div>
+ <form id="icseAiForm" class="icse-ai-compose"><label class="sr-only" for="icseAiSubject">Subject</label><select id="icseAiSubject"><option>General</option><option>Physics</option><option>Chemistry</option><option>Biology</option><option>Mathematics</option><option>English Language</option><option>English Literature</option><option>History & Civics</option><option>Geography</option><option>Computer Applications</option><option>Other ICSE subject</option></select><label class="sr-only" for="icseAiInput">Your question</label><textarea id="icseAiInput" rows="2" maxlength="5000" placeholder="Type your doubt… (Shift + Enter for a new line)" required></textarea><button id="icseAiSend" type="submit">✦ Ask Velora</button></form><div class="icse-ai-foot"><span id="icseAiStatus">API setup required before first use.</span><span>Don't enter passwords or private information.</span></div>
+</section>
+<script src="ai-tutor-config.js"></script><script src="ai-tutor.js" defer></script>
+<script src="script.js"></script>
 <script src="study-tools.js" defer></script>
 <script src="ui-ux.js" defer></script>
 <script src="student-dashboard.js" defer></script>
