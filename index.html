@@ -223,7 +223,58 @@
     @media(max-width:520px) { #globalSearchWrap { margin-bottom:.5rem; } #resourceGrid { grid-template-columns:minmax(0,1fr) !important; } }
     @media(max-width:520px) { .settings-panel { padding:20px 16px; } .settings-overlay { justify-content:stretch; } }
 
-  </style>
+  
+/* Mobile responsiveness pass — homepage header, search, navigation and content */
+html,body{max-width:100%;overflow-x:clip;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{min-width:0}
+main{min-width:0;width:100%}
+#globalSearchWrap,#globalSearchWrap>div,#globalSearchInput,#searchInput{min-width:0;max-width:100%;width:100%}
+#globalSearchInput,#searchInput,input,select,textarea{font-size:16px}
+#siteNavOverlay{padding:0}
+.site-nav-panel{width:min(390px,calc(100vw - 20px));max-width:100%;height:100%;height:100dvh;overflow-y:auto;overscroll-behavior:contain;padding-bottom:max(18px,env(safe-area-inset-bottom))}
+.site-nav-links a,.site-nav-links button{min-height:46px}
+@media(max-width:700px){
+ body>header{width:100%;}
+ body>header>div{height:auto!important;min-height:64px;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:8px!important;padding-top:8px;padding-bottom:8px;}
+ body>header>div>#siteNavToggle{grid-column:1;grid-row:1;justify-self:start;min-height:42px;padding:8px 10px;white-space:nowrap;}
+ body>header>div>a[href="./"]{grid-column:2;grid-row:1;justify-self:end;min-width:0;gap:7px!important;}
+ body>header>div>a[href="./"] img{width:34px;height:34px;}
+ body>header>div>a[href="./"] span{font-size:clamp(12px,3.4vw,16px);white-space:nowrap;}
+ body>header>div>a[href="./"] span.text-\[10px\]{font-size:8px;}
+ body>header>div>.flex.items-center.justify-self-end{grid-column:1/-1;grid-row:2;justify-self:stretch;width:100%;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px!important;}
+ body>header>div>.flex.items-center.justify-self-end>*{flex:0 0 auto;}
+ #pwaInstallBtn{min-height:40px;padding:8px 12px;font-size:12px;}
+ #settingsToggle{width:40px;height:40px;}
+ #globalSearchWrap{margin:0 auto 12px;padding:0; width:100%;}
+ #globalSearchWrap label{line-height:1.5;font-size:13px;}
+ #globalSearchInput,#searchInput{min-height:48px;padding:12px 14px;}
+ main.max-w-7xl{padding-left:14px!important;padding-right:14px!important;padding-top:16px!important;}
+ #statusMessage{padding:10px 12px;margin-bottom:16px;line-height:1.45;overflow-wrap:anywhere;}
+ #mainLandingView{gap:1.25rem;}
+ #resourceGrid{grid-template-columns:minmax(0,1fr)!important;gap:12px!important;}
+ #resourceGrid>*{min-width:0;max-width:100%;}
+ #mainSubjectGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;}
+ #mainSubjectGrid button{min-width:0;padding:14px 10px!important;overflow-wrap:anywhere;}
+ .settings-overlay{padding:0!important;align-items:stretch;overflow-y:auto;}
+ .settings-panel{width:100%;max-width:100%;max-height:100dvh;overflow-y:auto;border-radius:0!important;padding:22px 16px!important;padding-bottom:max(22px,env(safe-area-inset-bottom))!important;}
+}
+@media(max-width:420px){
+ body>header>div{padding-left:12px!important;padding-right:12px!important;}
+ body>header>div>a[href="./"]{gap:5px!important;}
+ body>header>div>a[href="./"] img{width:30px;height:30px;}
+ body>header>div>a[href="./"] span{font-size:12px;letter-spacing:-.03em;}
+ body>header>div>.flex.items-center.justify-self-end{gap:6px!important;}
+ body>header>div>.flex.items-center.justify-self-end>a[aria-label="Feedback and suggestions"]{width:40px;height:40px;}
+ #mainSubjectGrid{grid-template-columns:minmax(0,1fr)!important;}
+ #statusMessage{font-size:11px;}
+}
+@media(max-width:340px){
+ body>header>div>a[href="./"] span{font-size:11px;}
+ #siteNavToggle{font-size:13px;}
+ body>header>div>.flex.items-center.justify-self-end{justify-content:space-around;}
+}
+@media(prefers-reduced-motion:reduce){body>header *{scroll-behavior:auto!important;transition-duration:.01ms!important;}}
+</style>
 </head>
 
 <body class="bg-gray-950 text-gray-100 font-sans min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black pb-20 sm:pb-12">
