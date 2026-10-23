@@ -39,6 +39,19 @@ button:focus-visible,.btn:focus-visible{outline:3px solid #ffd17a;outline-offset
 @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
 @media(max-width:420px){body{padding:20px 14px}.brand{margin-bottom:18px}.card{border-radius:20px}}
+
+/* Mobile-first login refinements: comfortable touch targets, safe-area spacing, no iOS input zoom, and keyboard-friendly layout. */
+html{min-height:100%;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{min-height:100vh;min-height:100svh;min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:clamp(12px,3.5vw,28px);padding-top:max(clamp(12px,3.5vw,28px),env(safe-area-inset-top));padding-right:max(clamp(12px,3.5vw,28px),env(safe-area-inset-right));padding-bottom:max(clamp(12px,3.5vw,28px),env(safe-area-inset-bottom));padding-left:max(clamp(12px,3.5vw,28px),env(safe-area-inset-left))}
+main{width:100%;max-width:460px;min-width:0;margin:auto}
+.card{width:100%;padding:clamp(20px,5vw,38px);border-radius:clamp(16px,4vw,24px)}
+input{min-width:0;min-height:48px;font-size:16px;touch-action:manipulation}
+button,.btn{min-height:48px;touch-action:manipulation;overflow-wrap:anywhere}
+.brand,.back{overflow-wrap:anywhere}
+@media(max-width:480px){body{place-items:initial;padding-top:max(14px,env(safe-area-inset-top));padding-bottom:max(14px,env(safe-area-inset-bottom))}main{max-width:100%}.brand{font-size:1.12rem;margin-bottom:16px}.card{padding:22px 18px;border-radius:18px}h1{font-size:clamp(1.65rem,7vw,2rem)}p{font-size:.94rem}label{margin-top:15px}button,.btn{margin-top:10px}.divider{margin:15px 0}.foot{line-height:1.6;margin-top:16px}}
+@media(max-width:360px){.card{padding:19px 14px}.eyebrow{font-size:.65rem;letter-spacing:.12em}input{padding:12px}.password-rules{padding:11px}.rule{font-size:.74rem}}
+@media(max-height:700px) and (max-width:700px){body{align-items:flex-start}main{margin:auto}.brand{margin-bottom:12px}.card{padding-top:20px;padding-bottom:20px}.foot{margin-bottom:0}}
+@media(hover:none){.brand:hover,button:hover,.btn:hover{transform:none}}
 </style>
 </head>
 <body>
