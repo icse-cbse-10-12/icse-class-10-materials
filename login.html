@@ -201,5 +201,22 @@ function friendlyError(error) {
   return codes[error?.code]||"Could not complete sign-in: "+(error?.message||"Please try again.");
 }
 </script>
+
+<style id="mobile-login-override">
+@media screen and (max-width:600px) {
+ html,body { width:100% !important; max-width:100% !important; overflow-x:hidden !important; }
+ body { display:flex !important; align-items:flex-start !important; justify-content:center !important; min-height:100vh !important; min-height:100dvh !important; padding: max(14px,env(safe-area-inset-top)) 12px max(18px,env(safe-area-inset-bottom)) !important; box-sizing:border-box !important; }
+ main { width:100% !important; max-width:460px !important; min-width:0 !important; margin:auto !important; }
+ .brand { margin-bottom:14px !important; font-size:1.1rem !important; }
+ .card { width:100% !important; min-width:0 !important; padding:22px 17px !important; border-radius:18px !important; box-sizing:border-box !important; }
+ h1 { font-size:clamp(1.65rem,7vw,2rem) !important; overflow-wrap:anywhere !important; }
+ p { font-size:.94rem !important; }
+ input,button,.btn { width:100% !important; min-width:0 !important; min-height:48px !important; box-sizing:border-box !important; font-size:16px !important; }
+ button,.btn { white-space:normal !important; overflow-wrap:anywhere !important; }
+}
+@media screen and (max-width:360px) { body { padding-left:9px !important; padding-right:9px !important; } .card { padding:19px 13px !important; } .eyebrow { font-size:.65rem !important; letter-spacing:.1em !important; } }
+@media screen and (max-height:620px) and (max-width:600px) { body { align-items:flex-start !important; } main { margin-top:8px !important; margin-bottom:8px !important; } .brand { margin-bottom:10px !important; } .card { padding-top:17px !important; padding-bottom:17px !important; } }
+</style>
+
 </body>
 </html>
