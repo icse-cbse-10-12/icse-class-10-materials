@@ -1067,5 +1067,30 @@ main{min-width:0;width:100%}
 @media (max-width:360px) { body > header > div > #siteNavToggle { padding:7px 8px !important; font-size:12px !important; } body > header > div > a[href="./"] span { font-size:10px !important; } }
 </style>
 
+
+<style id="mobile-readable-header-fix">
+@media screen and (max-width: 767px) {
+  /* Keep the brand title and subtitle distinct; do not shrink every nested span. */
+  body > header > div > a[href="./"] { justify-content:flex-end !important; gap:7px !important; }
+  body > header > div > a[href="./"] > div { min-width:0 !important; align-items:flex-start !important; }
+  body > header > div > a[href="./"] > div > span:first-child { display:block !important; font-size:clamp(14px,4vw,17px) !important; font-weight:900 !important; line-height:1.1 !important; letter-spacing:-.025em !important; white-space:nowrap !important; }
+  body > header > div > a[href="./"] > div > span:first-child span { font-size:inherit !important; }
+  body > header > div > a[href="./"] > div > span:last-child { display:block !important; font-size:9px !important; line-height:1.3 !important; letter-spacing:.12em !important; white-space:nowrap !important; margin-top:3px !important; }
+  body > header > div > a[href="./"] img { width:34px !important; height:34px !important; }
+  body > header > div > .flex.items-center.justify-self-end { justify-content:space-between !important; gap:6px !important; }
+  body > header > div > .flex.items-center.justify-self-end > a, body > header > div > .flex.items-center.justify-self-end > button { min-height:42px !important; }
+  body > header > div > .flex.items-center.justify-self-end > a[href^="https://t.me/ICSEMasterClass10"] { padding-left:10px !important; padding-right:10px !important; font-size:11px !important; }
+  #statusMessage { font-size:12px !important; }
+  #globalSearchWrap label { font-size:14px !important; }
+  #globalSearchWrap input, #globalSearchInput, #searchInput { font-size:16px !important; }
+}
+@media screen and (max-width: 380px) {
+  body > header > div > a[href="./"] > div > span:first-child { font-size:14px !important; }
+  body > header > div > a[href="./"] img { width:31px !important; height:31px !important; }
+  body > header > div > .flex.items-center.justify-self-end { gap:4px !important; }
+  body > header > div > .flex.items-center.justify-self-end > a[href^="https://t.me/ICSEMasterClass10"] { padding-left:8px !important; padding-right:8px !important; }
+}
+</style>
+
 </body>
 </html>
