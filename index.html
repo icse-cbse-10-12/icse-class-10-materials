@@ -1175,5 +1175,54 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{ou
 }
 </style>
 
+
+<style id="mobile-header-spacing-color-shape-fix">
+/* Header: intentional spacing, consistent control shapes and balanced brand proportions. */
+body>header{background:linear-gradient(180deg,rgba(9,9,11,.98),rgba(12,16,24,.96))!important;border-bottom:1px solid rgba(125,211,252,.16)!important;box-shadow:0 8px 28px rgba(0,0,0,.18)!important}
+body>header>div{gap:14px!important}
+#siteNavToggle{display:inline-flex!important;align-items:center;justify-content:center;gap:7px!important;min-height:42px;padding:0 11px!important;border:1px solid rgba(161,161,170,.14)!important;border-radius:13px!important;background:rgba(39,39,42,.35)!important;color:#e4e4e7!important;font-size:13px!important;font-weight:650!important}
+#siteNavToggle i{font-size:14px;color:#f4f4f5}
+body>header>div>a[href="./"]{min-width:0!important;gap:9px!important;text-decoration:none!important}
+body>header>div>a[href="./"] img{width:38px!important;height:38px!important;flex:0 0 38px!important;border:1px solid rgba(251,191,36,.5)!important;padding:2px!important;background:linear-gradient(145deg,rgba(251,191,36,.1),rgba(14,165,233,.1))!important;box-shadow:0 0 16px rgba(251,191,36,.07)!important}
+body>header>div>a[href="./"]>div{min-width:0!important;gap:4px!important}
+body>header>div>a[href="./"]>div>span:first-child{font-size:16px!important;line-height:1.15!important;letter-spacing:-.045em!important;font-weight:900!important;white-space:nowrap!important}
+body>header>div>a[href="./"]>div>span:first-child>span{color:#fbbf24!important}
+body>header>div>a[href="./"]>div>span:last-child{margin-top:0!important;font-size:8px!important;line-height:1.35!important;letter-spacing:.13em!important;color:#a1a1aa!important;white-space:nowrap!important}
+body>header>div>.flex.items-center.justify-self-end{gap:9px!important}
+body>header>div>.flex.items-center.justify-self-end>a,body>header>div>.flex.items-center.justify-self-end>button{min-height:42px!important;border-radius:13px!important;box-shadow:0 3px 12px rgba(0,0,0,.12)!important}
+body>header>div>.flex.items-center.justify-self-end>a[href="./login.html"]{background:linear-gradient(145deg,#fbbf24,#f59e0b)!important;border:1px solid rgba(253,230,138,.75)!important;color:#18181b!important;box-shadow:0 4px 14px rgba(245,158,11,.15)!important}
+body>header>div>.flex.items-center.justify-self-end>a[aria-label="Feedback and suggestions"]{background:rgba(251,191,36,.075)!important;border:1px solid rgba(251,191,36,.25)!important;color:#fbbf24!important}
+#settingsToggle{background:linear-gradient(145deg,rgba(39,39,42,.9),rgba(24,24,27,.92))!important;border:1px solid rgba(161,161,170,.2)!important;color:#e4e4e7!important}
+body>header>div>.flex.items-center.justify-self-end>a[href^="https://t.me/ICSEMasterClass10"]{background:rgba(14,165,233,.09)!important;border:1px solid rgba(56,189,248,.25)!important;color:#7dd3fc!important;border-radius:13px!important}
+@media(max-width:767px){
+ body>header>div{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr)!important;grid-template-rows:auto auto!important;gap:11px 8px!important;min-height:0!important;height:auto!important;padding:11px 13px 12px!important}
+ body>header>div>#siteNavToggle{grid-column:1;grid-row:1;justify-self:start;align-self:center;min-height:39px;padding:0 10px!important}
+ body>header>div>a[href="./"]{grid-column:2;grid-row:1;justify-self:end;align-self:center;gap:7px!important;max-width:100%!important}
+ body>header>div>a[href="./"] img{width:32px!important;height:32px!important;flex-basis:32px!important}
+ body>header>div>a[href="./"]>div>span:first-child{font-size:clamp(12px,3.6vw,15px)!important;line-height:1.12!important}
+ body>header>div>a[href="./"]>div>span:last-child{font-size:7px!important;letter-spacing:.1em!important}
+ body>header>div>.flex.items-center.justify-self-end{grid-column:1/-1;grid-row:2;display:flex!important;justify-self:stretch;justify-content:space-between!important;align-items:center!important;width:100%;gap:8px!important;min-width:0}
+ body>header>div>.flex.items-center.justify-self-end>*{flex:0 0 auto!important}
+ body>header>div>.flex.items-center.justify-self-end>a,body>header>div>.flex.items-center.justify-self-end>button{height:42px!important;min-height:42px!important;border-radius:13px!important}
+ body>header>div>.flex.items-center.justify-self-end>a[href="./login.html"]{width:42px!important;padding:0!important}
+ #pwaInstallBtn{padding:0 12px!important;border-radius:13px!important}
+ body>header>div>.flex.items-center.justify-self-end>a[aria-label="Feedback and suggestions"]{width:42px!important;padding:0!important}
+ #settingsToggle{width:42px!important;min-width:42px!important;padding:0!important}
+ body>header>div>.flex.items-center.justify-self-end>a[href^="https://t.me/ICSEMasterClass10"]{padding:0 11px!important;font-size:10px!important;gap:6px!important;white-space:nowrap!important}
+}
+@media(max-width:380px){
+ body>header>div{padding-left:10px!important;padding-right:10px!important;column-gap:5px!important;row-gap:9px!important}
+ body>header>div>a[href="./"]{gap:5px!important}
+ body>header>div>a[href="./"] img{width:29px!important;height:29px!important;flex-basis:29px!important}
+ body>header>div>a[href="./"]>div>span:first-child{font-size:12px!important;letter-spacing:-.045em!important}
+ body>header>div>a[href="./"]>div>span:last-child{font-size:6.5px!important;letter-spacing:.08em!important}
+ body>header>div>#siteNavToggle{font-size:12px!important;padding:0 8px!important}
+ body>header>div>.flex.items-center.justify-self-end{gap:6px!important}
+ body>header>div>.flex.items-center.justify-self-end>a,body>header>div>.flex.items-center.justify-self-end>button{height:40px!important;min-height:40px!important;border-radius:12px!important}
+ body>header>div>.flex.items-center.justify-self-end>a[href="./login.html"],body>header>div>.flex.items-center.justify-self-end>a[aria-label="Feedback and suggestions"],#settingsToggle{width:40px!important;min-width:40px!important}
+ body>header>div>.flex.items-center.justify-self-end>a[href^="https://t.me/ICSEMasterClass10"]{padding:0 8px!important;font-size:9px!important}
+}
+</style>
+
 </body>
 </html>
