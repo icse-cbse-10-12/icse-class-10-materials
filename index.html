@@ -1031,65 +1031,101 @@ main{min-width:0;width:100%}
 <script src="syllabus-tracker.js" defer></script>
   
 
-<style id="mobile-layout-override">
-/* Final mobile overrides are deliberately placed after page styles for reliable cascade. */
-@media screen and (max-width: 767px) {
-  html, body { width:100% !important; max-width:100% !important; overflow-x:hidden !important; }
-  body { min-width:0 !important; }
-  body > header { width:100% !important; max-width:100vw !important; }
-  body > header > div { display:grid !important; grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important; grid-template-rows:auto auto !important; align-items:center !important; column-gap:8px !important; row-gap:8px !important; width:100% !important; height:auto !important; min-height:64px !important; padding:8px 12px !important; }
-  body > header > div > #siteNavToggle { grid-column:1 !important; grid-row:1 !important; justify-self:start !important; min-width:0 !important; min-height:42px !important; padding:8px 10px !important; white-space:nowrap !important; }
-  body > header > div > a[href="./"] { grid-column:2 !important; grid-row:1 !important; justify-self:end !important; min-width:0 !important; max-width:100% !important; gap:6px !important; }
-  body > header > div > a[href="./"] img { width:32px !important; height:32px !important; flex:0 0 auto !important; }
-  body > header > div > a[href="./"] span { max-width:100% !important; font-size:clamp(11px,3.3vw,15px) !important; white-space:nowrap !important; }
-  body > header > div > .flex.items-center.justify-self-end { grid-column:1 / -1 !important; grid-row:2 !important; justify-self:stretch !important; display:flex !important; width:100% !important; max-width:100% !important; justify-content:space-between !important; align-items:center !important; flex-wrap:nowrap !important; gap:6px !important; min-width:0 !important; }
-  body > header > div > .flex.items-center.justify-self-end > * { flex:0 1 auto !important; min-width:0 !important; }
-  body > header > div > .flex.items-center.justify-self-end a, body > header > div > .flex.items-center.justify-self-end button { min-height:40px !important; }
-  main, main.max-w-7xl, #mainLandingView, #globalSearchWrap, #resourceGrid, #mainSubjectGrid { width:100% !important; min-width:0 !important; max-width:100% !important; box-sizing:border-box !important; }
-  main.max-w-7xl { padding-left:12px !important; padding-right:12px !important; padding-top:16px !important; }
-  #globalSearchWrap { margin-left:0 !important; margin-right:0 !important; }
-  #globalSearchWrap input, #globalSearchInput, #searchInput, input, select, textarea { min-width:0 !important; max-width:100% !important; font-size:16px !important; box-sizing:border-box !important; }
-  #globalSearchInput, #searchInput { width:100% !important; min-height:48px !important; }
-  #resourceGrid { display:grid !important; grid-template-columns:minmax(0,1fr) !important; gap:12px !important; }
-  #resourceGrid > *, #mainSubjectGrid > * { min-width:0 !important; max-width:100% !important; overflow-wrap:anywhere !important; }
-  .site-nav-panel { width:min(390px, calc(100vw - 12px)) !important; max-width:calc(100vw - 12px) !important; height:100vh !important; height:100dvh !important; overflow-y:auto !important; overscroll-behavior:contain !important; padding-bottom:max(18px, env(safe-area-inset-bottom)) !important; }
-  .settings-overlay { justify-content:stretch !important; align-items:stretch !important; padding:0 !important; overflow-y:auto !important; }
-  .settings-panel { width:100% !important; max-width:100% !important; max-height:100vh !important; max-height:100dvh !important; overflow-y:auto !important; border-radius:0 !important; padding:20px 16px max(20px, env(safe-area-inset-bottom)) !important; }
-}
-@media screen and (max-width: 420px) {
-  body > header > div { padding-left:10px !important; padding-right:10px !important; }
-  body > header > div > a[href="./"] { gap:4px !important; }
-  body > header > div > a[href="./"] img { width:28px !important; height:28px !important; }
-  body > header > div > a[href="./"] span { font-size:11px !important; letter-spacing:-.03em !important; }
-  body > header > div > .flex.items-center.justify-self-end { gap:4px !important; }
-  #mainSubjectGrid { display:grid !important; grid-template-columns:minmax(0,1fr) !important; }
-}
-@media (max-width:360px) { body > header > div > #siteNavToggle { padding:7px 8px !important; font-size:12px !important; } body > header > div > a[href="./"] span { font-size:10px !important; } }
-</style>
 
 
-<style id="mobile-readable-header-fix">
-@media screen and (max-width: 767px) {
-  /* Keep the brand title and subtitle distinct; do not shrink every nested span. */
-  body > header > div > a[href="./"] { justify-content:flex-end !important; gap:7px !important; }
-  body > header > div > a[href="./"] > div { min-width:0 !important; align-items:flex-start !important; }
-  body > header > div > a[href="./"] > div > span:first-child { display:block !important; font-size:clamp(14px,4vw,17px) !important; font-weight:900 !important; line-height:1.1 !important; letter-spacing:-.025em !important; white-space:nowrap !important; }
-  body > header > div > a[href="./"] > div > span:first-child span { font-size:inherit !important; }
-  body > header > div > a[href="./"] > div > span:last-child { display:block !important; font-size:9px !important; line-height:1.3 !important; letter-spacing:.12em !important; white-space:nowrap !important; margin-top:3px !important; }
-  body > header > div > a[href="./"] img { width:34px !important; height:34px !important; }
-  body > header > div > .flex.items-center.justify-self-end { justify-content:space-between !important; gap:6px !important; }
-  body > header > div > .flex.items-center.justify-self-end > a, body > header > div > .flex.items-center.justify-self-end > button { min-height:42px !important; }
-  body > header > div > .flex.items-center.justify-self-end > a[href^="https://t.me/ICSEMasterClass10"] { padding-left:10px !important; padding-right:10px !important; font-size:11px !important; }
-  #statusMessage { font-size:12px !important; }
-  #globalSearchWrap label { font-size:14px !important; }
-  #globalSearchWrap input, #globalSearchInput, #searchInput { font-size:16px !important; }
+
+
+<style id="reference-inspired-design-system">
+:root{--im-bg:#09090b;--im-panel:rgba(24,24,27,.72);--im-panel-solid:#18181b;--im-border:rgba(161,161,170,.18);--im-border-strong:rgba(125,211,252,.36);--im-text:#fafafa;--im-muted:#a1a1aa;--im-sky:#38bdf8;--im-blue:#0ea5e9;--im-gold:#fbbf24;--im-glass:blur(18px)}
+html{background:var(--im-bg);scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body.bg-gray-950{background:radial-gradient(ellipse at 50% -18%,rgba(14,165,233,.12),transparent 40%),radial-gradient(ellipse at 100% 36%,rgba(124,58,237,.07),transparent 36%),#09090b!important;color:var(--im-text);overflow-x:clip;min-width:0}
+body,button,input,select,textarea{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+body>header{background:rgba(9,9,11,.84)!important;border-color:rgba(161,161,170,.16)!important;backdrop-filter:blur(22px)!important;-webkit-backdrop-filter:blur(22px)!important}
+body>header>div{max-width:1320px!important;min-height:68px;box-sizing:border-box}
+body>header a[href="./"]{text-decoration:none}
+body>header a[href="./"]>div>span:first-child{letter-spacing:-.04em;font-size:17px}
+body>header a[href="./"]>div>span:first-child>span{color:var(--im-gold)!important}
+#siteNavToggle{color:#e4e4e7!important;border:1px solid transparent;border-radius:12px;transition:background .2s,border-color .2s}
+#siteNavToggle:hover{background:rgba(63,63,70,.5);border-color:var(--im-border)}
+body>header .flex.items-center.justify-self-end>a,body>header .flex.items-center.justify-self-end>button{border-radius:13px!important;transition:transform .18s ease,border-color .18s ease,background .18s ease;}
+body>header .flex.items-center.justify-self-end>a[href="./login.html"]{background:linear-gradient(135deg,rgba(14,165,233,.22),rgba(59,130,246,.1))!important;border-color:rgba(56,189,248,.42)!important;color:#bae6fd!important;box-shadow:0 5px 22px rgba(14,165,233,.09)}
+body>header .flex.items-center.justify-self-end>a[aria-label="Feedback and suggestions"]{background:rgba(251,191,36,.08)!important;border-color:rgba(251,191,36,.24)!important}
+body>header .flex.items-center.justify-self-end>a[href^="https://t.me/ICSEMasterClass10"]{background:rgba(14,165,233,.09)!important;border-color:rgba(56,189,248,.25)!important;color:#7dd3fc!important}
+#globalSearchWrap>div{max-width:720px!important}
+#globalSearchWrap label{color:#d4d4d8!important;font-size:13px!important;letter-spacing:.01em}
+#globalSearchWrap input,#searchInput,#yearFilter{background:rgba(24,24,27,.78)!important;border:1px solid rgba(161,161,170,.24)!important;border-radius:15px!important;color:#fafafa!important;box-shadow:inset 0 1px rgba(255,255,255,.025);transition:border-color .18s,box-shadow .18s,background .18s}
+#globalSearchWrap input:focus,#searchInput:focus,#yearFilter:focus{border-color:rgba(56,189,248,.72)!important;box-shadow:0 0 0 4px rgba(14,165,233,.12)!important;outline:none!important}
+#globalSearchWrap input::placeholder,#searchInput::placeholder{color:#71717a!important}
+#statusMessage{background:rgba(24,24,27,.58)!important;border:1px solid var(--im-border)!important;border-radius:17px!important;color:#a1a1aa!important;backdrop-filter:blur(14px);padding:12px 16px!important}
+#mainLandingView>div:first-child{padding-top:clamp(24px,5vw,54px)!important;padding-bottom:16px!important;max-width:850px!important}
+#mainLandingView>div:first-child>span{background:rgba(14,165,233,.09)!important;border-color:rgba(56,189,248,.25)!important;color:#bae6fd!important;border-radius:999px!important;padding:7px 13px!important;letter-spacing:.015em}
+#mainLandingView h1{font-size:clamp(2rem,5vw,3.6rem)!important;line-height:1.08!important;letter-spacing:-.055em!important;text-wrap:balance;text-shadow:0 4px 34px rgba(14,165,233,.08)}
+#mainLandingView>div:first-child>p{font-size:clamp(13px,1.4vw,16px)!important;line-height:1.8!important;color:#a1a1aa!important;max-width:640px}
+#mainSubjectGrid{gap:14px!important;align-items:stretch}
+#mainSubjectGrid>*{min-width:0!important;position:relative;overflow:hidden;border-radius:20px!important;border:1px solid rgba(161,161,170,.19)!important;background:linear-gradient(145deg,rgba(39,39,42,.88),rgba(24,24,27,.72))!important;color:#e4e4e7!important;box-shadow:0 10px 32px rgba(0,0,0,.13),inset 0 1px rgba(255,255,255,.035)!important;transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease,background .22s ease!important}
+#mainSubjectGrid>*:before{content:"";position:absolute;inset:0 14% auto;height:1px;background:linear-gradient(90deg,transparent,rgba(125,211,252,.48),transparent);pointer-events:none}
+#mainSubjectGrid>*:hover{transform:translateY(-3px);border-color:rgba(56,189,248,.5)!important;box-shadow:0 14px 34px rgba(14,165,233,.1),inset 0 1px rgba(255,255,255,.06)!important}
+#mainSubjectGrid>*.active,#mainSubjectGrid>[aria-pressed="true"]{background:linear-gradient(135deg,rgba(14,165,233,.2),rgba(30,64,175,.18),rgba(24,24,27,.85))!important;border-color:rgba(56,189,248,.55)!important;color:#e0f2fe!important}
+#subjectDetailView>div:first-child{border-color:var(--im-border)!important}
+#subjectDetailView h2{letter-spacing:-.035em}
+#subjectDetailView .cat-btn,#subjectDetailView .personal-view-btn{border-radius:12px!important;min-height:40px;transition:background .18s,border-color .18s,color .18s}
+#subjectDetailView .cat-btn.active-tab{background:linear-gradient(135deg,#38bdf8,#0284c7)!important;border-color:#38bdf8!important;color:#07111f!important;box-shadow:0 6px 18px rgba(14,165,233,.16)}
+#resourceGrid>*{min-width:0!important;border-radius:18px!important;border-color:rgba(161,161,170,.18)!important;background:linear-gradient(145deg,rgba(39,39,42,.72),rgba(24,24,27,.72))!important;box-shadow:0 10px 28px rgba(0,0,0,.12)!important;overflow-wrap:anywhere}
+#resourceGrid>*:hover{border-color:rgba(56,189,248,.42)!important}
+.personal-library-toolbar{border:1px solid var(--im-border)!important;background:rgba(24,24,27,.58)!important;border-radius:18px!important;padding:16px!important;gap:14px}
+.personal-view-btn{border-radius:11px!important}
+.site-nav-overlay,.settings-overlay{background:rgba(0,0,0,.66)!important;backdrop-filter:blur(8px)!important;-webkit-backdrop-filter:blur(8px)!important}
+.site-nav-panel,.settings-panel{background:linear-gradient(155deg,#18181b,#09090b)!important;border-color:rgba(161,161,170,.2)!important;box-shadow:0 24px 90px rgba(0,0,0,.5)!important}
+.site-nav-panel{border-radius:0 24px 24px 0!important}
+.site-nav-links a,.site-nav-links button{border-radius:12px!important;transition:background .18s,border-color .18s!important}
+.site-nav-links a:hover,.site-nav-links button:hover{background:rgba(14,165,233,.1)!important;border-color:rgba(56,189,248,.2)!important}
+.settings-section,.settings-choice-grid,.settings-colours{border-color:var(--im-border)!important}
+.settings-section{border-radius:15px!important;background:rgba(39,39,42,.4)!important;padding:15px!important}
+input,select,textarea{font-size:16px}
+button,a,input,select{ -webkit-tap-highlight-color:transparent }
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #7dd3fc!important;outline-offset:3px!important}
+@media(min-width:768px){body>header>div{grid-template-columns:auto minmax(0,1fr) auto!important}#globalSearchWrap{margin-top:4px}#mainLandingView>div:first-child{margin-top:8px}}
+@media(max-width:767px){
+ body{padding-bottom:max(24px,env(safe-area-inset-bottom))!important}
+ body>header>div{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;grid-template-rows:auto auto!important;gap:8px!important;height:auto!important;min-height:0!important;padding:10px 12px!important}
+ body>header>div>#siteNavToggle{grid-column:1;grid-row:1;justify-self:start;min-height:42px;padding:8px 10px;white-space:nowrap}
+ body>header>div>a[href="./"]{grid-column:2;grid-row:1;justify-self:end;min-width:0;gap:7px!important}
+ body>header>div>a[href="./"] img{width:34px!important;height:34px!important;flex:0 0 auto}
+ body>header>div>a[href="./"]>div{min-width:0;align-items:flex-start}
+ body>header>div>a[href="./"]>div>span:first-child{font-size:clamp(13px,3.8vw,16px)!important;line-height:1.1!important;white-space:nowrap;letter-spacing:-.04em!important}
+ body>header>div>a[href="./"]>div>span:first-child>span{font-size:inherit!important}
+ body>header>div>a[href="./"]>div>span:last-child{font-size:8px!important;line-height:1.3;letter-spacing:.1em!important;white-space:nowrap;margin-top:3px!important}
+ body>header>div>.flex.items-center.justify-self-end{grid-column:1/-1;grid-row:2;display:flex!important;justify-self:stretch;justify-content:space-between!important;align-items:center;width:100%;gap:6px!important;min-width:0}
+ body>header>div>.flex.items-center.justify-self-end>*{min-width:0;flex:0 1 auto}
+ body>header>div>.flex.items-center.justify-self-end>a,body>header>div>.flex.items-center.justify-self-end>button{min-height:42px!important}
+ body>header>div>.flex.items-center.justify-self-end>a[href^="https://t.me/ICSEMasterClass10"]{padding:8px 10px!important;font-size:11px!important}
+ main.max-w-7xl{padding:18px 13px 24px!important}
+ #statusMessage{margin-bottom:18px!important;font-size:12px!important;line-height:1.5}
+ #globalSearchWrap{margin-bottom:24px!important}
+ #globalSearchWrap>div{width:100%!important;max-width:none!important}
+ #globalSearchWrap input,#searchInput{min-height:49px!important;padding:12px 14px!important;border-radius:14px!important}
+ #mainLandingView{gap:22px!important}
+ #mainLandingView>div:first-child{padding-top:12px!important;gap:14px!important}
+ #mainLandingView h1{font-size:clamp(1.85rem,7.2vw,2.6rem)!important;line-height:1.12!important}
+ #mainLandingView>div:first-child>p{font-size:14px!important;line-height:1.7!important}
+ #mainSubjectGrid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+ #mainSubjectGrid>*{width:100%!important;min-height:104px;padding:15px 10px!important;border-radius:17px!important;overflow-wrap:anywhere}
+ #resourceGrid{grid-template-columns:minmax(0,1fr)!important;gap:12px!important}
+ #resourceGrid>*{width:100%;padding:15px!important}
+ #subjectDetailView>div:first-child{align-items:stretch!important}
+ #subjectDetailView>div:first-child>.relative{width:100%!important}
+ #subjectDetailView .overflow-x-auto{scrollbar-width:none;overscroll-behavior-x:contain}
+ #subjectDetailView .overflow-x-auto::-webkit-scrollbar{display:none}
+ .personal-library-toolbar{display:flex!important;flex-direction:column!important;align-items:stretch!important}
+ .personal-library-actions{display:flex!important;flex-wrap:wrap!important;gap:7px!important}
+ .personal-view-btn{min-height:42px!important;flex:1 1 auto}
+ .site-nav-panel{width:min(370px,calc(100vw - 22px))!important;max-width:calc(100vw - 22px)!important;height:100dvh!important;overflow-y:auto!important;border-radius:0 22px 22px 0!important;padding-bottom:max(20px,env(safe-area-inset-bottom))!important}
+ .settings-overlay{padding:0!important;align-items:stretch!important;overflow-y:auto!important}
+ .settings-panel{width:100%!important;max-width:100%!important;max-height:100dvh!important;overflow-y:auto!important;border-radius:0!important;padding:20px 15px max(20px,env(safe-area-inset-bottom))!important}
+ footer{padding-left:14px!important;padding-right:14px!important}
 }
-@media screen and (max-width: 380px) {
-  body > header > div > a[href="./"] > div > span:first-child { font-size:14px !important; }
-  body > header > div > a[href="./"] img { width:31px !important; height:31px !important; }
-  body > header > div > .flex.items-center.justify-self-end { gap:4px !important; }
-  body > header > div > .flex.items-center.justify-self-end > a[href^="https://t.me/ICSEMasterClass10"] { padding-left:8px !important; padding-right:8px !important; }
-}
+@media(max-width:380px){body>header>div{padding-left:9px!important;padding-right:9px!important}body>header>div>a[href="./"]{gap:5px!important}body>header>div>a[href="./"] img{width:29px!important;height:29px!important}body>header>div>a[href="./"]>div>span:first-child{font-size:12px!important}body>header>div>a[href="./"]>div>span:last-child{font-size:7px!important}body>header>div>.flex.items-center.justify-self-end{gap:4px!important}body>header>div>.flex.items-center.justify-self-end>a[href^="https://t.me/ICSEMasterClass10"]{padding:7px 8px!important}#mainSubjectGrid>*{min-height:96px;padding:12px 7px!important}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 
 </body>

@@ -56,7 +56,7 @@ button,.btn{min-height:48px;touch-action:manipulation;overflow-wrap:anywhere}
 </head>
 <body>
 <main>
-<a class="brand" href="./">ICSE <span>MasterClass</span></a>
+<a class="brand" href="./" aria-label="ICSE MasterClass home"><img class="brand-mark" src="icseYtLogo.png" alt=""><span class="brand-name">ICSE <strong>MasterClass</strong><small>CLASS 10 PORTAL · STUDENT SPACE</small></span></a>
 <section class="card" aria-labelledby="title">
 <div class="eyebrow">Your learning space</div>
 <h1 id="title">Welcome back.</h1>
@@ -216,6 +216,48 @@ function friendlyError(error) {
 }
 @media screen and (max-width:360px) { body { padding-left:9px !important; padding-right:9px !important; } .card { padding:19px 13px !important; } .eyebrow { font-size:.65rem !important; letter-spacing:.1em !important; } }
 @media screen and (max-height:620px) and (max-width:600px) { body { align-items:flex-start !important; } main { margin-top:8px !important; margin-bottom:8px !important; } .brand { margin-bottom:10px !important; } .card { padding-top:17px !important; padding-bottom:17px !important; } }
+</style>
+
+
+<style id="reference-inspired-login-system">
+:root{color-scheme:dark;--navy:#09090b;--panel:#18181b;--amber:#fbbf24;--text:#fafafa;--muted:#a1a1aa;--line:rgba(161,161,170,.22);--glow:rgba(14,165,233,.16);--sky:#38bdf8}
+html,body{width:100%;max-width:100%;min-height:100%;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;box-sizing:border-box;padding:max(24px,env(safe-area-inset-top)) 18px max(24px,env(safe-area-inset-bottom));background:radial-gradient(ellipse at 50% -12%,rgba(14,165,233,.17),transparent 43%),radial-gradient(ellipse at 0% 100%,rgba(124,58,237,.09),transparent 40%),#09090b!important;color:#fafafa;overflow-x:hidden}
+body:before{opacity:.12;background-image:radial-gradient(rgba(212,212,216,.8) .65px,transparent .65px);background-size:25px 25px}
+main{width:min(100%,470px)!important;max-width:470px!important;min-width:0;margin:auto;animation:rise .55s cubic-bezier(.2,.8,.2,1) both}
+.brand{display:flex!important;align-items:center;justify-content:center;gap:12px;margin:0 0 24px!important;text-align:left!important;font-size:1rem!important;letter-spacing:0!important;transform:none!important}
+.brand-mark{width:48px;height:48px;flex:0 0 48px;object-fit:contain;border:1px solid rgba(251,191,36,.38);border-radius:50%;padding:3px;background:rgba(24,24,27,.75);box-shadow:0 0 28px rgba(14,165,233,.12)}
+.brand-name{display:flex;flex-direction:column;gap:4px;color:#fafafa!important;font-size:19px;font-weight:900;line-height:1.05;letter-spacing:-.04em}
+.brand-name strong{color:#fbbf24!important;font-weight:900}
+.brand-name small{font-size:9px;font-weight:800;color:#a1a1aa;letter-spacing:.17em;line-height:1.4}
+.card{width:100%;box-sizing:border-box;padding:clamp(24px,5.5vw,38px)!important;border:1px solid rgba(161,161,170,.23)!important;border-radius:24px!important;background:linear-gradient(145deg,rgba(39,39,42,.86),rgba(24,24,27,.8))!important;box-shadow:0 28px 90px rgba(0,0,0,.42),inset 0 1px rgba(255,255,255,.055)!important;backdrop-filter:blur(20px)!important;-webkit-backdrop-filter:blur(20px)!important}
+.card:before{left:13%;right:13%;background:linear-gradient(90deg,transparent,rgba(125,211,252,.72),transparent)!important}
+.eyebrow{color:#7dd3fc!important;letter-spacing:.15em!important}
+.eyebrow:before{background:#38bdf8!important}
+h1{font-size:clamp(1.9rem,5.5vw,2.35rem)!important;letter-spacing:-.055em!important;line-height:1.1!important;margin:12px 0 10px!important;text-wrap:balance}
+p{color:#a1a1aa}
+label{color:#e4e4e7!important;font-size:.83rem!important;margin:18px 0 8px!important}
+input{min-width:0;width:100%;min-height:49px;box-sizing:border-box;padding:13px 14px!important;border:1px solid rgba(161,161,170,.25)!important;border-radius:13px!important;background:rgba(9,9,11,.6)!important;color:#fafafa!important;font:inherit;font-size:16px!important}
+input::placeholder{color:#71717a!important}
+input:hover{border-color:rgba(125,211,252,.42)!important}
+input:focus{border-color:#38bdf8!important;background:rgba(9,9,11,.82)!important;box-shadow:0 0 0 4px rgba(14,165,233,.13)!important;outline:none}
+button,.btn{min-width:0;min-height:48px;box-sizing:border-box;border-radius:13px!important;font-size:.91rem!important;white-space:normal;overflow-wrap:anywhere;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease,background .18s ease!important}
+.primary{background:linear-gradient(115deg,#7dd3fc,#38bdf8 45%,#0284c7)!important;color:#06121c!important;border-color:rgba(125,211,252,.8)!important;box-shadow:0 9px 26px rgba(14,165,233,.19)!important}
+.primary:hover{box-shadow:0 12px 30px rgba(14,165,233,.3)!important}
+.secondary{background:rgba(63,63,70,.5)!important;color:#f4f4f5!important;border-color:rgba(161,161,170,.25)!important}
+.secondary:hover{background:rgba(63,63,70,.8)!important;border-color:rgba(125,211,252,.38)!important}
+.quiet{background:rgba(9,9,11,.38)!important;color:#d4d4d8!important;border-color:rgba(161,161,170,.2)!important}
+.quiet:hover{border-color:rgba(125,211,252,.4)!important;background:rgba(39,39,42,.6)!important}
+button:focus-visible,.btn:focus-visible{outline:3px solid #7dd3fc!important;outline-offset:3px}
+.message{min-height:24px;font-size:.88rem;overflow-wrap:anywhere}.message.error{color:#fda4af}.message.success{color:#86efac}
+.password-rules,.account{border-color:rgba(161,161,170,.2)!important;border-radius:14px!important;background:rgba(9,9,11,.4)!important}
+.rules-title{color:#e4e4e7!important}.rule{color:#a1a1aa}.rule.met{color:#86efac}.rule-mark{border-color:#52525b}.rule.met .rule-mark{background:#14532d;border-color:#4ade80;color:#bbf7d0}
+.divider{color:#a1a1aa!important;letter-spacing:.14em!important}.divider:before,.divider:after{background:linear-gradient(90deg,transparent,rgba(161,161,170,.3))!important}
+.small,.foot{color:#a1a1aa!important}.back{color:#7dd3fc!important}.back:hover{color:#fbbf24!important}
+@media(max-width:600px){body{align-items:flex-start;padding: max(20px,env(safe-area-inset-top)) 12px max(22px,env(safe-area-inset-bottom))!important}main{width:100%!important;max-width:470px!important;margin:auto!important}.brand{margin-bottom:18px!important}.brand-mark{width:43px;height:43px;flex-basis:43px}.brand-name{font-size:18px}.card{padding:24px 18px!important;border-radius:20px!important}h1{font-size:clamp(1.8rem,7vw,2.2rem)!important}.foot{line-height:1.7}.back{margin-top:17px}}
+@media(max-width:360px){body{padding-left:9px!important;padding-right:9px!important}.brand{gap:9px}.brand-mark{width:39px;height:39px;flex-basis:39px}.brand-name{font-size:16px}.brand-name small{font-size:8px;letter-spacing:.12em}.card{padding:21px 14px!important}.eyebrow{font-size:.65rem!important}button,.btn{padding:11px 10px!important}}
+@media(max-height:650px) and (max-width:600px){body{align-items:flex-start!important}.brand{margin-bottom:12px!important}.card{padding-top:18px!important;padding-bottom:18px!important}main{margin-top:8px!important;margin-bottom:8px!important}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
 </style>
 
 </body>
