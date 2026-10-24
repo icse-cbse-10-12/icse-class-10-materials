@@ -1128,5 +1128,52 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{ou
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 
+
+<style id="final-visual-formatting-pass">
+/* Typography, spacing and card hierarchy tuned from the mobile preview screenshot. */
+#statusMessage{display:flex!important;align-items:center;justify-content:center;gap:8px;min-height:42px!important;padding:10px 12px!important;font-size:12px!important;line-height:1.45!important;text-align:center!important}
+#globalSearchWrap{max-width:900px!important;margin-left:auto!important;margin-right:auto!important}
+#globalSearchWrap label{display:flex!important;align-items:center;flex-wrap:wrap;gap:8px!important;font-size:14px!important;font-weight:750!important;line-height:1.5!important}
+#globalSearchWrap label button,#globalSearchWrap label span{font-size:11px!important}
+#globalSearchWrap input{font-size:16px!important;min-height:52px!important;padding:14px 16px!important}
+#mainLandingView>div:first-child{gap:17px!important}
+#mainLandingView>div:first-child>span{font-size:12px!important;font-weight:700!important;box-shadow:0 4px 18px rgba(14,165,233,.08)}
+#mainLandingView h1{max-width:760px!important;margin-inline:auto!important;font-size:clamp(2rem,5.4vw,3.7rem)!important;line-height:1.08!important;letter-spacing:-.055em!important}
+#mainLandingView>div:first-child>p{max-width:660px!important;font-size:15px!important;line-height:1.8!important}
+#mainSubjectGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:13px!important}
+#mainSubjectGrid button{min-height:116px!important;padding:18px 12px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:9px!important;text-align:center!important}
+#mainSubjectGrid button>div{width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;display:flex!important;align-items:center!important;justify-content:center!important;border-radius:13px!important;background:linear-gradient(145deg,rgba(251,191,36,.12),rgba(14,165,233,.1))!important;border:1px solid rgba(161,161,170,.2)!important;box-shadow:inset 0 1px rgba(255,255,255,.06)!important}
+#mainSubjectGrid button>span,#mainSubjectGrid button>div+span{font-size:13px!important;font-weight:750!important;line-height:1.35!important;letter-spacing:-.01em!important}
+#mainSubjectGrid button:hover{transform:translateY(-2px)!important}
+#resourceGrid>*{border-radius:18px!important;padding:17px!important;line-height:1.6!important}
+#resourceGrid h3,#resourceGrid h4{font-size:15px!important;line-height:1.45!important;letter-spacing:-.015em}
+@media(max-width:767px){
+ main.max-w-7xl{padding-top:14px!important;padding-left:14px!important;padding-right:14px!important}
+ #statusMessage{margin:2px 0 20px!important;min-height:42px!important;font-size:12px!important}
+ #globalSearchWrap{margin-top:0!important;margin-bottom:27px!important;padding:0!important}
+ #globalSearchWrap label{font-size:14px!important;margin-bottom:9px!important}
+ #globalSearchWrap input{min-height:52px!important;border-radius:15px!important}
+ #mainLandingView{gap:25px!important}
+ #mainLandingView>div:first-child{padding-top:7px!important;padding-bottom:6px!important;gap:15px!important}
+ #mainLandingView>div:first-child>span{font-size:11px!important;padding:7px 12px!important}
+ #mainLandingView h1{font-size:clamp(1.9rem,7.5vw,2.45rem)!important;line-height:1.12!important;max-width:560px!important}
+ #mainLandingView>div:first-child>p{font-size:14px!important;line-height:1.75!important;padding-inline:5px!important}
+ #mainSubjectGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:11px!important}
+ #mainSubjectGrid button{min-height:112px!important;padding:15px 8px!important;border-radius:17px!important}
+ #mainSubjectGrid button>div{width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important}
+ #mainSubjectGrid button>span,#mainSubjectGrid button>div+span{font-size:13px!important}
+ #resourceGrid{gap:13px!important}
+ #resourceGrid>*{padding:15px!important}
+}
+@media(max-width:380px){
+ #mainSubjectGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+ #mainSubjectGrid button{min-height:104px!important;padding:12px 6px!important}
+ #mainSubjectGrid button>div{width:38px!important;height:38px!important;min-width:38px!important;min-height:38px!important}
+ #mainSubjectGrid button>span,#mainSubjectGrid button>div+span{font-size:12px!important}
+ #mainLandingView h1{font-size:1.85rem!important}
+ #mainLandingView>div:first-child>p{font-size:13px!important}
+}
+</style>
+
 </body>
 </html>
