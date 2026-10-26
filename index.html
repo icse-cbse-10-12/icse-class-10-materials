@@ -326,6 +326,7 @@
         <a href="./" onclick="toggleSiteNav(false)"><i class="fa-solid fa-house" aria-hidden="true"></i><span>Home</span><i class="fa-solid fa-chevron-right site-nav-chevron" aria-hidden="true"></i></a>
         <p class="site-nav-section-label">YOUR EXPERIENCE</p>
         <a href="./dashboard.html" onclick="toggleSiteNav(false)"><i class="fa-solid fa-chart-line" aria-hidden="true"></i><span>Student Dashboard</span><i class="fa-solid fa-chevron-right site-nav-chevron" aria-hidden="true"></i></a>
+        <a href="#icseAiTutor" onclick="toggleSiteNav(false)"><i class="fa-solid fa-robot" aria-hidden="true"></i><span>Free AI Tutor</span><i class="fa-solid fa-chevron-right site-nav-chevron" aria-hidden="true"></i></a>
         <a href="./login.html" onclick="toggleSiteNav(false)"><i class="fa-solid fa-user-lock" aria-hidden="true"></i><span>Sign in / Create account</span><i class="fa-solid fa-chevron-right site-nav-chevron" aria-hidden="true"></i></a>
         <p class="site-nav-section-label">LEARN & EXPLORE</p>
         <a href="#mainSubjectGrid" onclick="toggleSiteNav(false)"><i class="fa-solid fa-book-open" aria-hidden="true"></i><span>Browse Subjects</span><i class="fa-solid fa-chevron-right site-nav-chevron" aria-hidden="true"></i></a>
@@ -1023,12 +1024,49 @@
   <!-- Main JavaScript: Resource Database, Search, Sharing and PWA -->
  
 <section id="icseAiTutor" class="icse-ai-tutor" aria-labelledby="icseAiTutorTitle">
- <div class="icse-ai-tutor-head"><div><span class="icse-ai-eyebrow">YOUR STUDY COMPANION</span><h2 id="icseAiTutorTitle">✨ Velora AI Tutor</h2><p>Ask doubts, understand concepts, practise questions, and get step-by-step ICSE Class 10 explanations.</p></div><span class="icse-ai-online">● AI study mode</span></div>
- <div class="icse-ai-presets"><button type="button" data-ai-prompt="Explain this concept in simple language with an ICSE example: ">Explain a concept</button><button type="button" data-ai-prompt="Give me 5 ICSE practice questions with answers on: ">Practice questions</button><button type="button" data-ai-prompt="Teach me this topic step by step, then recap it: ">Teach step by step</button></div>
- <div class="icse-ai-chat" id="icseAiChat" role="log" aria-live="polite"><div class="icse-ai-message assistant"><div class="icse-ai-avatar">✦</div><div class="icse-ai-bubble"><strong>Hey! I'm Velora.</strong><p>Tell me the subject, chapter, or question you're stuck on.</p></div></div></div>
- <form id="icseAiForm" class="icse-ai-compose"><label class="sr-only" for="icseAiSubject">Subject</label><select id="icseAiSubject"><option>General</option><option>Physics</option><option>Chemistry</option><option>Biology</option><option>Mathematics</option><option>English Language</option><option>English Literature</option><option>History & Civics</option><option>Geography</option><option>Computer Applications</option><option>Other ICSE subject</option></select><label class="sr-only" for="icseAiInput">Your question</label><textarea id="icseAiInput" rows="2" maxlength="5000" placeholder="Type your doubt… (Shift + Enter for a new line)" required></textarea><button id="icseAiSend" type="submit">✦ Ask Velora</button></form><div class="icse-ai-foot"><span id="icseAiStatus">API setup required before first use.</span><span>Don't enter passwords or private information.</span></div>
+  <div class="icse-ai-tutor-head">
+    <div>
+      <span class="icse-ai-eyebrow">YOUR FREE STUDY COMPANION</span>
+      <h2 id="icseAiTutorTitle">✨ ICSE MasterClass AI Tutor</h2>
+      <p>Need help with a chapter, numerical, or exam question? Prepare your question below and continue the conversation with our existing Velora-powered AI tutor in Telegram.</p>
+    </div>
+    <span class="icse-ai-online"><i class="fa-brands fa-telegram" aria-hidden="true"></i> Chat via Telegram</span>
+  </div>
+  <div class="icse-ai-chat icse-ai-chat-guide" role="region" aria-label="How to use the AI tutor">
+    <div class="icse-ai-message assistant">
+      <div class="icse-ai-avatar" aria-hidden="true">✦</div>
+      <div class="icse-ai-bubble"><strong>Welcome to your AI Tutor!</strong>
+        <p>Choose a subject and type your doubt. Tap <strong>Copy Question</strong>, then <strong>Open AI Tutor</strong> and paste it into Telegram. Your answers appear in the bot chat, not on this page.</p>
+      </div>
+    </div>
+  </div>
+  <div class="icse-ai-presets" aria-label="Suggested types of study questions">
+    <button type="button" data-ai-prompt="Explain this concept simply with an ICSE Class 10 example: ">Explain a concept</button>
+    <button type="button" data-ai-prompt="Give me five ICSE Class 10 practice questions with solutions on: ">Practice questions</button>
+    <button type="button" data-ai-prompt="Teach this ICSE Class 10 topic step by step, with examples and a summary: ">Teach step by step</button>
+  </div>
+  <form id="icseAiForm" class="icse-ai-compose">
+    <label class="sr-only" for="icseAiSubject">Subject</label>
+    <select id="icseAiSubject" aria-label="Select your subject">
+      <option>General</option><option>Physics</option><option>Chemistry</option><option>Biology</option>
+      <option>Mathematics</option><option>English Language</option><option>English Literature</option>
+      <option>History &amp; Civics</option><option>Geography</option><option>Computer Applications</option>
+      <option>Other ICSE subject</option>
+    </select>
+    <label class="sr-only" for="icseAiInput">Your study question</label>
+    <textarea id="icseAiInput" rows="2" maxlength="5000" placeholder="What would you like to learn? Type your question here…" required></textarea>
+    <button id="icseAiSend" type="submit"><i class="fa-regular fa-copy" aria-hidden="true"></i> Copy Question</button>
+  </form>
+  <div class="icse-ai-route-actions">
+    <a class="icse-ai-telegram-link" id="icseAiLaunch" href="https://t.me/ICSEMasterClassTutorBot" target="_blank" rel="noopener noreferrer">
+      <i class="fa-brands fa-telegram" aria-hidden="true"></i> Open AI Tutor on Telegram <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+    </a>
+    <span>Already have Telegram? You can open the bot directly without copying a question.</span>
+  </div>
+  <p id="icseAiStatus" class="icse-ai-user-status" role="status" aria-live="polite">No subscription or API key needed for website visitors. The bot's free-service limits may apply.</p>
+  <p class="icse-ai-private-note">Please don't share passwords, phone numbers, or other private information with an AI bot. Double-check important answers against your textbook or teacher.</p>
 </section>
-<script src="ai-tutor-config.js"></script><script src="ai-tutor.js" defer></script>
+<script src="ai-tutor.js" defer></script>
 <script src="script.js"></script>
 <script src="study-tools.js" defer></script>
 <script src="ui-ux.js" defer></script>
