@@ -481,7 +481,7 @@
     <input
       id="globalSearchInput"
       type="search"
-      oninput="searchAllMaterials()"
+      oninput="scheduleMaterialSearch('global')"
       placeholder="Search topics, books, subjects..."
       autocomplete="off"
       class="w-full bg-gray-900 border border-gray-800 rounded-xl
@@ -539,7 +539,7 @@
           <input
             type="text"
             id="searchInput"
-            oninput="filterResources()"
+            oninput="scheduleMaterialSearch('detail')"
             placeholder="Search book, topic, publisher..."
             class="w-full bg-gray-900 border border-gray-800 rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 transition"
           >
@@ -654,6 +654,14 @@
   id="resourceGrid"
   class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
 ></div>
+<div id="resourceLoadMoreWrap" class="mc-resource-pagination" hidden>
+  <p id="resourceLoadMoreCount" class="mc-resource-page-caption" aria-live="polite">Showing materials</p>
+  <button id="resourceLoadMoreButton" type="button" onclick="loadMoreMaterials()" class="mc-load-more" aria-label="Load more matching study materials">
+    <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+    Load 36 more materials
+    <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+  </button>
+</div>
 
 
 

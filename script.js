@@ -85,6 +85,36 @@ let currentSubject = "All";
 let currentCategory = "All";
 let allResources = [];
 let filteredResources = [];
+// Build only a small number of cards per frame to keep mobile devices responsive.
+// Filter and search still scan the complete catalogue of 8,000+ materials.
+const RESOURCE_PAGE_SIZE = 36;
+let visibleResourceCount = RESOURCE_PAGE_SIZE;
+let materialSearchTimer = null;
+const materialSearchTextCache = new WeakMap();
+function materialSearchText(item) {
+  let cached = materialSearchTextCache.get(item);
+  if (cached !== undefined) return cached;
+  cached = [
+    item["Book Name"],item["Subject"],item["Publisher/Company"],item["Publisher"],
+    item["Category"],item["Scope"],item["Edition"],item["Format"]
+  ].filter(Boolean).join(" ").toLowerCase();
+  materialSearchTextCache.set(item,cached);
+  return cached;
+}
+function scheduleMaterialSearch(source) {
+  clearTimeout(materialSearchTimer);
+  materialSearchTimer = setTimeout(() => {
+    materialSearchTimer = null;
+    if (source === "global") searchAllMaterials();
+    else filterResources();
+  }, 200);
+}
+function loadMoreMaterials() {
+  if (visibleResourceCount >= filteredResources.length) return;
+  const from = visibleResourceCount;
+  visibleResourceCount = Math.min(visibleResourceCount + RESOURCE_PAGE_SIZE, filteredResources.length);
+  renderGrid(filteredResources, from);
+}
 let deferredPwaPrompt = null;
 let currentPersonalView = "all";
 const SAVED_MATERIALS_KEY = "icseMasterClass.savedMaterials.v1";
@@ -648,6 +678,14 @@ function filterResources() {
     document.getElementById("searchInput")?.value || ""
   ).toLowerCase().trim();
 
+  // Read local browser preferences once, never thousands of times per filter.
+  const selectedYear = document.getElementById("yearFilter")?.value || "all";
+  const personalKeySet = currentPersonalView === "saved"
+    ? new Set(readPersonalList(SAVED_MATERIALS_KEY))
+    : currentPersonalView === "recent"
+      ? new Set(readPersonalList(RECENT_MATERIALS_KEY))
+      : null;
+
   filteredResources = allResources.filter(item => {
     const itemSubject =
       (item["Subject"] || "").toLowerCase().trim();
@@ -734,27 +772,9 @@ if (currentCategory === "All") {
 
 
     // Search across more fields than just book name and subject.
-    const searchableText = [
-      item["Book Name"],
-      item["Subject"],
-      item["Publisher/Company"],
-      item["Publisher"],
-      item["Category"],
-      item["Scope"],
-      item["Edition"],
-      item["Format"]
-    ]
-      .filter(Boolean)
-      .join(" ")
-      .toLowerCase();
-
-    const srchMatch =
-      !searchVal || searchableText.includes(searchVal);
-    const selectedYear = document.getElementById("yearFilter")?.value || "all";
+    const srchMatch = !searchVal || materialSearchText(item).includes(searchVal);
     const yearMatch = selectedYear === "all" || getMaterialYear(item) === selectedYear;
-    const materialKey = getMaterialKey(item);
-    const personalKeys = currentPersonalView === "saved" ? readPersonalList(SAVED_MATERIALS_KEY) : currentPersonalView === "recent" ? readPersonalList(RECENT_MATERIALS_KEY) : null;
-    const personalMatch = currentPersonalView === "all" || personalKeys.includes(materialKey);
+    const personalMatch = !personalKeySet || personalKeySet.has(getMaterialKey(item));
 
     return subMatch && catMatch && srchMatch && yearMatch && personalMatch;
   });
@@ -768,6 +788,7 @@ if (currentCategory === "All") {
       return yearOf(b) - yearOf(a);
     });
   }
+  visibleResourceCount = RESOURCE_PAGE_SIZE;
   renderGrid(filteredResources);
 }
 
@@ -832,7 +853,7 @@ function closeSubjectSubPage() {
    RESOURCE CARDS
    ============================================================ */
 
-function renderGrid(data) {
+function renderGrid(data, appendFrom = 0) {
   const grid = document.getElementById("resourceGrid");
   const countEl = document.getElementById("itemCount");
 
@@ -841,6 +862,14 @@ function renderGrid(data) {
   }
 
   if (!grid) return;
+
+  const loadMoreWrap = document.getElementById("resourceLoadMoreWrap");
+  const loadMoreCount = document.getElementById("resourceLoadMoreCount");
+  const loadMoreButton = document.getElementById("resourceLoadMoreButton");
+  const shown = Math.min(visibleResourceCount, data.length);
+  if (loadMoreCount) loadMoreCount.textContent = `Showing ${shown.toLocaleString()} of ${data.length.toLocaleString()} matching materials`;
+  if (loadMoreWrap) loadMoreWrap.hidden = shown >= data.length;
+  if (loadMoreButton) loadMoreButton.disabled = shown >= data.length;
 
   if (data.length === 0) {
     grid.innerHTML = `
@@ -851,7 +880,10 @@ function renderGrid(data) {
     return;
   }
 
-  grid.innerHTML = data.map((item, index) => {
+  // Append only the next page of cards instead of recreating thousands of DOM nodes.
+  const first = appendFrom > 0 ? appendFrom : 0;
+  const visible = data.slice(first, shown);
+  const cardsHTML = visible.map((item, index) => {
     const rawDrive =
       item["Google Drive Link"] ||
       item["Google Drive Direct View / Download Link"] ||
@@ -941,7 +973,7 @@ function renderGrid(data) {
 
         <div class="grid grid-cols-2 gap-2 pt-2 border-t border-gray-800/80">
           <button
-            onclick="openMaterialModalByIndex(${index})"
+            onclick="openMaterialModalByIndex(${first + index})"
             aria-label="Preview ${escapeHTML(item["Book Name"] || "material")}"
             type="button"
             class="py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-200 font-bold text-xs text-center transition flex items-center justify-center gap-1.5 cursor-pointer"
@@ -1013,22 +1045,23 @@ function renderGrid(data) {
       </div>
     `;
   }).join("");
+  if (first > 0) grid.insertAdjacentHTML("beforeend", cardsHTML);
+  else grid.innerHTML = cardsHTML;
 
-  grid.querySelectorAll(".js-toggle-save").forEach(button => {
-    button.addEventListener("click", () => toggleSavedMaterial(button.dataset.materialKey));
-  });
-
-  grid.querySelectorAll(".js-open-share-page").forEach(button => {
-    button.addEventListener("click", () => {
-      openSharePageById(button.dataset.shareId);
+  // Event delegation creates three handlers once, not three for every card.
+  if (!grid.dataset.eventsDelegated) {
+    grid.dataset.eventsDelegated = "true";
+    grid.addEventListener("click", event => {
+      const target = event.target instanceof Element ? event.target : event.target?.parentElement;
+      if (!target) return;
+      const save = target.closest(".js-toggle-save");
+      if (save && grid.contains(save)) { toggleSavedMaterial(save.dataset.materialKey); return; }
+      const openShare = target.closest(".js-open-share-page");
+      if (openShare && grid.contains(openShare)) { openSharePageById(openShare.dataset.shareId); return; }
+      const share = target.closest(".js-share-material");
+      if (share && grid.contains(share)) shareMaterialById(share.dataset.shareId);
     });
-  });
-
-  grid.querySelectorAll(".js-share-material").forEach(button => {
-    button.addEventListener("click", () => {
-      shareMaterialById(button.dataset.shareId);
-    });
-  });
+  }
 }
 
 /* ============================================================

@@ -256,3 +256,13 @@ body.mc-login .mc-guest-entry:focus-visible { outline:3px solid #fbbf24;outline-
   .mc-home #welcomePopup .mc-telegram-dialog { padding:23px 18px; }
   .mc-home #welcomePopup .mc-telegram-dialog h2 { font-size:21px; }
 }
+
+/* Fast material catalogue: progressive pages of 36 cards. */
+.mc-resource-pagination[hidden]{display:none!important}
+.mc-resource-pagination{display:flex;flex-direction:column;align-items:center;gap:11px;margin:24px auto 12px;max-width:420px;text-align:center}
+.mc-resource-page-caption{color:#b5c6dc;font-size:12px;line-height:1.5}
+.mc-load-more{display:inline-flex;justify-content:center;align-items:center;gap:10px;min-height:50px;width:100%;padding:12px 18px;border:1px solid rgba(251,191,36,.45);border-radius:13px;background:linear-gradient(120deg,#273348,#151e30);color:#fcd34d;font-weight:800;cursor:pointer;box-shadow:0 9px 24px rgba(0,0,0,.15)}
+.mc-load-more:hover{background:#23364e;border-color:#fbbf24}
+.mc-load-more:disabled{opacity:.6;cursor:default}
+.mc-load-more:focus-visible{outline:3px solid #7dd3fc;outline-offset:3px}
+@media(max-width:640px){.mc-resource-pagination{width:100%;margin-top:18px}.mc-load-more{min-height:52px}}
