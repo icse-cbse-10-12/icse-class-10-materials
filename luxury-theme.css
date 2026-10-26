@@ -1,0 +1,116 @@
+/* ICSE MasterClass premium navy-and-gold design. CSS-only, no image/video/particle downloads.
+   Heavy visual effects are limited to static gradients; animations disabled on phones and reduced motion. */
+:root{--lux-bg:#070f1e;--lux-panel:#101e34;--lux-gold:#f6ce7b;--lux-border:rgba(246,206,123,.25)}
+.mc-home,.mc-dashboard{color:#eef4fc;background:#070f1e!important}
+.mc-home{background-image:radial-gradient(ellipse at 83% 4%,rgba(24,64,114,.2),transparent 41%),linear-gradient(#070f1e,#080f1d)!important}
+.mc-home>header,.mc-dashboard>header{background:#080f1f!important;border-bottom:1px solid rgba(246,206,123,.24)!important;box-shadow:0 3px 24px rgba(0,0,0,.15)!important}
+.mc-home #siteHeaderInner> a[href="./"] .text-amber-500,.mc-dashboard>header .text-amber-500{color:#f6ce7b!important}
+.mc-home #headerActions>a[href="./login.html"],.mc-home #mobileAccountLink{color:#f6ce7b!important;border-color:rgba(246,206,123,.46)!important;background:rgba(246,206,123,.09)!important}
+.mc-home .site-nav-panel{background:#0a1526!important;border-color:rgba(246,206,123,.3)!important}
+.mc-home .aurora-announcement{border:1px solid rgba(246,206,123,.22);border-radius:14px;background:linear-gradient(90deg,rgba(246,206,123,.09),#0b182b);color:#ddbd7e;padding:11px 15px}
+.mc-home .aurora-announcement a,.mc-home .aurora-eyebrow,.mc-home .aurora-eyebrow i{color:#f6ce7b}
+.mc-home .aurora-announcement-divider{color:#c49a55}
+.mc-home .aurora-hero-grid{isolation:isolate;position:relative;overflow:hidden;grid-template-columns:minmax(0,1.13fr) minmax(275px,.87fr);padding:clamp(24px,4vw,52px);margin-top:14px;gap:clamp(20px,3vw,44px);border:1px solid rgba(246,206,123,.26);border-radius:28px;background:radial-gradient(ellipse at 82% 18%,rgba(40,81,144,.28),transparent 50%),radial-gradient(ellipse at 18% 120%,rgba(161,104,33,.11),transparent 51%),linear-gradient(130deg,#111e33,#080f1d);box-shadow:0 20px 50px rgba(0,0,0,.24)}
+.mc-home .aurora-hero-grid:before{content:"";position:absolute;inset:0 auto auto 0;width:48%;height:1px;background:linear-gradient(90deg,#f6ce7b,transparent);pointer-events:none}
+.mc-home .aurora-hero-copy h1{color:#fff;max-width:13ch;font-size:clamp(39px,5vw,68px);line-height:1.07;letter-spacing:-.055em;text-wrap:balance}
+.mc-home .aurora-hero-copy h1 span,.mc-home .aurora-section-heading h2 span{color:#f6ce7b!important;background:linear-gradient(120deg,#fff0cb,#f6ce7b 62%,#c59145);background-clip:text;-webkit-background-clip:text}
+.mc-home .aurora-subtitle{color:#b7c6dc;font-size:clamp(14px,1.5vw,16px);line-height:1.8;max-width:530px}
+.mc-home .aurora-primary-action{background:linear-gradient(120deg,#ffe8aa,#e4ac4c)!important;color:#102039!important;border-color:#fce0a5!important;box-shadow:0 9px 24px rgba(177,113,40,.10)!important}
+.mc-home .aurora-secondary-action{background:rgba(6,16,33,.6)!important;border-color:rgba(246,206,123,.3)!important;color:#f1ddb0!important}
+.mc-home .aurora-trust-line{color:#b6c3d6;font-size:11px}
+.mc-home .aurora-trust-line i{color:#f6ce7b}
+.mc-home .aurora-orbit-card{background:linear-gradient(155deg,#14243d,#0a1529)!important;border:1px solid rgba(246,206,123,.35)!important;box-shadow:0 12px 36px rgba(0,0,0,.19)!important;border-radius:24px;min-height:385px;isolation:isolate}
+.mc-home .aurora-orbit-glow{display:none}
+.mc-home .lux-halo{position:absolute;top:25px;left:50%;width:250px;height:155px;transform:translateX(-50%);background:radial-gradient(ellipse,rgba(246,206,123,.17),transparent 67%);pointer-events:none}
+.mc-home .lux-book-scene{display:grid;place-items:center;position:relative;isolation:isolate;height:135px;overflow:hidden}
+.mc-home .lux-book-scene:before,.mc-home .lux-book-scene:after{content:"";position:absolute;border:1px solid rgba(246,206,123,.23);border-radius:50%;width:180px;height:100px;transform:rotate(-17deg)}
+.mc-home .lux-book-scene:after{width:214px;height:126px;border-color:rgba(246,206,123,.10);transform:rotate(13deg)}
+.mc-home .lux-book-plate{position:relative;z-index:1;display:grid;place-items:center;font-size:88px;color:#f6ce7b}
+.mc-home .lux-scene-star{position:absolute;color:#f6ce7b;font-size:22px}
+.mc-home .lux-star-one{top:16%;left:17%}
+.mc-home .lux-star-two{bottom:15%;right:17%}
+.mc-home .aurora-mini-icon,.mc-home .aurora-feature-icon{background:rgba(246,206,123,.10)!important;border-color:rgba(246,206,123,.25)!important;color:#f6ce7b!important}
+.mc-home .aurora-status-pill{background:rgba(246,206,123,.09);border-color:rgba(246,206,123,.22);color:#f5dca3}
+.mc-home .aurora-status-pill span{background:#f6ce7b;box-shadow:none}
+.mc-home .aurora-orbit-title{margin:6px 0 13px;color:#b8c8d9;font-size:19px}
+.mc-home .aurora-orbit-title strong{color:#f6ce7b}
+.mc-home .aurora-mini-feature{margin-top:8px;padding:11px;background:rgba(4,12,26,.45);border-color:rgba(246,206,123,.13)}
+.mc-home .aurora-mini-feature small{color:#a9bbcf}
+.mc-home .aurora-card-foot{margin-top:12px;padding-top:12px;color:#b7a277;border-top-color:rgba(246,206,123,.2)}
+.mc-home .aurora-quick-dock{background:linear-gradient(145deg,#14223a,#0a1528);border-color:rgba(246,206,123,.25);backdrop-filter:none}
+.mc-home .aurora-quick-dock>a:hover{background:rgba(246,206,123,.07);border-color:rgba(246,206,123,.32)}
+.mc-home .aurora-quick-dock .dock-icon,.mc-home .study-hub-tool .hub-tool-icon{color:#f6ce7b!important;background:rgba(246,206,123,.11)!important}
+.mc-home .study-hub-tool,.mc-home .study-hub-notice{background:linear-gradient(145deg,#12213a,#0b172c)!important;border-color:rgba(246,206,123,.18)!important}
+.mc-home .study-hub-tool{box-shadow:none!important}
+.mc-home .study-hub-tool:hover{border-color:rgba(246,206,123,.4)!important;transform:translateY(-2px)}
+.mc-home #globalSearchWrap>div{background:#101c30;border-color:rgba(246,206,123,.24)}
+.mc-home #globalSearchInput,.mc-home #searchInput{background:#091427!important;border-color:rgba(246,206,123,.24)!important;color:#fff}
+.mc-home #mainSubjectGrid>button{background:linear-gradient(145deg,#14253e,#0b172a)!important;border-color:rgba(246,206,123,.20)!important;border-radius:18px!important;box-shadow:none!important;min-height:116px}
+.mc-home #mainSubjectGrid>button:nth-child(4n+2){border-color:rgba(65,142,245,.32)!important}
+.mc-home #mainSubjectGrid>button:nth-child(4n+3){border-color:rgba(70,209,165,.27)!important}
+.mc-home #mainSubjectGrid>button:nth-child(4n+4){border-color:rgba(194,124,226,.25)!important}
+.mc-home #mainSubjectGrid>button:hover{transform:translateY(-2px);border-color:#f6ce7b!important}
+.mc-home #subjectDetailView #resourceGrid>div:not(.col-span-full){background:#111e32!important;border-color:rgba(246,206,123,.20)!important;box-shadow:none!important}
+.mc-home #subjectDetailView .cat-btn.active-tab{background:#f6ce7b!important;color:#0c1829!important}
+.mc-home #icseAiTutor,.mc-home #welcomePopup .mc-telegram-dialog{background:linear-gradient(145deg,#14253f,#0a172a);border-color:rgba(246,206,123,.3)!important;box-shadow:0 16px 45px rgba(0,0,0,.17)}
+.mc-dashboard #studentDashboard .dashboard-hero{background:linear-gradient(135deg,#14253f,#0a162a)!important;border-color:rgba(246,206,123,.3)!important}
+.mc-dashboard #studentDashboard .dashboard-pill{color:#f6ce7b;background:rgba(246,206,123,.09);border-color:rgba(246,206,123,.2)}
+.mc-dashboard #studentDashboard .dashboard-card,.mc-dashboard #studentDashboard .dashboard-stat{background:#111e32!important;border-color:rgba(246,206,123,.2)!important;box-shadow:none}
+.mc-dashboard #studentDashboard .dashboard-progress-fill{background:linear-gradient(90deg,#c28e40,#f8d991)}
+.mc-dashboard #studentDashboard .dashboard-primary{background:#f6ce7b;color:#0c1628}
+/* One small compositor-only entrance animation and one decorative icon drift—desktop only. */
+@keyframes lux-reveal{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes lux-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@media(min-width:901px) and (hover:hover) and (prefers-reduced-motion:no-preference){
+.mc-home .aurora-hero-copy{animation:lux-reveal .5s ease-out both}
+.mc-home .lux-book-plate{animation:lux-float 7s ease-in-out infinite}
+}
+@media(max-width:900px){
+.mc-home .aurora-hero-grid{grid-template-columns:minmax(0,1fr);padding:clamp(20px,4vw,30px);gap:18px}
+.mc-home .aurora-hero-copy h1{max-width:17ch}
+.mc-home .aurora-orbit-card{min-height:0}
+.mc-home .lux-book-scene{height:98px}
+.mc-home .lux-book-plate{font-size:59px}
+.mc-home .site-nav-overlay,.mc-home .site-nav-panel,.mc-home .aurora-quick-dock,.mc-home>header,.mc-login .card{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+}
+@media(max-width:760px){
+.mc-home .aurora-hero-grid{border-radius:20px}
+.mc-home .aurora-hero-copy h1{font-size:clamp(34px,9vw,47px)}
+.mc-home .aurora-hero-copy h1 span{background:none;color:#f6ce7b!important}
+.mc-home .aurora-announcement{font-size:9px;letter-spacing:.04em}
+.mc-home .lux-book-scene{height:80px}
+.mc-home .lux-book-plate{font-size:47px}
+.mc-home .aurora-hero-actions a,.mc-home .aurora-hero-actions button{min-height:48px}
+.mc-home .study-hub-tool:hover,.mc-home #mainSubjectGrid>button:hover{transform:none}
+}
+/* Royal welcome on desktop; compact login remains quick on phones. */
+body.mc-login{background:radial-gradient(ellipse at 20% 27%,rgba(34,71,120,.17),transparent 46%),linear-gradient(125deg,#070e1c,#0b1729)!important}
+body.mc-login main.lux-login-layout{width:min(1110px,100%);max-width:100%;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(330px,.9fr);gap:clamp(16px,3vw,35px);align-items:center;animation:none}
+body.mc-login .lux-login-story{display:flex;flex-direction:column;justify-content:space-between;min-height:560px;padding:clamp(25px,4vw,42px);border-radius:24px;border:1px solid rgba(246,206,123,.27);background:radial-gradient(ellipse at 82% 48%,rgba(192,129,39,.12),transparent 49%),linear-gradient(145deg,#132440,#081527);overflow:hidden}
+body.mc-login .lux-story-brand{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:850;color:#fce6b3}
+body.mc-login .lux-story-brand small{font-size:10px;color:#a8bcd4;letter-spacing:.07em;margin-left:auto}
+body.mc-login .lux-story-star{display:grid;place-items:center;width:36px;height:36px;border-radius:12px;background:rgba(246,206,123,.1);border:1px solid rgba(246,206,123,.28);font-size:22px;color:#f6ce7b}
+body.mc-login .lux-story-copy h2{max-width:12ch;color:#fff;font-size:clamp(38px,4.3vw,57px);font-weight:900;letter-spacing:-.055em;line-height:1.08;margin:9px 0 19px}
+body.mc-login .lux-story-copy h2 em{font-style:normal;color:#f6ce7b}
+body.mc-login .lux-story-copy p{max-width:38ch;color:#bfccdc;font-size:14px;line-height:1.75}
+body.mc-login .lux-story-copy .lux-story-kicker{color:#f6ce7b;font-size:11px;font-weight:800;letter-spacing:.12em}
+body.mc-login .lux-story-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+body.mc-login .lux-story-stats span{display:grid;text-align:center;gap:2px;padding:12px 4px;background:rgba(7,16,33,.58);border:1px solid rgba(246,206,123,.15);border-radius:13px}
+body.mc-login .lux-story-stats b{color:#f6ce7b;font-size:16px}
+body.mc-login .lux-story-stats small{color:#aebcd0;font-size:10px}
+body.mc-login .lux-login-form-side{min-width:0;max-width:460px;width:100%;margin:auto}
+body.mc-login .lux-login-form-side .card{background:linear-gradient(150deg,#14243c,#09172a)!important;border-color:rgba(246,206,123,.36)!important;box-shadow:0 16px 42px rgba(0,0,0,.19)!important}
+body.mc-login .lux-login-form-side .primary{background:linear-gradient(115deg,#ffe8ae,#e4ad50)!important;color:#111f34!important}
+body.mc-login .lux-login-form-side .mc-guest-entry{border-color:rgba(246,206,123,.31);background:rgba(246,206,123,.08);color:#ffe3b0}
+@media(max-width:800px){
+body.mc-login main.lux-login-layout{width:min(100%,470px);display:block}
+body.mc-login .lux-login-story{min-height:0;padding:17px 20px;margin-bottom:16px;border-radius:18px}
+body.mc-login .lux-story-copy{margin-top:13px}
+body.mc-login .lux-story-copy h2{max-width:none;font-size:clamp(26px,6vw,34px);margin-bottom:8px}
+body.mc-login .lux-story-copy p:not(.lux-story-kicker){font-size:12px;line-height:1.5;margin-bottom:0}
+body.mc-login .lux-story-kicker,body.mc-login .lux-story-stats{display:none}
+body.mc-login .lux-login-form-side .card{box-shadow:none!important}
+}
+@media(max-width:420px){body.mc-login{padding:12px 10px!important}body.mc-login .lux-login-story{padding:13px 15px}body.mc-login .lux-story-copy h2{font-size:25px}}
+@media(prefers-reduced-motion:reduce),(update:slow){.mc-home .aurora-hero-copy,.mc-home .lux-book-plate{animation:none!important}}
+.mc-home :is(a,button,input,select,textarea):focus-visible,.mc-dashboard :is(a,button,input,select,textarea):focus-visible,.mc-login :is(a,button,input,select,textarea):focus-visible{outline:3px solid #f6ce7b!important;outline-offset:3px}

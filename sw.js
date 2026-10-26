@@ -1,4 +1,4 @@
-const CACHE_NAME = 'icse-masterclass-v1.3.2-fast-library';
+const CACHE_NAME = 'icse-masterclass-v1.4.0-luxury-fast';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -6,6 +6,7 @@ const ASSETS_TO_CACHE = [
   './dashboard.html',
   './style.css',
   './design-polish.css',
+  './luxury-theme.css',
   './script.js',
   './ui-ux.css',
   './ui-ux.js',
