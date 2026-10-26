@@ -1,4 +1,4 @@
-const CACHE_NAME = 'icse-masterclass-v1.4.0-luxury-fast';
+const CACHE_NAME = 'icse-masterclass-v1.4.1-luxury-refresh';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -15,8 +15,7 @@ const ASSETS_TO_CACHE = [
   './syllabus-tracker.js',
   './manifest.json',
   './icseYtLogo.png',
-  'https://cdn.tailwindcss.com',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
+  './luxury-book.svg'
 ];
 
 // Install Event - Cache Core Static Assets
@@ -52,42 +51,51 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Fetch Event - Network First with Cache Fallback for Data, Cache First for Static Assets
-self.addEventListener('fetch', (event) => {
-  const requestUrl = new URL(event.request.url);
-
-  // For Google Sheets API / CSV Data: Network First, Fallback to Cache
-  if (requestUrl.hostname.includes('docs.google.com') || requestUrl.hostname.includes('allorigins')) {
+// Fresh HTML and UI styles: network-first prevents stale themes after GitHub Pages releases.
+// Offline navigation still falls back to the existing PWA cache.
+self.addEventListener('fetch', event => {
+  const req = event.request;
+  if (req.method !== 'GET') return;
+  const url = new URL(req.url);
+  const sameOrigin = url.origin === self.location.origin;
+  const isAppCode = sameOrigin && /\.(?:html|css|js)$/i.test(url.pathname);
+  if (req.mode === 'navigate' || isAppCode) {
     event.respondWith(
-      fetch(event.request)
-        .then((response) => {
-          const responseClone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseClone);
-          });
-          return response;
-        })
-        .catch(() => caches.match(event.request))
+      fetch(req).then(response => {
+        if (response && response.ok && response.type === 'basic') {
+          const copy = response.clone();
+          event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.put(req, copy)).catch(() => {}));
+        }
+        return response;
+      }).catch(async () => {
+        const cached = await caches.match(req);
+        if (cached) return cached;
+        if (req.mode === 'navigate') {
+          const home = await caches.match('./index.html');
+          if (home) return home;
+        }
+        return Response.error();
+      })
     );
     return;
   }
-
-  // For Static Assets: Cache First, Fallback to Network
-  event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse;
+  // External published Google Sheets catalogue: keep existing network-first behaviour.
+  if (url.hostname.includes('docs.google.com') || url.hostname.includes('allorigins')) {
+    event.respondWith(fetch(req).then(response => {
+      if (response && response.ok) {
+        const copy = response.clone();
+        event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.put(req, copy)).catch(() => {}));
       }
-      return fetch(event.request).then((response) => {
-        if (!response || response.status !== 200 || response.type !== 'basic') {
-          return response;
-        }
-        const responseToCache = response.clone();
-        caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, responseToCache);
-        });
-        return response;
-      });
-    })
-  );
+      return response;
+    }).catch(() => caches.match(req).then(cached => cached || Response.error())));
+    return;
+  }
+  // Icons and other static assets remain fast/offline via cache-first.
+  event.respondWith(caches.match(req).then(cached => cached || fetch(req).then(response => {
+    if (response && response.ok && response.type === 'basic') {
+      const copy = response.clone();
+      event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.put(req, copy)).catch(() => {}));
+    }
+    return response;
+  })));
 });
