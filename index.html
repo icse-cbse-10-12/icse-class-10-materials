@@ -10,10 +10,9 @@
       var params = new URLSearchParams(window.location.search);
       if (params.has("material") || params.get("entry") === "done") return;
       var key = "icseMasterclassEntryShownV1";
-      var seen = false;
-      try { seen = sessionStorage.getItem(key) === "yes"; } catch (_) {}
-      if (seen) return;
-      try { sessionStorage.setItem(key, "yes"); } catch (_) {}
+      // Require login/guest entry for each new top-level visit, not just once per tab.
+      // Internal vault navigation explicitly carries entry=done.
+      // Shared material links remain accessible without a login redirect.
       var redirect = "./login.html?entry=1";
       if (window.location.hash) redirect += "&next=" + encodeURIComponent(window.location.hash);
       window.location.replace(redirect);
@@ -252,7 +251,7 @@
 
   </style>
 <link rel="stylesheet" href="design-polish.css?v=20261026-1">
-  <link rel="stylesheet" href="luxury-theme.css?v=2">
+  <link rel="stylesheet" href="luxury-theme.css?v=3">
 </head>
 
 <body class="mc-home bg-gray-950 text-gray-100 font-sans min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black pb-20 sm:pb-12">

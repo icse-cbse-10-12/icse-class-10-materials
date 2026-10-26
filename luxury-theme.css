@@ -200,3 +200,12 @@ body.mc-home #mainSubjectGrid>button{min-height:108px!important}
 @keyframes lux-entrance{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
 @keyframes lux-book-hover{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
 @media(prefers-reduced-motion:reduce),(update:slow){body.mc-home .lux-hero-art,body.mc-home .aurora-hero-copy{animation:none!important}}
+
+/* Desktop login repair: override old generic main max-width and prevent a squeezed story column. */
+@media(min-width:801px){
+body.mc-login main.lux-login-layout{width:min(1100px,calc(100vw - 48px))!important;max-width:1100px!important;min-width:0!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(350px,440px)!important;gap:clamp(22px,3vw,44px)!important;margin:auto!important;align-items:center!important}
+body.mc-login .lux-login-story{min-width:0!important;width:100%!important;overflow:hidden!important}
+body.mc-login .lux-story-copy h2{max-width:100%!important;overflow-wrap:normal!important;word-break:normal!important}
+body.mc-login .lux-login-form-side{min-width:0!important;width:100%!important;max-width:440px!important}
+}
+@media(max-width:800px){body.mc-login main.lux-login-layout{width:min(100%,470px)!important;max-width:470px!important;display:block!important}}
