@@ -1,4 +1,4 @@
-const CACHE_NAME = 'icse-masterclass-v1.3.0-polish';
+const CACHE_NAME = 'icse-masterclass-v1.3.1-entry-telegram';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

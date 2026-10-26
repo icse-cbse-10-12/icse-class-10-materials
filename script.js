@@ -1416,35 +1416,46 @@ function closeMaterialModal() {
    WELCOME POPUP
    ============================================================ */
 
+const TELEGRAM_INVITE_KEY = "icseMasterclassTelegramInvite2026v1";
+let telegramInviteReturnFocus = null;
 function checkWelcomePopup() {
+  if (new URLSearchParams(window.location.search).has("material")
+      || document.body.classList.contains("shared-material-mode")) return;
   let hasSeenPopup = false;
-
-  try {
-    hasSeenPopup = localStorage.getItem(
-      "hasSeenMasterclassWelcome"
-    ) === "true";
-  } catch (error) {
-    console.warn("Local storage is unavailable.", error);
+  try { hasSeenPopup = localStorage.getItem(TELEGRAM_INVITE_KEY) === "true"; } catch (_) {
+    try { hasSeenPopup = sessionStorage.getItem(TELEGRAM_INVITE_KEY) === "true"; } catch (_) {}
   }
-
-  if (!hasSeenPopup) {
-    setTimeout(() => {
-      document.getElementById("welcomePopup")
-        ?.classList.remove("hidden");
-    }, 1200);
-  }
+  if (hasSeenPopup) return;
+  setTimeout(() => {
+    const popup = document.getElementById("welcomePopup");
+    if (!popup || document.body.classList.contains("shared-material-mode")) return;
+    telegramInviteReturnFocus = document.activeElement;
+    popup.classList.remove("hidden");
+    document.getElementById("telegramInviteJoin")?.focus();
+  }, 900);
 }
-
 function closeWelcomePopup() {
-  document.getElementById("welcomePopup")
-    ?.classList.add("hidden");
-
-  try {
-    localStorage.setItem("hasSeenMasterclassWelcome", "true");
-  } catch (error) {
-    console.warn("Could not save popup preference.", error);
+  const popup = document.getElementById("welcomePopup");
+  popup?.classList.add("hidden");
+  try { localStorage.setItem(TELEGRAM_INVITE_KEY, "true"); } catch (_) {
+    try { sessionStorage.setItem(TELEGRAM_INVITE_KEY, "true"); } catch (_) {}
   }
+  if (telegramInviteReturnFocus && typeof telegramInviteReturnFocus.focus === "function") {
+    telegramInviteReturnFocus.focus();
+  }
+  telegramInviteReturnFocus = null;
 }
+document.addEventListener("keydown", event => {
+  const popup = document.getElementById("welcomePopup");
+  if (!popup || popup.classList.contains("hidden")) return;
+  if (event.key === "Escape") { event.preventDefault(); closeWelcomePopup(); return; }
+  if (event.key !== "Tab") return;
+  const focusable = Array.from(popup.querySelectorAll("a[href],button:not([disabled])"));
+  if (!focusable.length) return;
+  const first = focusable[0], last = focusable[focusable.length - 1];
+  if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+  else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+});
 
 /* ============================================================
    PERSONALISATION SETTINGS
