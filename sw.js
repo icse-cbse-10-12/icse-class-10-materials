@@ -1,4 +1,4 @@
-const CACHE_NAME = 'icse-masterclass-v1.2.6';
+const CACHE_NAME = 'icse-masterclass-v1.2.7-auth-live';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

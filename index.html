@@ -82,6 +82,17 @@
 
     <style>#mainSubjectGrid button > div { gap:3px; } #mainSubjectGrid button:focus-visible { outline:2px solid #f59e0b; outline-offset:3px; }</style>
 
+  <style>
+    /* Login launch: keep the homepage header accessible on mobile. */
+    @media (max-width:640px) {
+      #siteHeaderInner { height:auto; min-height:64px; flex-wrap:wrap; gap:8px; padding-top:8px; padding-bottom:8px; }
+      #siteHeaderInner > #siteNavToggle { order:1; }
+      #siteHeaderInner > a[href="./"] { order:2; margin-left:auto; }
+      #siteHeaderInner > #headerActions { order:3; width:100%; justify-content:center; flex-wrap:wrap; }
+      #siteHeaderInner > a[href="./"] .text-lg { font-size:clamp(13px,3.8vw,18px); }
+    }
+  </style>
+
   <!-- Shareable Material Page Styles -->
   <style>
     #sharedMaterialPage {
@@ -230,7 +241,7 @@
 
   <!-- Header Navigation -->
   <header class="sticky top-0 z-40 bg-gray-950/90 backdrop-blur-md border-b border-gray-800/80">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <div id="siteHeaderInner" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
 
       <a href="./" onclick="closeSubjectSubPage()" class="flex items-center gap-3 group">
         <img
@@ -257,7 +268,8 @@
       </button>
 
       <!-- Header Actions -->
-      <div class="flex items-center gap-2 sm:gap-3">
+      <div id="headerActions" class="flex items-center gap-2 sm:gap-3">
+        <a href="./login.html" aria-label="Student account: sign in or create an account" title="Student Account" class="w-10 h-10 shrink-0 rounded-xl bg-amber-500/15 text-amber-300 border border-amber-500/40 hover:bg-amber-500 hover:text-gray-950 transition flex items-center justify-center"><i class="fa-solid fa-user-circle text-lg" aria-hidden="true"></i></a>
 
         <button
           id="pwaInstallBtn"
@@ -314,6 +326,7 @@
         <a href="./" onclick="toggleSiteNav(false)"><i class="fa-solid fa-house" aria-hidden="true"></i><span>Home</span><i class="fa-solid fa-chevron-right site-nav-chevron" aria-hidden="true"></i></a>
         <p class="site-nav-section-label">YOUR EXPERIENCE</p>
         <a href="./dashboard.html" onclick="toggleSiteNav(false)"><i class="fa-solid fa-chart-line" aria-hidden="true"></i><span>Student Dashboard</span><i class="fa-solid fa-chevron-right site-nav-chevron" aria-hidden="true"></i></a>
+        <a href="./login.html" onclick="toggleSiteNav(false)"><i class="fa-solid fa-user-lock" aria-hidden="true"></i><span>Sign in / Create account</span><i class="fa-solid fa-chevron-right site-nav-chevron" aria-hidden="true"></i></a>
         <p class="site-nav-section-label">LEARN & EXPLORE</p>
         <a href="#mainSubjectGrid" onclick="toggleSiteNav(false)"><i class="fa-solid fa-book-open" aria-hidden="true"></i><span>Browse Subjects</span><i class="fa-solid fa-chevron-right site-nav-chevron" aria-hidden="true"></i></a>
         <a href="#globalSearchInput" onclick="toggleSiteNav(false);showGlobalSearch()"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><span>Search Materials</span><i class="fa-solid fa-chevron-right site-nav-chevron" aria-hidden="true"></i></a>
