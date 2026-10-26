@@ -1,4 +1,4 @@
-const CACHE_NAME = 'icse-masterclass-v1.4.1-luxury-refresh';
+const CACHE_NAME = 'icse-masterclass-v1.4.2-login-layout-entry';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
