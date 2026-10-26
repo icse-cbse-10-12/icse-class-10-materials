@@ -1,0 +1,228 @@
+/* ICSE MasterClass — interface refinement, October 2026.
+   Presentation only. Scoped to the home, dashboard and authentication pages.
+   No authentication, materials, study data, or AI integration logic lives here. */
+
+:root { --mc-gold:#fbbf24; --mc-blue:#7dd3fc; --mc-ring:rgba(125,211,252,.32); }
+html { scroll-padding-top:96px; }
+.mc-home, .mc-dashboard, .mc-login { -webkit-font-smoothing:antialiased; }
+.mc-home :is(button,a,input,select,textarea):focus-visible,
+.mc-dashboard :is(button,a,input,select,textarea):focus-visible,
+.mc-login :is(button,a,input,select,textarea):focus-visible {
+  outline:3px solid #7dd3fc !important; outline-offset:3px; 
+}
+.mc-skip-link {
+  position:fixed; top:10px; left:12px; transform:translateY(-150%);
+  z-index:9999; padding:11px 17px; border-radius:11px;
+  background:#fbbf24; color:#111827; font-weight:800; text-decoration:none;
+}
+.mc-skip-link:focus { transform:none; }
+#mainContent:focus, #dashboardMain:focus { outline:none; }
+.mc-home :is(button,a), .mc-dashboard :is(button,a), .mc-login :is(button,a) {
+  -webkit-tap-highlight-color:rgba(251,191,36,.18);
+}
+
+/* Consistent chrome and less crowded navigation. */
+.mc-home > header,.mc-dashboard > header {
+  border-bottom-color:rgba(148,163,184,.22) !important;
+  box-shadow:0 10px 32px rgba(0,0,0,.15);
+}
+.mc-home #siteHeaderInner { gap:14px; }
+.mc-home #siteHeaderInner > a[href="./"] { flex-shrink:0; min-width:0; }
+.mc-home #headerActions { gap:8px; }
+.mc-home #headerActions > a, .mc-home #headerActions > button {
+  flex-shrink:0; min-height:42px; 
+}
+.mc-home #mobileAccountLink { display:none; }
+.mc-home .site-nav-links a, .mc-home .site-nav-links button { min-height:46px; }
+.mc-home .site-nav-panel { scrollbar-gutter:stable; }
+.mc-home .site-nav-overlay { backdrop-filter:blur(8px); }
+
+/* Homepage: more deliberate spacing and a quieter visual hierarchy. */
+.mc-home #mainContent { max-width:1280px; }
+.mc-home .aurora-welcome { margin-bottom:clamp(18px,3vw,34px); }
+.mc-home .aurora-announcement {
+  border-radius:14px; padding:11px 15px; line-height:1.55;
+}
+.mc-home .aurora-hero-grid {
+  gap:clamp(24px,4vw,56px);
+  padding:clamp(26px,4vw,48px) 0 clamp(22px,3vw,36px);
+}
+.mc-home .aurora-hero-copy h1 { max-width:14ch; line-height:1.075; text-wrap:balance; }
+.mc-home .aurora-subtitle { font-size:clamp(14px,1.4vw,16px); color:#bac9de; line-height:1.75; }
+.mc-home .aurora-hero-actions a,.mc-home .aurora-hero-actions button {
+  min-height:48px; border-radius:13px;
+}
+.mc-home .aurora-orbit-card { border-radius:22px; }
+.mc-home .study-hub-notice { border-radius:16px; }
+.mc-home .study-hub-section-head { gap:12px; }
+.mc-home .study-hub-tool {
+  min-height:92px; border-radius:17px; 
+  transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;
+}
+.mc-home .study-hub-tool:focus-visible { transform:translateY(-2px); }
+.mc-home #globalSearchWrap { scroll-margin-top:110px; }
+.mc-home #globalSearchInput { min-height:50px; border-radius:14px; padding:12px 16px; }
+.mc-home #mainSubjectGrid { scroll-margin-top:105px; }
+.mc-home #mainSubjectGrid button { min-height:112px; border-radius:16px; }
+.mc-home #resourceGrid > * { min-width:0; }
+
+/* Keep the functional Telegram tutor in the site's content flow. */
+.mc-home #icseAiTutor {
+  width:calc(100% - 32px); max-width:1216px;
+  margin:clamp(20px,4vw,44px) auto clamp(38px,5vw,68px);
+  padding:clamp(20px,3.4vw,34px); border-radius:24px;
+  border-color:rgba(125,211,252,.25);
+  box-shadow:0 20px 58px rgba(0,0,0,.22);
+}
+.mc-home #icseAiTutor .icse-ai-tutor-head h2 { letter-spacing:-.035em; }
+.mc-home #icseAiTutor .icse-ai-chat-guide { border-radius:16px; }
+.mc-home #icseAiTutor .icse-ai-telegram-link { min-height:48px; border-radius:12px; }
+.mc-home #icseAiTutor .icse-ai-presets button { min-height:42px; }
+.mc-home #icseAiTutor textarea,.mc-home #icseAiTutor select { min-height:48px; font-size:16px; }
+.mc-home #icseAiTutor .icse-ai-user-status { line-height:1.65; }
+.mc-home.shared-material-mode #icseAiTutor { display:none!important; }
+.mc-home > footer, .mc-dashboard > footer { padding-block:24px; }
+
+/* Dashboard: make statistics and forms readable on phones and tablets. */
+.mc-dashboard #studentDashboard { max-width:1230px; }
+.mc-dashboard #studentDashboard .dashboard-hero {
+  border-radius:24px; box-shadow:0 24px 64px rgba(0,0,0,.18);
+}
+.mc-dashboard #studentDashboard .dashboard-card { border-radius:20px; }
+.mc-dashboard #studentDashboard .dashboard-overview-number strong,
+.mc-dashboard #studentDashboard .dashboard-stat strong { font-variant-numeric:tabular-nums; }
+.mc-dashboard #studentDashboard .dashboard-input,
+.mc-dashboard #studentDashboard .syllabus-search-wrap input {
+  min-height:46px; font-size:16px;
+}
+.mc-dashboard #studentDashboard button { min-height:42px; }
+.mc-dashboard #studentDashboard .dashboard-task-list,
+.mc-dashboard #studentDashboard .syllabus-subject-grid { min-width:0; }
+
+/* Login uses the same navy + gold identity as the Study Vault. */
+body.mc-login {
+  background:
+    radial-gradient(ellipse at 15% 0%,rgba(31,89,134,.22),transparent 46%),
+    radial-gradient(ellipse at 90% 92%,rgba(245,158,11,.10),transparent 44%),
+    linear-gradient(145deg,#07111f,#0b192d 60%,#070d18) !important;
+  color:#f8fafc;
+}
+body.mc-login .brand { gap:13px; }
+body.mc-login .brand-mark {
+  border-color:rgba(251,191,36,.55)!important;
+  background:rgba(8,20,37,.87)!important;
+  box-shadow:0 0 0 4px rgba(251,191,36,.055),0 12px 30px rgba(0,0,0,.22)!important;
+}
+body.mc-login .brand-name strong { color:#fbbf24!important; }
+body.mc-login .brand-name small { color:#bac9de!important; }
+body.mc-login .card {
+  border:1px solid rgba(148,163,184,.3)!important;
+  background:linear-gradient(145deg,rgba(17,35,58,.97),rgba(9,22,39,.96))!important;
+  box-shadow:0 28px 74px rgba(0,0,0,.37),inset 0 1px rgba(255,255,255,.055)!important;
+}
+body.mc-login .card:before { background:linear-gradient(90deg,transparent,#fbbf24,transparent)!important; }
+body.mc-login .eyebrow { color:#fbbf24!important; }
+body.mc-login .eyebrow:before { background:#fbbf24!important; }
+body.mc-login .card h1 { color:#fff; font-size:clamp(29px,5vw,37px)!important; }
+body.mc-login p { color:#bbc9db; }
+body.mc-login label { color:#e2e8f0!important; }
+body.mc-login input {
+  background:rgba(5,14,28,.8)!important;
+  border:1px solid rgba(148,163,184,.38)!important;
+  border-radius:12px!important;
+}
+body.mc-login input:focus {
+  background:#0a1b30!important;
+  border-color:#fbbf24!important;
+  box-shadow:0 0 0 4px rgba(251,191,36,.13)!important;
+}
+body.mc-login .primary {
+  border-color:#fbbf24!important;
+  background:linear-gradient(120deg,#fcd34d,#f59e0b)!important;
+  color:#152035!important; box-shadow:0 10px 26px rgba(245,158,11,.19)!important;
+}
+body.mc-login .primary:hover { box-shadow:0 13px 28px rgba(245,158,11,.3)!important; }
+body.mc-login .secondary { background:#18304d!important; border-color:#375573!important; }
+body.mc-login .secondary:hover { background:#213f60!important; border-color:#7dd3fc!important; }
+body.mc-login .quiet { background:rgba(9,23,41,.8)!important; border-color:#34506d!important; }
+body.mc-login .quiet:hover { background:#172e49!important; border-color:#fbbf24!important; }
+body.mc-login .back { color:#fcd34d!important; }
+body.mc-login .back:hover { color:#fff!important; }
+body.mc-login .small,body.mc-login .foot { color:#a9bbd0!important; }
+body.mc-login .password-rules,body.mc-login .account {
+  border-color:rgba(148,163,184,.3)!important;
+  background:rgba(7,19,35,.85)!important;
+}
+body.mc-login .rule.met { color:#9ce7b2!important; }
+body.mc-login .message.error { color:#fda4af!important; }
+body.mc-login .message.success { color:#86efac!important; }
+
+/* Small-screen layout: menu left, brand centred, account right, utilities below. */
+@media (max-width:760px) {
+  html { scroll-padding-top:145px; }
+  body.mc-home #siteHeaderInner {
+    display:grid!important;
+    grid-template-columns:auto minmax(0,1fr) auto!important;
+    grid-template-rows:minmax(46px,auto) auto!important;
+    align-items:center!important; gap:8px!important;
+    height:auto!important; min-height:0!important;
+    padding:8px 13px 10px!important;
+  }
+  body.mc-home #siteHeaderInner > #siteNavToggle {
+    grid-column:1!important; grid-row:1!important;
+    justify-self:start!important; order:unset!important;
+    min-height:42px; padding:7px 10px;
+  }
+  body.mc-home #siteHeaderInner > a[href="./"] {
+    grid-column:2!important; grid-row:1!important;
+    justify-self:center!important; order:unset!important; margin:0!important;
+    gap:8px!important; max-width:100%;
+  }
+  body.mc-home #siteHeaderInner > a[href="./"] img { width:33px;height:33px;flex-shrink:0; }
+  body.mc-home #siteHeaderInner > a[href="./"] .text-lg { font-size:clamp(11px,3.5vw,16px)!important; white-space:nowrap; }
+  body.mc-home #siteHeaderInner > a[href="./"] .text-\\[10px\\] { font-size:8px;letter-spacing:.08em; }
+  body.mc-home #mobileAccountLink {
+    display:grid; grid-column:3; grid-row:1; place-items:center;
+    width:43px;height:43px; border:1px solid rgba(251,191,36,.4);
+    border-radius:12px;background:rgba(251,191,36,.12);color:#fcd34d;font-size:19px;
+  }
+  body.mc-home #headerActions {
+    grid-column:1/-1!important;grid-row:2!important;
+    display:flex!important; order:unset!important; width:100%!important;
+    justify-content:center!important; gap:8px!important; flex-wrap:wrap!important;
+  }
+  body.mc-home #headerActions > a[href="./login.html"] { display:none!important; }
+  body.mc-home #headerActions > :is(a,button) { min-height:40px; }
+  body.mc-home #mainContent { padding-top:20px; }
+  body.mc-home .aurora-hero-grid { grid-template-columns:minmax(0,1fr)!important;gap:21px;padding-block:25px; }
+  body.mc-home .aurora-hero-copy h1 { font-size:clamp(35px,9vw,55px); max-width:17ch; }
+  body.mc-home .aurora-subtitle { max-width:58ch; }
+  body.mc-home .aurora-orbit-card { max-width:100%; }
+  body.mc-home .study-hub-tool-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  body.mc-home .study-hub-tool { min-height:88px; }
+  body.mc-home .site-nav-panel { width:min(390px,calc(100vw - 18px))!important;min-width:0!important;max-width:100%!important;flex:0 0 auto!important; }
+  body.mc-dashboard #studentDashboard .dashboard-hero-top { flex-wrap:wrap; }
+  body.mc-dashboard #studentDashboard .dashboard-overview { min-width:0; }
+}
+@media(max-width:420px) {
+  body.mc-home #siteHeaderInner { gap:5px!important;padding-inline:10px!important; }
+  body.mc-home #siteHeaderInner > a[href="./"] { gap:5px!important; }
+  body.mc-home #siteHeaderInner > a[href="./"] img { width:28px;height:28px; }
+  body.mc-home #siteHeaderInner > a[href="./"] .text-lg { font-size:11.5px!important; }
+  body.mc-home #mobileAccountLink { width:40px;height:40px; }
+  body.mc-home #headerActions { gap:6px!important; }
+  body.mc-home #headerActions > :is(a,button) { font-size:11px; }
+  body.mc-home .aurora-announcement { gap:7px;letter-spacing:.035em;font-size:9px; }
+  body.mc-home .aurora-hero-actions a,body.mc-home .aurora-hero-actions button { width:100%; }
+  body.mc-home .study-hub-tool-grid { grid-template-columns:minmax(0,1fr); }
+  body.mc-home #icseAiTutor { width:calc(100% - 24px);padding:19px 16px; }
+  body.mc-dashboard > header .font-black { font-size:14px; }
+  body.mc-dashboard > header .dashboard-secondary { padding:9px 11px; }
+  body.mc-login .card { padding:23px 17px!important; }
+}
+@media(prefers-reduced-motion:reduce) {
+  body.mc-home *,body.mc-dashboard *,body.mc-login * {
+    animation-duration:.01ms!important; animation-iteration-count:1!important;
+    scroll-behavior:auto!important; transition-duration:.01ms!important;
+  }
+}
