@@ -226,3 +226,33 @@ body.mc-login .message.success { color:#86efac!important; }
     scroll-behavior:auto!important; transition-duration:.01ms!important;
   }
 }
+
+/* Entry portal and optional Telegram invitation */
+body.mc-login .mc-entry-helper { color:#bbd2e7; line-height:1.65; font-size:13px; }
+body.mc-login .mc-guest-entry {
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  margin-top:12px;padding:12px 15px;min-height:46px;
+  border:1px solid rgba(125,211,252,.32);border-radius:12px;
+  background:rgba(14,165,233,.08);color:#d4edff;
+  text-decoration:none;font-weight:750;font-size:13px;text-align:center;line-height:1.55;
+}
+body.mc-login .mc-guest-entry:hover { background:rgba(14,165,233,.18); }
+body.mc-login .mc-guest-entry:focus-visible { outline:3px solid #fbbf24;outline-offset:2px; }
+.mc-home #welcomePopup { overscroll-behavior:contain; }
+.mc-home #welcomePopup .mc-telegram-dialog {
+  background:linear-gradient(145deg,#13243d,#0b1527);
+  border:1px solid rgba(125,211,252,.28);
+  max-height:calc(100dvh - 32px);overflow-y:auto;
+  box-shadow:0 30px 95px rgba(0,0,0,.62);
+}
+.mc-home #welcomePopup .mc-telegram-icon { margin-inline:auto; }
+.mc-home #welcomePopup .mc-telegram-eyebrow {
+  color:#7dd3fc;font-size:11px;letter-spacing:.13em;font-weight:850;margin:0;
+}
+.mc-home #welcomePopup .mc-telegram-primary { min-height:50px;text-decoration:none; }
+.mc-home #welcomePopup .mc-telegram-later { border:1px solid rgba(148,163,184,.26); }
+.mc-home #welcomePopup :is(button,a):focus-visible { outline:3px solid #fbbf24!important;outline-offset:3px; }
+@media(max-width:420px){
+  .mc-home #welcomePopup .mc-telegram-dialog { padding:23px 18px; }
+  .mc-home #welcomePopup .mc-telegram-dialog h2 { font-size:21px; }
+}

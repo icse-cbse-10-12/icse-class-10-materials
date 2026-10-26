@@ -4,6 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- Show student login once at the start of each browser-tab visit. -->
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      if (params.has("material") || params.get("entry") === "done") return;
+      var key = "icseMasterclassEntryShownV1";
+      var seen = false;
+      try { seen = sessionStorage.getItem(key) === "yes"; } catch (_) {}
+      if (seen) return;
+      try { sessionStorage.setItem(key, "yes"); } catch (_) {}
+      var redirect = "./login.html?entry=1";
+      if (window.location.hash) redirect += "&next=" + encodeURIComponent(window.location.hash);
+      window.location.replace(redirect);
+    })();
+  </script>
+
   <!-- Primary SEO Metadata -->
   <title>ICSE Class 10 Study Materials, Question Banks & Notes | ICSE MasterClass</title>
   <meta name="title" content="ICSE Class 10 Study Materials, Question Banks & Notes | ICSE MasterClass">
@@ -887,69 +903,31 @@
     </div>
   </div>
 
-  <!-- Welcome Popup -->
-  <div
-    id="welcomePopup"
-    class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4"
-  >
-    <div class="bg-gray-900 border border-amber-500/30 rounded-3xl max-w-md w-full p-6 relative shadow-2xl space-y-5 text-center transform transition-all scale-100">
-
-      <button
-        onclick="closeWelcomePopup()"
-        class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700 flex items-center justify-center transition"
-        aria-label="Close welcome popup"
-      >
-        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
-      </button>
-
-      <div class="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mx-auto text-amber-400 text-2xl">
-        <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
+  <!-- Optional Telegram community invitation; shown once after entering the Study Vault. -->
+  <div id="welcomePopup" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4"
+       role="dialog" aria-modal="true" aria-labelledby="telegramInviteTitle" aria-describedby="telegramInviteDescription"
+       onclick="if (event.target === this) closeWelcomePopup()">
+    <div class="mc-telegram-dialog bg-gray-900 border border-amber-500/30 rounded-3xl max-w-md w-full p-6 relative shadow-2xl space-y-5 text-center">
+      <button type="button" onclick="closeWelcomePopup()" class="mc-telegram-close absolute top-4 right-4 w-10 h-10 rounded-full bg-gray-800 text-gray-200 hover:text-white hover:bg-gray-700 flex items-center justify-center transition"
+              aria-label="Dismiss Telegram invitation"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+      <div class="mc-telegram-icon w-16 h-16 rounded-2xl bg-sky-500/10 border border-sky-400/30 flex items-center justify-center mx-auto text-sky-300 text-3xl">
+        <i class="fa-brands fa-telegram" aria-hidden="true"></i>
       </div>
-
       <div class="space-y-2">
-        <h3 class="text-xl font-black text-white">
-          Welcome to ICSE MasterClass
-        </h3>
-
-        <p class="text-xs text-gray-400 leading-relaxed">
-          Get access to study notes, question banks and educational resources.
-          Connect with our community for updates and support.
+        <p class="mc-telegram-eyebrow">ICSE MASTERCLASS COMMUNITY</p>
+        <h2 id="telegramInviteTitle" class="text-2xl font-black text-white">Get study updates on Telegram</h2>
+        <p id="telegramInviteDescription" class="text-sm text-gray-300 leading-relaxed">
+          Join our ICSE Class 10 Telegram community for materials, notes, updates, and learning support. Joining is optional.
         </p>
       </div>
-
-      <div class="space-y-3 pt-2">
-
-        <a
-          href="https://www.youtube.com/@ICSEMasterClass10?sub_confirmation=1"
-          target="_blank"
-          rel="noopener noreferrer"
-          onclick="closeWelcomePopup()"
-          class="w-full py-3 px-4 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-red-600/20 transition"
-        >
-          <i class="fa-brands fa-youtube text-base" aria-hidden="true"></i>
-          <span>Subscribe on YouTube</span>
-        </a>
-
-        <a
-          href="https://t.me/ICSEMasterClass10"
-          target="_blank"
-          rel="noopener noreferrer"
-          onclick="closeWelcomePopup()"
-          class="w-full py-3 px-4 rounded-xl bg-sky-500 hover:bg-sky-400 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-sky-500/20 transition"
-        >
-          <i class="fa-brands fa-telegram text-base" aria-hidden="true"></i>
-          <span>Join Telegram Community</span>
-        </a>
-
-      </div>
-
-      <button
-        onclick="closeWelcomePopup()"
-        class="text-[11px] text-gray-500 hover:text-gray-300 underline font-medium transition"
-      >
-        Continue to Website
+      <a id="telegramInviteJoin" href="https://t.me/ICSEMasterClass10" target="_blank" rel="noopener noreferrer"
+         onclick="closeWelcomePopup()" class="mc-telegram-primary w-full py-3 px-4 rounded-xl bg-sky-500 hover:bg-sky-400 text-white font-bold text-sm flex items-center justify-center gap-2 transition">
+         <i class="fa-brands fa-telegram text-xl" aria-hidden="true"></i> Join ICSE Class 10 Telegram
+         <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+      </a>
+      <button type="button" onclick="closeWelcomePopup()" class="mc-telegram-later w-full min-h-11 rounded-xl text-gray-200 hover:text-white font-semibold text-sm">
+        Maybe later — continue studying
       </button>
-
     </div>
   </div>
 
