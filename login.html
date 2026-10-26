@@ -54,9 +54,24 @@ button,.btn{min-height:48px;touch-action:manipulation;overflow-wrap:anywhere}
 @media(hover:none){.brand:hover,button:hover,.btn:hover{transform:none}}
 </style>
 <link rel="stylesheet" href="design-polish.css?v=20261026-1">
+<link rel="stylesheet" href="luxury-theme.css?v=1">
 </head>
 <body class="mc-login">
-<main>
+<main class="lux-login-layout">
+  <aside class="lux-login-story" aria-label="ICSE MasterClass study space">
+    <div class="lux-story-brand"><span class="lux-story-star" aria-hidden="true">✦</span> ICSE MASTERCLASS <small>CLASS 10 STUDY VAULT</small></div>
+    <div class="lux-story-copy">
+      <p class="lux-story-kicker">LEARN · PRACTISE · EXCEL</p>
+      <h2>Master your <em>Class 10</em> journey.</h2>
+      <p>Notes, past papers, revision resources and a study community, together in one free learning platform.</p>
+    </div>
+    <div class="lux-story-stats">
+      <span><b>8,000+</b><small>Materials</small></span>
+      <span><b>ICSE 10</b><small>Study portal</small></span>
+      <span><b>Free</b><small>Learning tools</small></span>
+    </div>
+  </aside>
+  <div class="lux-login-form-side">
 <a class="brand" href="./" aria-label="ICSE MasterClass home"><img class="brand-mark" src="icseYtLogo.png" alt=""><span class="brand-name">ICSE <strong>MasterClass</strong><small>CLASS 10 PORTAL · STUDENT SPACE</small></span></a>
 <section class="card" aria-labelledby="title">
 <div class="eyebrow">Your learning space</div>
@@ -97,6 +112,7 @@ button,.btn{min-height:48px;touch-action:manipulation;overflow-wrap:anywhere}
 </section>
 <a class="back" data-vault-entry href="./?entry=done">← Back to Study Vault</a>
 <p class="foot">ICSE MasterClass · Learn with clarity. Practise with purpose.</p>
+  </div>
 </main>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
