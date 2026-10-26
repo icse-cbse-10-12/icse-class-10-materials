@@ -235,9 +235,11 @@
     @media(max-width:520px) { .settings-panel { padding:20px 16px; } .settings-overlay { justify-content:stretch; } }
 
   </style>
+<link rel="stylesheet" href="design-polish.css?v=20261026-1">
 </head>
 
-<body class="bg-gray-950 text-gray-100 font-sans min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black pb-20 sm:pb-12">
+<body class="mc-home bg-gray-950 text-gray-100 font-sans min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black pb-20 sm:pb-12">
+  <a class="mc-skip-link" href="#mainContent">Skip to content</a>
 
   <!-- Header Navigation -->
   <header class="sticky top-0 z-40 bg-gray-950/90 backdrop-blur-md border-b border-gray-800/80">
@@ -267,6 +269,8 @@
         <span>Menu</span>
       </button>
 
+      <!-- Mobile account shortcut: visible above the action row on small screens -->
+      <a id="mobileAccountLink" href="./login.html" aria-label="Open student login" title="Student account"><i class="fa-solid fa-user-circle" aria-hidden="true"></i></a>
       <!-- Header Actions -->
       <div id="headerActions" class="flex items-center gap-2 sm:gap-3">
         <a href="./login.html" aria-label="Student account: sign in or create an account" title="Student Account" class="w-10 h-10 shrink-0 rounded-xl bg-amber-500/15 text-amber-300 border border-amber-500/40 hover:bg-amber-500 hover:text-gray-950 transition flex items-center justify-center"><i class="fa-solid fa-user-circle text-lg" aria-hidden="true"></i></a>
@@ -370,7 +374,7 @@
         <div class="flex justify-between settings-muted text-xs"><span>Compact</span><span>Large</span></div>
       </div>
       <div class="settings-section settings-version">
-        <div class="flex items-center justify-between gap-3"><div><h3>Website version</h3><p class="settings-muted">ICSE MasterClass Materials Portal</p></div><span class="settings-version-badge">v1.2.6</span></div>
+        <div class="flex items-center justify-between gap-3"><div><h3>Website version</h3><p class="settings-muted">ICSE MasterClass Materials Portal</p></div><span class="settings-version-badge">October 2026</span></div>
         <a href="https://github.com/icse-cbse-10-12/icse-class-10-materials/releases/latest" target="_blank" rel="noopener noreferrer" class="settings-release-link">View release notes <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
       </div>
       <div class="flex gap-2 pt-4"><button class="settings-reset" onclick="resetSiteSettings()">Reset to defaults</button><button class="settings-done" onclick="toggleSettings(false)">Done</button></div>
@@ -379,7 +383,7 @@
 
 
   <!-- Main Website Content -->
-  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+  <main id="mainContent" tabindex="-1" class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
 
     <!-- Aurora dashboard refresh -->
@@ -960,6 +964,51 @@
     <span>Join Group</span>
   </a>
 
+  <!-- AI tutor belongs before the footer so the website ends with its actual footer. -->
+<section id="icseAiTutor" class="icse-ai-tutor" aria-labelledby="icseAiTutorTitle">
+  <div class="icse-ai-tutor-head">
+    <div>
+      <span class="icse-ai-eyebrow">YOUR FREE STUDY COMPANION</span>
+      <h2 id="icseAiTutorTitle">✨ ICSE MasterClass AI Tutor</h2>
+      <p>Need help with a chapter, numerical, or exam question? Prepare your question below and continue the conversation with our existing Velora-powered AI tutor in Telegram.</p>
+    </div>
+    <span class="icse-ai-online"><i class="fa-brands fa-telegram" aria-hidden="true"></i> Chat via Telegram</span>
+  </div>
+  <div class="icse-ai-chat icse-ai-chat-guide" role="region" aria-label="How to use the AI tutor">
+    <div class="icse-ai-message assistant">
+      <div class="icse-ai-avatar" aria-hidden="true">✦</div>
+      <div class="icse-ai-bubble"><strong>Welcome to your AI Tutor!</strong>
+        <p>Choose a subject and type your doubt. Tap <strong>Copy Question</strong>, then <strong>Open AI Tutor</strong> and paste it into Telegram. Your answers appear in the bot chat, not on this page.</p>
+      </div>
+    </div>
+  </div>
+  <div class="icse-ai-presets" aria-label="Suggested types of study questions">
+    <button type="button" data-ai-prompt="Explain this concept simply with an ICSE Class 10 example: ">Explain a concept</button>
+    <button type="button" data-ai-prompt="Give me five ICSE Class 10 practice questions with solutions on: ">Practice questions</button>
+    <button type="button" data-ai-prompt="Teach this ICSE Class 10 topic step by step, with examples and a summary: ">Teach step by step</button>
+  </div>
+  <form id="icseAiForm" class="icse-ai-compose">
+    <label class="sr-only" for="icseAiSubject">Subject</label>
+    <select id="icseAiSubject" aria-label="Select your subject">
+      <option>General</option><option>Physics</option><option>Chemistry</option><option>Biology</option>
+      <option>Mathematics</option><option>English Language</option><option>English Literature</option>
+      <option>History &amp; Civics</option><option>Geography</option><option>Computer Applications</option>
+      <option>Other ICSE subject</option>
+    </select>
+    <label class="sr-only" for="icseAiInput">Your study question</label>
+    <textarea id="icseAiInput" rows="2" maxlength="5000" placeholder="What would you like to learn? Type your question here…" required></textarea>
+    <button id="icseAiSend" type="submit"><i class="fa-regular fa-copy" aria-hidden="true"></i> Copy Question</button>
+  </form>
+  <div class="icse-ai-route-actions">
+    <a class="icse-ai-telegram-link" id="icseAiLaunch" href="https://t.me/ICSEMasterClassTutorBot" target="_blank" rel="noopener noreferrer">
+      <i class="fa-brands fa-telegram" aria-hidden="true"></i> Open AI Tutor on Telegram <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+    </a>
+    <span>Already have Telegram? You can open the bot directly without copying a question.</span>
+  </div>
+  <p id="icseAiStatus" class="icse-ai-user-status" role="status" aria-live="polite">No subscription or API key needed for website visitors. The bot's free-service limits may apply.</p>
+  <p class="icse-ai-private-note">Please don't share passwords, phone numbers, or other private information with an AI bot. Double-check important answers against your textbook or teacher.</p>
+</section>
+
   <!-- Footer -->
   <footer class="mt-auto border-t border-gray-800/80 bg-gray-950 py-6 text-center text-xs text-gray-500">
     <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
@@ -1023,49 +1072,7 @@
 
   <!-- Main JavaScript: Resource Database, Search, Sharing and PWA -->
  
-<section id="icseAiTutor" class="icse-ai-tutor" aria-labelledby="icseAiTutorTitle">
-  <div class="icse-ai-tutor-head">
-    <div>
-      <span class="icse-ai-eyebrow">YOUR FREE STUDY COMPANION</span>
-      <h2 id="icseAiTutorTitle">✨ ICSE MasterClass AI Tutor</h2>
-      <p>Need help with a chapter, numerical, or exam question? Prepare your question below and continue the conversation with our existing Velora-powered AI tutor in Telegram.</p>
-    </div>
-    <span class="icse-ai-online"><i class="fa-brands fa-telegram" aria-hidden="true"></i> Chat via Telegram</span>
-  </div>
-  <div class="icse-ai-chat icse-ai-chat-guide" role="region" aria-label="How to use the AI tutor">
-    <div class="icse-ai-message assistant">
-      <div class="icse-ai-avatar" aria-hidden="true">✦</div>
-      <div class="icse-ai-bubble"><strong>Welcome to your AI Tutor!</strong>
-        <p>Choose a subject and type your doubt. Tap <strong>Copy Question</strong>, then <strong>Open AI Tutor</strong> and paste it into Telegram. Your answers appear in the bot chat, not on this page.</p>
-      </div>
-    </div>
-  </div>
-  <div class="icse-ai-presets" aria-label="Suggested types of study questions">
-    <button type="button" data-ai-prompt="Explain this concept simply with an ICSE Class 10 example: ">Explain a concept</button>
-    <button type="button" data-ai-prompt="Give me five ICSE Class 10 practice questions with solutions on: ">Practice questions</button>
-    <button type="button" data-ai-prompt="Teach this ICSE Class 10 topic step by step, with examples and a summary: ">Teach step by step</button>
-  </div>
-  <form id="icseAiForm" class="icse-ai-compose">
-    <label class="sr-only" for="icseAiSubject">Subject</label>
-    <select id="icseAiSubject" aria-label="Select your subject">
-      <option>General</option><option>Physics</option><option>Chemistry</option><option>Biology</option>
-      <option>Mathematics</option><option>English Language</option><option>English Literature</option>
-      <option>History &amp; Civics</option><option>Geography</option><option>Computer Applications</option>
-      <option>Other ICSE subject</option>
-    </select>
-    <label class="sr-only" for="icseAiInput">Your study question</label>
-    <textarea id="icseAiInput" rows="2" maxlength="5000" placeholder="What would you like to learn? Type your question here…" required></textarea>
-    <button id="icseAiSend" type="submit"><i class="fa-regular fa-copy" aria-hidden="true"></i> Copy Question</button>
-  </form>
-  <div class="icse-ai-route-actions">
-    <a class="icse-ai-telegram-link" id="icseAiLaunch" href="https://t.me/ICSEMasterClassTutorBot" target="_blank" rel="noopener noreferrer">
-      <i class="fa-brands fa-telegram" aria-hidden="true"></i> Open AI Tutor on Telegram <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
-    </a>
-    <span>Already have Telegram? You can open the bot directly without copying a question.</span>
-  </div>
-  <p id="icseAiStatus" class="icse-ai-user-status" role="status" aria-live="polite">No subscription or API key needed for website visitors. The bot's free-service limits may apply.</p>
-  <p class="icse-ai-private-note">Please don't share passwords, phone numbers, or other private information with an AI bot. Double-check important answers against your textbook or teacher.</p>
-</section>
+
 <script src="ai-tutor.js" defer></script>
 <script src="script.js"></script>
 <script src="study-tools.js" defer></script>

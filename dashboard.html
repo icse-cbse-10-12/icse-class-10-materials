@@ -14,8 +14,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="ui-ux.css">
+<link rel="stylesheet" href="design-polish.css?v=20261026-1">
 </head>
-<body class="bg-gray-950 text-gray-100 font-sans min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black pb-12">
+<body class="mc-dashboard bg-gray-950 text-gray-100 font-sans min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black pb-12">
+  <a class="mc-skip-link" href="#dashboardMain">Skip to dashboard</a>
   <header class="sticky top-0 z-40 bg-gray-950/90 backdrop-blur-md border-b border-gray-800/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
       <a href="./" class="flex items-center gap-3 min-w-0 group">
@@ -25,7 +27,7 @@
       <a href="./" class="dashboard-secondary shrink-0"><i class="fa-solid fa-arrow-left mr-2" aria-hidden="true"></i><span>Study Vault</span></a>
     </div>
   </header>
-  <main class="flex-grow w-full">
+  <main id="dashboardMain" tabindex="-1" class="flex-grow w-full">
 <!-- Student Dashboard: private, browser-local study planning -->
   <section id="studentDashboard" class="dashboard-shell max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6" aria-labelledby="dashboardTitle">
     <div class="dashboard-hero mb-6">
@@ -35,7 +37,7 @@
           <h1 id="dashboardTitle">Small steps. Real progress.</h1>
           <p>Your plan, your pace. Pick one useful task and get started.</p>
         </div>
-        <a href="./" class="dashboard-secondary"><i class="fa-solid fa-arrow-left mr-2"></i>Study Vault</a>
+        <a href="./#icseAiTutor" class="dashboard-secondary"><i class="fa-solid fa-robot mr-2" aria-hidden="true"></i>AI Tutor</a>
       </div>
       <div class="dashboard-overview">
         <div class="dashboard-overview-main"><div class="dashboard-overview-label">YOUR PROGRESS</div><div class="dashboard-overview-number"><strong id="dashboardTasksDone">0</strong><span>of <b id="dashboardTasksTotal">0 tasks planned</b> completed</span></div><div class="dashboard-progress-track dashboard-overview-track"><div id="dashboardOverallFill" class="dashboard-progress-fill" style="width:0%"></div></div><p id="dashboardEncouragement" class="dashboard-encouragement">Every task you finish is a step forward.</p></div>
