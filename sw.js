@@ -1,7 +1,8 @@
-const CACHE_NAME = 'icse-masterclass-v1.2.7-auth-live';
+const CACHE_NAME = 'icse-masterclass-v1.2.8-ai-telegram';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
+  './ai-tutor.js',
   './dashboard.html',
   './style.css',
   './script.js',

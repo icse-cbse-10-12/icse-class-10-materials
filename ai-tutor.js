@@ -1,1 +1,69 @@
-(()=>{"use strict";const c=window.ICSE_AI_TUTOR_CONFIG||{},f=document.getElementById("icseAiForm");if(!f)return;const i=document.getElementById("icseAiInput"),s=document.getElementById("icseAiSubject"),ch=document.getElementById("icseAiChat"),b=document.getElementById("icseAiSend"),st=document.getElementById("icseAiStatus"),hist=[];function add(role,text){const r=document.createElement("div");r.className="icse-ai-message "+role;const a=document.createElement("div");a.className="icse-ai-avatar";a.textContent=role==="user"?"You":"✦";const d=document.createElement("div");d.className="icse-ai-bubble";d.textContent=text;r.append(a,d);ch.append(r);ch.scrollTop=ch.scrollHeight;return d}document.querySelectorAll("[data-ai-prompt]").forEach(x=>x.onclick=()=>{i.value=x.dataset.aiPrompt;i.focus();i.setSelectionRange(i.value.length,i.value.length)});i.onkeydown=e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();f.requestSubmit()}};f.onsubmit=async e=>{e.preventDefault();const q=i.value.trim();if(!q)return;if(!c.apiUrl||c.apiUrl.includes("YOUR-CLOUDFLARE-WORKER")){st.textContent="API not connected yet — follow ai-tutor-setup.md.";add("assistant","The tutor interface is ready, but the private API still needs deployment. The site owner must deploy the Cloudflare Worker and set GEMINI_API_KEY as a Worker secret. This question was not sent.");return}add("user",q);i.value="";b.disabled=true;st.textContent="Velora is thinking…";const ans=add("assistant","Thinking…");try{const r=await fetch(c.apiUrl,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({subject:s.value,message:q,history:hist.slice(-8)})}),d=await r.json();if(!r.ok)throw Error(d.error||"API error "+r.status);ans.textContent=d.answer;hist.push({role:"user",text:q},{role:"model",text:d.answer});if(hist.length>16)hist.splice(0,hist.length-16);st.textContent="Answered — ask a follow-up."}catch(x){ans.textContent="Sorry, I couldn't get an answer. "+x.message;st.textContent="Connection issue — try again."}finally{b.disabled=false;i.focus();ch.scrollTop=ch.scrollHeight}}})();
+(() => {
+  "use strict";
+  const form = document.getElementById("icseAiForm");
+  if (!form) return;
+  const question = document.getElementById("icseAiInput");
+  const subject = document.getElementById("icseAiSubject");
+  const status = document.getElementById("icseAiStatus");
+  const copyButton = document.getElementById("icseAiSend");
+  const botLink = document.getElementById("icseAiLaunch");
+
+  // Questions stay in the browser until a student chooses to paste them in Telegram.
+  // Do not add a secret AI API key or Telegram bot token to a public GitHub Pages site.
+  function setStatus(text, successful) {
+    status.textContent = text;
+    status.classList.toggle("icse-ai-copied", !!successful);
+  }
+  async function copyToClipboard(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      try {
+        await navigator.clipboard.writeText(text);
+        return true;
+      } catch (_) { /* fall back for restricted clipboard permissions */ }
+    }
+    const helper = document.createElement("textarea");
+    helper.value = text;
+    helper.setAttribute("readonly", "");
+    helper.style.position = "fixed";
+    helper.style.opacity = "0";
+    helper.style.left = "-9999px";
+    document.body.appendChild(helper);
+    helper.focus();
+    helper.select();
+    let copied = false;
+    try { copied = document.execCommand("copy"); } catch (_) { copied = false; }
+    helper.remove();
+    return copied;
+  }
+  document.querySelectorAll("#icseAiTutor [data-ai-prompt]").forEach(button => {
+    button.addEventListener("click", () => {
+      question.value = button.dataset.aiPrompt || "";
+      question.focus();
+      question.setSelectionRange(question.value.length, question.value.length);
+      setStatus("Finish your question, then copy it and open the tutor.", false);
+    });
+  });
+  question.addEventListener("keydown", e => {
+    if (e.key === "Enter" && !e.shiftKey && !e.isComposing) {
+      e.preventDefault();
+      form.requestSubmit();
+    }
+  });
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    const value = question.value.trim();
+    if (!value) { question.focus(); return; }
+    const prompt = "ICSE Class 10 | " + subject.value + "\n" + value;
+    copyButton.disabled = true;
+    try {
+      if (await copyToClipboard(prompt)) {
+        setStatus("✓ Question copied! Tap Open AI Tutor on Telegram, press Start if asked, and paste your question into the chat.", true);
+        botLink.focus({ preventScroll: true });
+      } else {
+        setStatus("Clipboard permission is unavailable. Select and copy your question manually, then open the Telegram bot.", false);
+        question.focus();
+        question.select();
+      }
+    } finally { copyButton.disabled = false; }
+  });
+})();
