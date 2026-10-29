@@ -346,7 +346,6 @@
         <a href="./" onclick="toggleSiteNav(false)"><i class="fa-solid fa-house" aria-hidden="true"></i><span>Home</span><i class="fa-solid fa-chevron-right site-nav-chevron" aria-hidden="true"></i></a>
         <p class="site-nav-section-label">YOUR EXPERIENCE</p>
         <a href="./dashboard.html" onclick="toggleSiteNav(false)"><i class="fa-solid fa-chart-line" aria-hidden="true"></i><span>Student Dashboard</span><i class="fa-solid fa-chevron-right site-nav-chevron" aria-hidden="true"></i></a>
-        <a href="#icseAiTutor" onclick="toggleSiteNav(false)"><i class="fa-solid fa-robot" aria-hidden="true"></i><span>Free AI Tutor</span><i class="fa-solid fa-chevron-right site-nav-chevron" aria-hidden="true"></i></a>
         <a href="https://edubot-nu-wheat.vercel.app/" target="_blank" rel="noopener noreferrer" onclick="toggleSiteNav(false)"><i class="fa-solid fa-comments" aria-hidden="true"></i><span>EduBot AI Assistant</span><i class="fa-solid fa-arrow-up-right-from-square site-nav-chevron" aria-hidden="true"></i></a>
         <a href="./login.html" onclick="toggleSiteNav(false)"><i class="fa-solid fa-user-lock" aria-hidden="true"></i><span>Sign in / Create account</span><i class="fa-solid fa-chevron-right site-nav-chevron" aria-hidden="true"></i></a>
         <p class="site-nav-section-label">LEARN & EXPLORE</p>
@@ -437,7 +436,6 @@
         <a href="#globalSearchInput" onclick="showGlobalSearch()"><span class="dock-icon cyan"><i class="fa-solid fa-magnifying-glass"></i></span><span><strong>Quick Search</strong><small>Find resources</small></span><i class="fa-solid fa-chevron-right"></i></a>
         <a href="#mainSubjectGrid"><span class="dock-icon violet"><i class="fa-solid fa-book-open"></i></span><span><strong>Study Materials</strong><small>Browse subjects</small></span><i class="fa-solid fa-chevron-right"></i></a>
         <a href="./dashboard.html"><span class="dock-icon amber"><i class="fa-solid fa-chart-line"></i></span><span><strong>My Dashboard</strong><small>Study workspace</small></span><i class="fa-solid fa-chevron-right"></i></a>
-        <a href="#icseAiTutor"><span class="dock-icon emerald"><i class="fa-solid fa-robot"></i></span><span><strong>AI Tutor</strong><small>Ask study questions</small></span><i class="fa-solid fa-chevron-right"></i></a>
         <a href="https://edubot-nu-wheat.vercel.app/" target="_blank" rel="noopener noreferrer"><span class="dock-icon cyan"><i class="fa-solid fa-comments"></i></span><span><strong>EduBot</strong><small>Open AI study assistant</small></span><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
       <a href="https://www.youtube.com/@ICSEMasterClass10" target="_blank" rel="noopener noreferrer"><span class="dock-icon rose"><i class="fa-brands fa-youtube"></i></span><span><strong>Video Lessons</strong><small>Learn visually</small></span><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
       </nav>
@@ -962,49 +960,23 @@
     <span>Join Group</span>
   </a>
 
-  <!-- AI tutor belongs before the footer so the website ends with its actual footer. -->
-<section id="icseAiTutor" class="icse-ai-tutor" aria-labelledby="icseAiTutorTitle">
+  <!-- EduBot is the single AI study assistant entry point. -->
+<section id="eduBotAssistant" class="icse-ai-tutor" aria-labelledby="eduBotAssistantTitle">
   <div class="icse-ai-tutor-head">
     <div>
-      <span class="icse-ai-eyebrow">YOUR FREE STUDY COMPANION</span>
-      <h2 id="icseAiTutorTitle">✦ Your ICSE AI Study Companion</h2>
-      <p>Need help with a chapter, numerical, or exam question? Prepare your question below and continue the conversation with our existing Velora-powered AI tutor in Telegram.</p>
+      <span class="icse-ai-eyebrow">YOUR STUDY ASSISTANT</span>
+      <h2 id="eduBotAssistantTitle">✦ Study with EduBot AI</h2>
+      <p>Open EduBot to ask study questions and get learning support. It opens in a new tab, so you can return to your Study Vault whenever you need.</p>
     </div>
-    <span class="icse-ai-online"><i class="fa-brands fa-telegram" aria-hidden="true"></i> Chat via Telegram</span>
+    <span class="icse-ai-online"><i class="fa-solid fa-comments" aria-hidden="true"></i> EduBot AI</span>
   </div>
-  <div class="icse-ai-chat icse-ai-chat-guide" role="region" aria-label="How to use the AI tutor">
-    <div class="icse-ai-message assistant">
-      <div class="icse-ai-avatar" aria-hidden="true">✦</div>
-      <div class="icse-ai-bubble"><strong>Welcome to your AI Tutor!</strong>
-        <p>Choose a subject and type your doubt. Tap <strong>Copy Question</strong>, then <strong>Open AI Tutor</strong> and paste it into Telegram. Your answers appear in the bot chat, not on this page.</p>
-      </div>
-    </div>
-  </div>
-  <div class="icse-ai-presets" aria-label="Suggested types of study questions">
-    <button type="button" data-ai-prompt="Explain this concept simply with an ICSE Class 10 example: ">Explain a concept</button>
-    <button type="button" data-ai-prompt="Give me five ICSE Class 10 practice questions with solutions on: ">Practice questions</button>
-    <button type="button" data-ai-prompt="Teach this ICSE Class 10 topic step by step, with examples and a summary: ">Teach step by step</button>
-  </div>
-  <form id="icseAiForm" class="icse-ai-compose">
-    <label class="sr-only" for="icseAiSubject">Subject</label>
-    <select id="icseAiSubject" aria-label="Select your subject">
-      <option>General</option><option>Physics</option><option>Chemistry</option><option>Biology</option>
-      <option>Mathematics</option><option>English Language</option><option>English Literature</option>
-      <option>History &amp; Civics</option><option>Geography</option><option>Computer Applications</option>
-      <option>Other ICSE subject</option>
-    </select>
-    <label class="sr-only" for="icseAiInput">Your study question</label>
-    <textarea id="icseAiInput" rows="2" maxlength="5000" placeholder="What would you like to learn? Type your question here…" required></textarea>
-    <button id="icseAiSend" type="submit"><i class="fa-regular fa-copy" aria-hidden="true"></i> Copy Question</button>
-  </form>
   <div class="icse-ai-route-actions">
-    <a class="icse-ai-telegram-link" id="icseAiLaunch" href="https://t.me/ICSEMasterClassTutorBot" target="_blank" rel="noopener noreferrer">
-      <i class="fa-brands fa-telegram" aria-hidden="true"></i> Open AI Tutor on Telegram <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+    <a class="icse-ai-telegram-link" href="https://edubot-nu-wheat.vercel.app/" target="_blank" rel="noopener noreferrer">
+      <i class="fa-solid fa-comments" aria-hidden="true"></i> Open EduBot AI <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
     </a>
-    <span>Already have Telegram? You can open the bot directly without copying a question.</span>
+    <span>For important exam answers, cross-check with your textbook or teacher.</span>
   </div>
-  <p id="icseAiStatus" class="icse-ai-user-status" role="status" aria-live="polite">No subscription or API key needed for website visitors. The bot's free-service limits may apply.</p>
-  <p class="icse-ai-private-note">Please don't share passwords, phone numbers, or other private information with an AI bot. Double-check important answers against your textbook or teacher.</p>
+  <p class="icse-ai-private-note">Do not share passwords, phone numbers, or other private information with an AI assistant.</p>
 </section>
 
   <!-- Footer -->
@@ -1071,7 +1043,6 @@
   <!-- Main JavaScript: Resource Database, Search, Sharing and PWA -->
  
 
-<script src="ai-tutor.js" defer></script>
 <script src="script.js"></script>
 <script src="study-tools.js" defer></script>
 <script src="ui-ux.js" defer></script>
