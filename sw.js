@@ -1,8 +1,9 @@
-const CACHE_NAME = 'icse-masterclass-v1.4.3-performance-audit';
+const CACHE_NAME = 'icse-masterclass-v1.5.0-gemini-edubot';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './ai-tutor.js',
+  './gemini-ai.js',
   './dashboard.html',
   './style.css',
   './design-polish.css',

@@ -273,6 +273,28 @@
     }
     @media (prefers-reduced-motion:reduce) { .edubot-embed-shell * { scroll-behavior:auto !important; } }
   </style>
+
+<style id="edubot-gemini-chat-css">
+#eduBotAssistant{scroll-margin-top:84px;min-width:0}
+.edubot-chat-shell{width:100%;min-width:0;overflow:hidden;border:1px solid rgba(245,158,11,.3);border-radius:18px;background:#080f1b;color:#e2e8f0}
+.edubot-chat-toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:13px 15px;border-bottom:1px solid rgba(148,163,184,.18);font-size:12px}
+.edubot-chat-toolbar>span:first-child{font-weight:800;color:#fbbf24;display:flex;gap:8px;align-items:center}
+.edubot-model-label{color:#94a3b8}
+.edubot-chat-messages{height:clamp(300px,48vh,520px);overflow-y:auto;overscroll-behavior:contain;padding:16px;display:flex;flex-direction:column;gap:12px}
+.edubot-message{max-width:92%;padding:12px 14px;border-radius:14px;overflow-wrap:anywhere;white-space:normal;line-height:1.55;font-size:14px}
+.edubot-message p{margin:5px 0 0;white-space:pre-wrap}
+.edubot-message-user{align-self:flex-end;background:#172a43;border:1px solid rgba(245,158,11,.2)}
+.edubot-message-assistant{align-self:flex-start;background:#101d2d;border:1px solid rgba(148,163,184,.16)}
+.edubot-chat-form{display:flex;gap:10px;align-items:flex-end;padding:12px;border-top:1px solid rgba(148,163,184,.18)}
+#edubotChatInput{flex:1;min-width:0;resize:vertical;max-height:140px;border:1px solid #334155;border-radius:12px;background:#0b1422;color:#f8fafc;padding:12px;font:inherit;font-size:14px}
+#edubotChatInput:focus{outline:2px solid #f59e0b;outline-offset:1px}
+#edubotSendButton{display:flex;gap:7px;align-items:center;justify-content:center;border:0;border-radius:12px;padding:12px 16px;background:#f59e0b;color:#111827;font-weight:800;cursor:pointer}
+#edubotSendButton:disabled{opacity:.55;cursor:wait}
+.edubot-chat-footer{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:0 14px 12px;color:#94a3b8;font-size:11px}
+#edubotClearChat{color:#fbbf24;text-decoration:underline;background:none;border:0;cursor:pointer}
+@media(max-width:640px){#eduBotAssistant{padding:14px 10px}.edubot-chat-shell{border-radius:13px}.edubot-chat-toolbar{align-items:flex-start;padding:11px}.edubot-chat-messages{height:58vh;min-height:280px;max-height:500px;padding:11px}.edubot-message{max-width:98%;font-size:13px}.edubot-chat-form{padding:9px;gap:7px}#edubotChatInput{padding:10px;font-size:16px}#edubotSendButton{padding:12px 13px}.edubot-chat-footer{padding:0 10px 10px}}
+@media(prefers-reduced-motion:reduce){.edubot-chat-shell *{scroll-behavior:auto!important}}
+</style>
 </head>
 
 <body class="mc-home bg-gray-950 text-gray-100 font-sans min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black pb-20 sm:pb-12">
@@ -991,20 +1013,21 @@
     </div>
     <span class="icse-ai-online"><i class="fa-solid fa-comments" aria-hidden="true"></i> EduBot AI</span>
   </div>
-  <div class="edubot-embed-shell">
-    <div class="edubot-embed-toolbar">
-      <span><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> EduBot inside ICSE MasterClass</span>
-      <a href="https://edubot-nu-wheat.vercel.app/" target="_blank" rel="noopener noreferrer">Open separately if needed <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+  <div class="edubot-chat-shell" id="edubotChatShell">
+    <div class="edubot-chat-toolbar">
+      <span><i class="fa-solid fa-sparkles" aria-hidden="true"></i> Gemini-powered study assistant</span>
+      <span class="edubot-model-label">EduBot · ICSE MasterClass</span>
     </div>
-    <iframe
-      class="edubot-embed-frame"
-      src="https://edubot-nu-wheat.vercel.app/"
-      title="EduBot AI study assistant"
-      loading="lazy"
-      referrerpolicy="strict-origin-when-cross-origin"
-      allow="clipboard-write"
-    ></iframe>
-    <p class="edubot-embed-fallback">If EduBot does not load here, use <a href="https://edubot-nu-wheat.vercel.app/" target="_blank" rel="noopener noreferrer">this direct link</a>. Some external services restrict embedding.</p>
+    <div id="edubotChatMessages" class="edubot-chat-messages" role="log" aria-live="polite" aria-relevant="additions">
+      <div class="edubot-message edubot-message-assistant"><strong>Welcome to EduBot! 👋</strong><p>Ask an ICSE Class 10 question, request a concept explanation, or generate a short practice quiz. I can make mistakes, so cross-check important answers with your textbook.</p></div>
+    </div>
+    <form id="edubotChatForm" class="edubot-chat-form">
+      <label class="sr-only" for="edubotChatInput">Ask EduBot a study question</label>
+      <textarea id="edubotChatInput" rows="2" maxlength="1500" placeholder="Ask a study question…" required></textarea>
+      <button id="edubotSendButton" type="submit"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i><span>Send</span></button>
+    </form>
+    <div class="edubot-chat-footer"><span id="edubotChatStatus" role="status">Ready to help · Keep personal information private</span><button type="button" id="edubotClearChat">Clear chat</button></div>
+    <noscript><p>Enable JavaScript to use EduBot.</p></noscript>
   </div>
   <p class="icse-ai-route-note">For important exam answers, cross-check with your textbook or teacher.</p>
   <p class="icse-ai-private-note">Do not share passwords, phone numbers, or other private information with an AI assistant.</p>
@@ -1080,5 +1103,6 @@
 <script src="student-dashboard.js" defer></script>
 <script src="syllabus-tracker.js" defer></script>
   
+<script type="module" src="./gemini-ai.js?v=1"></script>
 </body>
 </html>
