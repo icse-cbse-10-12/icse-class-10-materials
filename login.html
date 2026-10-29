@@ -116,12 +116,14 @@ button,.btn{min-height:48px;touch-action:manipulation;overflow-wrap:anywhere}
 </main>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, updateProfile, sendEmailVerification, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, updateProfile, sendEmailVerification, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import { firebaseConfig } from "./firebase-config.js";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
+// Ensure Google sessions survive navigation back to the Study Vault.
+const authReady = setPersistence(auth, browserLocalPersistence);
 const $ = id => document.getElementById(id);
 let mode = "login";
 const entryParams = new URLSearchParams(window.location.search);
@@ -186,6 +188,7 @@ $("authForm").addEventListener("submit",async event=>{
   event.preventDefault(); const button=$("submitBtn"); button.disabled=true; message("");
   const email=$("email").value.trim(); const password=$("password").value;
   try {
+    await authReady;
     if(mode==="signup" && !checkPassword(password)) { message("Please meet all password requirements before creating your account.","error"); return; }
     if(mode==="signup") {
       const name=$("displayName").value.trim();
@@ -204,10 +207,18 @@ $("authForm").addEventListener("submit",async event=>{
 });
 $("googleBtn").addEventListener("click",async()=>{
   const button=$("googleBtn"); button.disabled=true; message("");
-  try { await signInWithPopup(auth,googleProvider); message("Google sign-in successful.","success");
-    if(isHomepageEntry) openStudyVault(); }
-  catch(error) { message(friendlyError(error),"error"); }
-  finally { button.disabled=false; }
+  try {
+    await authReady;
+    const result=await signInWithPopup(auth,googleProvider);
+    if(!result.user) throw new Error("Google did not return a signed-in account.");
+    // Confirm Firebase has a persisted session before changing pages.
+    await result.user.getIdToken();
+    message("Google sign-in successful. Your student account is ready.","success");
+    if(isHomepageEntry) openStudyVault();
+  } catch(error) {
+    console.error("Google sign-in failed:",error?.code||error?.message);
+    message(friendlyError(error),"error");
+  } finally { button.disabled=false; }
 });
 $("logoutBtn").addEventListener("click",async()=>{try{await signOut(auth);message("You have signed out.","success");}catch(error){message(friendlyError(error),"error");}});
 $("verifyBtn").addEventListener("click",async()=>{try{if(auth.currentUser){await sendEmailVerification(auth.currentUser);message("Verification email sent. Check your inbox and spam folder.","success");}}catch(error){message(friendlyError(error),"error");}});
@@ -233,6 +244,8 @@ function friendlyError(error) {
     "auth/user-disabled":"This account has been disabled. Contact support.",
     "auth/popup-closed-by-user":"Google sign-in was closed before finishing.",
     "auth/popup-blocked":"Your browser blocked the sign-in popup. Allow popups and try again.",
+    "auth/account-exists-with-different-credential":"This Google email already has an account using another sign-in method. Sign in using that method first.",
+    "auth/invalid-persistence-type":"Your browser cannot save a sign-in session. Try Chrome or another supported browser.",
     "auth/operation-not-allowed":"This sign-in method is not enabled in Firebase Authentication.",
     "auth/unauthorized-domain":"This website domain is not authorised in Firebase Authentication. Add your GitHub Pages domain in Firebase Console → Authentication → Settings → Authorized domains.",
     "auth/network-request-failed":"Network problem. Check your internet connection and try again.",
