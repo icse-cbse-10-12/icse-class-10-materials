@@ -847,50 +847,19 @@ body.mc-home .library-status {
 }
 body.mc-home .library-status i { color:var(--mc-forest) !important; }
 body.mc-home #mainLandingView { margin-top:18px; }
-body.mc-home #mainLandingView #mainSubjectGrid {
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:8px !important;
-}
-body.mc-home #mainSubjectGrid .mc-subject-item {
-  display:flex !important;
-  flex-direction:row !important;
-  align-items:center !important;
-  justify-content:flex-start !important;
-  gap:10px !important;
-  min-height:52px;
-  padding:9px 11px !important;
-  text-align:left !important;
-  background:var(--mc-paper-2) !important;
-  border:1px solid var(--mc-rule) !important;
-  border-radius:4px !important;
-  box-shadow:none !important;
-  transform:none !important;
-}
-body.mc-home #mainSubjectGrid .mc-subject-item:hover {
-  background:var(--mc-forest-tint) !important;
-  border-color:var(--mc-rule-strong) !important;
-}
-body.mc-home #mainSubjectGrid .mc-subject-mark {
-  display:grid;
-  flex:0 0 30px;
-  width:30px;
-  height:30px;
-  place-items:center;
-  background:var(--mc-paper-3);
-  border:1px solid var(--mc-rule);
-  border-radius:3px;
-  color:var(--mc-forest-deep);
-  font-size:.65rem;
-  font-weight:800;
-  letter-spacing:.02em;
-}
-body.mc-home #mainSubjectGrid .mc-subject-name {
-  color:var(--mc-ink) !important;
-  font-size:.78rem !important;
-  font-weight:650 !important;
-  line-height:1.25;
-}
+body.mc-home #mainLandingView #mainSubjectGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px !important;}
+body.mc-home #mainSubjectGrid .mc-subject-item{display:flex !important;flex-direction:column !important;align-items:stretch !important;justify-content:space-between !important;gap:10px !important;min-width:0;min-height:174px;padding:12px !important;text-align:left !important;background:var(--mc-paper-2) !important;border:1px solid var(--mc-rule) !important;border-radius:8px !important;box-shadow:0 2px 8px rgba(37,41,35,.045) !important;transform:none !important;color:var(--mc-ink) !important;cursor:pointer;transition:border-color .18s ease,background .18s ease,transform .18s ease;}
+body.mc-home #mainSubjectGrid .mc-subject-item:hover{background:var(--mc-paper-3) !important;border-color:var(--mc-forest) !important;transform:translateY(-2px) !important;}
+body.mc-home #mainSubjectGrid .mc-subject-item:focus-visible{outline:3px solid var(--mc-forest) !important;outline-offset:3px;}
+body.mc-home #mainSubjectGrid .mc-subject-illustration{display:flex;align-items:center;justify-content:center;min-height:92px;border-radius:6px;overflow:hidden;}
+body.mc-home #mainSubjectGrid .mc-subject-art{display:block;width:100%;max-width:112px;height:88px;}
+body.mc-home #mainSubjectGrid .mc-art-blue{color:#426F91;background:#E7EFF4;}body.mc-home #mainSubjectGrid .mc-art-rose{color:#A66A60;background:#F4E9E4;}body.mc-home #mainSubjectGrid .mc-art-green{color:#47775C;background:#E8F0E6;}body.mc-home #mainSubjectGrid .mc-art-lavender{color:#76658D;background:#EEEAF3;}body.mc-home #mainSubjectGrid .mc-art-sky{color:#4C7C83;background:#E6F0EF;}body.mc-home #mainSubjectGrid .mc-art-sand{color:#8A704A;background:#F1EBDD;}body.mc-home #mainSubjectGrid .mc-art-sage{color:#47745F;background:#E9EFE8;}
+body.mc-home #mainSubjectGrid .mc-subject-copy{display:flex;flex-direction:column;gap:5px;min-width:0;}
+body.mc-home #mainSubjectGrid .mc-subject-name{color:var(--mc-ink) !important;font-size:.86rem !important;font-weight:720 !important;line-height:1.25;}
+body.mc-home #mainSubjectGrid .mc-subject-hint{display:flex;justify-content:space-between;gap:6px;color:var(--mc-ink-mute);font-size:.68rem;line-height:1.2;}
+@media(max-width:900px){body.mc-home #mainLandingView #mainSubjectGrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:11px !important;}}
+@media(max-width:600px){body.mc-home #mainLandingView #mainSubjectGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px !important;}body.mc-home #mainSubjectGrid .mc-subject-item{min-height:158px;padding:10px !important;}body.mc-home #mainSubjectGrid .mc-subject-illustration{min-height:82px;}body.mc-home #mainSubjectGrid .mc-subject-art{height:78px;max-width:100px;}}
+@media(prefers-reduced-motion:reduce){body.mc-home #mainSubjectGrid .mc-subject-item{transition:none;}body.mc-home #mainSubjectGrid .mc-subject-item:hover{transform:none !important;}}
 body.mc-home #resourceGrid.mc-material-list {
   display:flex !important;
   flex-direction:column;
