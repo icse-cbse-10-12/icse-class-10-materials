@@ -68,6 +68,7 @@ test("local student-data deletion covers dashboard and Study Tools keys", () => 
   const tools = read("study-tools.js");
   const login = read("login.html");
   assert.ok(dashboard.includes("window.clearStudyToolsData()"));
+  assert.ok(dashboard.includes('localStorage.removeItem("icseMasterClassStudyToolsV1")'));
   assert.ok(tools.includes("window.clearStudyToolsData = function()"));
   assert.ok(login.includes('localStorage.removeItem("icseMasterClass.studentDashboard.v1")'));
   assert.ok(login.includes('localStorage.removeItem("icseMasterClassStudyToolsV1")'));

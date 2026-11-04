@@ -49,7 +49,7 @@
     document.getElementById("icseConsentExternal").checked = has("externalServices");
     document.getElementById("icseConsentRegion").value = consent?.region || "unknown";
     dialog.hidden = false;
-    document.getElementById("icseConsentAnalytics").focus();
+    document.getElementById("icseConsentRegion").focus();
   }
   function closeDialog() { dialog.hidden = true; settings.focus(); }
   function save(analytics, externalServices, region = document.getElementById("icseConsentRegion")?.value || consent?.region || "unknown") {
