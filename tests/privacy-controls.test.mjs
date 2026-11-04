@@ -89,6 +89,9 @@ test("Cloud Functions uses a supported Node 22 runtime and current Admin SDK", (
   assert.equal(firebase.functions.runtime, "nodejs22");
   assert.ok(pkg.dependencies["firebase-admin"].startsWith("^14."));
   assert.ok(pkg.dependencies["firebase-functions"].startsWith("^7."));
+  const workflow = read(".github/workflows/site-smoke.yml");
+  assert.ok(workflow.includes("node-version: 22"));
+  assert.ok(workflow.includes("node-version: 24"));
 });
 
 test("deployment instructions explicitly distinguish source from deployed backend", () => {
