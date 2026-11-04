@@ -1,5 +1,5 @@
-// Previous cache: icse-masterclass-v1.7.0-material-library
-const CACHE_NAME = "icse-masterclass-v1.8.0-legal-pages";
+// Previous cache: icse-masterclass-v1.8.0-legal-pages
+const CACHE_NAME = "icse-masterclass-v1.9.0-student-library-ux";
 const APP_SHELL = [
   "./",
   "./index.html",

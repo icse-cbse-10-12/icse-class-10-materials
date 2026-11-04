@@ -185,7 +185,7 @@ test("the first-screen Telegram invitation and floating CTA are removed", () => 
 
 test("the service worker invalidates the previous app shell and precaches the new library styles", () => {
   const sw = read("sw.js");
-  assert.match(sw, /icse-masterclass-v1\.8\.0-legal-pages/);
+  assert.match(sw, /icse-masterclass-v1\.9\.0-student-library-ux/);
   assert.match(sw, /academic-library\.css\?v=2/);
 });
 
@@ -214,6 +214,19 @@ test("copyright, non-affiliation and takedown information are visible by default
   assert.doesNotMatch(html, /October 2026|settings-version-badge/);
 });
 
+
+
+test("subject directory uses accessible subject-specific vector illustrations", () => {
+  const script = read("script.js");
+  const css = read("academic-library.css");
+  assert.ok(script.includes("function getSubjectIllustration(subject)"));
+  assert.ok(script.includes("mc-subject-art"));
+  assert.ok(script.includes('aria-label="Open ${escapeHTML(subject)} subject materials"'));
+  assert.ok(css.includes("#mainSubjectGrid .mc-subject-art"));
+  assert.ok(css.includes("repeat(2,minmax(0,1fr))"));
+  assert.ok(css.includes("focus-visible"));
+  assert.ok(css.includes("prefers-reduced-motion"));
+});
 
 test("all active stylesheets have balanced rule braces", () => {
   for (const file of ["style.css", "ui-ux.css", "design-polish.css", "luxury-theme.css", "academic-library.css"]) {
@@ -263,7 +276,7 @@ test("privacy and terms pages are linked from the homepage, login and dashboard"
 
 test("offline app shell caches the legal pages and invalidates the old cache", () => {
   const sw = read("sw.js");
-  assert.match(sw, /icse-masterclass-v1\.8\.0-legal-pages/);
+  assert.match(sw, /icse-masterclass-v1\.9\.0-student-library-ux/);
   assert.match(sw, /privacy-policy\.html/);
   assert.match(sw, /terms-and-conditions\.html/);
 });
