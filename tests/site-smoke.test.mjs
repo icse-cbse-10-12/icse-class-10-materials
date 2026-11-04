@@ -302,7 +302,7 @@ test("About email support provides copy and Gmail compose actions", () => {
 
 test("offline app shell caches the legal pages and invalidates the old cache", () => {
   const sw = read("sw.js");
-  assert.match(sw, /icse-masterclass-v1\.10\.0-about-panel/);
+  assert.match(sw, /icse-masterclass-v1\\.11\\.0-email-support-actions/);
   assert.match(sw, /privacy-policy\.html/);
   assert.match(sw, /terms-and-conditions\.html/);
 });
