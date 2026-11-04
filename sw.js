@@ -1,9 +1,12 @@
-const CACHE_NAME = "icse-masterclass-v1.7.0-material-library";
+// Previous cache: icse-masterclass-v1.7.0-material-library
+const CACHE_NAME = "icse-masterclass-v1.8.0-legal-pages";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./login.html",
   "./dashboard.html",
+  "./privacy-policy.html",
+  "./terms-and-conditions.html",
   "./portal.html",
   "./style.css",
   "./style.css?v=study-hub-layout-1",
