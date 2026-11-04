@@ -185,7 +185,7 @@ test("the first-screen Telegram invitation and floating CTA are removed", () => 
 
 test("the service worker invalidates the previous app shell and precaches the new library styles", () => {
   const sw = read("sw.js");
-  assert.match(sw, /icse-masterclass-v1\.10\.0-about-panel/);
+  assert.match(sw, /icse-masterclass-v1\.11\.0-email-support-actions/);
   assert.match(sw, /academic-library\.css\?v=3/);
 });
 
