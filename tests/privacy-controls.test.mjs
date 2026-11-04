@@ -81,6 +81,15 @@ test("legal and backend foundation files exist and refund model is truthful", ()
   assert.ok(read("refund-policy.html").includes("no Study Vault purchases to refund"));
 });
 
+test("Cloud Functions uses a supported Node 22 runtime and current Admin SDK", () => {
+  const pkg = JSON.parse(read("functions/package.json"));
+  const firebase = JSON.parse(read("firebase.json"));
+  assert.equal(pkg.engines.node, "22");
+  assert.equal(firebase.functions.runtime, "nodejs22");
+  assert.ok(pkg.dependencies["firebase-admin"].startsWith("^14."));
+  assert.ok(pkg.dependencies["firebase-functions"].startsWith("^7."));
+});
+
 test("deployment instructions explicitly distinguish source from deployed backend", () => {
   const doc = read("docs/ACCOUNT-DELETION-DEPLOYMENT.md");
   assert.ok(doc.includes("not a deployed backend"));

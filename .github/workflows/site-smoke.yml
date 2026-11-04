@@ -25,6 +25,12 @@ jobs:
           node-version: 24
           package-manager-cache: false
 
+      - name: Install Cloud Functions dependencies
+        run: npm install --prefix functions --ignore-scripts --no-audit --no-fund
+
+      - name: Check Cloud Functions package
+        run: npm run --prefix functions check
+
       - name: Run site smoke tests
         run: node --test tests/site-smoke.test.mjs tests/privacy-controls.test.mjs
 
