@@ -1,5 +1,5 @@
 // Previous cache: icse-masterclass-v1.8.0-legal-pages
-const CACHE_NAME = "icse-masterclass-v1.12.0-library-ux";
+const CACHE_NAME = "icse-masterclass-v1.13.0-privacy-controls";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -7,6 +7,9 @@ const APP_SHELL = [
   "./dashboard.html",
   "./privacy-policy.html",
   "./terms-and-conditions.html",
+  "./cookie-policy.html",
+  "./refund-policy.html",
+  "./consent-manager.js",
   "./portal.html",
   "./style.css",
   "./style.css?v=study-hub-layout-1",

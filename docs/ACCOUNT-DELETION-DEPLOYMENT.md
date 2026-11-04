@@ -11,7 +11,7 @@ The repository inspection found no student Firestore profile collection or stude
 1. Confirm Firebase project icse-masterclass is the intended production project.
 2. Confirm Firebase Authentication is enabled for the same project.
 3. Enable billing for the Firebase project if Firebase requires the Blaze plan for Cloud Functions deployment. Review current pricing and set budget alerts before enabling billing.
-4. Install Node.js 20 and Firebase CLI.
+4. Install Node.js 22 and Firebase CLI (current Firebase CLI releases support this workflow).
 5. Authenticate with an account authorised to deploy Functions.
 
 ## Deploy

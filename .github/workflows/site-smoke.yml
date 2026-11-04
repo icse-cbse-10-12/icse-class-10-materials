@@ -22,14 +22,32 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v7
         with:
+          node-version: 22
+          package-manager-cache: false
+
+      - name: Set up Node.js 22 for Cloud Functions
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          package-manager-cache: false
+
+      - name: Install Cloud Functions dependencies
+        run: npm install --prefix functions --ignore-scripts --no-audit --no-fund
+
+      - name: Check Cloud Functions package
+        run: npm run --prefix functions check
+
+      - name: Restore Node.js 24 for site tests
+        uses: actions/setup-node@v7
+        with:
           node-version: 24
           package-manager-cache: false
 
       - name: Run site smoke tests
-        run: node --test tests/site-smoke.test.mjs
+        run: node --test tests/site-smoke.test.mjs tests/privacy-controls.test.mjs
 
       - name: Check JavaScript syntax
         run: |
-          for file in sw.js edubot-loader.js script.js gemini-ai.js; do
+          for file in sw.js edubot-loader.js consent-manager.js script.js gemini-ai.js functions/index.js; do
             node --check "$file"
           done

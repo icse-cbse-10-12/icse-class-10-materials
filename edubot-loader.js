@@ -9,6 +9,15 @@
   let ready = false;
   let submissionPending = false;
 
+  function hasExternalConsent() {
+    return !!(window.ICSEConsent && window.ICSEConsent.has("externalServices") === true);
+  }
+
+  function requestConsent() {
+    if (status) status.textContent = "EduBot sends your question and recent chat context to Google Gemini. Enable Optional external services in Privacy settings to continue.";
+    window.ICSEConsent?.open();
+  }
+
   function loadEduBot() {
     if (!modulePromise) {
       modulePromise = import("./gemini-ai.js?v=2")
@@ -26,6 +35,7 @@
   }
 
   input?.addEventListener("focus", () => {
+    if (!hasExternalConsent()) { requestConsent(); return; }
     if (ready) return;
     loadEduBot().catch(error => {
       console.error("[EduBot loader]", error);
@@ -34,6 +44,7 @@
   });
 
   form.addEventListener("submit", async event => {
+    if (!hasExternalConsent()) { event.preventDefault(); requestConsent(); return; }
     if (ready) return;
     event.preventDefault();
     if (submissionPending) return;

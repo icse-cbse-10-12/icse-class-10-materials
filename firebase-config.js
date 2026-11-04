@@ -7,5 +7,7 @@ export const firebaseConfig = {
   storageBucket: "icse-masterclass.firebasestorage.app",
   messagingSenderId: "1036194846793",
   appId: "1:1036194846793:web:d83876d981a96d47e90798",
-  measurementId: "G-LKM1N5BX4K"
+  measurementId: "G-LKM1N5BX4K",
+  // Set true only after deleteMyAccount is deployed and verified in asia-south1.
+  accountDeletionAvailable: false
 };
