@@ -76,3 +76,10 @@ test("EduBot lazy loading coalesces concurrent submits and can retry focus after
   assert.match(loader, /if \(submissionPending\) return/);
   assert.doesNotMatch(loader, /\{ once: true \}/);
 });
+
+test("service-worker precache includes exact versioned CSS keys used by the homepage and login", () => {
+  const sw = read("sw.js");
+  for (const asset of ["style.css?v=study-hub-layout-1", "design-polish.css?v=20261026-1", "luxury-theme.css?v=3", "academic-library.css?v=1"]) {
+    assert.ok(sw.includes(asset), `APP_SHELL must precache ${asset}`);
+  }
+});
