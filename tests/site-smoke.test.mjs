@@ -274,6 +274,16 @@ test("privacy and terms pages are linked from the homepage, login and dashboard"
   assert.match(privacy, /does not include built-in age verification/i);
 });
 
+
+test("About and copyright panel uses the compact navy reference design", () => {
+ const html=read("index.html"); const css=read("academic-library.css");
+ assert.match(html,/academic-library\\.css\\?v=3/);
+ assert.match(html,/<details class="library-legal" open>/);
+ assert.match(html,/Extensive Subject Support/); assert.match(html,/Curated Resource Formats/);
+ assert.match(html,/Resource Index, Copyright and Disclaimer/);
+ assert.match(css,/About \/ copyright panel — match the compact navy reference layout/);
+ assert.match(css,/#080e1b/); assert.match(css,/#15151b/);
+});
 test("offline app shell caches the legal pages and invalidates the old cache", () => {
   const sw = read("sw.js");
   assert.match(sw, /icse-masterclass-v1\.9\.0-student-library-ux/);

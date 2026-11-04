@@ -1089,3 +1089,33 @@ body.mc-home .library-status .text-emerald-400 { color:var(--mc-forest-deep) !im
 body.mc-home .library-status .text-red-400 { color:var(--mc-warn) !important; }
 body.mc-home .library-status button { background:var(--mc-paper-2) !important;border:1px solid var(--mc-rule) !important;border-radius:4px !important;color:var(--mc-warn) !important; }
 body.mc-home .library-status button:hover { background:var(--mc-paper-3) !important;border-color:var(--mc-rule-strong) !important; }
+
+
+/* About / copyright panel — match the compact navy reference layout. */
+body.mc-home .library-legal{display:block;margin:24px 0 0;padding:24px;border:0;border-radius:0;background:transparent;color:#d7deea;font-size:11px;line-height:1.55}
+body.mc-home .library-legal>summary{display:block;list-style:none;color:#f8fafc;font-size:16px;line-height:1.35;font-weight:800;cursor:default}
+body.mc-home .library-legal>summary::-webkit-details-marker{display:none}
+body.mc-home .library-legal>summary>span:first-child{display:flex;align-items:center;gap:8px;color:#f8fafc;font-size:16px;font-weight:800}
+body.mc-home .library-legal>summary>span:first-child i{color:#fbbf24!important}
+body.mc-home .library-legal>summary>span:last-child{display:block;margin-top:3px;color:#fbbf24!important;font-size:10px;font-weight:600}
+body.mc-home .library-legal-copy{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;max-width:none;padding-top:20px;color:#e2e8f0;font-size:10px;line-height:1.55}
+body.mc-home .library-legal-copy>p{margin:0;color:#e2e8f0;font-size:10px;line-height:1.55}
+body.mc-home .library-legal-copy>.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}
+body.mc-home .library-legal-copy>.grid>section{min-width:0;min-height:100px;padding:12px;border:1px solid #202b3d!important;border-radius:7px;background:#080e1b!important}
+body.mc-home .library-legal-copy>.grid>section h3{color:#f8fafc!important;font-size:10px;line-height:1.4;font-weight:700}
+body.mc-home .library-legal-copy>.grid>section h3 i{color:#fbbf24!important}
+body.mc-home .library-legal-copy>.grid>section p{margin-top:5px;color:#aebbd0!important;font-size:9px;line-height:1.5}
+body.mc-home .library-legal-copy>section[aria-labelledby="resourceDisclaimerTitle"]{margin-top:8px;padding:14px 16px;border:1px solid #4a3518!important;border-radius:8px;background:#15151b!important}
+body.mc-home #resourceDisclaimerTitle{color:#fbbf24!important;font-size:10px;line-height:1.4;font-weight:800}
+body.mc-home #resourceDisclaimerTitle i{color:#fbbf24!important}
+body.mc-home .library-legal-copy>section[aria-labelledby="resourceDisclaimerTitle"]>div{margin-top:10px;display:grid;gap:5px}
+body.mc-home .library-legal-copy>section[aria-labelledby="resourceDisclaimerTitle"] p{margin:0;color:#e2e8f0!important;font-size:9px;line-height:1.45}
+body.mc-home .library-legal-copy>section[aria-labelledby="resourceDisclaimerTitle"] p.text-gray-400{margin-top:2px;color:#8995a8!important;font-size:8px}
+body.mc-home .library-legal-copy a{color:#fbbf24!important;text-decoration:underline;text-underline-offset:2px}
+@media(max-width:560px){
+ body.mc-home .library-legal{margin-top:16px;padding:18px 12px}
+ body.mc-home .library-legal-copy{padding-top:14px}
+ body.mc-home .library-legal-copy>.grid{grid-template-columns:minmax(0,1fr);gap:8px;margin-top:10px}
+ body.mc-home .library-legal-copy>.grid>section{min-height:0}
+ body.mc-home .library-legal-copy>section[aria-labelledby="resourceDisclaimerTitle"]{padding:12px}
+}
