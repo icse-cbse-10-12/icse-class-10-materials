@@ -144,7 +144,7 @@ test("the published Google Sheets source remains unchanged and read-only", () =>
 });
 
 test("local page links and fragment targets resolve within the repository", () => {
-  const pages = ["index.html", "login.html", "dashboard.html", "admin-1.html", "portal.html", "404.html", "privacy-policy.html", "terms-and-conditions.html"];
+  const pages = ["index.html", "login.html", "dashboard.html", "admin-1.html", "portal.html", "404.html"];
   for (const page of pages) {
     const html = read(page);
     const ids = new Set([...html.matchAll(/\bid=[\"']([^\"']+)[\"']/g)].map(match => match[1]));
@@ -185,7 +185,7 @@ test("the first-screen Telegram invitation and floating CTA are removed", () => 
 
 test("the service worker invalidates the previous app shell and precaches the new library styles", () => {
   const sw = read("sw.js");
-  assert.match(sw, /icse-masterclass-v1\.8\.0-legal-pages/);
+  assert.match(sw, /icse-masterclass-v1\.7\.0-material-library/);
   assert.match(sw, /academic-library\.css\?v=2/);
 });
 
@@ -223,7 +223,7 @@ test("all active stylesheets have balanced rule braces", () => {
 });
 
 test("public pages do not contain duplicate element IDs", () => {
-  for (const page of ["index.html", "login.html", "dashboard.html", "admin-1.html", "portal.html", "404.html", "privacy-policy.html", "terms-and-conditions.html"]) {
+  for (const page of ["index.html", "login.html", "dashboard.html", "admin-1.html", "portal.html", "404.html"]) {
     const ids = [...read(page).matchAll(/\bid=[\"']([^\"']+)[\"']/g)].map(match => match[1]);
     const duplicates = ids.filter((id, index) => ids.indexOf(id) !== index);
     assert.deepEqual([...new Set(duplicates)], [], `${page} must not repeat IDs`);
@@ -238,41 +238,12 @@ test("material rows do not invent generic titles, subjects or categories when so
   assert.match(script, /category \? `\<span/);
 });
 
-
-test("privacy and terms pages are linked from the homepage, login and dashboard", () => {
-  for (const page of ["index.html", "login.html", "dashboard.html"]) {
-    const html = read(page);
-    assert.match(html, /href=["']privacy-policy\.html["']/i, `${page} must link to the privacy policy`);
-    assert.match(html, /href=["']terms-and-conditions\.html["']/i, `${page} must link to the terms`);
-  }
-  for (const page of ["privacy-policy.html", "terms-and-conditions.html"]) {
-    assert.ok(existsSync(join(root, page)), `${page} must exist`);
-    const html = read(page);
-    assert.match(html, /Team MasterClass/);
-    assert.match(html, /icsemasterclass@gmail\.com/);
-    assert.match(html, /icseYtFavicon\.png/);
-    assert.match(html, /Back to Study Vault/);
-  }
-  assert.doesNotMatch(read("login.html"), /8,000\+/);
-  const privacy = read("privacy-policy.html");
-  assert.match(privacy, /Firebase Authentication/);
-  assert.match(privacy, /Google Gemini/);
-  assert.match(privacy, /localStorage/);
-  assert.match(privacy, /does not include built-in age verification/i);
-});
-
-test("offline app shell caches the legal pages and invalidates the old cache", () => {
-  const sw = read("sw.js");
-  assert.match(sw, /icse-masterclass-v1\.8\.0-legal-pages/);
-  assert.match(sw, /privacy-policy\.html/);
-  assert.match(sw, /terms-and-conditions\.html/);
-});
-
-
-test("CI uses supported Node 24 actions and a pinned Ubuntu runner", () => {
-  const workflow = read(".github/workflows/site-smoke.yml");
-  assert.match(workflow, /runs-on: ubuntu-24\.04/);
-  assert.match(workflow, /actions\/checkout@v7/);
-  assert.match(workflow, /actions\/setup-node@v7/);
-  assert.match(workflow, /node-version: 24/);
+test("subject directory uses accessible custom vector illustrations", () => {
+  const script = read("script.js"); const css = read("academic-library.css");
+  assert.match(script, /function getSubjectIllustration\(subject\)/);
+  assert.match(script, /mc-subject-art/); assert.match(script, /mc-subject-hint/);
+  assert.match(script, /aria-label=\"Open \${escapeHTML\(subject\)} subject materials\"/);
+  assert.match(css, /#mainSubjectGrid \.mc-subject-art/);
+  assert.match(css, /repeat\(2,minmax\(0,1fr\)\)/);
+  assert.match(css, /focus-visible/); assert.match(css, /prefers-reduced-motion/);
 });

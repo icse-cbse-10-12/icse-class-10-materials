@@ -222,26 +222,41 @@ function installPwaApp() {
    SUBJECT GRID
    ============================================================ */
 
+function getSubjectIllustration(subject) {
+  const n=String(subject||"").toLowerCase(); let art="book",tone="sage";
+  if(n==="all"){art="library";} else if(n.includes("physics")){art="atom";tone="blue";}
+  else if(n.includes("chemistry")){art="flask";tone="rose";} else if(n.includes("biology")){art="leaf";tone="green";}
+  else if(n.includes("mathematics")){art="geometry";tone="lavender";} else if(n.includes("computer")){art="chip";tone="blue";}
+  else if(n.includes("geography")){art="globe";tone="sky";} else if(n.includes("history")){art="column";tone="sand";}
+  else if(n.includes("english")){art="book";tone="rose";} else if(n.includes("language")){art="speech";tone="lavender";}
+  else if(n.includes("physical education")){art="ball";tone="green";} else if(n.includes("home science")){art="home";tone="sand";}
+  else if(n.includes("commercial")||n.includes("economic")){art="briefcase";tone="sand";}
+  else if(n.includes("environment")){art="sprout";tone="green";}
+  const paths={
+    library:'<path d="M15 27 40 14l25 13v31H15zM9 27 40 10l31 17M23 35h11v23H23zm23 0h11v23H46z"/>',
+    atom:'<ellipse cx="40" cy="39" rx="29" ry="11"/><ellipse cx="40" cy="39" rx="29" ry="11" transform="rotate(60 40 39)"/><ellipse cx="40" cy="39" rx="29" ry="11" transform="rotate(120 40 39)"/><circle cx="40" cy="39" r="4" fill="currentColor"/>',
+    flask:'<path d="M31 12h18M35 12v20L19 59q-3 6 5 6h32q8 0 5-7L45 32V12M27 49h26"/><circle cx="36" cy="54" r="2" fill="currentColor"/><circle cx="47" cy="57" r="2" fill="currentColor"/>',
+    leaf:'<path d="M64 13C34 13 15 25 15 47c0 11 8 18 19 18 23 0 30-25 30-52ZM17 64c11-18 23-29 42-43M34 47l-2-14m15 2 10-1"/>',
+    geometry:'<path d="M12 60 39 13l29 47z"/><circle cx="40" cy="39" r="23"/><path d="M12 60h56M39 13v47"/>',
+    chip:'<rect x="22" y="21" width="36" height="36" rx="5"/><rect x="30" y="29" width="20" height="20" rx="2"/><path d="M30 12v9m10-9v9m10-9v9M30 57v9m10-9v9m10-9v9M13 30h9m-9 10h9m-9 10h9m36-20h9m-9 10h9m-9 10h9"/>',
+    globe:'<circle cx="40" cy="39" r="28"/><path d="M12 39h56M40 11c-17 17-17 39 0 56m0-56c17 17 17 39 0 56M17 25h46M17 53h46"/>',
+    column:'<path d="M13 25 40 11l27 14zM17 29h46M20 29v27m13-27v27m14-27v27m13-27v27M14 59h52M10 65h60"/>',
+    book:'<path d="M12 18q15-6 28 3v43q-13-9-28-3zM68 18q-15-6-28 3v43q13-9 28-3zM20 29q8-2 13 2m-13 8q8-2 13 2m19-12q8-4 13-2m-13 12q8-4 13-2"/>',
+    speech:'<path d="M12 18q0-6 7-6h42q7 0 7 7v27q0 7-7 7H37L22 64v-11h-3q-7 0-7-7zM25 29h30M25 39h22"/>',
+    ball:'<circle cx="40" cy="39" r="28"/><path d="m40 11 9 18-9 10-18-5-10 15m37 16-9-26 18-12M22 34l-7-18m34 13 19 7"/>',
+    home:'<path d="m10 35 30-24 30 24M17 31v34h46V31M32 65V45h16v20M24 40h7v8h-7zm25 0h7v8h-7z"/>',
+    briefcase:'<rect x="12" y="25" width="56" height="38" rx="4"/><path d="M29 25v-8h22v8M12 39h56M34 39v7h12v-7"/>',
+    sprout:'<path d="M40 65V34m0 13C17 48 13 34 15 21c15-1 25 5 25 19m0 4c2-19 15-26 30-25 0 16-9 27-30 29M40 65H25"/>'
+  };
+  return `<svg class="mc-subject-art mc-art-${tone}" viewBox="0 0 80 76" role="img" aria-label="${escapeHTML(subject)} illustration" focusable="false"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">${paths[art]}</g></svg>`;
+}
 function initSubjectCards() {
-  const grid = document.getElementById("mainSubjectGrid");
-  if (!grid) return;
-
-  grid.innerHTML = subjectsList.map(subject => {
-    const label = subject.replace(/^Second Language\s*[-:]?\s*/i, "");
-    const mark = subject === "All"
-      ? "ALL"
-      : label.split(/\s+/).map(word => word[0]).join("").slice(0, 2).toUpperCase();
-    return `
-      <button data-subject="${escapeHTML(subject)}" class="mc-subject-item" type="button"
-        aria-label="Open ${escapeHTML(subject)} subject materials">
-        <span class="mc-subject-mark" aria-hidden="true">${escapeHTML(mark)}</span>
-        <span class="mc-subject-name">${escapeHTML(subject)}</span>
-      </button>`;
+  const grid=document.getElementById("mainSubjectGrid"); if(!grid)return;
+  grid.innerHTML=subjectsList.map(subject=>{
+    const label=subject.replace(/^Second Language\s*[-:]?\s*/i,"");
+    return `<button data-subject="${escapeHTML(subject)}" class="mc-subject-item" type="button" aria-label="Open ${escapeHTML(subject)} subject materials"><span class="mc-subject-illustration" aria-hidden="true">${getSubjectIllustration(subject)}</span><span class="mc-subject-copy"><span class="mc-subject-name">${escapeHTML(label)}</span><span class="mc-subject-hint">Explore materials <span aria-hidden="true">→</span></span></span></button>`;
   }).join("");
-
-  grid.querySelectorAll("button[data-subject]").forEach(button => {
-    button.addEventListener("click", () => selectSubject(button.dataset.subject));
-  });
+  grid.querySelectorAll("button[data-subject]").forEach(button=>button.addEventListener("click",()=>selectSubject(button.dataset.subject)));
 }
 
 /* ============================================================
