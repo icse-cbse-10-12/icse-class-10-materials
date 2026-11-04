@@ -10,7 +10,7 @@ const read = name => readFileSync(join(root, name), "utf8");
 test("all public pages load the shared academic design layer", () => {
   for (const [page, bodyClass] of [["index.html", "mc-home"], ["login.html", "mc-login"], ["dashboard.html", "mc-dashboard"], ["admin-1.html", "mc-admin"]]) {
     const html = read(page);
-    assert.ok(/academic-library\\.css\\?v=[23]/.test(html), `${page} must load the shared design layer`);
+    assert.ok(html.includes("academic-library.css?v=2") || html.includes("academic-library.css?v=3"), `${page} must load the shared design layer`);
     assert.match(html, new RegExp(`<body[^>]*class=[\"'][^\"']*${bodyClass}`), `${page} must have its expected scope class`);
   }
 });
@@ -186,7 +186,7 @@ test("the first-screen Telegram invitation and floating CTA are removed", () => 
 test("the service worker invalidates the previous app shell and precaches the new library styles", () => {
   const sw = read("sw.js");
   assert.match(sw, /icse-masterclass-v1\.10\.0-about-panel/);
-  assert.match(sw, /academic-library\.css\?v=2/);
+  assert.match(sw, /academic-library\.css\?v=3/);
 });
 
 test("subject and search navigation hide and restore the discovery header correctly", () => {
