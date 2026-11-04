@@ -247,6 +247,16 @@
     startButton.textContent = running ? "Pause" : "Start";
   }
 
+  window.clearStudyToolsData = function() {
+    if (timerId !== null) clearInterval(timerId);
+    timerId = null;
+    running = false;
+    state = { ...defaults, tasks: [] };
+    save();
+    renderTasks();
+    renderTimer();
+  };
+
   function setMode(mode) {
     pauseTimer();
 

@@ -185,7 +185,7 @@ test("the first-screen Telegram invitation and floating CTA are removed", () => 
 
 test("the service worker invalidates the previous app shell and precaches the new library styles", () => {
   const sw = read("sw.js");
-  assert.match(sw, /icse-masterclass-v1\.12\.0-library-ux/);
+  assert.match(sw, /icse-masterclass-v1\.13\.0-privacy-controls/);
   assert.match(sw, /academic-library\.css\?v=5/);
 });
 
@@ -317,12 +317,12 @@ test("About email support provides copy and Gmail compose actions", () => {
  assert.match(script,/navigator\.clipboard\.writeText/);
  assert.match(script,/copyTextFallback/);
  assert.match(script,/Email address copied\./);
- assert.match(sw,/icse-masterclass-v1\.12\.0-library-ux/);
+ assert.match(sw,/icse-masterclass-v1\.13\.0-privacy-controls/);
 });
 
 test("offline app shell caches the legal pages and invalidates the old cache", () => {
   const sw = read("sw.js");
-    assert.match(sw, /icse-masterclass-v1\.12\.0-library-ux/);
+    assert.match(sw, /icse-masterclass-v1\.13\.0-privacy-controls/);
   assert.match(sw, /privacy-policy\.html/);
   assert.match(sw, /terms-and-conditions\.html/);
 });
