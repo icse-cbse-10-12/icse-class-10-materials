@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, existsSync, statSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -28,6 +28,8 @@ test("service worker does not precache broken or heavy AI assets", () => {
   const sw = read("sw.js");
   assert.doesNotMatch(sw, /ai-tutor\.js|gemini-ai\.js/);
   assert.match(sw, /login\.html/);
+  assert.match(sw, /icseYtLogo\.webp/);
+  assert.doesNotMatch(sw, /icseYtLogo\.png/);
   assert.match(sw, /academic-library\.css/);
   assert.match(sw, /NETWORK_TIMEOUT_MS/);
   assert.match(sw, /CATALOGUE_TIMEOUT_MS/);
@@ -82,4 +84,14 @@ test("service-worker precache includes exact versioned CSS keys used by the home
   for (const asset of ["style.css?v=study-hub-layout-1", "design-polish.css?v=20261026-1", "luxury-theme.css?v=3", "academic-library.css?v=1"]) {
     assert.ok(sw.includes(asset), `APP_SHELL must precache ${asset}`);
   }
+});
+
+test("visible logo assets are optimised and PWA icons use the correct dimensions", () => {
+  for (const name of ["icseYtLogo.webp", "icseYtFavicon.png", "icseYtPwa-192.png", "icseYtPwa-512.png"]) assert.ok(existsSync(join(root, name)), `${name} must exist`);
+  assert.ok(statSync(join(root, "icseYtLogo.webp")).size < 100_000, "visible WebP logo must stay below 100 KB");
+  const manifest = JSON.parse(read("manifest.json"));
+  assert.deepEqual(manifest.icons.map(icon => icon.sizes), ["192x192", "512x512"]);
+  assert.ok(read("index.html").includes('src="icseYtLogo.webp"'));
+  assert.ok(read("login.html").includes('src="icseYtLogo.webp"'));
+  assert.ok(read("dashboard.html").includes('src="icseYtLogo.webp"'));
 });

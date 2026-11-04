@@ -20,7 +20,11 @@ const APP_SHELL = [
   "./syllabus-tracker.js",
   "./edubot-loader.js?v=1",
   "./manifest.json",
-  "./luxury-book.svg"
+  "./luxury-book.svg",
+  "./icseYtLogo.webp",
+  "./icseYtFavicon.png",
+  "./icseYtPwa-192.png",
+  "./icseYtPwa-512.png"
 ];
 const NETWORK_TIMEOUT_MS = 2800;
 const CATALOGUE_TIMEOUT_MS = 4500;
