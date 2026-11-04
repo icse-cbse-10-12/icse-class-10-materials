@@ -15,7 +15,7 @@ const APP_SHELL = [
   "./design-polish.css?v=20261026-1",
   "./luxury-theme.css",
   "./luxury-theme.css?v=3",
-  "./academic-library.css?v=3",
+  "./academic-library.css?v=4",
   "./script.js",
   "./ui-ux.js",
   "./study-tools.js",

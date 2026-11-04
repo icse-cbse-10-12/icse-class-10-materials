@@ -277,7 +277,7 @@ test("privacy and terms pages are linked from the homepage, login and dashboard"
 
 test("About and copyright panel uses the compact navy reference design", () => {
  const html=read("index.html"); const css=read("academic-library.css");
- assert.match(html,/academic-library\.css\?v=3/);
+ assert.match(html,/academic-library\.css\?v=4/);
  assert.match(html,/<details class="library-legal" open>/);
  assert.match(html,/Extensive Subject Support/); assert.match(html,/Curated Resource Formats/);
  assert.match(html,/Resource Index, Copyright and Disclaimer/);
