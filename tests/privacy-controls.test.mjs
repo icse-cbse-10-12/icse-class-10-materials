@@ -7,6 +7,12 @@ import { fileURLToPath } from "node:url";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const read = path => readFileSync(join(root, path), "utf8");
 
+test("consent manager is present on the public, account and admin surfaces", () => {
+  for (const page of ["index.html", "login.html", "dashboard.html", "admin-1.html", "privacy-policy.html", "terms-and-conditions.html"]) {
+    assert.ok(read(page).includes("consent-manager.js"), page + " must load the shared consent manager");
+  }
+});
+
 test("consent manager defaults optional categories off and persists versioned preferences", () => {
   const source = read("consent-manager.js");
   assert.ok(source.includes("externalServices: false"));
@@ -44,7 +50,7 @@ test("EduBot and administrator Supabase are optional external processing", () =>
   assert.ok(policy.includes("Gemini service"));
   assert.ok(policy.includes("question and recent conversation context"));
   assert.ok(policy.includes("administrator-only Supabase SDK"));
-  assert.ok(policy.includes("No analytics SDK is currently activated"));
+  assert.ok(policy.includes("does not currently run an analytics SDK"));
 });
 
 test("account deletion function is caller-scoped and requires recent authentication", () => {
