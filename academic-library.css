@@ -738,3 +738,10 @@ body.mc-home #icseStudyPanel .study-task.done label{color:var(--mc-ink-mute) !im
 body.mc-login .brand-mark{background:var(--mc-forest-soft) !important;color:var(--mc-forest-deep) !important;border:1px solid var(--mc-rule-strong) !important;box-shadow:none !important;}
 body.mc-login .brand-name strong,body.mc-login .lux-story-copy h2 em,body.mc-login .lux-story-kicker{color:var(--mc-forest-deep) !important;}
 body.mc-login .lux-story-stats{background:var(--mc-paper) !important;border:1px solid var(--mc-rule) !important;}
+
+/* Keep semantic status and portal navigation contrast intact. */
+body.mc-portal .links a,body.mc-portal .resource a,body.mc-portal .footer a,body.mc-portal .eyebrow,body.mc-portal .brand b,body.mc-portal h1 span{color:var(--mc-forest-deep) !important;}
+body.mc-portal .feedback{color:var(--mc-forest-deep) !important;}
+body.mc-admin>header p{color:var(--mc-ink-soft) !important;}
+body.mc-admin .status.good{background:var(--mc-forest-soft) !important;color:var(--mc-forest-deep) !important;border:1px solid var(--mc-rule-strong) !important;}
+body.mc-admin .status.bad{background:#F2E4DD !important;color:#793A2C !important;border:1px solid #B98C7B !important;}
