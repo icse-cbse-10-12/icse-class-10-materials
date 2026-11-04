@@ -163,7 +163,7 @@ body.mc-login .message.success { color:#86efac!important; }
   body.mc-home #siteHeaderInner {
     display:grid!important;
     grid-template-columns:auto minmax(0,1fr) auto!important;
-    grid-template-rows:minmax(46px,auto) auto!important;
+    grid-template-rows:minmax(46px,auto)!important;
     align-items:center!important; gap:8px!important;
     height:auto!important; min-height:0!important;
     padding:8px 13px 10px!important;
@@ -186,20 +186,9 @@ body.mc-login .message.success { color:#86efac!important; }
     width:43px;height:43px; border:1px solid rgba(251,191,36,.4);
     border-radius:12px;background:rgba(251,191,36,.12);color:#fcd34d;font-size:19px;
   }
-  body.mc-home #headerActions {
-    grid-column:1/-1!important;grid-row:2!important;
-    display:flex!important; order:unset!important; width:100%!important;
-    justify-content:center!important; gap:8px!important; flex-wrap:wrap!important;
-  }
+  body.mc-home #headerActions { display:none!important; }
   body.mc-home #headerActions > a[href="./login.html"] { display:none!important; }
-  body.mc-home #headerActions > :is(a,button) { min-height:40px; }
   body.mc-home #mainContent { padding-top:20px; }
-  body.mc-home .aurora-hero-grid { grid-template-columns:minmax(0,1fr)!important;gap:21px;padding-block:25px; }
-  body.mc-home .aurora-hero-copy h1 { font-size:clamp(35px,9vw,55px); max-width:17ch; }
-  body.mc-home .aurora-subtitle { max-width:58ch; }
-  body.mc-home .aurora-orbit-card { max-width:100%; }
-  body.mc-home .study-hub-tool-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
-  body.mc-home .study-hub-tool { min-height:88px; }
   body.mc-home .site-nav-panel { width:min(390px,calc(100vw - 18px))!important;min-width:0!important;max-width:100%!important;flex:0 0 auto!important; }
   body.mc-dashboard #studentDashboard .dashboard-hero-top { flex-wrap:wrap; }
   body.mc-dashboard #studentDashboard .dashboard-overview { min-width:0; }
@@ -212,9 +201,6 @@ body.mc-login .message.success { color:#86efac!important; }
   body.mc-home #mobileAccountLink { width:40px;height:40px; }
   body.mc-home #headerActions { gap:6px!important; }
   body.mc-home #headerActions > :is(a,button) { font-size:11px; }
-  body.mc-home .aurora-announcement { gap:7px;letter-spacing:.035em;font-size:9px; }
-  body.mc-home .aurora-hero-actions a,body.mc-home .aurora-hero-actions button { width:100%; }
-  body.mc-home .study-hub-tool-grid { grid-template-columns:minmax(0,1fr); }
   body.mc-home #icseAiTutor { width:calc(100% - 24px);padding:19px 16px; }
   body.mc-dashboard > header .font-black { font-size:14px; }
   body.mc-dashboard > header .dashboard-secondary { padding:9px 11px; }
@@ -238,25 +224,6 @@ body.mc-login .mc-guest-entry {
 }
 body.mc-login .mc-guest-entry:hover { background:rgba(14,165,233,.18); }
 body.mc-login .mc-guest-entry:focus-visible { outline:3px solid #fbbf24;outline-offset:2px; }
-.mc-home #welcomePopup { overscroll-behavior:contain; }
-.mc-home #welcomePopup .mc-telegram-dialog {
-  background:linear-gradient(145deg,#13243d,#0b1527);
-  border:1px solid rgba(125,211,252,.28);
-  max-height:calc(100dvh - 32px);overflow-y:auto;
-  box-shadow:0 30px 95px rgba(0,0,0,.62);
-}
-.mc-home #welcomePopup .mc-telegram-icon { margin-inline:auto; }
-.mc-home #welcomePopup .mc-telegram-eyebrow {
-  color:#7dd3fc;font-size:11px;letter-spacing:.13em;font-weight:850;margin:0;
-}
-.mc-home #welcomePopup .mc-telegram-primary { min-height:50px;text-decoration:none; }
-.mc-home #welcomePopup .mc-telegram-later { border:1px solid rgba(148,163,184,.26); }
-.mc-home #welcomePopup :is(button,a):focus-visible { outline:3px solid #fbbf24!important;outline-offset:3px; }
-@media(max-width:420px){
-  .mc-home #welcomePopup .mc-telegram-dialog { padding:23px 18px; }
-  .mc-home #welcomePopup .mc-telegram-dialog h2 { font-size:21px; }
-}
-
 /* Fast material catalogue: progressive pages of 36 cards. */
 .mc-resource-pagination[hidden]{display:none!important}
 .mc-resource-pagination{display:flex;flex-direction:column;align-items:center;gap:11px;margin:24px auto 12px;max-width:420px;text-align:center}

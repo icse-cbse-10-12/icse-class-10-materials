@@ -52,7 +52,7 @@
 .mc-home #mainSubjectGrid>button:hover{transform:translateY(-2px);border-color:#f6ce7b!important}
 .mc-home #subjectDetailView #resourceGrid>div:not(.col-span-full){background:#111e32!important;border-color:rgba(246,206,123,.20)!important;box-shadow:none!important}
 .mc-home #subjectDetailView .cat-btn.active-tab{background:#f6ce7b!important;color:#0c1829!important}
-.mc-home #icseAiTutor,.mc-home #welcomePopup .mc-telegram-dialog{background:linear-gradient(145deg,#14253f,#0a172a);border-color:rgba(246,206,123,.3)!important;box-shadow:0 16px 45px rgba(0,0,0,.17)}
+.mc-home #icseAiTutor{background:linear-gradient(145deg,#14253f,#0a172a);border-color:rgba(246,206,123,.3)!important;box-shadow:0 16px 45px rgba(0,0,0,.17)}
 .mc-dashboard #studentDashboard .dashboard-hero{background:linear-gradient(135deg,#14253f,#0a162a)!important;border-color:rgba(246,206,123,.3)!important}
 .mc-dashboard #studentDashboard .dashboard-pill{color:#f6ce7b;background:rgba(246,206,123,.09);border-color:rgba(246,206,123,.2)}
 .mc-dashboard #studentDashboard .dashboard-card,.mc-dashboard #studentDashboard .dashboard-stat{background:#111e32!important;border-color:rgba(246,206,123,.2)!important;box-shadow:none}

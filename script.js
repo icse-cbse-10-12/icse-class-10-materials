@@ -38,49 +38,6 @@ const subjectsList = [
   "Other Subjects"
 ];
 
-// Emoji fallback icons remain visible even when the Font Awesome CDN is blocked.
-const subjectEmoji = {
-  "All":"📚", "Physics":"⚛️", "Physical Education":"🏃", "Mathematics":"📐", "Home Science":"🏠",
-  "History & Civics":"🏛️", "Geography":"🌍", "Environmental Applications":"🌿", "Environmental Science":"🌱",
-  "English Literature":"📖", "English Language":"✍️", "Economic Applications":"📈", "Computer Applications":"💻",
-  "Commercial Studies":"💼", "Commercial Applications":"🏢", "Chemistry":"🧪", "Biology":"🧬",
-  "Second Language - Tamil":"🗣️", "Second Language - Malayalam":"🗣️", "Second Language - Kannada":"🗣️",
-  "Second Language - Hindi":"🗣️", "Second Language: Telugu":"🗣️", "Other Subjects":"📁"
-};
-
-// Custom Icons Mapping
-const subjectIcons = {
-  "All": "fa-layer-group",
-  "Physics": "fa-atom",
-  "Physical Education": "fa-dumbbell",
-  "Mathematics": "fa-calculator",
-  "Home Science": "fa-house-user",
-  "History & Civics": "fa-landmark",
-  "Geography": "fa-earth-americas",
-  "Environmental Applications": "fa-leaf",
-  "Environmental Science": "fa-leaf",
-  "English Literature": "fa-book-open",
-  "English Language": "fa-pen-nib",
-  "Economic Applications": "fa-chart-line",
-  "Computer Applications": "fa-code",
-  "Commercial Studies": "fa-briefcase",
-  "Commercial Applications": "fa-building-columns",
-  "Chemistry": "fa-flask",
-  "Biology": "fa-dna",
-  "Second Language - Tamil": "fa-language",
-  "Second Language - Malayalam": "fa-language",
-  "Second Language - Kannada": "fa-language",
-  "Second Language - Hindi": "fa-language",
-  "Second Language: Telugu": "fa-language",
-  "Notes": "fa-note-sticky",
-  "Other Subjects": "fa-folder-open",
-  "English": "fa-book-open",
-  "Economics": "fa-chart-pie",
-  "Accounts": "fa-calculator",
-  "Art": "fa-palette",
-  "Sanskrit": "fa-language",
-};
-
 let currentSubject = "All";
 let currentCategory = "All";
 let allResources = [];
@@ -270,17 +227,15 @@ function initSubjectCards() {
   if (!grid) return;
 
   grid.innerHTML = subjectsList.map(subject => {
+    const label = subject.replace(/^Second Language\s*[-:]?\s*/i, "");
+    const mark = subject === "All"
+      ? "ALL"
+      : label.split(/\s+/).map(word => word[0]).join("").slice(0, 2).toUpperCase();
     return `
-      <button
-        data-subject="${escapeHTML(subject)}"
-        class="p-4 rounded-xl bg-gray-900/60 border border-gray-800 hover:border-amber-500/50 hover:bg-gray-900/80 transition flex flex-col items-center justify-center gap-2 text-center group cursor-pointer"
-        type="button"
-        aria-label="Open ${escapeHTML(subject)} subject materials"
-      >
-        <div class="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-black transition" aria-hidden="true">
-          <span class="text-xl leading-none" aria-hidden="true">${escapeHTML(subjectEmoji[subject] || "📘")}</span>
-        </div>
-        <span class="text-xs font-bold text-gray-200 group-hover:text-white">${escapeHTML(subject)}</span>
+      <button data-subject="${escapeHTML(subject)}" class="mc-subject-item" type="button"
+        aria-label="Open ${escapeHTML(subject)} subject materials">
+        <span class="mc-subject-mark" aria-hidden="true">${escapeHTML(mark)}</span>
+        <span class="mc-subject-name">${escapeHTML(subject)}</span>
       </button>`;
   }).join("");
 
@@ -360,78 +315,6 @@ async function fetchSheetData() {
 }
 
 /* ============================================================
-   LATEST MATERIALS — 2027 RESOURCES
-   ============================================================ */
-
-function renderLatestMaterials() {
-  const grid = document.getElementById("latestMaterialsGrid");
-  const count = document.getElementById("latestMaterialsCount");
-  if (!grid) return;
-
-  const latest = allResources.filter(item => {
-    const edition = String(item["Edition"] || "").trim();
-    const scope = String(item["Scope"] || "").toLowerCase();
-    const title = String(item["Book Name"] || "").toLowerCase();
-    const itemSubject = String(item["Subject"] || "").trim().toLowerCase();
-    const targetSubject = String(currentSubject || "All").trim().toLowerCase();
-    const subjectMatches = targetSubject === "all" || itemSubject === targetSubject;
-    return subjectMatches && (edition === "2027" || scope.includes("2027") || title.includes("2027"));
-  });
-
-  const unique = [];
-  const seen = new Set();
-  latest.forEach(item => {
-    const title = String(item["Book Name"] || "Untitled material").trim();
-    const link = normalizeExternalUrl(item["Google Drive Link"] || item["Latest Edition Link"]);
-    const key = `${title.toLowerCase()}|${link}`;
-    if (!seen.has(key)) {
-      seen.add(key);
-      unique.push({ item, title, link });
-    }
-  });
-
-  // Show newer question banks and reference documents before repeated syllabus entries.
-  unique.sort((a, b) => {
-    const score = entry => {
-      const text = `${entry.title} ${entry.item["Category"] || ""} ${entry.item["Scope"] || ""}`.toLowerCase();
-      let value = 0;
-      if (text.includes("question bank")) value -= 5;
-      if (text.includes("competency")) value -= 4;
-      if (text.includes("sample paper") || text.includes("specimen")) value -= 3;
-      if (text.includes("official syllabus")) value += 3;
-      return value;
-    };
-    return score(a) - score(b) || a.title.localeCompare(b.title);
-  });
-
-  if (count) count.textContent = `${unique.length} resource${unique.length === 1 ? "" : "s"} tagged 2027`;
-
-  if (!unique.length) {
-    grid.innerHTML = '<div class="rounded-2xl border border-gray-800 bg-gray-900/60 p-5 text-sm text-gray-400">No 2027 resources are tagged in the database yet. Add them to Google Sheets with Edition set to 2027.</div>';
-    return;
-  }
-
-  grid.innerHTML = unique.map(({ item, title, link }) => {
-    const subject = item["Subject"] || "Study Material";
-    const category = item["Category"] || "Resource";
-    const publisher = item["Publisher/Company"] || "ICSE MasterClass resource vault";
-    const hasLink = Boolean(link);
-    return `
-      <article class="group rounded-2xl border border-gray-800 bg-gray-900/70 p-4 sm:p-5 hover:border-amber-500/50 hover:bg-gray-900 transition flex flex-col min-h-[190px]">
-        <div class="flex items-center justify-between gap-2 mb-3">
-          <span class="inline-flex items-center gap-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 px-2.5 py-1 text-[10px] font-black uppercase tracking-wide text-amber-300"><i class="fa-regular fa-calendar-check"></i> 2027</span>
-          <span class="text-[10px] text-gray-500 truncate">${escapeHTML(subject)}</span>
-        </div>
-        <h3 class="text-sm font-extrabold leading-snug text-white group-hover:text-amber-300 transition">${escapeHTML(title)}</h3>
-        <p class="text-xs text-gray-400 mt-2">${escapeHTML(category)} · ${escapeHTML(publisher)}</p>
-        <div class="mt-auto pt-4">
-          ${hasLink ? `<a href="${escapeHTML(link)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 w-full rounded-xl bg-amber-500 hover:bg-amber-400 text-gray-950 font-extrabold text-xs px-4 py-3 transition"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open Material</a>` : '<span class="block rounded-xl border border-gray-700 px-4 py-3 text-center text-xs text-gray-500">Link not available yet</span>'}
-        </div>
-      </article>`;
-  }).join("");
-}
-
-/* ============================================================
    ROUTING
    ============================================================ */
 
@@ -480,6 +363,8 @@ function checkHashRoute() {
 
   document.getElementById("subjectDetailView")
     ?.classList.add("hidden");
+  document.querySelector(".library-discovery")?.classList.remove("hidden");
+  document.getElementById("globalSearchWrap")?.classList.remove("hidden");
 }
 
 /* ============================================================
@@ -536,8 +421,9 @@ function parseCSV(text) {
 function selectSubject(subjectName, updateHash = true) {
   currentPersonalView = "all"; updatePersonalLibraryUI();
   const globalWrap = document.getElementById("globalSearchWrap");
-  if (subjectName === "All") globalWrap?.classList.remove("hidden");
-  else globalWrap?.classList.add("hidden");
+  const discovery = document.querySelector(".library-discovery");
+  globalWrap?.classList.add("hidden");
+  discovery?.classList.add("hidden");
   currentSubject = subjectName;
 
   if (updateHash) {
@@ -582,6 +468,7 @@ function searchAllMaterials() {
   const detailView = document.getElementById("subjectDetailView");
   const title = document.getElementById("selectedSubjectTitle");
   const globalWrap = document.getElementById("globalSearchWrap");
+  const discovery = document.querySelector(".library-discovery");
 
   const query = globalInput?.value || "";
 
@@ -610,6 +497,7 @@ function searchAllMaterials() {
     landingView.classList.add("hidden");
     detailView?.classList.remove("hidden");
     globalWrap?.classList.add("hidden");
+    discovery?.classList.add("hidden");
 
     history.pushState(
       "",
@@ -839,6 +727,8 @@ function closeSubjectSubPage() {
 
   document.getElementById("mainLandingView")
     ?.classList.remove("hidden");
+  document.querySelector(".library-discovery")?.classList.remove("hidden");
+  document.getElementById("globalSearchWrap")?.classList.remove("hidden");
 
   currentSubject = "All";
 
@@ -850,17 +740,14 @@ function closeSubjectSubPage() {
 }
 
 /* ============================================================
-   RESOURCE CARDS
+   MATERIAL DIRECTORY ROWS
    ============================================================ */
 
 function renderGrid(data, appendFrom = 0) {
   const grid = document.getElementById("resourceGrid");
   const countEl = document.getElementById("itemCount");
 
-  if (countEl) {
-    countEl.innerText = `${data.length} Materials Found`;
-  }
-
+  if (countEl) countEl.textContent = `${data.length.toLocaleString()} Materials Found`;
   if (!grid) return;
 
   const loadMoreWrap = document.getElementById("resourceLoadMoreWrap");
@@ -872,183 +759,59 @@ function renderGrid(data, appendFrom = 0) {
   if (loadMoreButton) loadMoreButton.disabled = shown >= data.length;
 
   if (data.length === 0) {
-    grid.innerHTML = `
-      <div class="col-span-full text-center py-12 text-gray-500 text-xs">
-        No study materials matched your search or category filter.
-      </div>
-    `;
+    grid.innerHTML = '<div class="mc-material-empty">No study materials matched your search or category filter.</div>';
     return;
   }
 
-  // Append only the next page of cards instead of recreating thousands of DOM nodes.
+  // Render only the visible page; the source catalogue remains untouched.
   const first = appendFrom > 0 ? appendFrom : 0;
   const visible = data.slice(first, shown);
-  const cardsHTML = visible.map((item, index) => {
-    const rawDrive =
-      item["Google Drive Link"] ||
-      item["Google Drive Direct View / Download Link"] ||
-      item["Link"] ||
-      "";
-
+  const rowsHTML = visible.map((item, index) => {
+    const rawDrive = item["Google Drive Link"] || item["Google Drive Direct View / Download Link"] || item["Link"] || "";
     const driveLink = normalizeExternalUrl(rawDrive);
-
-    const rawLecture =
-      item["Lecture Link"] ||
-      item["Telegram Channel Post Link"] ||
-      "";
-
+    const rawLecture = item["Lecture Link"] || item["Telegram Channel Post Link"] || "";
     const lectureLink = normalizeExternalUrl(rawLecture);
-
-    const rawLatestEdLink = item["Latest Edition Link"] || "";
-
-    const latestEdLink = normalizeExternalUrl(
-      rawLatestEdLink,
-      true
-    );
-
-    const isLatestAvailable =
-      item["Latest Edition Available?"] || "";
-
-    const editionText =
-      item["Edition"] && item["Edition"] !== "Not Specified"
-        ? `Ed: ${item["Edition"]}`
-        : "";
+    const latestEdLink = normalizeExternalUrl(item["Latest Edition Link"] || "", true);
+    const latestStatus = item["Latest Edition Available?"] || "";
+    const editionText = item["Edition"] && item["Edition"] !== "Not Specified" ? `Ed. ${item["Edition"]}` : "";
     const materialKey = getMaterialKey(item);
     const saved = isMaterialSaved(item);
+    const title = item["Book Name"] || item["Subject"] || "";
+    const subject = item["Subject"] || "";
+    const category = item["Category"] || "";
+    const publisher = item["Publisher/Company"] || item["Publisher"] || "";
 
     return `
-      <div class="p-4 rounded-xl bg-gray-900/60 border border-gray-800 hover:border-amber-500/40 transition flex flex-col justify-between gap-3 shadow-lg">
-        <div class="flex justify-end -mb-1">
-          <button type="button" data-material-key="${escapeHTML(materialKey)}" aria-pressed="${saved}" class="js-toggle-save personal-save-btn ${saved ? "is-saved" : ""}">
-            <i class="fa-${saved ? "solid" : "regular"} fa-bookmark" aria-hidden="true"></i>
-            ${saved ? "Saved" : "Save"}
-          </button>
-        </div>
-        <div class="space-y-2">
-          <div class="flex items-center justify-between text-[10px] gap-2">
-            <span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold shrink-0">
-              ${escapeHTML(item["Category"] || "General")}
-            </span>
-
-            <div class="flex items-center gap-1 overflow-hidden truncate text-gray-400">
-              ${
-                editionText
-                  ? `<span class="px-1.5 py-0.5 rounded bg-gray-800 text-amber-300 font-mono font-semibold">${escapeHTML(editionText)}</span>`
-                  : ""
-              }
-              <span class="truncate">
-                ${escapeHTML(item["Publisher/Company"] || item["Publisher"] || item["Subject"] || "")}
-              </span>
-            </div>
+      <article class="mc-material-row">
+        <div class="mc-material-main">
+          <div class="mc-material-meta">
+            ${subject ? `<span class="mc-material-subject">${escapeHTML(subject)}</span>` : ""}
+            ${category ? `<span class="mc-material-category">${escapeHTML(category)}</span>` : ""}
+            ${editionText ? `<span class="mc-material-edition">${escapeHTML(editionText)}</span>` : ""}
+            ${publisher ? `<span class="mc-material-publisher">${escapeHTML(publisher)}</span>` : ""}
           </div>
-
-          <h3 class="font-bold text-sm text-white line-clamp-2 leading-snug">
-            ${escapeHTML(item["Book Name"] || "Resource File")}
-          </h3>
-
-          ${
-            item["Scope"]
-              ? `<p class="text-xs text-gray-400 line-clamp-2">${escapeHTML(item["Scope"])}</p>`
-              : ""
-          }
-
-          ${
-            isLatestAvailable
-              ? `
-                <div class="pt-1 text-[11px]">
-                  <span class="text-emerald-400 font-semibold">
-                    <i class="fa-solid fa-circle-check text-[10px]" aria-hidden="true"></i>
-                    Latest Edition: ${escapeHTML(isLatestAvailable)}
-                  </span>
-                  ${
-                    latestEdLink
-                      ? `<a href="${escapeHTML(latestEdLink)}" target="_blank" rel="noopener noreferrer" class="ml-1 text-amber-400 underline hover:text-amber-300 font-bold">(Get Book)</a>`
-                      : ""
-                  }
-                </div>
-              `
-              : ""
-          }
+          <h3>${escapeHTML(title)}</h3>
+          ${item["Scope"] ? `<p class="mc-material-scope">${escapeHTML(item["Scope"])}</p>` : ""}
+          ${latestStatus ? `<p class="mc-material-latest">Latest edition: ${escapeHTML(latestStatus)} ${latestEdLink ? `<a href="${escapeHTML(latestEdLink)}" target="_blank" rel="noopener noreferrer">View edition</a>` : ""}</p>` : ""}
         </div>
-
-        <div class="grid grid-cols-2 gap-2 pt-2 border-t border-gray-800/80">
-          <button
-            onclick="openMaterialModalByIndex(${first + index})"
-            aria-label="Preview ${escapeHTML(item["Book Name"] || "material")}"
-            type="button"
-            class="py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-200 font-bold text-xs text-center transition flex items-center justify-center gap-1.5 cursor-pointer"
-          >
-            <i class="fa-solid fa-eye" aria-hidden="true"></i>
-            Preview
+        <div class="mc-material-actions">
+          <button type="button" onclick="openMaterialModalByIndex(${first + index})" aria-label="Preview ${escapeHTML(title)}" class="mc-material-action">
+            <i class="fa-solid fa-eye" aria-hidden="true"></i><span>Preview</span>
           </button>
-
-          <a
-            href="${escapeHTML(driveLink || "#")}"
-            ${
-              driveLink
-                ? 'target="_blank" rel="noopener noreferrer"'
-                : 'aria-disabled="true" tabindex="-1"'
-            }
-            class="py-2 rounded-lg ${
-              driveLink
-                ? "bg-amber-500 text-black hover:bg-amber-400"
-                : "bg-gray-800 text-gray-500 cursor-not-allowed"
-            } font-bold text-xs text-center transition flex items-center justify-center gap-1.5"
-          >
-            <i class="fa-solid fa-download" aria-hidden="true"></i>
-            ${driveLink ? "Material" : "Link unavailable"}
-          </a>
-
-          ${
-            lectureLink
-              ? `
-                <a
-                  href="${escapeHTML(lectureLink)}"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Watch lecture video"
-                  class="col-span-2 py-2 rounded-lg bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500 hover:text-white font-bold text-xs text-center transition flex items-center justify-center gap-1.5"
-                >
-                  <i class="fa-brands fa-youtube text-sm" aria-hidden="true"></i>
-                  Watch Lecture
-                </a>
-              `
-              : ""
-          }
+          ${driveLink ? `<a href="${escapeHTML(driveLink)}" target="_blank" rel="noopener noreferrer" class="mc-material-action mc-material-open"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i><span>Open</span></a>` : `<span class="mc-material-action is-disabled" aria-disabled="true"><i class="fa-solid fa-link-slash" aria-hidden="true"></i><span>Unavailable</span></span>`}
+          <button type="button" data-material-key="${escapeHTML(materialKey)}" aria-pressed="${saved}" aria-label="${saved ? "Remove saved material" : "Save material"}: ${escapeHTML(title)}" class="mc-material-action js-toggle-save ${saved ? "is-saved" : ""}">
+            <i class="fa-${saved ? "solid" : "regular"} fa-bookmark" aria-hidden="true"></i><span>${saved ? "Saved" : "Save"}</span>
+          </button>
+          ${lectureLink ? `<a href="${escapeHTML(lectureLink)}" target="_blank" rel="noopener noreferrer" aria-label="Watch lecture for ${escapeHTML(title)}" class="mc-material-action"><i class="fa-brands fa-youtube" aria-hidden="true"></i><span>Video</span></a>` : ""}
+          ${item["Share ID"] ? `<button type="button" data-share-id="${escapeHTML(item["Share ID"])}" class="mc-material-action js-open-share-page"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i><span>Share page</span></button><button type="button" data-share-id="${escapeHTML(item["Share ID"])}" class="mc-material-action js-share-material"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i><span>Share</span></button>` : ""}
         </div>
-
-        ${
-          item["Share ID"]
-            ? `
-              <div class="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  data-share-id="${escapeHTML(item["Share ID"])}"
-                  class="js-open-share-page py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-200 font-bold text-xs text-center transition"
-                >
-                  <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
-                  Share Page
-                </button>
-
-                <button
-                  type="button"
-                  data-share-id="${escapeHTML(item["Share ID"])}"
-                  class="js-share-material py-2 rounded-lg border border-amber-500/40 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 font-bold text-xs text-center transition"
-                >
-                  <i class="fa-solid fa-share-nodes" aria-hidden="true"></i>
-                  Share
-                </button>
-              </div>
-            `
-            : ""
-        }
-      </div>
-    `;
+      </article>`;
   }).join("");
-  if (first > 0) grid.insertAdjacentHTML("beforeend", cardsHTML);
-  else grid.innerHTML = cardsHTML;
 
-  // Event delegation creates three handlers once, not three for every card.
+  if (first > 0) grid.insertAdjacentHTML("beforeend", rowsHTML);
+  else grid.innerHTML = rowsHTML;
+
+  // Event delegation keeps one set of handlers for the entire catalogue list.
   if (!grid.dataset.eventsDelegated) {
     grid.dataset.eventsDelegated = "true";
     grid.addEventListener("click", event => {
@@ -1176,7 +939,8 @@ function showSharedMaterialPage(shareId) {
     }
 
     if (openButton) {
-      openButton.href = "#";
+      openButton.removeAttribute("href");
+      openButton.tabIndex = -1;
       openButton.classList.add("opacity-50", "pointer-events-none");
       openButton.setAttribute("aria-disabled", "true");
     }
@@ -1215,17 +979,13 @@ function showSharedMaterialPage(shareId) {
     if (openButton) {
       if (resourceUrl) {
         openButton.href = resourceUrl;
-        openButton.classList.remove(
-          "opacity-50",
-          "pointer-events-none"
-        );
+        openButton.removeAttribute("tabindex");
+        openButton.classList.remove("opacity-50", "pointer-events-none");
         openButton.setAttribute("aria-disabled", "false");
       } else {
-        openButton.href = "#";
-        openButton.classList.add(
-          "opacity-50",
-          "pointer-events-none"
-        );
+        openButton.removeAttribute("href");
+        openButton.tabIndex = -1;
+        openButton.classList.add("opacity-50", "pointer-events-none");
         openButton.setAttribute("aria-disabled", "true");
       }
     }
@@ -1245,6 +1005,8 @@ function showSharedMaterialPage(shareId) {
 
       document.getElementById("mainLandingView")
         ?.classList.remove("hidden");
+      document.querySelector(".library-discovery")?.classList.remove("hidden");
+      document.getElementById("globalSearchWrap")?.classList.remove("hidden");
 
       document.getElementById("subjectDetailView")
         ?.classList.add("hidden");
@@ -1391,22 +1153,14 @@ function openMaterialModalByIndex(index) {
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
-          <a
-            href="${escapeHTML(driveLink || "#")}"
-            ${
-              driveLink
-                ? 'target="_blank" rel="noopener noreferrer"'
-                : 'aria-disabled="true" tabindex="-1"'
-            }
-            class="py-2.5 rounded-lg ${
-              driveLink
-                ? "bg-amber-500 text-black hover:bg-amber-400"
-                : "bg-gray-800 text-gray-500 pointer-events-none"
-            } font-bold text-xs text-center transition flex items-center justify-center gap-2"
-          >
-            <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
-            ${driveLink ? "Open Drive Link" : "Link unavailable"}
-          </a>
+          ${driveLink ? `
+            <a href="${escapeHTML(driveLink)}" target="_blank" rel="noopener noreferrer"
+              class="py-2.5 rounded-lg bg-amber-500 text-black hover:bg-amber-400 font-bold text-xs text-center transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> Open Drive Link
+            </a>` : `
+            <span class="py-2.5 rounded-lg bg-gray-800 text-gray-500 font-bold text-xs text-center flex items-center justify-center gap-2" aria-disabled="true">
+              <i class="fa-solid fa-link-slash" aria-hidden="true"></i> Link unavailable
+            </span>`}
 
           ${
             lectureLink
@@ -1444,51 +1198,6 @@ function openMaterialModalByIndex(index) {
 function closeMaterialModal() {
   document.getElementById("detailView")?.classList.add("hidden");
 }
-
-/* ============================================================
-   WELCOME POPUP
-   ============================================================ */
-
-const TELEGRAM_INVITE_KEY = "icseMasterclassTelegramInvite2026v1";
-let telegramInviteReturnFocus = null;
-function checkWelcomePopup() {
-  if (new URLSearchParams(window.location.search).has("material")
-      || document.body.classList.contains("shared-material-mode")) return;
-  let hasSeenPopup = false;
-  try { hasSeenPopup = localStorage.getItem(TELEGRAM_INVITE_KEY) === "true"; } catch (_) {
-    try { hasSeenPopup = sessionStorage.getItem(TELEGRAM_INVITE_KEY) === "true"; } catch (_) {}
-  }
-  if (hasSeenPopup) return;
-  setTimeout(() => {
-    const popup = document.getElementById("welcomePopup");
-    if (!popup || document.body.classList.contains("shared-material-mode")) return;
-    telegramInviteReturnFocus = document.activeElement;
-    popup.classList.remove("hidden");
-    document.getElementById("telegramInviteJoin")?.focus();
-  }, 900);
-}
-function closeWelcomePopup() {
-  const popup = document.getElementById("welcomePopup");
-  popup?.classList.add("hidden");
-  try { localStorage.setItem(TELEGRAM_INVITE_KEY, "true"); } catch (_) {
-    try { sessionStorage.setItem(TELEGRAM_INVITE_KEY, "true"); } catch (_) {}
-  }
-  if (telegramInviteReturnFocus && typeof telegramInviteReturnFocus.focus === "function") {
-    telegramInviteReturnFocus.focus();
-  }
-  telegramInviteReturnFocus = null;
-}
-document.addEventListener("keydown", event => {
-  const popup = document.getElementById("welcomePopup");
-  if (!popup || popup.classList.contains("hidden")) return;
-  if (event.key === "Escape") { event.preventDefault(); closeWelcomePopup(); return; }
-  if (event.key !== "Tab") return;
-  const focusable = Array.from(popup.querySelectorAll("a[href],button:not([disabled])"));
-  if (!focusable.length) return;
-  const first = focusable[0], last = focusable[focusable.length - 1];
-  if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
-  else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
-});
 
 /* ============================================================
    PERSONALISATION SETTINGS
@@ -1556,7 +1265,6 @@ const startApp = () => {
   updatePersonalLibraryUI();
   initSubjectCards();
   fetchSheetData();
-  checkWelcomePopup();
 };
 
 if (document.readyState === "loading") {
@@ -1598,10 +1306,12 @@ function showGlobalSearch() {
   const input = document.getElementById("globalSearchInput");
   const landingView = document.getElementById("mainLandingView");
   const detailView = document.getElementById("subjectDetailView");
+  const discovery = document.querySelector(".library-discovery");
   if (!wrap || !input) return;
   // Return to the all-materials landing view so the global search is not hidden by subject navigation.
   if (wrap.classList.contains("hidden")) {
     currentSubject = "All";
+    discovery?.classList.remove("hidden");
     wrap.classList.remove("hidden");
     landingView?.classList.remove("hidden");
     detailView?.classList.add("hidden");

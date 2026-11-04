@@ -1,4 +1,4 @@
-const CACHE_NAME = "icse-masterclass-v1.6.0-academic-library";
+const CACHE_NAME = "icse-masterclass-v1.7.0-material-library";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -12,7 +12,7 @@ const APP_SHELL = [
   "./design-polish.css?v=20261026-1",
   "./luxury-theme.css",
   "./luxury-theme.css?v=3",
-  "./academic-library.css?v=1",
+  "./academic-library.css?v=2",
   "./script.js",
   "./ui-ux.js",
   "./study-tools.js",
