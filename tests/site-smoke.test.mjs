@@ -62,3 +62,17 @@ test("the catalogue can render from cache while a background refresh runs", () =
   assert.match(sw, /event.waitUntil\(refresh\.then/);
   assert.match(sw, /const cached = await caches.match\(request\)/);
 });
+
+test("offline app assets keep versioned cache keys and navigation fallback is query tolerant", () => {
+  const sw = read("sw.js");
+  assert.match(sw, /request\.mode === "navigate"\)\);/);
+  assert.match(sw, /typeof AbortController === "undefined"/);
+  assert.match(sw, /return cached \|\| response/);
+});
+
+test("EduBot lazy loading coalesces concurrent submits and can retry focus after failure", () => {
+  const loader = read("edubot-loader.js");
+  assert.match(loader, /let submissionPending = false/);
+  assert.match(loader, /if \(submissionPending\) return/);
+  assert.doesNotMatch(loader, /\{ once: true \}/);
+});

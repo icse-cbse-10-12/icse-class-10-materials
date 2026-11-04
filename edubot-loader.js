@@ -7,6 +7,7 @@
 
   let modulePromise = null;
   let ready = false;
+  let submissionPending = false;
 
   function loadEduBot() {
     if (!modulePromise) {
@@ -25,15 +26,18 @@
   }
 
   input?.addEventListener("focus", () => {
+    if (ready) return;
     loadEduBot().catch(error => {
       console.error("[EduBot loader]", error);
       reportLoadError();
     });
-  }, { once: true });
+  });
 
   form.addEventListener("submit", async event => {
     if (ready) return;
     event.preventDefault();
+    if (submissionPending) return;
+    submissionPending = true;
     const submitter = event.submitter;
     try {
       await loadEduBot();
@@ -42,6 +46,8 @@
     } catch (error) {
       console.error("[EduBot loader]", error);
       reportLoadError();
+    } finally {
+      submissionPending = false;
     }
   });
 })();

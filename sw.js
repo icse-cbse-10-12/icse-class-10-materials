@@ -44,6 +44,7 @@ self.addEventListener("activate", event => {
 });
 
 async function fetchWithTimeout(request, timeoutMs) {
+  if (typeof AbortController === "undefined") return fetch(request);
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
@@ -59,8 +60,10 @@ async function networkFirst(request, timeoutMs, ignoreSearch = false) {
     if (response && response.ok) {
       const cache = await caches.open(CACHE_NAME);
       await cache.put(new Request(request.url), response.clone()).catch(() => {});
+      return response;
     }
-    return response;
+    const cached = await caches.match(request, { ignoreSearch });
+    return cached || response;
   } catch (error) {
     const cached = await caches.match(request, { ignoreSearch });
     if (cached) return cached;
@@ -81,7 +84,7 @@ self.addEventListener("fetch", event => {
   const catalogue = url.hostname === "docs.google.com" || url.hostname === "api.allorigins.win";
 
   if (request.mode === "navigate" || appCode) {
-    event.respondWith(networkFirst(request, request.destination === "script" ? SCRIPT_TIMEOUT_MS : NETWORK_TIMEOUT_MS, true));
+    event.respondWith(networkFirst(request, request.destination === "script" ? SCRIPT_TIMEOUT_MS : NETWORK_TIMEOUT_MS, request.mode === "navigate"));
     return;
   }
   if (catalogue) {
