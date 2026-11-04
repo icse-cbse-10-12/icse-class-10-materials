@@ -1,4 +1,4 @@
-/* EduBot boot loader: Firebase AI is downloaded only when a student uses the assistant. */
+/* EduBot boot loader: the shared API client is downloaded only when a student uses the assistant. */
 (() => {
   const form = document.getElementById("edubotChatForm");
   const input = document.getElementById("edubotChatInput");
@@ -11,7 +11,7 @@
 
   function loadEduBot() {
     if (!modulePromise) {
-      modulePromise = import("./gemini-ai.js?v=2")
+      modulePromise = import("./gemini-ai.js?v=3")
         .then(() => { ready = true; })
         .catch(error => {
           modulePromise = null;
