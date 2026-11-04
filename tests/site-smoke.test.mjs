@@ -253,6 +253,7 @@ test("privacy and terms pages are linked from the homepage, login and dashboard"
     assert.match(html, /icseYtFavicon\.png/);
     assert.match(html, /Back to Study Vault/);
   }
+  assert.doesNotMatch(read("login.html"), /8,000\+/);
   const privacy = read("privacy-policy.html");
   assert.match(privacy, /Firebase Authentication/);
   assert.match(privacy, /Google Gemini/);
