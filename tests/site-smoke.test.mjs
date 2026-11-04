@@ -267,3 +267,12 @@ test("offline app shell caches the legal pages and invalidates the old cache", (
   assert.match(sw, /privacy-policy\.html/);
   assert.match(sw, /terms-and-conditions\.html/);
 });
+
+
+test("CI uses supported Node 24 actions and a pinned Ubuntu runner", () => {
+  const workflow = read(".github/workflows/site-smoke.yml");
+  assert.match(workflow, /runs-on: ubuntu-24\.04/);
+  assert.match(workflow, /actions\/checkout@v7/);
+  assert.match(workflow, /actions\/setup-node@v7/);
+  assert.match(workflow, /node-version: 24/);
+});
