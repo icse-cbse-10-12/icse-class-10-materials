@@ -1,5 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
 
 /* ============================================================
    ICSE MasterClass — Design System
@@ -26,10 +26,9 @@ html {
 }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
   background-color: var(--site-bg);
   color: #f3f4f6;
-  overflow-x: hidden;
   min-width: 0;
 }
 
