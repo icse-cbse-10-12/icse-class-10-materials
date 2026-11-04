@@ -10,7 +10,7 @@ const read = name => readFileSync(join(root, name), "utf8");
 test("all public pages load the shared academic design layer", () => {
   for (const [page, bodyClass] of [["index.html", "mc-home"], ["login.html", "mc-login"], ["dashboard.html", "mc-dashboard"], ["admin-1.html", "mc-admin"]]) {
     const html = read(page);
-    assert.ok(html.includes("academic-library.css?v=2") || html.includes("academic-library.css?v=3") || html.includes("academic-library.css?v=4"), `${page} must load the shared design layer`);
+    assert.ok(html.includes("academic-library.css"), `${page} must load the shared design layer`);
     assert.match(html, new RegExp(`<body[^>]*class=[\"'][^\"']*${bodyClass}`), `${page} must have its expected scope class`);
   }
 });
@@ -81,7 +81,7 @@ test("EduBot lazy loading coalesces concurrent submits and can retry focus after
 
 test("service-worker precache includes exact versioned CSS keys used by the homepage and login", () => {
   const sw = read("sw.js");
-  for (const asset of ["style.css?v=study-hub-layout-1", "design-polish.css?v=20261026-1", "luxury-theme.css?v=3", "academic-library.css?v=4"]) {
+  for (const asset of ["style.css?v=study-hub-layout-1", "design-polish.css?v=20261026-1", "luxury-theme.css?v=3", "academic-library.css?v=5"]) {
     assert.ok(sw.includes(asset), `APP_SHELL must precache ${asset}`);
   }
 });
@@ -111,7 +111,7 @@ test("the homepage is a material-first index with search before subject browsing
   const subjects = html.indexOf('id="mainSubjectGrid"');
   assert.ok(discovery >= 0, "a direct library heading should be present");
   assert.ok(search > discovery && search < subjects, "global search must precede subject browsing");
-  assert.match(html, /Syllabus Archive Index/);
+  assert.match(html, /Find the right study material/);
   assert.doesNotMatch(html, /aurora-welcome|aurora-quick-dock|study-hub-nav|study-hub-notice|study-hub-tools|lux-proof/);
 });
 
@@ -185,8 +185,8 @@ test("the first-screen Telegram invitation and floating CTA are removed", () => 
 
 test("the service worker invalidates the previous app shell and precaches the new library styles", () => {
   const sw = read("sw.js");
-  assert.match(sw, /icse-masterclass-v1\.11\.0-email-support-actions/);
-  assert.match(sw, /academic-library\.css\?v=4/);
+  assert.match(sw, /icse-masterclass-v1\.12\.0-library-ux/);
+  assert.match(sw, /academic-library\.css\?v=5/);
 });
 
 test("subject and search navigation hide and restore the discovery header correctly", () => {
@@ -226,6 +226,26 @@ test("subject directory uses accessible subject-specific vector illustrations", 
   assert.ok(css.includes("repeat(2,minmax(0,1fr))"));
   assert.ok(css.includes("focus-visible"));
   assert.ok(css.includes("prefers-reduced-motion"));
+});
+
+test("homepage discovery has clear student-facing search guidance", () => {
+  const html = read("index.html");
+  assert.match(html, /Find the right study material/);
+  assert.match(html, /class="library-intro"/);
+  assert.match(html, /class="library-search-hint"/);
+  assert.match(html, /role="group" aria-label="Filter resources by category"/);
+});
+
+test("mobile subject cards retain their vector illustrations at narrow widths", () => {
+  const css = read("academic-library.css");
+  assert.match(css, /min-height:164px !important/);
+  assert.match(css, /mc-subject-illustration \{ min-height:82px/);
+});
+
+test("file size is shown only when the published row includes file-size metadata", () => {
+  const script = read("script.js");
+  assert.match(script, /const fileSize = String\(item\["File Size"\] \|\| ""\)\.trim\(\)/);
+  assert.match(script, /fileSize \? `<span class="mc-material-size">/);
 });
 
 test("all active stylesheets have balanced rule braces", () => {
@@ -277,7 +297,7 @@ test("privacy and terms pages are linked from the homepage, login and dashboard"
 
 test("About and copyright panel uses the compact navy reference design", () => {
  const html=read("index.html"); const css=read("academic-library.css");
- assert.match(html,/academic-library\.css\?v=4/);
+ assert.match(html,/academic-library\.css\?v=5/);
  assert.match(html,/<details class="library-legal" open>/);
  assert.match(html,/Extensive Subject Support/); assert.match(html,/Curated Resource Formats/);
  assert.match(html,/Resource Index, Copyright and Disclaimer/);
@@ -291,18 +311,18 @@ test("About email support provides copy and Gmail compose actions", () => {
  assert.match(html,/id="copyEmailBtn"/);
  assert.match(html,/id="copyEmailStatus"[^>]*aria-live="polite"/);
  assert.match(html,/mail\.google\.com\/mail\/\?view=cm&amp;fs=1&amp;to=icsemasterclass%40gmail\.com/);
- assert.match(html,/academic-library\.css\?v=4/);
+ assert.match(html,/academic-library\.css\?v=5/);
  assert.match(css,/Email support actions/);
  assert.match(css,/\.copy-button\.success/);
  assert.match(script,/navigator\.clipboard\.writeText/);
  assert.match(script,/copyTextFallback/);
  assert.match(script,/Email address copied\./);
- assert.match(sw,/icse-masterclass-v1\.11\.0-email-support-actions/);
+ assert.match(sw,/icse-masterclass-v1\.12\.0-library-ux/);
 });
 
 test("offline app shell caches the legal pages and invalidates the old cache", () => {
   const sw = read("sw.js");
-    assert.match(sw, /icse-masterclass-v1\.11\.0-email-support-actions/);
+    assert.match(sw, /icse-masterclass-v1\.12\.0-library-ux/);
   assert.match(sw, /privacy-policy\.html/);
   assert.match(sw, /terms-and-conditions\.html/);
 });

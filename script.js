@@ -795,6 +795,7 @@ function renderGrid(data, appendFrom = 0) {
     const subject = item["Subject"] || "";
     const category = item["Category"] || "";
     const publisher = item["Publisher/Company"] || item["Publisher"] || "";
+    const fileSize = String(item["File Size"] || "").trim();
 
     return `
       <article class="mc-material-row">
@@ -804,6 +805,7 @@ function renderGrid(data, appendFrom = 0) {
             ${category ? `<span class="mc-material-category">${escapeHTML(category)}</span>` : ""}
             ${editionText ? `<span class="mc-material-edition">${escapeHTML(editionText)}</span>` : ""}
             ${publisher ? `<span class="mc-material-publisher">${escapeHTML(publisher)}</span>` : ""}
+            ${fileSize ? `<span class="mc-material-size"><i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i><span>File size: ${escapeHTML(fileSize)}</span></span>` : ""}
           </div>
           <h3>${escapeHTML(title)}</h3>
           ${item["Scope"] ? `<p class="mc-material-scope">${escapeHTML(item["Scope"])}</p>` : ""}

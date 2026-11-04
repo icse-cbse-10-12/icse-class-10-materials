@@ -218,7 +218,7 @@
   </style>
 <link rel="stylesheet" href="design-polish.css?v=20261026-1">
   <link rel="stylesheet" href="luxury-theme.css?v=3">
-  <link rel="stylesheet" href="academic-library.css?v=4">
+  <link rel="stylesheet" href="academic-library.css?v=5">
 
   <style id="edubot-embed-responsive">
     #eduBotAssistant { scroll-margin-top: 84px; min-width: 0; }
@@ -375,8 +375,9 @@
     <section class="library-discovery" aria-labelledby="libraryTitle">
       <div class="library-heading">
         <p class="library-eyebrow">ICSE CLASS 10 · MATERIALS</p>
-        <h1 id="libraryTitle">Syllabus Archive Index</h1>
+        <h1 id="libraryTitle">Find the right study material</h1>
       </div>
+      <p class="library-intro">Search notes, question banks, specimen papers and revision resources—or start with a subject below.</p>
       <div id="globalSearchWrap" class="library-search-wrap">
         <label for="globalSearchInput">Search materials</label>
         <div class="library-search-field">
@@ -386,6 +387,7 @@
             aria-label="Search all study materials">
         </div>
       </div>
+      <p class="library-search-hint">Tip: Try a chapter, topic, book title or publisher.</p>
       <div id="statusMessage" class="library-status" role="status" aria-live="polite">
         <i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i>
         <span>Loading the materials catalogue…</span>
@@ -394,7 +396,7 @@
 
     <!-- Landing Page -->
     <section id="mainLandingView" class="space-y-4">
-      <div class="library-section-label"><h2>Browse by subject</h2></div>
+      <div class="library-section-label"><div><h2>Browse by subject</h2><p class="library-section-note">Choose a subject to explore its notes, question banks and practice resources.</p></div></div>
 
       <!-- Subject directory is populated from the existing subject list. -->
       <div
@@ -443,7 +445,7 @@
 
      
 <!-- Resource Category Filters -->
-<div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+<div class="library-filter-tabs flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none" role="group" aria-label="Filter resources by category">
 
   <!-- All Materials -->
   <button
@@ -523,7 +525,7 @@
 </div>
 
 <!-- Material year filter -->
-<div class="flex flex-wrap items-center justify-between gap-3 py-3">
+<div class="library-year-filter flex flex-wrap items-center justify-between gap-3 py-3">
   <label for="yearFilter" class="text-xs font-semibold text-gray-400">Browse materials by year</label>
   <select id="yearFilter" onchange="filterResources()" aria-label="Filter materials by year" class="w-full sm:w-48 bg-gray-900 border border-gray-800 rounded-xl px-3 py-2 text-xs font-semibold text-white focus:outline-none focus:border-amber-500 transition">
     <option value="all">All Years</option>
