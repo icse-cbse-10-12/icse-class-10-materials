@@ -10,7 +10,7 @@ const read = name => readFileSync(join(root, name), "utf8");
 test("all public pages load the shared academic design layer", () => {
   for (const [page, bodyClass] of [["index.html", "mc-home"], ["login.html", "mc-login"], ["dashboard.html", "mc-dashboard"], ["admin-1.html", "mc-admin"]]) {
     const html = read(page);
-    assert.ok(html.includes("academic-library.css?v=2"), `${page} must load the shared design layer`);
+    assert.ok(html.includes("academic-library.css?v=3"), `${page} must load the shared design layer`);
     assert.match(html, new RegExp(`<body[^>]*class=[\"'][^\"']*${bodyClass}`), `${page} must have its expected scope class`);
   }
 });
@@ -81,7 +81,7 @@ test("EduBot lazy loading coalesces concurrent submits and can retry focus after
 
 test("service-worker precache includes exact versioned CSS keys used by the homepage and login", () => {
   const sw = read("sw.js");
-  for (const asset of ["style.css?v=study-hub-layout-1", "design-polish.css?v=20261026-1", "luxury-theme.css?v=3", "academic-library.css?v=2"]) {
+  for (const asset of ["style.css?v=study-hub-layout-1", "design-polish.css?v=20261026-1", "luxury-theme.css?v=3", "academic-library.css?v=3"]) {
     assert.ok(sw.includes(asset), `APP_SHELL must precache ${asset}`);
   }
 });
