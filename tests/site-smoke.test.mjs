@@ -205,9 +205,9 @@ test("PWA installation is available from the secondary navigation, not the heade
 });
 
 
-test("copyright, non-affiliation and takedown information remain available in a collapsed disclosure", () => {
+test("copyright, non-affiliation and takedown information are visible by default and remain collapsible", () => {
   const html = read("index.html");
-  assert.match(html, /<details class="library-legal">/);
+  assert.match(html, /<details class="library-legal" open>/);
   assert.match(html, /not affiliated with, authorised by or endorsed by the Council/);
   assert.match(html, /Third-party materials, publications, book covers and trademarks remain the property/);
   assert.match(html, /mailto:icsemasterclass@gmail.com/);
