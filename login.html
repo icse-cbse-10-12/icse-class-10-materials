@@ -95,6 +95,7 @@ button,.btn{min-height:48px;touch-action:manipulation;overflow-wrap:anywhere}
   </ul>
   <p id="passwordReady" class="rules-ready" role="status">Complete all requirements to continue.</p>
 </div>
+<label id="termsAcknowledgementWrap" class="small hidden" for="termsAcknowledgement" style="display:flex;align-items:flex-start;gap:9px;line-height:1.5;margin:14px 0"><input id="termsAcknowledgement" type="checkbox" style="width:18px;min-width:18px;height:18px;margin:2px 0 0" /> <span>I agree to the <a href="terms-and-conditions.html" target="_blank" rel="noopener noreferrer">Terms and Conditions</a> and acknowledge the <a href="privacy-policy.html" target="_blank" rel="noopener noreferrer">Privacy Policy</a>. This is not parental consent.</span></label>
 <button id="submitBtn" class="primary" type="submit">Sign in</button>
 </form>
 <button id="googleBtn" class="secondary" type="button">Continue with Google</button>
@@ -108,6 +109,8 @@ button,.btn{min-height:48px;touch-action:manipulation;overflow-wrap:anywhere}
 <a class="btn primary" data-vault-entry href="./?entry=done">Enter Study Vault <span aria-hidden="true">→</span></a>
 <a class="btn secondary" href="./dashboard.html">Open Student Dashboard <span aria-hidden="true">→</span></a>
 <button id="verifyBtn" class="secondary" type="button">Resend verification email</button>
+<p id="accountDeletionPending" class="small">Online account deletion is not enabled yet. To request Firebase account deletion, contact <a href="mailto:icsemasterclass@gmail.com">icsemasterclass@gmail.com</a>.</p>
+<button id="deleteAccountBtn" class="quiet hidden" type="button">Delete my account</button>
 <button id="logoutBtn" class="quiet" type="button">Sign out</button>
 </div>
 <p id="message" class="message" role="status" aria-live="polite"></p>
@@ -154,6 +157,9 @@ function setMode(next) {
   $("intro").textContent=signup?"Create an account to begin your ICSE MasterClass journey.":isHomepageEntry?"Sign in to continue, or browse our free Class 10 Study Vault as a guest.":"Sign in to your student account, or create one to get started.";
   $("nameWrap").classList.toggle("hidden",!signup);
   $("passwordRules").classList.toggle("hidden",!signup);
+  $("termsAcknowledgementWrap").classList.toggle("hidden",!signup);
+  $("termsAcknowledgement").required=signup;
+  $("termsAcknowledgement").checked=false;
   if (signup) checkPassword($("password").value);
   $("displayName").required=signup;
   $("password").autocomplete=signup?"new-password":"current-password";
@@ -193,6 +199,7 @@ $("authForm").addEventListener("submit",async event=>{
   try {
     await authReady;
     if(mode==="signup" && !checkPassword(password)) { message("Please meet all password requirements before creating your account.","error"); return; }
+    if(mode==="signup" && !$("termsAcknowledgement").checked) { message("Please agree to the Terms and acknowledge the Privacy Policy before creating an account.","error"); return; }
     if(mode==="signup") {
       const name=$("displayName").value.trim();
       if(!name) throw new Error("Please enter your name.");
@@ -225,6 +232,26 @@ $("googleBtn").addEventListener("click",async()=>{
 });
 $("logoutBtn").addEventListener("click",async()=>{try{await signOut(auth);message("You have signed out.","success");}catch(error){message(friendlyError(error),"error");}});
 $("verifyBtn").addEventListener("click",async()=>{try{if(auth.currentUser){await sendEmailVerification(auth.currentUser);message("Verification email sent. Check your inbox and spam folder.","success");}}catch(error){message(friendlyError(error),"error");}});
+$("deleteAccountBtn").addEventListener("click",async()=>{
+  const user=auth.currentUser;
+  if(!user){message("Sign in again before requesting account deletion.","error");return;}
+  if(firebaseConfig.accountDeletionAvailable!==true){message("Online account deletion is not enabled yet. Contact support for a verified deletion request.","error");return;}
+  if(!window.confirm("Permanently delete your Firebase student account? This cannot be undone. Study data saved in this browser will also be cleared after the server confirms deletion."))return;
+  const button=$("deleteAccountBtn");button.disabled=true;message("Requesting account deletion…");
+  try{
+    const {getFunctions,httpsCallable}=await import("https://www.gstatic.com/firebasejs/10.14.1/firebase-functions.js");
+    const removeAccount=httpsCallable(getFunctions(app,"asia-south1"),"deleteMyAccount");
+    const response=await removeAccount({});
+    if(response?.data?.deleted!==true)throw new Error("The server did not confirm account deletion.");
+    let localCleared=true;
+    try{localStorage.removeItem("icseMasterClass.studentDashboard.v1");localStorage.removeItem("icseMasterClassStudyToolsV1");}catch(_){localCleared=false;}
+    try{await signOut(auth);}catch(_){}
+    message(localCleared?"Your Firebase account was deleted. Student study data saved in this browser was also cleared.":"Your Firebase account was deleted, but this browser could not clear local study data. Clear site data in browser settings.","success");
+  }catch(error){
+    const detail=error?.code==="functions/failed-precondition"?"For security, sign out and sign in again, then retry within five minutes.":(error?.message||"Please contact support.");
+    message("Account deletion was not confirmed. "+detail,"error");
+  }finally{button.disabled=false;}
+});
 onAuthStateChanged(auth,user=>{
   const signed=!!user;
   $("formPanel").classList.toggle("hidden",signed);
@@ -236,6 +263,8 @@ onAuthStateChanged(auth,user=>{
     $("accountEmail").textContent=user.email||"Signed in with a provider";
     $("verifiedStatus").textContent=user.email? (user.emailVerified?"Email verified ✓":"Email not verified yet. Check your inbox.") :"Google account";
     $("verifyBtn").classList.toggle("hidden",!user.email||user.emailVerified);
+    $("deleteAccountBtn").classList.toggle("hidden",firebaseConfig.accountDeletionAvailable!==true);
+    $("accountDeletionPending").classList.toggle("hidden",firebaseConfig.accountDeletionAvailable===true);
   } else setMode(mode);
 });
 function friendlyError(error) {
@@ -332,7 +361,8 @@ button:focus-visible,.btn:focus-visible{outline:3px solid #7dd3fc!important;outl
 @media(max-width:360px){.card{padding:22px 15px!important}.brand{margin-bottom:15px!important}}
 </style>
 
-<footer class="login-legal-footer" aria-label="Legal information"><a href="privacy-policy.html">Privacy Policy</a><span aria-hidden="true">·</span><a href="terms-and-conditions.html">Terms and Conditions</a><span aria-hidden="true">·</span><a href="mailto:icsemasterclass@gmail.com">Contact</a></footer>
+<footer class="login-legal-footer" aria-label="Legal information"><a href="privacy-policy.html">Privacy Policy</a><span aria-hidden="true">·</span><a href="terms-and-conditions.html">Terms and Conditions</a><span aria-hidden="true">·</span><a href="cookie-policy.html">Cookie Policy</a><span aria-hidden="true">·</span><a href="refund-policy.html">Refund Policy</a><span aria-hidden="true">·</span><a href="mailto:icsemasterclass@gmail.com">Contact</a></footer>
 <style>.login-legal-footer{width:min(100%,470px);margin:18px auto 0;display:flex;justify-content:center;flex-wrap:wrap;gap:9px;color:#a1a1aa;font-size:.8rem}.login-legal-footer a{color:#cbd5e1;text-underline-offset:3px}.login-legal-footer a:hover{color:#fbbf24}.login-legal-footer a:focus-visible{outline:2px solid #7dd3fc;outline-offset:3px}</style>
+<script src="consent-manager.js" defer></script>
 </body>
 </html>

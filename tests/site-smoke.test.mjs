@@ -144,7 +144,7 @@ test("the published Google Sheets source remains unchanged and read-only", () =>
 });
 
 test("local page links and fragment targets resolve within the repository", () => {
-  const pages = ["index.html", "login.html", "dashboard.html", "admin-1.html", "portal.html", "404.html", "privacy-policy.html", "terms-and-conditions.html"];
+  const pages = ["index.html", "login.html", "dashboard.html", "admin-1.html", "portal.html", "404.html", "privacy-policy.html", "terms-and-conditions.html", "cookie-policy.html", "refund-policy.html"];
   for (const page of pages) {
     const html = read(page);
     const ids = new Set([...html.matchAll(/\bid=[\"']([^\"']+)[\"']/g)].map(match => match[1]));
@@ -256,7 +256,7 @@ test("all active stylesheets have balanced rule braces", () => {
 });
 
 test("public pages do not contain duplicate element IDs", () => {
-  for (const page of ["index.html", "login.html", "dashboard.html", "admin-1.html", "portal.html", "404.html", "privacy-policy.html", "terms-and-conditions.html"]) {
+  for (const page of ["index.html", "login.html", "dashboard.html", "admin-1.html", "portal.html", "404.html", "privacy-policy.html", "terms-and-conditions.html", "cookie-policy.html", "refund-policy.html"]) {
     const ids = [...read(page).matchAll(/\bid=[\"']([^\"']+)[\"']/g)].map(match => match[1]);
     const duplicates = ids.filter((id, index) => ids.indexOf(id) !== index);
     assert.deepEqual([...new Set(duplicates)], [], `${page} must not repeat IDs`);
@@ -278,7 +278,7 @@ test("privacy and terms pages are linked from the homepage, login and dashboard"
     assert.match(html, /href=["']privacy-policy\.html["']/i, `${page} must link to the privacy policy`);
     assert.match(html, /href=["']terms-and-conditions\.html["']/i, `${page} must link to the terms`);
   }
-  for (const page of ["privacy-policy.html", "terms-and-conditions.html"]) {
+  for (const page of ["privacy-policy.html", "terms-and-conditions.html", "cookie-policy.html", "refund-policy.html"]) {
     assert.ok(existsSync(join(root, page)), `${page} must exist`);
     const html = read(page);
     assert.match(html, /Team MasterClass/);
