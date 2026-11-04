@@ -161,6 +161,7 @@ function setMode(next) {
   $("modeBtn").textContent=signup?"Already have an account? Sign in":"New here? Create an account";
   message("");
 }
+if (entryParams.get("mode") === "signup") setMode("signup");
 const passwordRequirements = [
   ["ruleLength", value => value.length >= 8],
   ["ruleUpper", value => /[A-Z]/.test(value)],
