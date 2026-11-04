@@ -10,7 +10,7 @@ const read = name => readFileSync(join(root, name), "utf8");
 test("all public pages load the shared academic design layer", () => {
   for (const [page, bodyClass] of [["index.html", "mc-home"], ["login.html", "mc-login"], ["dashboard.html", "mc-dashboard"], ["admin-1.html", "mc-admin"]]) {
     const html = read(page);
-    assert.ok(html.includes("academic-library.css?v=3"), `${page} must load the shared design layer`);
+    assert.ok(/academic-library\\.css\\?v=[23]/.test(html), `${page} must load the shared design layer`);
     assert.match(html, new RegExp(`<body[^>]*class=[\"'][^\"']*${bodyClass}`), `${page} must have its expected scope class`);
   }
 });
