@@ -1,0 +1,9 @@
+{
+  "name": "icse-masterclass-functions",
+  "private": true,
+  "description": "Trusted Firebase Functions for ICSE MasterClass Study Vault account controls.",
+  "engines": { "node": "20" },
+  "main": "index.js",
+  "scripts": { "check": "node --check index.js" },
+  "dependencies": { "firebase-admin": "^13.0.0", "firebase-functions": "^6.0.0" }
+}
