@@ -218,7 +218,7 @@
   </style>
 <link rel="stylesheet" href="design-polish.css?v=20261026-1">
   <link rel="stylesheet" href="luxury-theme.css?v=3">
-  <link rel="stylesheet" href="academic-library.css?v=3">
+  <link rel="stylesheet" href="academic-library.css?v=4">
 
   <style id="edubot-embed-responsive">
     #eduBotAssistant { scroll-margin-top: 84px; min-width: 0; }
@@ -575,7 +575,15 @@
           <p><strong>2. Non-Affiliation:</strong> ICSE MasterClass is an independent educational initiative and is not affiliated with, authorised by or endorsed by the Council for the Indian School Certificate Examinations (CISCE).</p>
           <p><strong>3. Intellectual Property:</strong> Third-party materials, publications, book covers and trademarks remain the property of their respective owners. Linking to a resource does not imply ownership or permission to redistribute it.</p>
           <p><strong>4. Removal Requests:</strong> Copyright owners or authorised representatives may contact us to request a review or removal of a resource link.</p>
-          <p class="pt-1"><i class="fa-solid fa-envelope mr-1" aria-hidden="true"></i> <strong>Email Support:</strong> <a href="mailto:icsemasterclass@gmail.com" class="font-bold text-amber-400 underline underline-offset-2">icsemasterclass@gmail.com</a></p>
+          <div class="email-support-row pt-1">
+            <div class="email-support-label"><i class="fa-solid fa-envelope mr-1" aria-hidden="true"></i> <strong>Email Support:</strong></div>
+            <div class="email-container">
+              <a id="emailText" class="email-address" href="mailto:icsemasterclass@gmail.com">icsemasterclass@gmail.com</a>
+              <button type="button" id="copyEmailBtn" class="copy-button">Copy Address</button>
+              <a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=icsemasterclass%40gmail.com" target="_blank" rel="noopener noreferrer" class="gmail-link">Open in Gmail Web</a>
+              <span id="copyEmailStatus" class="copy-email-status" role="status" aria-live="polite"></span>
+            </div>
+          </div>
           <p class="text-[10px] text-gray-400">Removal requests will be reviewed promptly. Any stated processing time is subject to verification and the circumstances of the request.</p>
         </div></section>
       </div>

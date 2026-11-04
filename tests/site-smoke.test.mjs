@@ -284,6 +284,22 @@ test("About and copyright panel uses the compact navy reference design", () => {
  assert.match(css,/About \/ copyright panel — match the compact navy reference layout/);
  assert.match(css,/#080e1b/); assert.match(css,/#15151b/);
 });
+
+test("About email support provides copy and Gmail compose actions", () => {
+ const html=read("index.html"); const css=read("academic-library.css"); const script=read("script.js"); const sw=read("sw.js");
+ assert.match(html,/id="emailText"[^>]*>icsemasterclass@gmail\.com/);
+ assert.match(html,/id="copyEmailBtn"/);
+ assert.match(html,/id="copyEmailStatus"[^>]*aria-live="polite"/);
+ assert.match(html,/mail\.google\.com\/mail\/\?view=cm&amp;fs=1&amp;to=icsemasterclass%40gmail\.com/);
+ assert.match(html,/academic-library\.css\?v=4/);
+ assert.match(css,/Email support actions/);
+ assert.match(css,/\.copy-button\.success/);
+ assert.match(script,/navigator\.clipboard\.writeText/);
+ assert.match(script,/copyTextFallback/);
+ assert.match(script,/Email address copied\./);
+ assert.match(sw,/icse-masterclass-v1\.11\.0-email-support-actions/);
+});
+
 test("offline app shell caches the legal pages and invalidates the old cache", () => {
   const sw = read("sw.js");
   assert.match(sw, /icse-masterclass-v1\.10\.0-about-panel/);
