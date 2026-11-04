@@ -58,7 +58,7 @@ async function networkFirst(request, timeoutMs, ignoreSearch = false) {
     const response = await fetchWithTimeout(request, timeoutMs);
     if (response && response.ok) {
       const cache = await caches.open(CACHE_NAME);
-      await cache.put(request, response.clone()).catch(() => {});
+      await cache.put(new Request(request.url), response.clone()).catch(() => {});
     }
     return response;
   } catch (error) {
@@ -85,7 +85,22 @@ self.addEventListener("fetch", event => {
     return;
   }
   if (catalogue) {
-    event.respondWith(networkFirst(request, CATALOGUE_TIMEOUT_MS));
+    // Return the last published catalogue immediately on repeat visits, then refresh
+    // the cache in the background. First visits still wait for a live response.
+    const refresh = fetchWithTimeout(request, CATALOGUE_TIMEOUT_MS).then(async response => {
+      if (response && response.ok) {
+        const cache = await caches.open(CACHE_NAME);
+        await cache.put(new Request(request.url), response.clone()).catch(() => {});
+      }
+      return response;
+    }).catch(() => null);
+    event.waitUntil(refresh.then(() => {}));
+    event.respondWith((async () => {
+      const cached = await caches.match(request);
+      if (cached) return cached;
+      const fresh = await refresh;
+      return fresh || Response.error();
+    })());
     return;
   }
 
@@ -96,7 +111,7 @@ self.addEventListener("fetch", event => {
       const response = await fetchWithTimeout(request, NETWORK_TIMEOUT_MS);
       if (response && response.ok && response.type === "basic") {
         const cache = await caches.open(CACHE_NAME);
-        await cache.put(request, response.clone()).catch(() => {});
+        await cache.put(new Request(request.url), response.clone()).catch(() => {});
       }
       return response;
     } catch (error) {

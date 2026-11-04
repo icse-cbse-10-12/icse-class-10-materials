@@ -55,3 +55,10 @@ test("the homepage defaults to the paper theme while retaining dark mode options
   assert.match(read("script.js"), /siteSettingsDefaults = \{ mode: "light"/);
   assert.match(read("script.js"), /\["dark", "light", "midnight"\]/);
 });
+
+test("the catalogue can render from cache while a background refresh runs", () => {
+  const sw = read("sw.js");
+  assert.match(sw, /const refresh = fetchWithTimeout\(request, CATALOGUE_TIMEOUT_MS\)/);
+  assert.match(sw, /event.waitUntil\(refresh\.then/);
+  assert.match(sw, /const cached = await caches.match\(request\)/);
+});
