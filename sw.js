@@ -1,5 +1,5 @@
 // Previous cache: icse-masterclass-v1.8.0-legal-pages
-const CACHE_NAME = "icse-masterclass-v1.9.0-student-library-ux";
+const CACHE_NAME = "icse-masterclass-v1.10.0-about-panel";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -15,7 +15,7 @@ const APP_SHELL = [
   "./design-polish.css?v=20261026-1",
   "./luxury-theme.css",
   "./luxury-theme.css?v=3",
-  "./academic-library.css?v=2",
+  "./academic-library.css?v=3",
   "./script.js",
   "./ui-ux.js",
   "./study-tools.js",
