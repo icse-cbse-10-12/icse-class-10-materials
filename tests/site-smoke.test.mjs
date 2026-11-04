@@ -185,7 +185,7 @@ test("the first-screen Telegram invitation and floating CTA are removed", () => 
 
 test("the service worker invalidates the previous app shell and precaches the new library styles", () => {
   const sw = read("sw.js");
-  assert.match(sw, /icse-masterclass-v1\.9\.0-student-library-ux/);
+  assert.match(sw, /icse-masterclass-v1\.10\.0-about-panel/);
   assert.match(sw, /academic-library\.css\?v=2/);
 });
 
@@ -277,7 +277,7 @@ test("privacy and terms pages are linked from the homepage, login and dashboard"
 
 test("About and copyright panel uses the compact navy reference design", () => {
  const html=read("index.html"); const css=read("academic-library.css");
- assert.match(html,/academic-library\\.css\\?v=3/);
+ assert.match(html,/academic-library\.css\?v=3/);
  assert.match(html,/<details class="library-legal" open>/);
  assert.match(html,/Extensive Subject Support/); assert.match(html,/Curated Resource Formats/);
  assert.match(html,/Resource Index, Copyright and Disclaimer/);
@@ -286,7 +286,7 @@ test("About and copyright panel uses the compact navy reference design", () => {
 });
 test("offline app shell caches the legal pages and invalidates the old cache", () => {
   const sw = read("sw.js");
-  assert.match(sw, /icse-masterclass-v1\.9\.0-student-library-ux/);
+  assert.match(sw, /icse-masterclass-v1\.10\.0-about-panel/);
   assert.match(sw, /privacy-policy\.html/);
   assert.match(sw, /terms-and-conditions\.html/);
 });
