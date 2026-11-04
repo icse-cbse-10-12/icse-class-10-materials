@@ -3,19 +3,19 @@
   "name": "ICSE MasterClass Study Material Vault",
   "icons": [
     {
-      "src": "icseYtLogo.png",
+      "src": "icseYtPwa-192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "icseYtLogo.png",
+      "src": "icseYtPwa-512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
   ],
   "start_url": "./index.html",
-  "background_color": "#090d16",
-  "theme_color": "#090d16",
+  "background_color": "#F5F1E8",
+  "theme_color": "#F5F1E8",
   "display": "standalone",
   "orientation": "portrait",
   "description": "Free educational resource vault for ICSE Class 10 students. Download question banks, PYQs, revision notes, and video lectures."

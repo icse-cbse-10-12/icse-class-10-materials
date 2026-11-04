@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
+  <link rel="preconnect" href="https://cdn.tailwindcss.com">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Student Dashboard | ICSE MasterClass Study Vault</title>
   <meta name="description" content="Plan your ICSE study sessions, track syllabus progress, use a Pomodoro timer and manage daily tasks in your private student dashboard.">
-  <meta name="theme-color" content="#090d16">
+  <meta name="theme-color" content="#F5F1E8">
   <meta name="application-name" content="ICSE MasterClass Study Vault">
   <link rel="manifest" href="manifest.json">
-  <link rel="icon" href="icseYtLogo.png">
+  <link rel="icon" href="icseYtFavicon.png">
   <script>tailwind.config={darkMode:"class",theme:{extend:{colors:{brand:{400:"#f59e0b",500:"#d97706",600:"#b45309"}}}}};</script>
   <script src="https://cdn.tailwindcss.com" defer></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -16,13 +19,14 @@
   <link rel="stylesheet" href="ui-ux.css">
 <link rel="stylesheet" href="design-polish.css?v=20261026-1">
 <link rel="stylesheet" href="luxury-theme.css?v=3">
+  <link rel="stylesheet" href="academic-library.css?v=1">
 </head>
 <body class="mc-dashboard bg-gray-950 text-gray-100 font-sans min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black pb-12">
   <a class="mc-skip-link" href="#dashboardMain">Skip to dashboard</a>
   <header class="sticky top-0 z-40 bg-gray-950/90 backdrop-blur-md border-b border-gray-800/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
       <a href="./" class="flex items-center gap-3 min-w-0 group">
-        <img src="icseYtLogo.png" alt="ICSE MasterClass logo" class="w-10 h-10 object-contain rounded-full border border-amber-500/30">
+        <img src="icseYtLogo.webp" alt="ICSE MasterClass logo" class="w-10 h-10 object-contain rounded-full border border-amber-500/30">
         <span class="font-black text-lg tracking-tight text-white">ICSE <span class="text-amber-500">MasterClass</span><span class="block text-[10px] font-bold text-gray-400 tracking-widest uppercase mt-0.5">STUDENT DASHBOARD</span></span>
       </a>
       <a href="./" class="dashboard-secondary shrink-0"><i class="fa-solid fa-arrow-left mr-2" aria-hidden="true"></i><span>Study Vault</span></a>

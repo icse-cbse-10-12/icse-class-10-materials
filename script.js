@@ -1493,7 +1493,7 @@ document.addEventListener("keydown", event => {
 /* ============================================================
    PERSONALISATION SETTINGS
    ============================================================ */
-const siteSettingsDefaults = { mode: "dark", accent: "amber", fontSize: "100" };
+const siteSettingsDefaults = { mode: "light", accent: "emerald", fontSize: "100" };
 function readSiteSettings() {
   try {
     const saved = JSON.parse(localStorage.getItem("icseMasterclassSiteSettings") || "{}");
