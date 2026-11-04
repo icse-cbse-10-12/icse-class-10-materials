@@ -8,9 +8,9 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const read = name => readFileSync(join(root, name), "utf8");
 
 test("all public pages load the shared academic design layer", () => {
-  for (const [page, bodyClass] of [["index.html", "mc-home"], ["login.html", "mc-login"], ["dashboard.html", "mc-dashboard"], ["portal.html", "mc-portal"], ["admin-1.html", "mc-admin"]]) {
+  for (const [page, bodyClass] of [["index.html", "mc-home"], ["login.html", "mc-login"], ["dashboard.html", "mc-dashboard"], ["admin-1.html", "mc-admin"]]) {
     const html = read(page);
-    assert.match(html, /academic-library\.css\?v=1/ , `${page} must load the shared design layer`);
+    assert.ok(html.includes("academic-library.css?v=2"), `${page} must load the shared design layer`);
     assert.match(html, new RegExp(`<body[^>]*class=[\"'][^\"']*${bodyClass}`), `${page} must have its expected scope class`);
   }
 });
@@ -81,7 +81,7 @@ test("EduBot lazy loading coalesces concurrent submits and can retry focus after
 
 test("service-worker precache includes exact versioned CSS keys used by the homepage and login", () => {
   const sw = read("sw.js");
-  for (const asset of ["style.css?v=study-hub-layout-1", "design-polish.css?v=20261026-1", "luxury-theme.css?v=3", "academic-library.css?v=1"]) {
+  for (const asset of ["style.css?v=study-hub-layout-1", "design-polish.css?v=20261026-1", "luxury-theme.css?v=3", "academic-library.css?v=2"]) {
     assert.ok(sw.includes(asset), `APP_SHELL must precache ${asset}`);
   }
 });
@@ -94,4 +94,146 @@ test("visible logo assets are optimised and PWA icons use the correct dimensions
   assert.ok(read("index.html").includes('src="icseYtLogo.webp"'));
   assert.ok(read("login.html").includes('src="icseYtLogo.webp"'));
   assert.ok(read("dashboard.html").includes('src="icseYtLogo.webp"'));
+});
+
+
+test("the public materials catalogue opens without a forced login redirect", () => {
+  const html = read("index.html");
+  assert.doesNotMatch(html, /window\.location\.replace\(redirect\)/);
+  assert.doesNotMatch(html, /login\.html\?entry=1/);
+  assert.match(html, /href=[\"']\.\/login\.html[\"']/);
+});
+
+test("the homepage is a material-first index with search before subject browsing", () => {
+  const html = read("index.html");
+  const discovery = html.indexOf('class="library-discovery"');
+  const search = html.indexOf('id="globalSearchWrap"');
+  const subjects = html.indexOf('id="mainSubjectGrid"');
+  assert.ok(discovery >= 0, "a direct library heading should be present");
+  assert.ok(search > discovery && search < subjects, "global search must precede subject browsing");
+  assert.match(html, /Syllabus Archive Index/);
+  assert.doesNotMatch(html, /aurora-welcome|aurora-quick-dock|study-hub-nav|study-hub-notice|study-hub-tools|lux-proof/);
+});
+
+test("Telegram, feedback and appearance controls are secondary to material discovery", () => {
+  const html = read("index.html");
+  const header = html.match(/<header class="sticky[\s\S]*?<\/header>/)?.[0] || "";
+  assert.doesNotMatch(header, /t\.me\/|Feedback|settingsToggle/);
+  assert.match(html, /toggleSettings\(true\)/, "settings remain available from the navigation drawer");
+  assert.match(html, /https:\/\/t\.me\/ICSEMasterClass10/, "the Telegram link remains available outside the header");
+});
+
+test("the unused portal URL redirects to the real catalogue and contains no demo resources", () => {
+  const portal = read("portal.html");
+  assert.match(portal, /location\.replace\([\"']\.\/[\"']\)/);
+  assert.doesNotMatch(portal, /sample practice card|Sample question to demonstrate|Planned feature|Add a real resource link/i);
+});
+
+test("invalid or missing shared-material URLs cannot navigate to a hash placeholder", () => {
+  const html = read("index.html");
+  const script = read("script.js");
+  assert.doesNotMatch(html, /href=[\"']#[\"']/);
+  assert.doesNotMatch(script, /openButton\.href\s*=\s*[\"']#[\"']/);
+  assert.match(script, /openButton\.removeAttribute\([\"']href[\"']\)/);
+});
+
+test("the published Google Sheets source remains unchanged and read-only", () => {
+  const script = read("script.js");
+  assert.match(script, /const primaryCsvUrl =\s*[\"']https:\/\/docs\.google\.com\/spreadsheets\/d\/e\/2PACX-1vQLGKfaC9WUePvCArs7YAxYP9tmoPYkCdfJviR2pdOnlSZ6gVLEqgtAEga4XLQpubVTfEsHo2eWBWx7\/pub\?output=csv[\"']/);
+  assert.doesNotMatch(script, /spreadsheets\.googleapis\.com[\s\S]{0,300}(?:POST|PUT|PATCH|DELETE)/i);
+});
+
+test("local page links and fragment targets resolve within the repository", () => {
+  const pages = ["index.html", "login.html", "dashboard.html", "admin-1.html", "portal.html", "404.html"];
+  for (const page of pages) {
+    const html = read(page);
+    const ids = new Set([...html.matchAll(/\bid=[\"']([^\"']+)[\"']/g)].map(match => match[1]));
+    for (const match of html.matchAll(/\b(href|src|action)=[\"']([^\"']+)[\"']/g)) {
+      const value = match[2];
+      if (/^(?:https?:|mailto:|tel:|javascript:|data:)/i.test(value)) continue;
+      if (value === "#") assert.fail(`${page} contains an inert hash-only link`);
+      if (value.startsWith("#")) {
+        assert.ok(ids.has(value.slice(1)), `${page} has no target for ${value}`);
+        continue;
+      }
+      const pathname = new URL(value, `https://study-vault.test/${page}`).pathname.replace(/^\//, "");
+      if (!pathname || pathname.endsWith("/")) continue;
+      assert.ok(existsSync(join(root, pathname)), `${page} references missing local path ${value}`);
+    }
+  }
+});
+
+
+test("material result rows preserve preview, open, save and share actions", () => {
+  const script = read("script.js");
+  assert.match(script, /class="mc-material-row"/);
+  for (const selector of ["js-toggle-save", "js-open-share-page", "js-share-material", "openMaterialModalByIndex"]) {
+    assert.ok(script.includes(selector), `${selector} must remain available`);
+  }
+  assert.match(read("academic-library.css"), /#resourceGrid \.mc-material-row/);
+  assert.doesNotMatch(script, /subjectEmoji|📚|📘/);
+});
+
+test("the first-screen Telegram invitation and floating CTA are removed", () => {
+  const html = read("index.html");
+  const script = read("script.js");
+  assert.doesNotMatch(html, /welcomePopup|telegramInviteJoin|Join Group/);
+  assert.doesNotMatch(script, /checkWelcomePopup|TELEGRAM_INVITE_KEY/);
+  assert.doesNotMatch(read("design-polish.css"), /#welcomePopup/);
+});
+
+
+test("the service worker invalidates the previous app shell and precaches the new library styles", () => {
+  const sw = read("sw.js");
+  assert.match(sw, /icse-masterclass-v1\.7\.0-material-library/);
+  assert.match(sw, /academic-library\.css\?v=2/);
+});
+
+test("subject and search navigation hide and restore the discovery header correctly", () => {
+  const script = read("script.js");
+  assert.match(script, /discovery\?\.classList\.add\(\"hidden\"\)/);
+  assert.match(script, /discovery\?\.classList\.remove\(\"hidden\"\)/);
+  assert.doesNotMatch(script, /renderLatestMaterials|No 2027 resources are tagged/);
+});
+
+test("PWA installation is available from the secondary navigation, not the header", () => {
+  const html = read("index.html");
+  const header = html.match(/<header class="sticky[\s\S]*?<\/header>/)?.[0] || "";
+  const nav = html.match(/<nav class="site-nav-links"[\s\S]*?<\/nav>/)?.[0] || "";
+  assert.doesNotMatch(header, /pwaInstallBtn/);
+  assert.match(nav, /id="pwaInstallBtn"/);
+});
+
+
+test("copyright, non-affiliation and takedown information remain available in a collapsed disclosure", () => {
+  const html = read("index.html");
+  assert.match(html, /<details class="library-legal">/);
+  assert.match(html, /not affiliated with, authorised by or endorsed by the Council/);
+  assert.match(html, /Third-party materials, publications, book covers and trademarks remain the property/);
+  assert.match(html, /mailto:icsemasterclass@gmail.com/);
+  assert.doesNotMatch(html, /October 2026|settings-version-badge/);
+});
+
+
+test("all active stylesheets have balanced rule braces", () => {
+  for (const file of ["style.css", "ui-ux.css", "design-polish.css", "luxury-theme.css", "academic-library.css"]) {
+    const css = read(file);
+    assert.equal((css.match(/\{/g) || []).length, (css.match(/\}/g) || []).length, `${file} must have balanced braces`);
+  }
+});
+
+test("public pages do not contain duplicate element IDs", () => {
+  for (const page of ["index.html", "login.html", "dashboard.html", "admin-1.html", "portal.html", "404.html"]) {
+    const ids = [...read(page).matchAll(/\bid=[\"']([^\"']+)[\"']/g)].map(match => match[1]);
+    const duplicates = ids.filter((id, index) => ids.indexOf(id) !== index);
+    assert.deepEqual([...new Set(duplicates)], [], `${page} must not repeat IDs`);
+  }
+});
+
+
+test("material rows do not invent generic titles, subjects or categories when source metadata is blank", () => {
+  const script = read("script.js");
+  assert.doesNotMatch(script, /item\[\"Book Name\"\] \|\| \"Resource File\"/);
+  assert.doesNotMatch(script, /item\[\"Category\"\] \|\| \"General\"/);
+  assert.match(script, /category \? `\<span/);
 });
