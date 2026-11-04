@@ -1119,3 +1119,18 @@ body.mc-home .library-legal-copy a{color:#fbbf24!important;text-decoration:under
  body.mc-home .library-legal-copy>.grid>section{min-height:0}
  body.mc-home .library-legal-copy>section[aria-labelledby="resourceDisclaimerTitle"]{padding:12px}
 }
+
+
+/* Email support actions — retain the compact navy About panel reference design. */
+body.mc-home .email-support-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+body.mc-home .email-support-label{flex:0 0 auto;color:#e2e8f0}
+body.mc-home .email-container{display:inline-flex;align-items:center;flex-wrap:wrap;gap:7px;font-family:system-ui,-apple-system,sans-serif;min-width:0}
+body.mc-home .email-address{font-weight:700;color:#fbbf24!important;text-decoration:underline;text-underline-offset:2px;overflow-wrap:anywhere}
+body.mc-home .copy-button,body.mc-home .gmail-link{display:inline-flex;align-items:center;justify-content:center;min-height:30px;padding:5px 10px;border-radius:6px;font-size:10px;font-weight:700;line-height:1.2;text-decoration:none;cursor:pointer;transition:background-color .16s ease,border-color .16s ease,color .16s ease}
+body.mc-home .copy-button{background:#202b3d;border:1px solid #3a4659;color:#e2e8f0}
+body.mc-home .copy-button:hover{background:#2a3850;border-color:#64748b;color:#fff}
+body.mc-home .copy-button.success{background:#123b35;border-color:#2c8b78;color:#b9f4e6}
+body.mc-home .gmail-link{background:#b93832;border:1px solid #d34c44;color:#fff!important}
+body.mc-home .gmail-link:hover{background:#d33426;border-color:#ef6b61;color:#fff!important}
+body.mc-home .copy-email-status{color:#9ee6d5;font-size:9px;min-height:1em}
+@media(max-width:560px){body.mc-home .email-container{gap:6px}body.mc-home .copy-button,body.mc-home .gmail-link{min-height:36px;padding-inline:10px}}

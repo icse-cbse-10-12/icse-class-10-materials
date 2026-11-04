@@ -1337,3 +1337,53 @@ function showGlobalSearch() {
     input.focus({ preventScroll: true });
   }, 80);
 }
+
+
+/* Copy the published support address with an accessible confirmation and fallback. */
+(() => {
+  const button = document.getElementById("copyEmailBtn");
+  const emailLink = document.getElementById("emailText");
+  const status = document.getElementById("copyEmailStatus");
+  if (!button || !emailLink || !status) return;
+
+  const copyTextFallback = text => {
+    const field = document.createElement("textarea");
+    field.value = text;
+    field.setAttribute("readonly", "");
+    field.style.position = "fixed";
+    field.style.opacity = "0";
+    document.body.appendChild(field);
+    field.select();
+    let copied = false;
+    try { copied = document.execCommand("copy"); } catch (_) { copied = false; }
+    field.remove();
+    return copied;
+  };
+
+  button.addEventListener("click", async () => {
+    const email = emailLink.textContent.trim();
+    let copied = false;
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(email);
+        copied = true;
+      } else {
+        copied = copyTextFallback(email);
+      }
+    } catch (_) {
+      copied = copyTextFallback(email);
+    }
+
+    if (copied) {
+      button.textContent = "✓ Copied!";
+      button.classList.add("success");
+      status.textContent = "Email address copied.";
+      window.setTimeout(() => {
+        button.textContent = "Copy Address";
+        button.classList.remove("success");
+      }, 2000);
+    } else {
+      status.textContent = "Copy unavailable. Select the email address to copy it manually.";
+    }
+  });
+})();

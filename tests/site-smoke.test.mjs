@@ -10,7 +10,7 @@ const read = name => readFileSync(join(root, name), "utf8");
 test("all public pages load the shared academic design layer", () => {
   for (const [page, bodyClass] of [["index.html", "mc-home"], ["login.html", "mc-login"], ["dashboard.html", "mc-dashboard"], ["admin-1.html", "mc-admin"]]) {
     const html = read(page);
-    assert.ok(html.includes("academic-library.css?v=2") || html.includes("academic-library.css?v=3"), `${page} must load the shared design layer`);
+    assert.ok(html.includes("academic-library.css?v=2") || html.includes("academic-library.css?v=3") || html.includes("academic-library.css?v=4"), `${page} must load the shared design layer`);
     assert.match(html, new RegExp(`<body[^>]*class=[\"'][^\"']*${bodyClass}`), `${page} must have its expected scope class`);
   }
 });
@@ -81,7 +81,7 @@ test("EduBot lazy loading coalesces concurrent submits and can retry focus after
 
 test("service-worker precache includes exact versioned CSS keys used by the homepage and login", () => {
   const sw = read("sw.js");
-  for (const asset of ["style.css?v=study-hub-layout-1", "design-polish.css?v=20261026-1", "luxury-theme.css?v=3", "academic-library.css?v=3"]) {
+  for (const asset of ["style.css?v=study-hub-layout-1", "design-polish.css?v=20261026-1", "luxury-theme.css?v=3", "academic-library.css?v=4"]) {
     assert.ok(sw.includes(asset), `APP_SHELL must precache ${asset}`);
   }
 });
@@ -185,8 +185,8 @@ test("the first-screen Telegram invitation and floating CTA are removed", () => 
 
 test("the service worker invalidates the previous app shell and precaches the new library styles", () => {
   const sw = read("sw.js");
-  assert.match(sw, /icse-masterclass-v1\.10\.0-about-panel/);
-  assert.match(sw, /academic-library\.css\?v=3/);
+  assert.match(sw, /icse-masterclass-v1\.11\.0-email-support-actions/);
+  assert.match(sw, /academic-library\.css\?v=4/);
 });
 
 test("subject and search navigation hide and restore the discovery header correctly", () => {
@@ -277,16 +277,32 @@ test("privacy and terms pages are linked from the homepage, login and dashboard"
 
 test("About and copyright panel uses the compact navy reference design", () => {
  const html=read("index.html"); const css=read("academic-library.css");
- assert.match(html,/academic-library\.css\?v=3/);
+ assert.match(html,/academic-library\.css\?v=4/);
  assert.match(html,/<details class="library-legal" open>/);
  assert.match(html,/Extensive Subject Support/); assert.match(html,/Curated Resource Formats/);
  assert.match(html,/Resource Index, Copyright and Disclaimer/);
  assert.match(css,/About \/ copyright panel — match the compact navy reference layout/);
  assert.match(css,/#080e1b/); assert.match(css,/#15151b/);
 });
+
+test("About email support provides copy and Gmail compose actions", () => {
+ const html=read("index.html"); const css=read("academic-library.css"); const script=read("script.js"); const sw=read("sw.js");
+ assert.match(html,/id="emailText"[^>]*>icsemasterclass@gmail\.com/);
+ assert.match(html,/id="copyEmailBtn"/);
+ assert.match(html,/id="copyEmailStatus"[^>]*aria-live="polite"/);
+ assert.match(html,/mail\.google\.com\/mail\/\?view=cm&amp;fs=1&amp;to=icsemasterclass%40gmail\.com/);
+ assert.match(html,/academic-library\.css\?v=4/);
+ assert.match(css,/Email support actions/);
+ assert.match(css,/\.copy-button\.success/);
+ assert.match(script,/navigator\.clipboard\.writeText/);
+ assert.match(script,/copyTextFallback/);
+ assert.match(script,/Email address copied\./);
+ assert.match(sw,/icse-masterclass-v1\.11\.0-email-support-actions/);
+});
+
 test("offline app shell caches the legal pages and invalidates the old cache", () => {
   const sw = read("sw.js");
-  assert.match(sw, /icse-masterclass-v1\.10\.0-about-panel/);
+    assert.match(sw, /icse-masterclass-v1\.11\.0-email-support-actions/);
   assert.match(sw, /privacy-policy\.html/);
   assert.match(sw, /terms-and-conditions\.html/);
 });
