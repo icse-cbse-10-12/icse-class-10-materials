@@ -1,0 +1,42 @@
+Vruntime Labs Attribution License (VLAL) v1.0
+
+Copyright (c) 2026 Vruntime Labs. All rights reserved except as granted below.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to use, copy,
+modify, merge, publish, distribute, sublicense, and/or sell copies of the
+Software, in any project, personal or commercial, subject to the following
+conditions:
+
+1. ATTRIBUTION REQUIRED. Wherever the Software, or any substantial portion of it,
+   is used, you must give visible credit to "Vruntime Labs". Credit must appear
+   in at least ONE of the following places that end users or developers of your
+   product can reasonably see:
+     a) the product's user interface (for example an About page, footer, or
+        credits screen), with the text "Theme transition by Vruntime Labs".
+        The credit must link to BOTH of these official contact destinations:
+          - GitHub: https://github.com/vruntime-labs
+          - Email: mailto:vruntimelabs@gmail.com
+     b) the product's public documentation, README, or website credits page,
+        with links to both official contact destinations listed above; or
+     c) for products with no UI or docs (e.g. a closed-source app), the
+        "open-source licenses" / "acknowledgements" section or equivalent,
+        reproducing the credit and both contact destinations.
+
+2. NOTICE PRESERVED. Source redistributions (including modified versions) must
+   retain this license text and the above copyright notice. Binary or bundled
+   redistributions must reproduce them in documentation or other materials
+   provided with the distribution, or in a comment at the top of the bundle.
+
+3. NO ENDORSEMENT. The name "Vruntime Labs" may not be used to imply
+   endorsement of your product beyond the required credit in clause 1.
+
+4. MODIFICATIONS. You may add your own copyright notice for your modifications,
+   but you may not remove or obscure the attribution required by this license.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
