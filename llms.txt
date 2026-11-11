@@ -1,0 +1,30 @@
+# ICSE MasterClass Study Vault
+
+> Independent educational resource directory for ICSE Class 10 students in India. Not affiliated with, authorised by or endorsed by CISCE.
+
+## Canonical website
+- https://icse-cbse-10-12.github.io/icse-class-10-materials/
+
+## What this site provides
+The Study Vault helps students discover listed notes, question banks, previous-year questions, specimen/sample papers, reference resources and video lessons. Catalogue availability varies by subject and original provider. Many resources are hosted by third parties; this website does not claim ownership of third-party books, PDFs, videos, trademarks or other intellectual property.
+
+## Main public pages
+- Study Vault: https://icse-cbse-10-12.github.io/icse-class-10-materials/
+- Study blog: https://icse-cbse-10-12.github.io/icse-class-10-materials/blog/
+- FAQs: https://icse-cbse-10-12.github.io/icse-class-10-materials/faq.html
+- ICSE Class 10 Date Sheet 2027: https://icse-cbse-10-12.github.io/icse-class-10-materials/blog/icse-class-10-date-sheet-2027.html
+- ICSE Class 10 preparation guide: https://icse-cbse-10-12.github.io/icse-class-10-materials/blog/icse-class-10-study-plan.html
+- How to use the Study Vault: https://icse-cbse-10-12.github.io/icse-class-10-materials/blog/how-to-use-icse-masterclass-study-vault.html
+- Sitemap: https://icse-cbse-10-12.github.io/icse-class-10-materials/sitemap.xml
+
+## Authority and verification
+For official syllabus, regulations, examination notices and date sheets, use https://cisce.org/. Independent ICSE MasterClass summaries are informational aids and must not override the latest official CISCE publication or a student's school instructions.
+
+## Publisher and contact
+- Publisher: Team MasterClass / ICSE MasterClass
+- Email: icsemasterclass@gmail.com
+- YouTube: https://www.youtube.com/@ICSEMasterClass10
+- Telegram: https://t.me/ICSEMasterClass10
+
+## Content principles
+Identify the source and update date for time-sensitive facts. Distinguish official CISCE information from independent guidance. Do not infer that a linked third-party resource is free, authorised for redistribution or hosted by ICSE MasterClass. Do not invent marks, rankings, reviews, search volumes or guaranteed outcomes.

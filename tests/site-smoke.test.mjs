@@ -346,3 +346,36 @@ test("ink theme initializes after the site's saved appearance settings", () => {
   assert.ok(script.includes('document.addEventListener("DOMContentLoaded", startApp)'));
   assert.ok(!html.includes('document.readyState === "loading"'));
 });
+
+test("editorial pages expose canonical metadata, answer content and structured data", () => {
+  const blog = read("blog/index.html");
+  const faq = read("faq.html");
+  for (const page of ["blog/icse-class-10-date-sheet-2027.html", "blog/icse-class-10-study-plan.html", "blog/how-to-use-icse-masterclass-study-vault.html"]) {
+    const html = read(page);
+    assert.match(html, /<title>[^<]+<\\/title>/);
+    assert.match(html, /rel="canonical"/);
+    assert.match(html, /application\\/ld\\+json/);
+    assert.match(html, /datePublished/);
+    assert.match(html, /Team MasterClass/);
+  }
+  assert.match(blog, /"@type":"Blog"/);
+  assert.match(faq, /"@type":"FAQPage"/);
+  assert.match(faq, /Is ICSE MasterClass an official CISCE website/);
+  assert.match(read("llms.txt"), /not affiliated with, authorised by or endorsed by CISCE/i);
+  assert.match(read("seo/keyword-map.md"), /Search-volume figures are intentionally omitted/);
+});
+test("homepage links to blog and FAQs without removing protected copyright content", () => {
+  const html = read("index.html");
+  assert.match(html, /href="\\.\\/blog\\//);
+  assert.match(html, /href="\\.\\/faq\\.html"/);
+  assert.match(html, /Resource Index, Copyright and Disclaimer/);
+  assert.match(html, /not affiliated with, authorised by or endorsed by the Council/);
+});
+test("sitemap and service worker include the new editorial pages", () => {
+  const sitemap = read("sitemap.xml");
+  for (const path of ["blog/","faq.html","blog/icse-class-10-date-sheet-2027.html","blog/icse-class-10-study-plan.html","blog/how-to-use-icse-masterclass-study-vault.html"]) assert.ok(sitemap.includes(path));
+  const sw = read("sw.js");
+  assert.match(sw, /icse-masterclass-v1\\.15\\.0-editorial-content/);
+  assert.match(sw, /blog\\/blog\\.css/);
+  assert.match(sw, /faq\\.html/);
+});
