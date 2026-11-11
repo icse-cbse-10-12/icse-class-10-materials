@@ -35,8 +35,8 @@ function makeNoise(seed) {
 const defaults = {
   attribute: 'data-theme',      // attribute set on <html>
   storageKey: 'vr-theme',       // localStorage key ('' to disable persistence)
-  duration: 1400,
-  initialTheme: null,               // ms
+  duration: 1400, // ms
+  initialTheme: null, // initial theme polarity supplied by the host page
   roughness: 0.55,              // 0 = clean circle, 1 = very ragged bleed
   scale: 3.2,                   // noise frequency
   edge: 0.09,                   // softness of the ink edge
