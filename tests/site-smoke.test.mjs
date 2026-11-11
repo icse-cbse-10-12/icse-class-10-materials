@@ -362,7 +362,7 @@ test("editorial pages expose canonical metadata, answer content and structured d
   assert.ok(blog.includes('"@type":"Blog"'));
   assert.ok(faq.includes('"@type":"FAQPage"'));
   assert.ok(faq.includes("Is ICSE MasterClass an official CISCE website"));
-  assert.ok(read("llms.txt").includes("not affiliated with, authorised by or endorsed by CISCE"));
+  assert.ok(read("llms.txt").toLowerCase().includes("not affiliated with, authorised by or endorsed by cisce"));
   assert.ok(read("seo/keyword-map.md").includes("Search-volume figures are intentionally omitted"));
 });
 test("homepage links to blog and FAQs without removing protected copyright content", () => {
