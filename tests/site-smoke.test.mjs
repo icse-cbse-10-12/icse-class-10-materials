@@ -412,3 +412,12 @@ test("EduBot API integration keeps the optional-service consent gate", () => {
   assert.ok(read("index.html").includes("up to 10 messages, including your questions and EduBot replies"));
   assert.ok(read("privacy-policy.html").includes("EduBot API hosted on Vercel"));
 });
+
+
+test("external resource links show a clear source notice and generic open action", () => {
+  const script = read("script.js");
+  assert.ok(script.includes("External resource"));
+  assert.ok(script.includes("This resource is hosted on an external website."));
+  assert.ok(script.includes("Open Resource"));
+  assert.ok(!script.includes("Open Drive Link"));
+});

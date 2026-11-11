@@ -1109,6 +1109,14 @@ function openMaterialModalByIndex(index) {
       </div>
     `;
   }
+ else if (driveLink) {
+    embedHtml = `
+      <div class="rounded-lg border border-gray-800 bg-gray-950 p-5 text-sm text-gray-300">
+        <p class="font-semibold text-gray-100">External resource</p>
+        <p class="mt-2">This resource is hosted on an external website. Use Open Resource below to visit the original source. Availability and any sign-in or payment requirements are controlled by that website.</p>
+      </div>
+    `;
+  }
 
   if (container) {
     container.innerHTML = `
@@ -1173,7 +1181,7 @@ function openMaterialModalByIndex(index) {
           ${driveLink ? `
             <a href="${escapeHTML(driveLink)}" target="_blank" rel="noopener noreferrer"
               class="py-2.5 rounded-lg bg-amber-500 text-black hover:bg-amber-400 font-bold text-xs text-center transition flex items-center justify-center gap-2">
-              <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> Open Drive Link
+              <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> Open Resource
             </a>` : `
             <span class="py-2.5 rounded-lg bg-gray-800 text-gray-500 font-bold text-xs text-center flex items-center justify-center gap-2" aria-disabled="true">
               <i class="fa-solid fa-link-slash" aria-hidden="true"></i> Link unavailable
