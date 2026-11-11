@@ -144,7 +144,7 @@ test("the published Google Sheets source remains unchanged and read-only", () =>
 });
 
 test("local page links and fragment targets resolve within the repository", () => {
-  const pages = ["index.html", "login.html", "dashboard.html", "admin-1.html", "portal.html", "404.html", "privacy-policy.html", "terms-and-conditions.html", "cookie-policy.html", "refund-policy.html"];
+  const pages = ["index.html", "login.html", "dashboard.html", "admin-1.html", "portal.html", "404.html", "privacy-policy.html", "terms-and-conditions.html", "cookie-policy.html", "refund-policy.html", "faq.html", "blog/index.html", "blog/icse-class-10-date-sheet-2027.html", "blog/icse-class-10-study-plan.html", "blog/how-to-use-icse-masterclass-study-vault.html"];
   for (const page of pages) {
     const html = read(page);
     const ids = new Set([...html.matchAll(/\bid=[\"']([^\"']+)[\"']/g)].map(match => match[1]));
@@ -185,7 +185,7 @@ test("the first-screen Telegram invitation and floating CTA are removed", () => 
 
 test("the service worker invalidates the previous app shell and precaches the new library styles", () => {
   const sw = read("sw.js");
-  assert.match(sw, /icse-masterclass-v1\.14\.0-ink-bleed-theme/);
+  assert.match(sw, /icse-masterclass-v1\.15\.0-editorial-content/);
   assert.ok(sw.includes("./src/inkbleed.js"), "APP_SHELL must precache the ink theme module");
   assert.match(sw, /academic-library\.css\?v=5/);
 });
@@ -318,12 +318,12 @@ test("About email support provides copy and Gmail compose actions", () => {
  assert.match(script,/navigator\.clipboard\.writeText/);
  assert.match(script,/copyTextFallback/);
  assert.match(script,/Email address copied\./);
- assert.match(sw,/icse-masterclass-v1\.14\.0-ink-bleed-theme/);
+ assert.match(sw,/icse-masterclass-v1\.15\.0-editorial-content/);
 });
 
 test("offline app shell caches the legal pages and invalidates the old cache", () => {
   const sw = read("sw.js");
-    assert.match(sw, /icse-masterclass-v1\.14\.0-ink-bleed-theme/);
+    assert.match(sw, /icse-masterclass-v1\.15\.0-editorial-content/);
   assert.match(sw, /privacy-policy\.html/);
   assert.match(sw, /terms-and-conditions\.html/);
 });
@@ -345,4 +345,38 @@ test("ink theme initializes after the site's saved appearance settings", () => {
   assert.ok(html.includes('document.addEventListener("DOMContentLoaded", initialiseInkTheme, { once: true });'));
   assert.ok(script.includes('document.addEventListener("DOMContentLoaded", startApp)'));
   assert.ok(!html.includes('document.readyState === "loading"'));
+});
+
+
+test("editorial pages expose canonical metadata, answer content and structured data", () => {
+  const blog = read("blog/index.html");
+  const faq = read("faq.html");
+  for (const page of ["blog/icse-class-10-date-sheet-2027.html", "blog/icse-class-10-study-plan.html", "blog/how-to-use-icse-masterclass-study-vault.html"]) {
+    const html = read(page);
+    assert.ok(html.includes("<title>") && html.includes("</title>"), page + " must have a title");
+    assert.ok(html.includes('rel="canonical"'), page + " must have a canonical URL");
+    assert.ok(html.includes("application/ld+json"), page + " must have structured data");
+    assert.ok(html.includes("datePublished"), page + " must expose a publication date");
+    assert.ok(html.includes("Team MasterClass"), page + " must identify the publisher");
+  }
+  assert.ok(blog.includes('"@type":"Blog"'));
+  assert.ok(faq.includes('"@type":"FAQPage"'));
+  assert.ok(faq.includes("Is ICSE MasterClass an official CISCE website"));
+  assert.ok(read("llms.txt").toLowerCase().includes("not affiliated with, authorised by or endorsed by cisce"));
+  assert.ok(read("seo/keyword-map.md").includes("Search-volume figures are intentionally omitted"));
+});
+test("homepage links to blog and FAQs without removing protected copyright content", () => {
+  const html = read("index.html");
+  assert.ok(html.includes('href="./blog/"'));
+  assert.ok(html.includes('href="./faq.html"'));
+  assert.ok(html.includes("Resource Index, Copyright and Disclaimer"));
+  assert.ok(html.includes("not affiliated with, authorised by or endorsed by the Council"));
+});
+test("sitemap and service worker include the new editorial pages", () => {
+  const sitemap = read("sitemap.xml");
+  for (const path of ["blog/","faq.html","blog/icse-class-10-date-sheet-2027.html","blog/icse-class-10-study-plan.html","blog/how-to-use-icse-masterclass-study-vault.html"]) assert.ok(sitemap.includes(path));
+  const sw = read("sw.js");
+  assert.ok(sw.includes("icse-masterclass-v1.15.0-editorial-content"));
+  assert.ok(sw.includes("./blog/blog.css"));
+  assert.ok(sw.includes("./faq.html"));
 });

@@ -1,8 +1,15 @@
 // Previous cache: icse-masterclass-v1.8.0-legal-pages
-const CACHE_NAME = "icse-masterclass-v1.14.0-ink-bleed-theme";
+const CACHE_NAME = "icse-masterclass-v1.15.0-editorial-content";
 const APP_SHELL = [
   "./",
   "./index.html",
+  "./blog/",
+  "./blog/index.html",
+  "./blog/blog.css",
+  "./blog/icse-class-10-date-sheet-2027.html",
+  "./blog/icse-class-10-study-plan.html",
+  "./blog/how-to-use-icse-masterclass-study-vault.html",
+  "./faq.html",
   "./login.html",
   "./dashboard.html",
   "./privacy-policy.html",
