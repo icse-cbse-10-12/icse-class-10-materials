@@ -1,5 +1,5 @@
 // Previous cache: icse-masterclass-v1.8.0-legal-pages
-const CACHE_NAME = "icse-masterclass-v1.15.0-editorial-content";
+const CACHE_NAME = "icse-masterclass-v1.16.0-edubot-api";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -32,7 +32,7 @@ const APP_SHELL = [
   "./study-tools.js",
   "./student-dashboard.js",
   "./syllabus-tracker.js",
-  "./edubot-loader.js?v=1",
+  "./edubot-loader.js?v=2",
   "./manifest.json",
   "./luxury-book.svg",
   "./icseYtLogo.webp",

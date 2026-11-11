@@ -1,7 +1,14 @@
+# Default: disallow crawlers unless a public search/fetch agent is explicitly allowed below.
 User-agent: *
-Allow: /
+Disallow: /
 
 User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Applebot
 Allow: /
 
 User-agent: OAI-SearchBot
@@ -10,10 +17,35 @@ Allow: /
 User-agent: ChatGPT-User
 Allow: /
 
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
 User-agent: PerplexityBot
 Allow: /
 
+# Model-training and bulk-dataset crawlers are not permitted.
+User-agent: GPTBot
+Disallow: /
+
 User-agent: ClaudeBot
-Allow: /
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: Applebot-Extended
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: meta-externalagent
+Disallow: /
 
 Sitemap: https://icse-cbse-10-12.github.io/icse-class-10-materials/sitemap.xml
