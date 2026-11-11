@@ -421,3 +421,11 @@ test("external resource links show a clear source notice and generic open action
   assert.ok(script.includes("Open Resource"));
   assert.ok(!script.includes("Open Drive Link"));
 });
+
+
+test("latest edition links are not duplicated when they match the primary resource", () => {
+  const script = read("script.js");
+  assert.ok(script.includes("latestEdLinkIsDistinct"));
+  assert.ok(script.includes("View Latest Edition"));
+  assert.ok(!script.includes("Get Latest Edition Book"));
+});

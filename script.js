@@ -787,6 +787,7 @@ function renderGrid(data, appendFrom = 0) {
     const rawLecture = item["Lecture Link"] || item["Telegram Channel Post Link"] || "";
     const lectureLink = normalizeExternalUrl(rawLecture);
     const latestEdLink = normalizeExternalUrl(item["Latest Edition Link"] || "", true);
+    const latestEdLinkIsDistinct = Boolean(latestEdLink && latestEdLink !== driveLink);
     const latestStatus = item["Latest Edition Available?"] || "";
     const editionText = item["Edition"] && item["Edition"] !== "Not Specified" ? `Ed. ${item["Edition"]}` : "";
     const materialKey = getMaterialKey(item);
@@ -809,7 +810,7 @@ function renderGrid(data, appendFrom = 0) {
           </div>
           <h3>${escapeHTML(title)}</h3>
           ${item["Scope"] ? `<p class="mc-material-scope">${escapeHTML(item["Scope"])}</p>` : ""}
-          ${latestStatus ? `<p class="mc-material-latest">Latest edition: ${escapeHTML(latestStatus)} ${latestEdLink ? `<a href="${escapeHTML(latestEdLink)}" target="_blank" rel="noopener noreferrer">View edition</a>` : ""}</p>` : ""}
+          ${latestStatus ? `<p class="mc-material-latest">Latest edition: ${escapeHTML(latestStatus)} ${latestEdLinkIsDistinct ? `<a href="${escapeHTML(latestEdLink)}" target="_blank" rel="noopener noreferrer">View edition</a>` : ""}</p>` : ""}
         </div>
         <div class="mc-material-actions">
           <button type="button" onclick="openMaterialModalByIndex(${first + index})" aria-label="Preview ${escapeHTML(title)}" class="mc-material-action">
@@ -1088,6 +1089,7 @@ function openMaterialModalByIndex(index) {
     item["Latest Edition Link"] || "",
     true
   );
+  const latestEdLinkIsDistinct = Boolean(latestEdLink && latestEdLink !== driveLink);
 
   let embedHtml = "";
 
@@ -1157,7 +1159,7 @@ function openMaterialModalByIndex(index) {
                   ${escapeHTML(item["Latest Edition Available?"])}
 
                   ${
-                    latestEdLink
+                    latestEdLinkIsDistinct
                       ? `
                         <a
                           href="${escapeHTML(latestEdLink)}"
@@ -1165,8 +1167,8 @@ function openMaterialModalByIndex(index) {
                           rel="noopener noreferrer"
                           class="ml-2 text-amber-400 underline font-bold"
                         >
-                          <i class="fa-solid fa-cart-shopping text-xs" aria-hidden="true"></i>
-                          Get Latest Edition Book
+                          <i class="fa-solid fa-arrow-up-right-from-square text-xs" aria-hidden="true"></i>
+                          View Latest Edition
                         </a>
                       `
                       : ""
