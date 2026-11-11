@@ -336,3 +336,13 @@ test("CI uses supported Node 24 actions and a pinned Ubuntu runner", () => {
   assert.match(workflow, /actions\/setup-node@v7/);
   assert.match(workflow, /node-version: 24/);
 });
+test("ink theme initializes after the site's saved appearance settings", () => {
+  const html = read("index.html");
+  const script = read("script.js");
+  const modulePosition = html.indexOf('import { createInkTheme }');
+  const appScriptPosition = html.indexOf('<script src="script.js"></script>');
+  assert.ok(modulePosition >= 0 && appScriptPosition > modulePosition);
+  assert.ok(html.includes('document.addEventListener("DOMContentLoaded", initialiseInkTheme, { once: true });'));
+  assert.ok(script.includes('document.addEventListener("DOMContentLoaded", startApp)'));
+  assert.ok(!html.includes('document.readyState === "loading"'));
+});

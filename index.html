@@ -848,11 +848,9 @@
         }
       });
     };
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", initialiseInkTheme, { once: true });
-    } else {
-      initialiseInkTheme();
-    }
+    // The classic site script registers its DOMContentLoaded handler before
+    // this deferred module runs. Initialize after it applies saved site settings.
+    document.addEventListener("DOMContentLoaded", initialiseInkTheme, { once: true });
   </script>
 
   <!-- Main JavaScript: Resource Database, Search, Sharing and PWA -->
