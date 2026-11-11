@@ -787,6 +787,7 @@ function renderGrid(data, appendFrom = 0) {
     const rawLecture = item["Lecture Link"] || item["Telegram Channel Post Link"] || "";
     const lectureLink = normalizeExternalUrl(rawLecture);
     const latestEdLink = normalizeExternalUrl(item["Latest Edition Link"] || "", true);
+    const latestEdLinkIsDistinct = Boolean(latestEdLink && latestEdLink !== driveLink);
     const latestStatus = item["Latest Edition Available?"] || "";
     const editionText = item["Edition"] && item["Edition"] !== "Not Specified" ? `Ed. ${item["Edition"]}` : "";
     const materialKey = getMaterialKey(item);
@@ -809,7 +810,7 @@ function renderGrid(data, appendFrom = 0) {
           </div>
           <h3>${escapeHTML(title)}</h3>
           ${item["Scope"] ? `<p class="mc-material-scope">${escapeHTML(item["Scope"])}</p>` : ""}
-          ${latestStatus ? `<p class="mc-material-latest">Latest edition: ${escapeHTML(latestStatus)} ${latestEdLink ? `<a href="${escapeHTML(latestEdLink)}" target="_blank" rel="noopener noreferrer">View edition</a>` : ""}</p>` : ""}
+          ${latestStatus ? `<p class="mc-material-latest">Latest edition: ${escapeHTML(latestStatus)} ${latestEdLinkIsDistinct ? `<a href="${escapeHTML(latestEdLink)}" target="_blank" rel="noopener noreferrer">View edition</a>` : ""}</p>` : ""}
         </div>
         <div class="mc-material-actions">
           <button type="button" onclick="openMaterialModalByIndex(${first + index})" aria-label="Preview ${escapeHTML(title)}" class="mc-material-action">
@@ -1088,6 +1089,7 @@ function openMaterialModalByIndex(index) {
     item["Latest Edition Link"] || "",
     true
   );
+  const latestEdLinkIsDistinct = Boolean(latestEdLink && latestEdLink !== driveLink);
 
   let embedHtml = "";
 
@@ -1106,6 +1108,14 @@ function openMaterialModalByIndex(index) {
           allow="autoplay"
           loading="lazy"
         ></iframe>
+      </div>
+    `;
+  }
+ else if (driveLink) {
+    embedHtml = `
+      <div class="rounded-lg border border-gray-800 bg-gray-950 p-5 text-sm text-gray-300">
+        <p class="font-semibold text-gray-100">External resource</p>
+        <p class="mt-2">This resource is hosted on an external website. Use Open Resource below to visit the original source. Availability and any sign-in or payment requirements are controlled by that website.</p>
       </div>
     `;
   }
@@ -1149,7 +1159,7 @@ function openMaterialModalByIndex(index) {
                   ${escapeHTML(item["Latest Edition Available?"])}
 
                   ${
-                    latestEdLink
+                    latestEdLinkIsDistinct
                       ? `
                         <a
                           href="${escapeHTML(latestEdLink)}"
@@ -1157,8 +1167,8 @@ function openMaterialModalByIndex(index) {
                           rel="noopener noreferrer"
                           class="ml-2 text-amber-400 underline font-bold"
                         >
-                          <i class="fa-solid fa-cart-shopping text-xs" aria-hidden="true"></i>
-                          Get Latest Edition Book
+                          <i class="fa-solid fa-arrow-up-right-from-square text-xs" aria-hidden="true"></i>
+                          View Latest Edition
                         </a>
                       `
                       : ""
@@ -1173,7 +1183,7 @@ function openMaterialModalByIndex(index) {
           ${driveLink ? `
             <a href="${escapeHTML(driveLink)}" target="_blank" rel="noopener noreferrer"
               class="py-2.5 rounded-lg bg-amber-500 text-black hover:bg-amber-400 font-bold text-xs text-center transition flex items-center justify-center gap-2">
-              <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> Open Drive Link
+              <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> Open Resource
             </a>` : `
             <span class="py-2.5 rounded-lg bg-gray-800 text-gray-500 font-bold text-xs text-center flex items-center justify-center gap-2" aria-disabled="true">
               <i class="fa-solid fa-link-slash" aria-hidden="true"></i> Link unavailable

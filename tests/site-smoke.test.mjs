@@ -15,12 +15,12 @@ test("all public pages load the shared academic design layer", () => {
   }
 });
 
-test("EduBot Firebase module is not loaded during initial page parsing", () => {
+test("EduBot shared API module is not loaded during initial page parsing", () => {
   const html = read("index.html");
-  assert.match(html, /edubot-loader\.js\?v=1/);
+  assert.match(html, /edubot-loader\.js\?v=2/);
   assert.doesNotMatch(html, /<script[^>]+gemini-ai\.js/i);
   const loader = read("edubot-loader.js");
-  assert.match(loader, /import\(\"\.\/gemini-ai\.js\?v=2\"\)/);
+  assert.match(loader, /import\(\"\.\/gemini-ai\.js\?v=3\"\)/);
   assert.match(loader, /addEventListener\(\"submit\"/);
 });
 
@@ -185,7 +185,7 @@ test("the first-screen Telegram invitation and floating CTA are removed", () => 
 
 test("the service worker invalidates the previous app shell and precaches the new library styles", () => {
   const sw = read("sw.js");
-  assert.match(sw, /icse-masterclass-v1\.15\.0-editorial-content/);
+  assert.match(sw, /icse-masterclass-v1\.16\.0-edubot-api/);
   assert.ok(sw.includes("./src/inkbleed.js"), "APP_SHELL must precache the ink theme module");
   assert.match(sw, /academic-library\.css\?v=5/);
 });
@@ -318,12 +318,12 @@ test("About email support provides copy and Gmail compose actions", () => {
  assert.match(script,/navigator\.clipboard\.writeText/);
  assert.match(script,/copyTextFallback/);
  assert.match(script,/Email address copied\./);
- assert.match(sw,/icse-masterclass-v1\.15\.0-editorial-content/);
+ assert.match(sw,/icse-masterclass-v1\.16\.0-edubot-api/);
 });
 
 test("offline app shell caches the legal pages and invalidates the old cache", () => {
   const sw = read("sw.js");
-    assert.match(sw, /icse-masterclass-v1\.15\.0-editorial-content/);
+    assert.match(sw, /icse-masterclass-v1\.16\.0-edubot-api/);
   assert.match(sw, /privacy-policy\.html/);
   assert.match(sw, /terms-and-conditions\.html/);
 });
@@ -376,7 +376,56 @@ test("sitemap and service worker include the new editorial pages", () => {
   const sitemap = read("sitemap.xml");
   for (const path of ["blog/","faq.html","blog/icse-class-10-date-sheet-2027.html","blog/icse-class-10-study-plan.html","blog/how-to-use-icse-masterclass-study-vault.html"]) assert.ok(sitemap.includes(path));
   const sw = read("sw.js");
-  assert.ok(sw.includes("icse-masterclass-v1.15.0-editorial-content"));
+  assert.ok(sw.includes("icse-masterclass-v1.16.0-edubot-api"));
   assert.ok(sw.includes("./blog/blog.css"));
   assert.ok(sw.includes("./faq.html"));
+});
+
+
+test("AI crawler policy permits search agents and blocks training crawlers", () => {
+  const robots = read("robots.txt");
+  const groups = robots.split(/\n\s*\n/);
+  const groupFor = agent => groups.find(group => group.split(/\r?\n/).some(line => line.trim() === `User-agent: ${agent}`)) || "";
+  assert.ok(groupFor("*").includes("Disallow: /"));
+  for (const agent of ["Googlebot", "Bingbot", "Applebot", "OAI-SearchBot", "ChatGPT-User", "Claude-SearchBot", "Claude-User", "PerplexityBot"]) {
+    assert.ok(groupFor(agent).includes("Allow: /"), `${agent} must remain discoverable`);
+  }
+  for (const agent of ["GPTBot", "ClaudeBot", "Google-Extended", "Applebot-Extended", "CCBot", "Bytespider", "meta-externalagent"]) {
+    assert.ok(groupFor(agent).includes("Disallow: /"), `${agent} must be blocked`);
+  }
+  assert.ok(robots.includes("https://icse-cbse-10-12.github.io/icse-class-10-materials/sitemap.xml"));
+});
+
+test("dashboard links to the current official ICSE 2027 syllabus page", () => {
+  const dashboard = read("dashboard.html");
+  assert.ok(dashboard.includes("https://cisce.org/icse-regulations-and-syllabuses-2027/"));
+  assert.ok(dashboard.includes("Official ICSE 2027 regulations and syllabus"));
+  assert.ok(!dashboard.includes("0.1-ICSE-Contents2.pdf"));
+});
+
+test("EduBot API integration keeps the optional-service consent gate", () => {
+  const loader = read("edubot-loader.js");
+  const client = read("gemini-ai.js");
+  assert.ok(loader.includes('window.ICSEConsent && window.ICSEConsent.has("externalServices") === true'));
+  assert.ok(loader.includes('import("./gemini-ai.js?v=3")'));
+  assert.ok(client.includes("https://edubot-nu-wheat.vercel.app/api/chat"));
+  assert.ok(read("index.html").includes("up to 10 messages, including your questions and EduBot replies"));
+  assert.ok(read("privacy-policy.html").includes("EduBot API hosted on Vercel"));
+});
+
+
+test("external resource links show a clear source notice and generic open action", () => {
+  const script = read("script.js");
+  assert.ok(script.includes("External resource"));
+  assert.ok(script.includes("This resource is hosted on an external website."));
+  assert.ok(script.includes("Open Resource"));
+  assert.ok(!script.includes("Open Drive Link"));
+});
+
+
+test("latest edition links are not duplicated when they match the primary resource", () => {
+  const script = read("script.js");
+  assert.ok(script.includes("latestEdLinkIsDistinct"));
+  assert.ok(script.includes("View Latest Edition"));
+  assert.ok(!script.includes("Get Latest Edition Book"));
 });

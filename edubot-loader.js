@@ -1,4 +1,4 @@
-/* EduBot boot loader: Firebase AI is downloaded only when a student uses the assistant. */
+/* EduBot boot loader: the shared API client loads only after optional-service consent and first use. */
 (() => {
   const form = document.getElementById("edubotChatForm");
   const input = document.getElementById("edubotChatInput");
@@ -14,13 +14,13 @@
   }
 
   function requestConsent() {
-    if (status) status.textContent = "EduBot sends your question and recent chat context to Google Gemini. Enable Optional external services in Privacy settings to continue.";
+    if (status) status.textContent = "EduBot sends your question and recent conversation context to the Vercel-hosted EduBot API, which may use Google Gemini or Groq. Enable Optional external services in Privacy settings to continue.";
     window.ICSEConsent?.open();
   }
 
   function loadEduBot() {
     if (!modulePromise) {
-      modulePromise = import("./gemini-ai.js?v=2")
+      modulePromise = import("./gemini-ai.js?v=3")
         .then(() => { ready = true; })
         .catch(error => {
           modulePromise = null;

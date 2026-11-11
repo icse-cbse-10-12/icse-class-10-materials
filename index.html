@@ -455,7 +455,7 @@
         </div>
       </div>
 
-     
+
 <!-- Resource Category Filters -->
 <div class="library-filter-tabs flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none" role="group" aria-label="Filter resources by category">
 
@@ -752,7 +752,7 @@
   </div>
   <div class="edubot-chat-shell" id="edubotChatShell">
     <div class="edubot-chat-toolbar">
-      <span><i class="fa-solid fa-sparkles" aria-hidden="true"></i> Gemini-powered study assistant</span>
+      <span><i class="fa-solid fa-sparkles" aria-hidden="true"></i> AI-powered study assistant</span>
       <span class="edubot-model-label">EduBot · ICSE MasterClass</span>
     </div>
     <div id="edubotChatMessages" class="edubot-chat-messages" role="log" aria-live="polite" aria-relevant="additions">
@@ -766,7 +766,7 @@
     <div class="edubot-chat-footer"><span id="edubotChatStatus" role="status">Ready to help · Keep personal information private</span><button type="button" id="edubotClearChat">Clear chat</button></div>
     <label class="edubot-data-ack" for="edubotDataAcknowledgement">
       <input id="edubotDataAcknowledgement" form="edubotChatForm" type="checkbox" required>
-      <span><strong>Before sending:</strong> Your question and recent conversation context (up to 12 messages in this page) are sent to Google Gemini through Firebase AI Logic to generate a reply. Do not include your name, email, phone number, school details, passwords or other personal information. AI answers can be inaccurate. If you are under 18, use this feature with parent/guardian guidance. <strong>This acknowledgement is not parental consent.</strong> <span class="edubot-data-ack-confirm">I have read and understood this notice.</span></span>
+      <span><strong>Before sending:</strong> Your question and recent conversation context (up to 10 messages, including your questions and EduBot replies) are sent to the EduBot API hosted by Vercel and may be processed by Google Gemini or Groq to generate a reply. Do not include your name, email, phone number, school details, passwords or other personal information. AI answers can be inaccurate. If you are under 18, use this feature with parent/guardian guidance. <strong>This acknowledgement is not parental consent.</strong> <span class="edubot-data-ack-confirm">I have read and understood this notice.</span></span>
     </label>
     <noscript><p>Enable JavaScript to use EduBot.</p></noscript>
   </div>
@@ -864,15 +864,15 @@
   </script>
 
   <!-- Main JavaScript: Resource Database, Search, Sharing and PWA -->
- 
+
 
 <script src="script.js"></script>
 <script src="study-tools.js" defer></script>
 <script src="ui-ux.js" defer></script>
 <script src="student-dashboard.js" defer></script>
 <script src="syllabus-tracker.js" defer></script>
-  
+
 <script src="consent-manager.js" defer></script>
-<script type="module" src="./edubot-loader.js?v=1"></script>
+<script type="module" src="./edubot-loader.js?v=2"></script>
 </body>
 </html>

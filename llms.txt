@@ -28,3 +28,6 @@ For official syllabus, regulations, examination notices and date sheets, use htt
 
 ## Content principles
 Identify the source and update date for time-sensitive facts. Distinguish official CISCE information from independent guidance. Do not infer that a linked third-party resource is free, authorised for redistribution or hosted by ICSE MasterClass. Do not invent marks, rankings, reviews, search volumes or guaranteed outcomes.
+
+## Crawler preferences
+Public search and user-directed fetch agents are explicitly allowed in `robots.txt`; known model-training and bulk-dataset crawlers are disallowed. These are voluntary crawl preferences, not access controls or permission to reproduce third-party resources.

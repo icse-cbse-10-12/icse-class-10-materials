@@ -49,18 +49,25 @@ test("EduBot displays a separate required pre-send data-use acknowledgement", ()
   const html = read("index.html");
   assert.ok(html.includes('id="edubotDataAcknowledgement"'));
   assert.ok(html.includes('form="edubotChatForm" type="checkbox" required'));
-  assert.ok(html.includes("recent conversation context (up to 12 messages in this page)"));
-  assert.ok(html.includes("sent to Google Gemini through Firebase AI Logic"));
+  assert.ok(html.includes("recent conversation context (up to 10 messages, including your questions and EduBot replies)"));
+  assert.ok(html.includes("sent to the EduBot API hosted by Vercel and may be processed by Google Gemini or Groq"));
   assert.ok(html.includes("This acknowledgement is not parental consent."));
   assert.ok(html.includes("Do not include your name, email, phone number, school details, passwords"));
 });
 
 test("EduBot and administrator Supabase are optional external processing", () => {
   const policy = read("cookie-policy.html");
-  assert.ok(policy.includes("Gemini service"));
+  const terms = read("terms-and-conditions.html");
+  const consent = read("consent-manager.js");
+  assert.ok(policy.includes("Google Gemini as its primary provider"));
+  assert.ok(policy.includes("Groq as a fallback"));
   assert.ok(policy.includes("question and recent conversation context"));
   assert.ok(policy.includes("administrator-only Supabase SDK"));
   assert.ok(policy.includes("does not currently run an analytics SDK"));
+  assert.ok(terms.includes("EduBot API hosted on Vercel"));
+  assert.ok(terms.includes("Google Gemini or Groq"));
+  assert.ok(consent.includes("Vercel-hosted EduBot API"));
+  assert.ok(consent.includes("Google Gemini or Groq"));
 });
 
 test("account deletion function is caller-scoped and requires recent authentication", () => {
