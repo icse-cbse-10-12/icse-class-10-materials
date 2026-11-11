@@ -6,7 +6,7 @@
 - https://icse-cbse-10-12.github.io/icse-class-10-materials/
 
 ## What this site provides
-The Study Vault helps students discover listed notes, question banks, previous-year questions, specimen/sample papers, reference resources and video lessons. Catalogue availability varies by subject and original provider. Many resources are hosted by third parties; this website does not claim ownership of third-party books, PDFs, videos, trademarks or other intellectual property.
+The Study Vault is an independent resource-discovery and aggregation directory. The PDFs, notes, question papers and other downloadable study files listed here are not produced or authored by Team MasterClass; they are aggregated or referenced from educational resources found across online sources. Catalogue availability and source details vary. Original authors, publishers and rights holders retain their rights. A listing does not establish ownership, endorsement, permission to copy or permission to redistribute. Check the original source and its terms. The website does not claim ownership of third-party books, PDFs, videos, trademarks or other intellectual property.
 
 ## Main public pages
 - Study Vault: https://icse-cbse-10-12.github.io/icse-class-10-materials/
