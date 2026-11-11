@@ -342,7 +342,7 @@ test("ink theme initializes after the site's saved appearance settings", () => {
   const modulePosition = html.indexOf('import { createInkTheme }');
   const appScriptPosition = html.indexOf('<script src="script.js"></script>');
   assert.ok(modulePosition >= 0 && appScriptPosition > modulePosition);
-  assert.match(html, /document\.addEventListener\("DOMContentLoaded", initialiseInkTheme, \{ once: true \}\)/);
-  assert.match(script, /document\.addEventListener\("DOMContentLoaded", startApp\)/);
-  assert.doesNotMatch(html, /document\.readyState === "loading"/);
+  assert.ok(html.includes('document.addEventListener("DOMContentLoaded", initialiseInkTheme, { once: true });'));
+  assert.ok(script.includes('document.addEventListener("DOMContentLoaded", startApp)'));
+  assert.ok(!html.includes('document.readyState === "loading"'));
 });
