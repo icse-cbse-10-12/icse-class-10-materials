@@ -1247,9 +1247,17 @@ function applySiteSettings() {
   document.querySelectorAll("[data-mode]").forEach(el => el.classList.toggle("active", el.dataset.mode === settings.mode));
   document.querySelectorAll("[data-accent]").forEach(el => el.classList.toggle("active", el.dataset.accent === settings.accent));
 }
-function setSiteMode(mode) {
-  const settings = readSiteSettings(); settings.mode = ["dark", "light", "midnight"].includes(mode) ? mode : "dark";
-  saveSiteSettings(settings); applySiteSettings();
+function setSiteMode(mode, origin) {
+  const settings = readSiteSettings();
+  settings.mode = ["dark", "light", "midnight"].includes(mode) ? mode : "dark";
+  saveSiteSettings(settings);
+  const nextInkTheme = settings.mode === "light" ? "light" : "dark";
+  const inkTheme = window.icseInkTheme;
+  if (inkTheme && inkTheme.get() !== nextInkTheme) {
+    void inkTheme.set(nextInkTheme, origin || document.querySelector('[data-mode="' + settings.mode + '"]'));
+    return;
+  }
+  applySiteSettings();
 }
 function setSiteAccent(accent) {
   const settings = readSiteSettings(); settings.accent = ["amber", "blue", "emerald", "violet", "rose"].includes(accent) ? accent : "amber";

@@ -1,5 +1,5 @@
 // Previous cache: icse-masterclass-v1.8.0-legal-pages
-const CACHE_NAME = "icse-masterclass-v1.13.0-privacy-controls";
+const CACHE_NAME = "icse-masterclass-v1.14.0-ink-bleed-theme";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -20,6 +20,7 @@ const APP_SHELL = [
   "./luxury-theme.css?v=3",
   "./academic-library.css?v=5",
   "./script.js",
+  "./src/inkbleed.js",
   "./ui-ux.js",
   "./study-tools.js",
   "./student-dashboard.js",

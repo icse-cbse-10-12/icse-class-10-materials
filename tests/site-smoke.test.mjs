@@ -50,7 +50,7 @@ test("the base stylesheet no longer serializes a remote font import", () => {
 });
 
 test("all same-origin assets referenced by the new patch exist", () => {
-  for (const name of ["academic-library.css", "edubot-loader.js", "sw.js"]) assert.ok(existsSync(join(root, name)), `${name} must exist`);
+  for (const name of ["academic-library.css", "edubot-loader.js", "sw.js", "src/inkbleed.js"]) assert.ok(existsSync(join(root, name)), `${name} must exist`);
 });
 
 test("the homepage defaults to the paper theme while retaining dark mode options", () => {
@@ -185,7 +185,8 @@ test("the first-screen Telegram invitation and floating CTA are removed", () => 
 
 test("the service worker invalidates the previous app shell and precaches the new library styles", () => {
   const sw = read("sw.js");
-  assert.match(sw, /icse-masterclass-v1\.13\.0-privacy-controls/);
+  assert.match(sw, /icse-masterclass-v1\.14\.0-ink-bleed-theme/);
+  assert.ok(sw.includes("./src/inkbleed.js"), "APP_SHELL must precache the ink theme module");
   assert.match(sw, /academic-library\.css\?v=5/);
 });
 
@@ -317,12 +318,12 @@ test("About email support provides copy and Gmail compose actions", () => {
  assert.match(script,/navigator\.clipboard\.writeText/);
  assert.match(script,/copyTextFallback/);
  assert.match(script,/Email address copied\./);
- assert.match(sw,/icse-masterclass-v1\.13\.0-privacy-controls/);
+ assert.match(sw,/icse-masterclass-v1\.14\.0-ink-bleed-theme/);
 });
 
 test("offline app shell caches the legal pages and invalidates the old cache", () => {
   const sw = read("sw.js");
-    assert.match(sw, /icse-masterclass-v1\.13\.0-privacy-controls/);
+    assert.match(sw, /icse-masterclass-v1\.14\.0-ink-bleed-theme/);
   assert.match(sw, /privacy-policy\.html/);
   assert.match(sw, /terms-and-conditions\.html/);
 });

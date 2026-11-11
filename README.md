@@ -151,3 +151,7 @@ For resource feedback or corrections, use the [Telegram feedback channel](https:
 </a>
 
 </div>
+
+## Theme transition credit
+
+Theme transition by [Vruntime Labs](https://github.com/vruntime-labs) · [Email](mailto:vruntimelabs@gmail.com).

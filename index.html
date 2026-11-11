@@ -342,9 +342,9 @@
       <div class="settings-section">
         <h3>Appearance</h3><p class="settings-muted">Choose the look that feels best.</p>
         <div class="settings-choice-grid" role="group" aria-label="Colour theme">
-          <button class="theme-choice" data-mode="dark" onclick="setSiteMode('dark')"><span class="theme-swatch swatch-dark"></span><span>Dark</span></button>
-          <button class="theme-choice" data-mode="light" onclick="setSiteMode('light')"><span class="theme-swatch swatch-light"></span><span>Light</span></button>
-          <button class="theme-choice" data-mode="midnight" onclick="setSiteMode('midnight')"><span class="theme-swatch swatch-midnight"></span><span>Midnight</span></button>
+          <button class="theme-choice" data-mode="dark" onclick="setSiteMode('dark', this)"><span class="theme-swatch swatch-dark"></span><span>Dark</span></button>
+          <button class="theme-choice" data-mode="light" onclick="setSiteMode('light', this)"><span class="theme-swatch swatch-light"></span><span>Light</span></button>
+          <button class="theme-choice" data-mode="midnight" onclick="setSiteMode('midnight', this)"><span class="theme-swatch swatch-midnight"></span><span>Midnight</span></button>
         </div>
       </div>
       <div class="settings-section">
@@ -363,6 +363,11 @@
         <div class="flex justify-between settings-muted text-xs"><span>Compact</span><span>Large</span></div>
       </div>
 <div class="flex gap-2 pt-4"><button class="settings-reset" onclick="resetSiteSettings()">Reset to defaults</button><button class="settings-done" onclick="toggleSettings(false)">Done</button></div>
+      <p class="settings-muted mt-4 text-center">
+        Theme transition by
+        <a href="https://github.com/vruntime-labs" target="_blank" rel="noopener noreferrer">Vruntime Labs</a>
+        · <a href="mailto:vruntimelabs@gmail.com">Email</a>
+      </p>
     </section>
   </div>
 
@@ -824,6 +829,29 @@
             console.error("Service worker registration failed:", error);
           });
       });
+    }
+  </script>
+
+  <script type="module">
+    import { createInkTheme } from "./src/inkbleed.js";
+    const initialiseInkTheme = () => {
+      const savedMode = document.body.dataset.siteMode;
+      window.icseInkTheme = createInkTheme({
+        attribute: "data-icse-ink-theme",
+        storageKey: "",
+        initialTheme: savedMode === "light" ? "light" : "dark",
+        duration: 1150,
+        roughness: 0.48,
+        scale: 3.2,
+        onChange: () => {
+          if (typeof window.applySiteSettings === "function") window.applySiteSettings();
+        }
+      });
+    };
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initialiseInkTheme, { once: true });
+    } else {
+      initialiseInkTheme();
     }
   </script>
 
