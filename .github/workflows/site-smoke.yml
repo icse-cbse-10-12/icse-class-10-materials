@@ -44,7 +44,7 @@ jobs:
           package-manager-cache: false
 
       - name: Run site smoke tests
-        run: node --test tests/site-smoke.test.mjs tests/privacy-controls.test.mjs
+        run: node --test tests/site-smoke.test.mjs tests/privacy-controls.test.mjs tests/catalog-build.test.mjs
 
       - name: Check JavaScript syntax
         run: |

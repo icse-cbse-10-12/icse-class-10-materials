@@ -160,6 +160,38 @@
       });
     }
 
+    // Brief opacity-only placeholders make live search transitions feel stable.
+    const searchInputs = [globalSearch, document.getElementById("searchInput")].filter(Boolean);
+    let skeletonTimer = 0;
+    let showingSkeleton = false;
+    const skeletonMarkup = Array.from({ length: 3 }, () => `
+      <article class="mc-skeleton-card" aria-hidden="true">
+        <span class="mc-skeleton-line mc-skeleton-short"></span>
+        <span class="mc-skeleton-line mc-skeleton-title"></span>
+        <span class="mc-skeleton-line mc-skeleton-copy"></span>
+        <span class="mc-skeleton-line mc-skeleton-actions"></span>
+      </article>`).join("");
+    if (resourceGrid && "MutationObserver" in window) {
+      const gridObserver = new MutationObserver(() => {
+        if (showingSkeleton && !resourceGrid.querySelector(".mc-skeleton-card")) {
+          showingSkeleton = false;
+          resourceGrid.removeAttribute("aria-busy");
+        }
+      });
+      gridObserver.observe(resourceGrid, { childList: true });
+      searchInputs.forEach(input => input.addEventListener("input", () => {
+        window.clearTimeout(skeletonTimer);
+        const query = input.value.trim();
+        if (!query || window.icseCatalogReady !== true) return;
+        skeletonTimer = window.setTimeout(() => {
+          if (input.value.trim() !== query || window.icseCatalogReady !== true) return;
+          showingSkeleton = true;
+          resourceGrid.setAttribute("aria-busy", "true");
+          resourceGrid.innerHTML = skeletonMarkup;
+        }, 65);
+      }, { passive: true }));
+    }
+
     // Recheck links after browser history restoration.
     window.addEventListener("pageshow", () => {
       secureExternalLinks();

@@ -250,12 +250,45 @@ function getSubjectIllustration(subject) {
   };
   return `<svg class="mc-subject-art mc-art-${tone}" viewBox="0 0 80 76" role="img" aria-label="${escapeHTML(subject)} illustration" focusable="false"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">${paths[art]}</g></svg>`;
 }
+const subjectGroups = {
+  "Sciences": ["All", "Physics", "Chemistry", "Biology", "Physical Education", "Home Science", "Environmental Applications", "Environmental Science"],
+  "Maths & Tech": ["Mathematics", "Computer Applications"],
+  "Humanities": ["History & Civics", "Geography", "Economic Applications", "Commercial Studies", "Commercial Applications", "Other Subjects"],
+  "Languages": ["English Literature", "English Language", "Second Language - Tamil", "Second Language - Malayalam", "Second Language - Kannada", "Second Language - Hindi", "Second Language: Telugu"]
+};
+let activeSubjectGroup = "Sciences";
+function setSubjectGroup(group) {
+  if (!Object.prototype.hasOwnProperty.call(subjectGroups, group)) return;
+  activeSubjectGroup = group;
+  initSubjectCards();
+}
 function initSubjectCards() {
   const grid=document.getElementById("mainSubjectGrid"); if(!grid)return;
-  grid.innerHTML=subjectsList.map(subject=>{
+  const subjects = subjectGroups[activeSubjectGroup] || subjectsList;
+  grid.innerHTML=subjects.map(subject=>{
     const label=subject.replace(/^Second Language\s*[-:]?\s*/i,"");
-    return `<button data-subject="${escapeHTML(subject)}" class="mc-subject-item" type="button" aria-label="Open ${escapeHTML(subject)} subject materials"><span class="mc-subject-illustration" aria-hidden="true">${getSubjectIllustration(subject)}</span><span class="mc-subject-copy"><span class="mc-subject-name">${escapeHTML(label)}</span><span class="mc-subject-hint">Explore materials <span aria-hidden="true">→</span></span></span></button>`;
+    return `<button data-subject="${escapeHTML(subject)}" class="mc-subject-item" type="button" aria-label="Open ${escapeHTML(subject)} subject materials"><span class="mc-subject-illustration" aria-hidden="true">${getSubjectIllustration(subject)}</span><span class="mc-subject-copy"><span class="mc-subject-name">${subject === "All" ? "All Subjects" : escapeHTML(label)}</span><span class="mc-subject-hint">Explore materials <span aria-hidden="true">→</span></span></span></button>`;
   }).join("");
+  document.querySelectorAll("[data-subject-group]").forEach(tab => {
+    const active = tab.dataset.subjectGroup === activeSubjectGroup;
+    tab.classList.toggle("active", active);
+    tab.setAttribute("aria-selected", String(active));
+    tab.tabIndex = active ? 0 : -1;
+    if (tab.dataset.keyboardBound !== "true") {
+      tab.addEventListener("keydown", event => {
+        if (!["ArrowRight", "ArrowLeft", "Home", "End"].includes(event.key)) return;
+        const tabs = [...document.querySelectorAll("[data-subject-group]")];
+        const index = tabs.indexOf(tab);
+        const nextIndex = event.key === "Home" ? 0 : event.key === "End" ? tabs.length - 1 : (index + (event.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length;
+        event.preventDefault();
+        tabs[nextIndex]?.focus();
+        setSubjectGroup(tabs[nextIndex]?.dataset.subjectGroup);
+      });
+      tab.dataset.keyboardBound = "true";
+    }
+  });
+  const activeTab = [...document.querySelectorAll("[data-subject-group]")].find(tab => tab.dataset.subjectGroup === activeSubjectGroup);
+  if (activeTab) grid.setAttribute("aria-labelledby", activeTab.id);
   grid.querySelectorAll("button[data-subject]").forEach(button=>button.addEventListener("click",()=>selectSubject(button.dataset.subject)));
 }
 
@@ -286,6 +319,46 @@ async function requestResourceCsv(url) {
 
 async function fetchSheetData() {
   const statusEl = document.getElementById("statusMessage");
+  const embeddedCatalog = document.getElementById("catalog-data");
+  if (embeddedCatalog) {
+    try {
+      const prerendered = JSON.parse(embeddedCatalog.textContent || "[]");
+      if (Array.isArray(prerendered) && prerendered.length > 0) {
+        allResources = prerendered;
+        window.icseCatalogReady = true;
+        if (statusEl) statusEl.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600" aria-hidden="true"></i><span>Loaded ${allResources.length.toLocaleString()} materials from the pre-rendered catalogue.</span>`;
+        const pendingQuery = document.getElementById("globalSearchInput")?.value?.trim();
+        if (pendingQuery) searchAllMaterials();
+        else checkHashRoute();
+        return;
+      }
+    } catch (error) {
+      console.warn("The pre-rendered catalogue could not be read; refreshing from Google Sheets.", error);
+    }
+  }
+  try {
+    const cacheResponse = await fetch("./catalog-data.json", { cache: "force-cache" });
+    if (cacheResponse.ok) {
+      const cachePayload = await cacheResponse.json();
+      const cachedResources = Array.isArray(cachePayload)
+        ? cachePayload
+        : Array.isArray(cachePayload?.fields) && Array.isArray(cachePayload?.rows)
+          ? cachePayload.rows.map(row => Object.fromEntries(cachePayload.fields.map((field, index) => [field, row[index] ?? ""])))
+          : [];
+      if (cachedResources.length > 0) {
+        allResources = cachedResources;
+        window.icseCatalogReady = true;
+        if (statusEl) statusEl.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600" aria-hidden="true"></i><span>Loaded ${allResources.length.toLocaleString()} materials from the cached catalogue.</span>`;
+        const pendingQuery = document.getElementById("globalSearchInput")?.value?.trim();
+        if (pendingQuery) searchAllMaterials();
+        else checkHashRoute();
+        return;
+      }
+    }
+  } catch (error) {
+    console.warn("The generated catalogue cache is unavailable; refreshing from Google Sheets.", error);
+  }
+
   let resources = null;
 
   try {
@@ -312,6 +385,7 @@ async function fetchSheetData() {
   }
 
   allResources = resources;
+  window.icseCatalogReady = true;
 
   if (statusEl) {
     statusEl.innerHTML = `
@@ -797,6 +871,9 @@ function renderGrid(data, appendFrom = 0) {
     const category = item["Category"] || "";
     const publisher = item["Publisher/Company"] || item["Publisher"] || "";
     const fileSize = String(item["File Size"] || "").trim();
+    const fileFormat = String(item["Format"] || "PDF").trim() || "PDF";
+    let sourceBadge = "Link unavailable";
+    try { sourceBadge = driveLink && new URL(driveLink).hostname.toLowerCase().endsWith("drive.google.com") ? "Direct Drive" : driveLink ? "External source" : "Link unavailable"; } catch (_) {}
 
     return `
       <article class="mc-material-row">
@@ -806,7 +883,11 @@ function renderGrid(data, appendFrom = 0) {
             ${category ? `<span class="mc-material-category">${escapeHTML(category)}</span>` : ""}
             ${editionText ? `<span class="mc-material-edition">${escapeHTML(editionText)}</span>` : ""}
             ${publisher ? `<span class="mc-material-publisher">${escapeHTML(publisher)}</span>` : ""}
-            ${fileSize ? `<span class="mc-material-size"><i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i><span>File size: ${escapeHTML(fileSize)}</span></span>` : ""}
+          </div>
+          <div class="mc-material-file-badges">
+            <span class="mc-material-file-badge">${escapeHTML(fileFormat)}</span>
+            ${fileSize ? `<span class="mc-material-size"><i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i><span>File size: ${escapeHTML(fileSize)}</span></span>` : `<span class="mc-material-file-badge">Size not listed</span>`}
+            <span class="mc-material-file-badge">${escapeHTML(sourceBadge)}</span>
           </div>
           <h3>${escapeHTML(title)}</h3>
           ${item["Scope"] ? `<p class="mc-material-scope">${escapeHTML(item["Scope"])}</p>` : ""}
@@ -816,7 +897,7 @@ function renderGrid(data, appendFrom = 0) {
           <button type="button" onclick="openMaterialModalByIndex(${first + index})" aria-label="Preview ${escapeHTML(title)}" class="mc-material-action">
             <i class="fa-solid fa-eye" aria-hidden="true"></i><span>Preview</span>
           </button>
-          ${driveLink ? `<a href="${escapeHTML(driveLink)}" target="_blank" rel="noopener noreferrer" class="mc-material-action mc-material-open"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i><span>Open</span></a>` : `<span class="mc-material-action is-disabled" aria-disabled="true"><i class="fa-solid fa-link-slash" aria-hidden="true"></i><span>Unavailable</span></span>`}
+          ${driveLink ? `<a href="${escapeHTML(driveLink)}" target="_blank" rel="noopener noreferrer" class="mc-material-action mc-material-open"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i><span>Open PDF</span></a>` : `<span class="mc-material-action is-disabled" aria-disabled="true"><i class="fa-solid fa-link-slash" aria-hidden="true"></i><span>Unavailable</span></span>`}
           <button type="button" data-material-key="${escapeHTML(materialKey)}" aria-pressed="${saved}" aria-label="${saved ? "Remove saved material" : "Save material"}: ${escapeHTML(title)}" class="mc-material-action js-toggle-save ${saved ? "is-saved" : ""}">
             <i class="fa-${saved ? "solid" : "regular"} fa-bookmark" aria-hidden="true"></i><span>${saved ? "Saved" : "Save"}</span>
           </button>

@@ -457,3 +457,80 @@ footer { background:rgba(5,9,19,.85)!important;border-top-color:rgba(125,211,252
 .icse-ai-user-status.icse-ai-copied{color:#86efac}
 .icse-ai-private-note{font-size:11px;color:#9baec9;line-height:1.6;margin:9px 0 0}
 @media(max-width:640px){.icse-ai-route-actions{align-items:stretch;flex-direction:column}.icse-ai-telegram-link{width:100%;text-align:center}.icse-ai-chat-guide{padding:12px}.icse-ai-route-actions span{max-width:100%}}
+
+
+/* Paper Light library foundation. Dark and Vruntime Ink remain user-selectable. */
+:root { --paper-light:#FAF9F6; --paper-card:#FFFFFF; --paper-ink:#1E293B; --paper-line:#E2E8F0; }
+body.mc-home[data-site-mode="light"] { background:var(--paper-light)!important; color:var(--paper-ink)!important; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important; }
+body.mc-home[data-site-mode="light"] main,
+body.mc-home[data-site-mode="light"] #mainContent,
+body.mc-home[data-site-mode="light"] #mainLandingView,
+body.mc-home[data-site-mode="light"] #subjectDetailView { color:var(--paper-ink)!important; }
+body.mc-home[data-site-mode="light"] .library-discovery,
+body.mc-home[data-site-mode="light"] .library-section-label,
+body.mc-home[data-site-mode="light"] .library-legal,
+body.mc-home[data-site-mode="light"] .personal-library-toolbar,
+body.mc-home[data-site-mode="light"] #subjectDetailView .border-b { background:var(--paper-card)!important; border-color:var(--paper-line)!important; color:var(--paper-ink)!important; box-shadow:none!important; }
+body.mc-home[data-site-mode="light"] .library-discovery,
+body.mc-home[data-site-mode="light"] .personal-library-toolbar { border:1px solid var(--paper-line)!important; }
+body.mc-home[data-site-mode="light"] .library-heading h1,
+body.mc-home[data-site-mode="light"] .library-section-label h2,
+body.mc-home[data-site-mode="light"] #selectedSubjectTitle,
+body.mc-home[data-site-mode="light"] .library-legal summary,
+body.mc-home[data-site-mode="light"] .library-legal-copy { color:var(--paper-ink)!important; }
+body.mc-home[data-site-mode="light"] .library-intro,
+body.mc-home[data-site-mode="light"] .library-search-hint,
+body.mc-home[data-site-mode="light"] .library-section-note,
+body.mc-home[data-site-mode="light"] .library-status,
+body.mc-home[data-site-mode="light"] .personal-library-caption { color:#475569!important; }
+body.mc-home[data-site-mode="light"] header.sticky { background:#FFFFFF!important; border-color:var(--paper-line)!important; box-shadow:none!important; }
+body.mc-home[data-site-mode="light"] header a,
+body.mc-home[data-site-mode="light"] header span.text-white,
+body.mc-home[data-site-mode="light"] .text-white,
+body.mc-home[data-site-mode="light"] .text-gray-100,
+body.mc-home[data-site-mode="light"] .text-gray-200 { color:var(--paper-ink)!important; }
+body.mc-home[data-site-mode="light"] .text-gray-300,
+body.mc-home[data-site-mode="light"] .text-gray-400,
+body.mc-home[data-site-mode="light"] .text-gray-500 { color:#475569!important; }
+body.mc-home[data-site-mode="light"] .bg-gray-950,
+body.mc-home[data-site-mode="light"] .bg-gray-950\/90,
+body.mc-home[data-site-mode="light"] .bg-gray-900,
+body.mc-home[data-site-mode="light"] .bg-gray-900\/60,
+body.mc-home[data-site-mode="light"] .bg-gray-900\/80 { background:#FFFFFF!important; }
+body.mc-home[data-site-mode="light"] .border-gray-800,
+body.mc-home[data-site-mode="light"] .border-gray-800\/80,
+body.mc-home[data-site-mode="light"] .border-gray-700 { border-color:var(--paper-line)!important; }
+body.mc-home[data-site-mode="light"] input,
+body.mc-home[data-site-mode="light"] select,
+body.mc-home[data-site-mode="light"] textarea { background:#FFFFFF!important; color:var(--paper-ink)!important; border:1px solid var(--paper-line)!important; }
+body.mc-home[data-site-mode="light"] #globalSearchInput,
+body.mc-home[data-site-mode="light"] #searchInput { min-height:48px; border-radius:10px!important; box-shadow:none!important; }
+body.mc-home[data-site-mode="light"] #mainSubjectGrid .mc-subject-item,
+body.mc-home[data-site-mode="light"] #resourceGrid .mc-material-row { background:#FFFFFF!important; color:var(--paper-ink)!important; border:1px solid var(--paper-line)!important; box-shadow:none!important; }
+body.mc-home[data-site-mode="light"] #mainSubjectGrid .mc-subject-item:hover,
+body.mc-home[data-site-mode="light"] #resourceGrid .mc-material-row:hover { transform:none!important; border-color:#94A3B8!important; box-shadow:none!important; }
+body.mc-home[data-site-mode="light"] #resourceGrid .mc-material-row h3,
+body.mc-home[data-site-mode="light"] #resourceGrid .mc-material-row p { color:var(--paper-ink)!important; }
+body.mc-home[data-site-mode="light"] .mc-material-file-badge { background:#F8FAFC!important; color:#334155!important; border-color:var(--paper-line)!important; }
+body.mc-home[data-site-mode="light"] .cat-btn { background:#FFFFFF!important; color:#334155!important; border-color:var(--paper-line)!important; }
+body.mc-home[data-site-mode="light"] .cat-btn.active-tab { background:#1E293B!important; color:#FFFFFF!important; border-color:#1E293B!important; box-shadow:none!important; }
+body.mc-home[data-site-mode="light"] .personal-view-btn { background:#FFFFFF!important; color:#334155!important; border-color:var(--paper-line)!important; }
+body.mc-home[data-site-mode="light"] .personal-view-btn.active { background:#1E293B!important; color:#FFFFFF!important; border-color:#1E293B!important; }
+body.mc-home[data-site-mode="light"] .settings-panel { background:#FFFFFF!important; color:var(--paper-ink)!important; border-color:var(--paper-line)!important; box-shadow:none!important; }
+body.mc-home[data-site-mode="light"] .settings-muted { color:#64748B!important; }
+body.mc-home[data-site-mode="light"] .settings-section { border-color:var(--paper-line)!important; }
+body.mc-home[data-site-mode="light"] .theme-choice,
+body.mc-home[data-site-mode="light"] .colour-choice { background:#FFFFFF!important; color:var(--paper-ink)!important; border-color:var(--paper-line)!important; }
+body.mc-home[data-site-mode="light"] .settings-close,
+body.mc-home[data-site-mode="light"] .settings-reset { color:var(--paper-ink)!important; border-color:var(--paper-line)!important; }
+body.mc-home[data-site-mode="light"] .settings-overlay { background:rgba(15,23,42,.38)!important; }
+body.mc-home[data-site-mode="light"] .settings-choice-grid { gap:6px!important; }
+
+/* No expensive blur or layered shadows on the library's first screen. */
+body.mc-home .glass-card,
+body.mc-home .mc-material-row,
+body.mc-home .mc-subject-item,
+body.mc-home .library-discovery,
+body.mc-home .personal-library-toolbar { backdrop-filter:none!important; -webkit-backdrop-filter:none!important; box-shadow:none!important; }
+body.mc-home .mc-material-row,
+body.mc-home .mc-subject-item { transition: border-color .15s ease,background-color .15s ease!important; }
