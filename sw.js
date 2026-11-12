@@ -102,9 +102,12 @@ self.addEventListener("fetch", event => {
   const url = new URL(request.url);
   const sameOrigin = url.origin === self.location.origin;
   const appCode = sameOrigin && /\.(?:html|css|js)$/i.test(url.pathname);
+  const catalogueData = sameOrigin && url.pathname.endsWith("/catalog-data.json");
   const catalogue = url.hostname === "docs.google.com" || url.hostname === "api.allorigins.win";
 
-  if (request.mode === "navigate" || appCode) {
+  // Generated catalogue JSON must revalidate online, with the last good copy
+  // retained as the network-first strategy's offline fallback.
+  if (request.mode === "navigate" || appCode || catalogueData) {
     event.respondWith(networkFirst(request, request.destination === "script" ? SCRIPT_TIMEOUT_MS : NETWORK_TIMEOUT_MS, request.mode === "navigate"));
     return;
   }

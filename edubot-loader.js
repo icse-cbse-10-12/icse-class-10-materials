@@ -3,7 +3,33 @@
   const form = document.getElementById("edubotChatForm");
   const input = document.getElementById("edubotChatInput");
   const status = document.getElementById("edubotChatStatus");
+  const drawer = document.getElementById("edubotDrawer");
+  const drawerPanel = drawer?.querySelector(".edubot-drawer-panel");
+  const closeButton = drawer?.querySelector(".edubot-drawer-close");
+  let previousFocus = null;
   if (!form) return;
+
+  function toggleEduBot(open) {
+    if (!drawer) return;
+    const shouldOpen = Boolean(open);
+    if (shouldOpen && drawer.hidden) previousFocus = document.activeElement;
+    drawer.hidden = !shouldOpen;
+    drawer.setAttribute("aria-hidden", String(!shouldOpen));
+    document.body.classList.toggle("edubot-drawer-open", shouldOpen);
+    if (shouldOpen) closeButton?.focus({ preventScroll: true });
+    else previousFocus?.focus?.({ preventScroll: true });
+  }
+  window.toggleEduBot = toggleEduBot;
+  drawer?.querySelector("[data-edubot-close]")?.addEventListener("click", () => toggleEduBot(false));
+  drawer?.addEventListener("keydown", event => {
+    if (event.key === "Escape") { event.preventDefault(); toggleEduBot(false); return; }
+    if (event.key !== "Tab" || !drawerPanel) return;
+    const focusable = [...drawerPanel.querySelectorAll('a[href],button:not([disabled]),textarea:not([disabled]),input:not([disabled]),[tabindex]:not([tabindex="-1"])')].filter(el => !el.hidden);
+    if (!focusable.length) return;
+    const first = focusable[0], last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+  });
 
   let modulePromise = null;
   let ready = false;
