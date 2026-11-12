@@ -142,6 +142,11 @@ function escapeHTML(value) {
   }[char]));
 }
 
+function isVerifiedPdfResource(item, url = "") {
+  if (String(item?.Format || "").trim().toLowerCase() === "pdf") return true;
+  try { return new URL(url).pathname.toLowerCase().endsWith(".pdf"); } catch (_) { return false; }
+}
+
 function normalizeExternalUrl(value, rejectGenericCisceHome = false) {
   const raw = String(value || "").trim();
 
@@ -871,9 +876,10 @@ function renderGrid(data, appendFrom = 0) {
     const category = item["Category"] || "";
     const publisher = item["Publisher/Company"] || item["Publisher"] || "";
     const fileSize = String(item["File Size"] || "").trim();
-    const fileFormat = String(item["Format"] || "PDF").trim() || "PDF";
+    const fileFormat = String(item["Format"] || "Resource").trim() || "Resource";
     let sourceBadge = "Link unavailable";
     try { sourceBadge = driveLink && new URL(driveLink).hostname.toLowerCase().endsWith("drive.google.com") ? "Direct Drive" : driveLink ? "External source" : "Link unavailable"; } catch (_) {}
+    const openLabel = isVerifiedPdfResource(item, driveLink) ? "Open PDF" : "Open Resource";
 
     return `
       <article class="mc-material-row">
@@ -897,7 +903,7 @@ function renderGrid(data, appendFrom = 0) {
           <button type="button" onclick="openMaterialModalByIndex(${first + index})" aria-label="Preview ${escapeHTML(title)}" class="mc-material-action">
             <i class="fa-solid fa-eye" aria-hidden="true"></i><span>Preview</span>
           </button>
-          ${driveLink ? `<a href="${escapeHTML(driveLink)}" target="_blank" rel="noopener noreferrer" class="mc-material-action mc-material-open"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i><span>Open PDF</span></a>` : `<span class="mc-material-action is-disabled" aria-disabled="true"><i class="fa-solid fa-link-slash" aria-hidden="true"></i><span>Unavailable</span></span>`}
+          ${driveLink ? `<a href="${escapeHTML(driveLink)}" target="_blank" rel="noopener noreferrer" class="mc-material-action mc-material-open"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i><span>${openLabel}</span></a>` : `<span class="mc-material-action is-disabled" aria-disabled="true"><i class="fa-solid fa-link-slash" aria-hidden="true"></i><span>Unavailable</span></span>`}
           <button type="button" data-material-key="${escapeHTML(materialKey)}" aria-pressed="${saved}" aria-label="${saved ? "Remove saved material" : "Save material"}: ${escapeHTML(title)}" class="mc-material-action js-toggle-save ${saved ? "is-saved" : ""}">
             <i class="fa-${saved ? "solid" : "regular"} fa-bookmark" aria-hidden="true"></i><span>${saved ? "Saved" : "Save"}</span>
           </button>

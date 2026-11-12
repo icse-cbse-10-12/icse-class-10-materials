@@ -48,6 +48,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "Catalogue and sitemap are already up to date."
           else
-            git commit -m "chore: refresh prerendered study catalogue"
+            git commit -m "chore: refresh prerendered study catalogue [skip ci]"
             git push
           fi

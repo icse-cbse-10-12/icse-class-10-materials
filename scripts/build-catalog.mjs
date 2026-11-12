@@ -48,13 +48,18 @@ function resourceUrl(item) {
   return safeUrl(item["Google Drive Link"] || item["Google Drive Direct View / Download Link"] || item.Link || "");
 }
 
+export function isVerifiedPdfResource(item, url = "") {
+  if (String(item?.Format || "").trim().toLowerCase() === "pdf") return true;
+  try { return new URL(url).pathname.toLowerCase().endsWith(".pdf"); } catch { return false; }
+}
+
 function materialKey(item) {
   const shareId = clean(item["Share ID"]);
   if (shareId) return `share:${shareId}`;
   return [item["Book Name"], item.Subject, item.Category, item.Edition].map(value => clean(value).toLowerCase()).join("|");
 }
 
-function renderCard(item) {
+export function renderCard(item) {
   const title = clean(item["Book Name"] || item.Subject || "Study material");
   const subject = clean(item.Subject);
   const category = clean(item.Category);
@@ -62,14 +67,15 @@ function renderCard(item) {
   const publisher = clean(item["Publisher/Company"] || item.Publisher);
   const scope = clean(item.Scope);
   const size = clean(item["File Size"]) || "Size not listed";
-  const format = clean(item.Format) || "PDF";
+  const format = clean(item.Format) || "Resource";
   const url = resourceUrl(item);
   let source = "Link unavailable";
   try { source = url && new URL(url).hostname.toLowerCase().endsWith("drive.google.com") ? "Direct Drive" : url ? "External source" : source; } catch { /* keep safe fallback */ }
   const meta = [subject, category, edition && edition !== "Not Specified" ? `Ed. ${edition}` : "", publisher]
     .filter(Boolean).map(value => `<span class="mc-material-meta-chip">${esc(value)}</span>`).join("");
+  const actionLabel = isVerifiedPdfResource(item, url) ? "Open PDF" : "Open Resource";
   const action = url
-    ? `<a class="mc-material-action mc-material-open" href="${esc(url)}" target="_blank" rel="noopener noreferrer"><span>Open PDF</span></a>`
+    ? `<a class="mc-material-action mc-material-open" href="${esc(url)}" target="_blank" rel="noopener noreferrer"><span>${actionLabel}</span></a>`
     : `<span class="mc-material-action is-disabled" aria-disabled="true">Link unavailable</span>`;
   return `<article class="mc-material-row mc-prerendered-row"><div class="mc-material-main"><div class="mc-material-meta">${meta}</div><h3>${esc(title)}</h3>${scope ? `<p class="mc-material-scope">${esc(scope)}</p>` : ""}<div class="mc-material-file-badges"><span class="mc-material-file-badge">${esc(format)}</span><span class="mc-material-file-badge">${esc(size)}</span><span class="mc-material-file-badge">${esc(source)}</span></div></div><div class="mc-material-actions">${action}<button type="button" class="mc-material-action js-toggle-save" data-material-key="${esc(materialKey(item))}" aria-pressed="false" aria-label="Save material: ${esc(title)}"><span>Save</span></button></div></article>`;
 }
@@ -81,7 +87,7 @@ const CATALOG_FIELDS = [
   "Latest Edition Available?", "Latest Edition Link", "Share ID"
 ];
 
-function schemaFor(resources, modified, totalCount) {
+function schemaFor(resources, totalCount) {
   const learningResources = resources.map((item, index) => {
       const resource = {
         "@type": "LearningResource",
@@ -89,7 +95,6 @@ function schemaFor(resources, modified, totalCount) {
         "name": clean(item["Book Name"] || item.Subject || "Study material"),
         "educationalLevel": "ICSE Class 10",
         "learningResourceType": clean(item.Category || item.Format || "Study material"),
-        "dateModified": modified,
         "isPartOf": { "@type": "WebSite", "name": "ICSE MasterClass Study Vault", "url": SITE_URL }
       };
       if (clean(item.Subject)) resource.about = clean(item.Subject).split(/[,;|]+/).map(value => value.trim()).filter(Boolean);
@@ -128,22 +133,34 @@ export async function buildCatalog({ root = resolve(fileURLToPath(new URL("..", 
   };
   const catalogJson = JSON.stringify(catalogPayload);
   const catalogJsonPath = resolve(root, "catalog-data.json");
-  await writeFile(catalogJsonPath, catalogJson);
-  let html = await readFile(indexPath, "utf8");
+  let previousCatalog = "";
+  try { previousCatalog = await readFile(catalogJsonPath, "utf8"); } catch { /* first catalogue build */ }
+  const catalogChanged = previousCatalog !== catalogJson;
+  const previousHtml = await readFile(indexPath, "utf8");
+  let html = previousHtml;
   const firstPage = resources.slice(0, 36);
   html = replaceMarkedBlock(html, "<!-- CATALOG_CARDS_START -->", "<!-- CATALOG_CARDS_END -->", firstPage.map(renderCard).join("\n"));
   const safeJson = value => JSON.stringify(value).replace(/</g, "\\u003c");
   html = replaceMarkedBlock(html, "<!-- CATALOG_DATA_START -->", "<!-- CATALOG_DATA_END -->", '<link rel="preload" href="./catalog-data.json" as="fetch" crossorigin>');
-  html = replaceMarkedBlock(html, "<!-- CATALOG_SCHEMA_START -->", "<!-- CATALOG_SCHEMA_END -->", `<script type="application/ld+json" id="catalog-learning-resources">${safeJson(schemaFor(firstPage, modified, resources.length))}</script>`);
+  html = replaceMarkedBlock(html, "<!-- CATALOG_SCHEMA_START -->", "<!-- CATALOG_SCHEMA_END -->", `<script type="application/ld+json" id="catalog-learning-resources">${safeJson(schemaFor(firstPage, resources.length))}</script>`);
   html = html.replace(/(<p id="itemCount"[^>]*>)[\s\S]*?(<\/p>)/, `$1${resources.length.toLocaleString("en-IN")} Materials Found$2`);
   html = html.replace(/<span>Loading the materials catalogue…<\/span>/, `<span>${resources.length.toLocaleString("en-IN")} materials are ready to browse.</span>`);
-  await writeFile(indexPath, html);
+  const indexChanged = html !== previousHtml;
+  if (catalogChanged) await writeFile(catalogJsonPath, catalogJson);
+  if (indexChanged) await writeFile(indexPath, html);
 
   const sitemapPath = resolve(root, "sitemap.xml");
   let sitemap = await readFile(sitemapPath, "utf8");
-  sitemap = sitemap.replace(/<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/g, `<lastmod>${modified}</lastmod>`);
-  await writeFile(sitemapPath, sitemap);
-  return { count: resources.length, prerendered: firstPage.length, modified, jsonBytes: Buffer.byteLength(catalogJson) };
+  if (indexChanged || catalogChanged) {
+    const updatedSitemap = sitemap.replace(/<url\b[^>]*>[\s\S]*?<\/url>/gi, urlBlock => {
+      const location = urlBlock.match(/<loc>\s*([^<]+)\s*<\/loc>/i)?.[1]?.trim();
+      const normalizedLocation = location ? location.replace(/\/+$/, "") + "/" : "";
+      if (normalizedLocation !== SITE_URL) return urlBlock;
+      return urlBlock.replace(/<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/i, `<lastmod>${modified}</lastmod>`);
+    });
+    if (updatedSitemap !== sitemap) await writeFile(sitemapPath, updatedSitemap);
+  }
+  return { count: resources.length, prerendered: firstPage.length, modified, homepageChanged: indexChanged || catalogChanged, jsonBytes: Buffer.byteLength(catalogJson) };
 }
 
 async function main() {
@@ -157,7 +174,7 @@ async function main() {
     csvText = await response.text();
   }
   const result = await buildCatalog({ root, csvText });
-  console.log(`Cached ${result.count.toLocaleString("en-IN")} materials in catalog-data.json; pre-rendered ${result.prerendered} cards and LearningResource entries; sitemap updated (${result.modified}).`);
+  console.log(`Cached ${result.count.toLocaleString("en-IN")} materials in catalog-data.json; pre-rendered ${result.prerendered} cards and LearningResource entries; homepage sitemap date updated: ${result.homepageChanged}.`);
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
