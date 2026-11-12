@@ -342,7 +342,7 @@ async function fetchSheetData() {
     }
   }
   try {
-    const cacheResponse = await fetch("./catalog-data.json", { cache: "force-cache" });
+    const cacheResponse = await fetch("./catalog-data.json", { cache: "no-cache" });
     if (cacheResponse.ok) {
       const cachePayload = await cacheResponse.json();
       const cachedResources = Array.isArray(cachePayload)

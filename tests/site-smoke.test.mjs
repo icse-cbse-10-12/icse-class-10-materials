@@ -429,3 +429,14 @@ test("latest edition links are not duplicated when they match the primary resour
   assert.ok(script.includes("View Latest Edition"));
   assert.ok(!script.includes("Get Latest Edition Book"));
 });
+
+
+test("generated catalogue JSON revalidates online and keeps an offline cache fallback", () => {
+  const sw = read("sw.js");
+  const script = read("script.js");
+  assert.match(sw, /const catalogueData = sameOrigin && url\.pathname\.endsWith\("\/catalog-data\.json"\);/);
+  assert.match(sw, /request\.mode === "navigate" \|\| appCode \|\| catalogueData/);
+  assert.match(sw, /event\.respondWith\(networkFirst\(request,/);
+  assert.match(sw, /const cached = await caches\.match\(request/);
+  assert.match(script, /fetch\("\.\/catalog-data\.json", \{ cache: "no-cache" \}\)/);
+});
