@@ -34,3 +34,38 @@ body[data-site-mode="light"] .editorial-brand,body[data-site-mode="light"] .edit
 body[data-site-mode="light"] .editorial-lede,body[data-site-mode="light"] .editorial-content,body[data-site-mode="light"] .editorial-card p{color:#46534c}
 body[data-site-mode="light"] .editorial-card,body[data-site-mode="light"] .editorial-faq details{background:#fff;border-color:#d7d2c7}
 body[data-site-mode="light"] .editorial-content strong,body[data-site-mode="light"] .editorial-faq summary{color:#202a26}
+
+
+/* Scroll-linked reading indicator. Animate transform rather than width so
+   supported browsers can composite the bar without per-frame layout. */
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  background-color: #1D4ED8;
+  z-index: 50;
+  transform: scaleX(0);
+  transform-origin: left center;
+  pointer-events: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  .reading-progress {
+    animation: grow-progress linear both;
+    animation-timeline: scroll();
+  }
+}
+
+@keyframes grow-progress {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reading-progress {
+    display: none;
+  }
+}
