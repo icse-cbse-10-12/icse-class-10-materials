@@ -1,4 +1,4 @@
-// Previous cache: icse-masterclass-v1.8.0-legal-pages
+// Previous cache: icse-masterclass-v1.16.0-edubot-api
 const CACHE_NAME = "icse-masterclass-v1.17.0-site-polish";
 const APP_SHELL = [
   "./",
