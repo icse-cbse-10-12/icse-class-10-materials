@@ -1,5 +1,5 @@
-// Previous cache: icse-masterclass-v1.8.0-legal-pages
-const CACHE_NAME = "icse-masterclass-v1.16.0-edubot-api";
+// Previous cache: icse-masterclass-v1.16.0-edubot-api
+const CACHE_NAME = "icse-masterclass-v1.17.0-site-polish";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -26,6 +26,7 @@ const APP_SHELL = [
   "./luxury-theme.css",
   "./luxury-theme.css?v=3",
   "./academic-library.css?v=5",
+  "./site-polish.css?v=1",
   "./script.js",
   "./src/inkbleed.js",
   "./ui-ux.js",

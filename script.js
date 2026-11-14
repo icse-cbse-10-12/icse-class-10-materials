@@ -40,6 +40,7 @@ const subjectsList = [
 
 let currentSubject = "All";
 let currentCategory = "All";
+let currentPublisher = "all";
 let allResources = [];
 let filteredResources = [];
 // Build only a small number of cards per frame to keep mobile devices responsive.
@@ -633,6 +634,46 @@ function populateYearFilter() {
   select.value = years.includes(selected) ? selected : "all";
 }
 
+function getMaterialPublisher(item) {
+  return String(item?.["Publisher/Company"] || item?.["Publisher"] || "")
+    .trim()
+    .replace(/\s+/g, " ");
+}
+
+function normalizePublisherValue(value) {
+  return String(value || "").trim().replace(/\s+/g, " ").toLocaleLowerCase();
+}
+
+function populatePublisherFilter() {
+  const select = document.getElementById("publisherFilter");
+  if (!select) return;
+  const selected = normalizePublisherValue(currentPublisher || select.value || "all") || "all";
+  const publishers = new Map();
+  allResources.forEach(item => {
+    const label = getMaterialPublisher(item);
+    const key = normalizePublisherValue(label);
+    if (!key) return;
+    const existing = publishers.get(key);
+    if (existing) existing.count += 1;
+    else publishers.set(key, { label, count: 1 });
+  });
+  select.replaceChildren();
+  const allOption = document.createElement("option");
+  allOption.value = "all";
+  allOption.textContent = "All publishers";
+  select.append(allOption);
+  [...publishers.entries()]
+    .sort((a, b) => a[1].label.localeCompare(b[1].label, undefined, { sensitivity: "base" }))
+    .forEach(([key, publisher]) => {
+      const option = document.createElement("option");
+      option.value = key;
+      option.textContent = publisher.label + " (" + publisher.count.toLocaleString() + ")";
+      select.append(option);
+    });
+  currentPublisher = publishers.has(selected) ? selected : "all";
+  select.value = currentPublisher;
+}
+
 // Recognised subjects include the existing website labels and common sheet aliases.
 const knownSubjectNames = new Set([
   ...subjectsList.filter(subject => subject !== "All").map(subject =>
@@ -656,12 +697,16 @@ function filterResources() {
   if (document.getElementById("yearFilter") && document.getElementById("yearFilter").options.length <= 1 && allResources.length) {
     populateYearFilter();
   }
+  if (document.getElementById("publisherFilter") && document.getElementById("publisherFilter").options.length <= 1 && allResources.length) {
+    populatePublisherFilter();
+  }
   const searchVal = (
     document.getElementById("searchInput")?.value || ""
   ).toLowerCase().trim();
 
   // Read local browser preferences once, never thousands of times per filter.
   const selectedYear = document.getElementById("yearFilter")?.value || "all";
+  const selectedPublisher = normalizePublisherValue(document.getElementById("publisherFilter")?.value || currentPublisher || "all") || "all";
   const personalKeySet = currentPersonalView === "saved"
     ? new Set(readPersonalList(SAVED_MATERIALS_KEY))
     : currentPersonalView === "recent"
@@ -756,9 +801,11 @@ if (currentCategory === "All") {
     // Search across more fields than just book name and subject.
     const srchMatch = !searchVal || materialSearchText(item).includes(searchVal);
     const yearMatch = selectedYear === "all" || getMaterialYear(item) === selectedYear;
+    const itemPublisher = normalizePublisherValue(getMaterialPublisher(item));
+    const publisherMatch = selectedPublisher === "all" || itemPublisher === selectedPublisher;
     const personalMatch = !personalKeySet || personalKeySet.has(getMaterialKey(item));
 
-    return subMatch && catMatch && srchMatch && yearMatch && personalMatch;
+    return subMatch && catMatch && srchMatch && yearMatch && publisherMatch && personalMatch;
   });
 
   if (currentPersonalView === "recent") {
@@ -777,6 +824,13 @@ if (currentCategory === "All") {
 /* ============================================================
    CATEGORY FILTER TABS
    ============================================================ */
+
+function setPublisherFilter(value) {
+  currentPublisher = normalizePublisherValue(value) || "all";
+  currentPersonalView = "all";
+  updatePersonalLibraryUI();
+  filterResources();
+}
 
 function setCategoryFilter(category, event) {
   currentPersonalView = "all"; updatePersonalLibraryUI();

@@ -226,6 +226,7 @@
 <link rel="stylesheet" href="design-polish.css?v=20261026-1">
   <link rel="stylesheet" href="luxury-theme.css?v=3">
   <link rel="stylesheet" href="academic-library.css?v=5">
+  <link rel="stylesheet" href="site-polish.css?v=1">
 
   <style id="edubot-embed-responsive">
     #eduBotAssistant { scroll-margin-top: 84px; min-width: 0; }
@@ -546,12 +547,20 @@
 
 </div>
 
-<!-- Material year filter -->
-<div class="library-year-filter flex flex-wrap items-center justify-between gap-3 py-3">
-  <label for="yearFilter" class="text-xs font-semibold text-gray-400">Browse materials by year</label>
-  <select id="yearFilter" onchange="filterResources()" aria-label="Filter materials by year" class="w-full sm:w-48 bg-gray-900 border border-gray-800 rounded-xl px-3 py-2 text-xs font-semibold text-white focus:outline-none focus:border-amber-500 transition">
-    <option value="all">All Years</option>
-  </select>
+<!-- Refine the current subject and category without duplicating catalogue records. -->
+<div class="library-refinement-filters" aria-label="Refine materials">
+  <div class="library-refinement-field">
+    <label for="publisherFilter">Publisher / Creator</label>
+    <select id="publisherFilter" onchange="setPublisherFilter(this.value)" aria-label="Filter materials by publisher or creator">
+      <option value="all">All publishers</option>
+    </select>
+  </div>
+  <div class="library-refinement-field">
+    <label for="yearFilter">Edition year</label>
+    <select id="yearFilter" onchange="filterResources()" aria-label="Filter materials by year">
+      <option value="all">All Years</option>
+    </select>
+  </div>
 </div>
 
 <!-- Personal library: local-only saved and recent material views. -->

@@ -379,3 +379,45 @@ body.edubot-drawer-open { overflow:hidden; }
   .edubot-drawer-panel .edubot-chat-messages { height:48vh; min-height:260px; max-height:440px; }
 }
 @media(max-width:380px) { .subject-group-tabs { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+
+
+/* Paper Light card surface and native saved/checked selection state. */
+.material-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+}
+
+/* Automatically highlights card when saved/checked without extra JS. */
+.material-card:has(input[type="checkbox"]:checked),
+.material-card.is-saved {
+  border-color: #1D4ED8;
+  background-color: #EFF6FF;
+}
+
+/* Violet is reserved for the explicitly selected optional accent. */
+[data-accent="violet"] .material-card.is-saved {
+  border-color: #8b5cf6;
+  background-color: #f5f3ff;
+}
+
+/* Horizontal thumb-zone tracks: subject categories and saved revision shelf. */
+@media (max-width: 760px) {
+  .subject-track,
+  .subject-group-tabs {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 8px;
+    padding-bottom: 6px;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .subject-track > *,
+  .subject-group-tabs > * {
+    scroll-snap-align: center;
+    flex: 0 0 auto;
+    min-height: 48px;
+  }
+}
