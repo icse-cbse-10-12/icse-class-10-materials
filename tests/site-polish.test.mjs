@@ -44,6 +44,7 @@ test("shared visual tokens preserve Paper Light and avoid costly visual effects"
   assert.ok(css.includes("--site-ink:#1E293B"));
   assert.ok(css.includes("--site-primary:#1D4ED8"));
   assert.ok(css.includes("min-height:48px"));
+  assert.equal((css.match(/\\{/g) || []).length, (css.match(/\\}/g) || []).length);
   assert.doesNotMatch(css, /mix-blend-mode\s*:\s*difference|backdrop-filter\s*:\s*blur|linear-gradient|radial-gradient/i);
 });
 
