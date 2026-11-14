@@ -78,7 +78,13 @@ button,.btn{min-height:48px;touch-action:manipulation;overflow-wrap:anywhere}
 <section class="card" aria-labelledby="title">
 <div class="eyebrow">Your learning space</div>
 <h1 id="title">Welcome back.</h1>
-<p id="intro">Sign in to your student account, or create one to get started.</p>
+<p id="intro">Sign in only if you need an account. You can browse the Study Vault and use local study tools as a guest.</p>
+<div class="privacy-notice" role="note" aria-label="Student privacy and parental permission">
+  <strong>Guest access is the default.</strong>
+  <p>Saved materials, syllabus progress and theme preferences can stay in this browser's localStorage. No account, email address or profile photo is needed for these student study features.</p>
+  <p>If you are under 18, please confirm you have a parent or guardian's permission before creating an account or submitting personal details.</p>
+  <p><strong>Important:</strong> This notice or a checkbox is not verifiable parental consent. The current site does not verify a parent's identity and age. Until a verifiable parent/guardian consent process is implemented, students under 18 should use guest access only and should not create an account, sign in, submit personal details or use EduBot or other third-party processing features. This page does not request profile-photo uploads or biometric data.</p>
+</div>
 <p class="mc-entry-helper" id="entryIntro" hidden>Browse the free ICSE Class 10 materials after signing in, or choose guest access below.</p>
 <div id="formPanel">
 <form id="authForm">
@@ -120,16 +126,37 @@ button,.btn{min-height:48px;touch-action:manipulation;overflow-wrap:anywhere}
   </div>
 </main>
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, updateProfile, sendEmailVerification, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import { firebaseConfig } from "./firebase-config.js";
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const googleProvider = new GoogleAuthProvider();
-// Ensure Google sessions survive navigation back to the Study Vault.
-const authReady = setPersistence(auth, browserLocalPersistence);
+let app = null, auth = null, googleProvider = null, authApi = null;
+let authPromise = null;
 const $ = id => document.getElementById(id);
+
+// Firebase is optional: do not contact Google/Firebase until the visitor has
+// explicitly enabled external services and chosen an account action.
+async function ensureAuth() {
+  if (window.ICSEConsent?.has("externalServices") !== true) {
+    window.ICSEConsent?.open();
+    throw new Error("Enable Optional external services in Privacy settings, or continue as a guest.");
+  }
+  if (!authPromise) {
+    authPromise = Promise.all([
+      import("https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js"),
+      import("https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js")
+    ]).then(async ([appSdk, authSdk]) => {
+      app = appSdk.initializeApp(firebaseConfig);
+      auth = authSdk.getAuth(app);
+      authApi = authSdk;
+      googleProvider = new authSdk.GoogleAuthProvider();
+      await authSdk.setPersistence(auth, authSdk.browserLocalPersistence);
+      authSdk.onAuthStateChanged(auth, renderAuthState);
+    }).catch(error => {
+      authPromise = null;
+      throw error;
+    });
+  }
+  await authPromise;
+}
 let mode = "login";
 const entryParams = new URLSearchParams(window.location.search);
 const isHomepageEntry = entryParams.get("entry") === "1";
@@ -197,18 +224,18 @@ $("authForm").addEventListener("submit",async event=>{
   event.preventDefault(); const button=$("submitBtn"); button.disabled=true; message("");
   const email=$("email").value.trim(); const password=$("password").value;
   try {
-    await authReady;
+    await ensureAuth();
     if(mode==="signup" && !checkPassword(password)) { message("Please meet all password requirements before creating your account.","error"); return; }
     if(mode==="signup" && !$("termsAcknowledgement").checked) { message("Please agree to the Terms and acknowledge the Privacy Policy before creating an account.","error"); return; }
     if(mode==="signup") {
       const name=$("displayName").value.trim();
       if(!name) throw new Error("Please enter your name.");
-      const credential=await createUserWithEmailAndPassword(auth,email,password);
-      await updateProfile(credential.user,{displayName:name});
-      try { await sendEmailVerification(credential.user); message("Account created! A verification email has been sent. Check your inbox and spam folder.","success"); }
+      const credential=await authApi.createUserWithEmailAndPassword(auth,email,password);
+      await authApi.updateProfile(credential.user,{displayName:name});
+      try { await authApi.sendEmailVerification(credential.user); message("Account created! A verification email has been sent. Check your inbox and spam folder.","success"); }
       catch { message("Account created, but the verification email could not be sent right now. You can retry after signing in.","success"); }
     } else {
-      await signInWithEmailAndPassword(auth,email,password);
+      await authApi.signInWithEmailAndPassword(auth,email,password);
       message("You are signed in. Welcome back!","success");
       if(isHomepageEntry) openStudyVault();
     }
@@ -218,8 +245,8 @@ $("authForm").addEventListener("submit",async event=>{
 $("googleBtn").addEventListener("click",async()=>{
   const button=$("googleBtn"); button.disabled=true; message("");
   try {
-    await authReady;
-    const result=await signInWithPopup(auth,googleProvider);
+    await ensureAuth();
+    const result=await authApi.signInWithPopup(auth,googleProvider);
     if(!result.user) throw new Error("Google did not return a signed-in account.");
     // Confirm Firebase has a persisted session before changing pages.
     await result.user.getIdToken();
@@ -230,8 +257,8 @@ $("googleBtn").addEventListener("click",async()=>{
     message(friendlyError(error),"error");
   } finally { button.disabled=false; }
 });
-$("logoutBtn").addEventListener("click",async()=>{try{await signOut(auth);message("You have signed out.","success");}catch(error){message(friendlyError(error),"error");}});
-$("verifyBtn").addEventListener("click",async()=>{try{if(auth.currentUser){await sendEmailVerification(auth.currentUser);message("Verification email sent. Check your inbox and spam folder.","success");}}catch(error){message(friendlyError(error),"error");}});
+$("logoutBtn").addEventListener("click",async()=>{try{await authApi.signOut(auth);message("You have signed out.","success");}catch(error){message(friendlyError(error),"error");}});
+$("verifyBtn").addEventListener("click",async()=>{try{if(auth.currentUser){await authApi.sendEmailVerification(auth.currentUser);message("Verification email sent. Check your inbox and spam folder.","success");}}catch(error){message(friendlyError(error),"error");}});
 $("deleteAccountBtn").addEventListener("click",async()=>{
   const user=auth.currentUser;
   if(!user){message("Sign in again before requesting account deletion.","error");return;}
@@ -245,14 +272,14 @@ $("deleteAccountBtn").addEventListener("click",async()=>{
     if(response?.data?.deleted!==true)throw new Error("The server did not confirm account deletion.");
     let localCleared=true;
     try{localStorage.removeItem("icseMasterClass.studentDashboard.v1");localStorage.removeItem("icseMasterClassStudyToolsV1");}catch(_){localCleared=false;}
-    try{await signOut(auth);}catch(_){}
+    try{await authApi.signOut(auth);}catch(_){}
     message(localCleared?"Your Firebase account was deleted. Student study data saved in this browser was also cleared.":"Your Firebase account was deleted, but this browser could not clear local study data. Clear site data in browser settings.","success");
   }catch(error){
     const detail=error?.code==="functions/failed-precondition"?"For security, sign out and sign in again, then retry within five minutes.":(error?.message||"Please contact support.");
     message("Account deletion was not confirmed. "+detail,"error");
   }finally{button.disabled=false;}
 });
-onAuthStateChanged(auth,user=>{
+function renderAuthState(user) {
   const signed=!!user;
   $("formPanel").classList.toggle("hidden",signed);
   $("signedPanel").classList.toggle("hidden",!signed);
@@ -266,7 +293,7 @@ onAuthStateChanged(auth,user=>{
     $("deleteAccountBtn").classList.toggle("hidden",firebaseConfig.accountDeletionAvailable!==true);
     $("accountDeletionPending").classList.toggle("hidden",firebaseConfig.accountDeletionAvailable===true);
   } else setMode(mode);
-});
+}
 function friendlyError(error) {
   const codes={
     "auth/email-already-in-use":"This email already has an account. Try signing in instead.",
@@ -287,6 +314,12 @@ function friendlyError(error) {
 }
 </script>
 
+<style id="student-privacy-notice">
+.privacy-notice{margin:14px 0;padding:14px 15px;border:1px solid #64748b;border-left:3px solid #1d4ed8;border-radius:12px;background:#f8fafc;color:#1e293b;font-size:.88rem;line-height:1.55}
+.privacy-notice p{margin:7px 0 0;color:#334155}
+.privacy-notice strong{color:#0f172a}
+@media(max-width:600px){.privacy-notice{padding:13px;font-size:.86rem}}
+</style>
 <style id="mobile-login-override">
 @media screen and (max-width:600px) {
  html,body { width:100% !important; max-width:100% !important; overflow-x:hidden !important; }
@@ -361,7 +394,7 @@ button:focus-visible,.btn:focus-visible{outline:3px solid #7dd3fc!important;outl
 @media(max-width:360px){.card{padding:22px 15px!important}.brand{margin-bottom:15px!important}}
 </style>
 
-<footer class="login-legal-footer" aria-label="Legal information"><a href="privacy-policy.html">Privacy Policy</a><span aria-hidden="true">·</span><a href="terms-and-conditions.html">Terms and Conditions</a><span aria-hidden="true">·</span><a href="cookie-policy.html">Cookie Policy</a><span aria-hidden="true">·</span><a href="refund-policy.html">Refund Policy</a><span aria-hidden="true">·</span><a href="mailto:icsemasterclass@gmail.com">Contact</a></footer>
+<footer class="login-legal-footer" aria-label="Legal information"><a href="privacy-policy.html">Privacy Policy</a><span aria-hidden="true">·</span><a href="terms-and-conditions.html">Terms and Conditions</a><span aria-hidden="true">·</span><a href="cookie-policy.html">Cookie Policy</a><span aria-hidden="true">·</span><a href="mailto:icsemasterclass@gmail.com">Contact</a></footer>
 <style>.login-legal-footer{width:min(100%,470px);margin:18px auto 0;display:flex;justify-content:center;flex-wrap:wrap;gap:9px;color:#a1a1aa;font-size:.8rem}.login-legal-footer a{color:#cbd5e1;text-underline-offset:3px}.login-legal-footer a:hover{color:#fbbf24}.login-legal-footer a:focus-visible{outline:2px solid #7dd3fc;outline-offset:3px}</style>
 <script src="consent-manager.js" defer></script>
 </body>
