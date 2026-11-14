@@ -157,4 +157,5 @@ test("public pages use system fonts and no session-replay or analytics SDK", () 
   assert.ok(read("consent-manager.js").includes("min-height:48px"));
   assert.ok(read("portal.html").includes("min-height:48px"));
   assert.ok(read("404.html").includes("min-height:48px"));
+  assert.ok(!read("404.html").includes("cdn.tailwindcss.com"));
 });
