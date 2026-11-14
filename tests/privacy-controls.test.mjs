@@ -117,3 +117,44 @@ test("deployment instructions explicitly distinguish source from deployed backen
   assert.ok(doc.includes("Verify the deployed function name and region"));
   assert.ok(doc.includes("Blaze plan"));
 });
+
+test("minor privacy notice is explicit and Firebase account SDK waits for opt-in", () => {
+  const login = read("login.html");
+  const portal = read("portal.html");
+  const consent = read("consent-manager.js");
+  const config = read("firebase-config.js");
+  assert.ok(login.includes("If you are under 18, please confirm you have a parent or guardian's permission before creating an account or submitting personal details."));
+  assert.ok(login.includes("not verifiable parental consent"));
+  assert.ok(portal.includes("not verifiable parental consent"));
+  assert.ok(login.includes('window.ICSEConsent?.has("externalServices") !== true'));
+  assert.ok(login.includes('import("https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js")'));
+  assert.ok(!login.includes('import { getAuth'));
+  assert.ok(!config.includes("measurementId:"));
+  assert.ok(consent.includes("analytics: false"));
+  assert.ok(consent.includes("externalServices: false"));
+});
+
+test("student saved materials, theme preferences, syllabus progress and Study Tools stay local", () => {
+  const app = read("script.js");
+  const dashboard = read("student-dashboard.js");
+  const tools = read("study-tools.js");
+  const tracker = read("syllabus-tracker.js");
+  assert.ok(app.includes("localStorage.setItem(storageKey"));
+  assert.ok(app.includes("icseMasterclassSiteSettings"));
+  assert.ok(dashboard.includes("localStorage.setItem(KEY"));
+  assert.ok(dashboard.includes("syllabusProgress"));
+  assert.ok(tools.includes("localStorage.setItem(STORAGE_KEY"));
+  assert.ok(tracker.includes("window.getDashboardSyllabusProgress"));
+  assert.ok(tracker.includes("window.setDashboardSyllabusProgress"));
+});
+
+test("public pages use system fonts and no session-replay or analytics SDK", () => {
+  for (const page of ["index.html", "login.html", "portal.html", "privacy-policy.html", "cookie-policy.html", "404.html", "style.css", "ui-ux.css", "blog/blog.css"]) {
+    assert.doesNotMatch(read(page), /fonts\.googleapis\.com|fonts\.gstatic\.com/i, page);
+  }
+  const appCode = ["index.html", "login.html", "dashboard.html", "admin-1.html", "script.js", "consent-manager.js", "edubot-loader.js", "gemini-ai.js", "student-dashboard.js"].map(read).join("\n");
+  assert.doesNotMatch(appCode, /hotjar|clarity\.ms|microsoft clarity|gtag\(|google-analytics|firebase\/analytics|getAnalytics\(/i);
+  assert.ok(read("consent-manager.js").includes("min-height:48px"));
+  assert.ok(read("portal.html").includes("min-height:48px"));
+  assert.ok(read("404.html").includes("min-height:48px"));
+});

@@ -1,14 +1,32 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex,follow">
-  <meta http-equiv="refresh" content="0;url=./">
-  <title>Opening ICSE Study Vault</title>
-  <script>window.location.replace("./");</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#FAF9F6">
+<title>Student Portal | ICSE MasterClass</title>
+<style>
+:root{color-scheme:light;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:#1e293b;background:#FAF9F6}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:20px}
+main{width:min(100%,560px);padding:clamp(22px,5vw,36px);background:#fff;border:1px solid #e2e8f0;border-radius:16px}
+h1{margin:0 0 12px;font-size:clamp(1.7rem,5vw,2.2rem);text-wrap:balance}
+p{line-height:1.65;color:#475569}
+.notice{padding:14px;border-left:3px solid #1d4ed8;background:#eff6ff;border-radius:8px}
+a{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:10px 16px;background:#1d4ed8;color:#fff;text-decoration:none;border-radius:8px;font-weight:700}
+a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+</style>
 </head>
 <body>
-  <p>Opening the <a href="./">ICSE Study Vault materials catalogue</a>…</p>
+<main>
+<h1>ICSE MasterClass Study Vault</h1>
+<p>Guest access is available without an account. Saved materials, syllabus progress and theme preferences stay in this browser's localStorage.</p>
+<div class="notice">
+<p>If you are under 18, please confirm you have a parent or guardian's permission before creating an account or submitting personal details.</p>
+<p><strong>This notice is not verifiable parental consent.</strong> The site does not currently verify a parent's identity and age. Until that process exists, students under 18 should use guest access and not submit personal details.</p>
+</div>
+<p><a id="portalContinue" href="./">Continue to the free Study Vault</a></p>
+<noscript><p>JavaScript is disabled. Use the link above to open the Study Vault.</p></noscript>
+</main>
+<script>document.getElementById("portalContinue").addEventListener("click",function(event){event.preventDefault();window.location.replace("./");});</script>
 </body>
 </html>
