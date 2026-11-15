@@ -53,8 +53,6 @@ video {
 
 .glass-card {
   background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--border-dark);
 }
 
@@ -169,8 +167,6 @@ video {
   }
 
   .glass-card {
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
   }
 
   iframe {
@@ -368,7 +364,7 @@ header.sticky { background:rgba(5,9,19,.84)!important;border-bottom-color:rgba(1
 .dock-icon.rose { color:#fda4af;background:rgba(244,63,94,.12); }
 .aurora-card-foot { margin-top:18px;padding-top:14px;border-top:1px solid rgba(148,163,184,.12);color:#71829a;font-size:8px;font-weight:900;letter-spacing:.11em; }
 .aurora-card-foot i { margin-right:5px;color:#fbbf24; }
-.aurora-quick-dock { display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:10px;border:1px solid rgba(148,163,184,.13);border-radius:18px;background:rgba(10,16,30,.66);backdrop-filter:blur(16px); }
+.aurora-quick-dock { display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:10px;border:1px solid rgba(148,163,184,.13);border-radius:18px;background:rgba(10,16,30,.66); }
 .aurora-quick-dock>a { display:flex;align-items:center;gap:10px;min-width:0;padding:12px;border:1px solid transparent;border-radius:13px;text-decoration:none;transition:background .2s,border-color .2s,transform .2s; }
 .aurora-quick-dock>a:hover { background:rgba(30,41,59,.55);border-color:rgba(125,211,252,.16);transform:translateY(-2px); }
 .aurora-quick-dock>a>span:nth-child(2) { display:flex;flex:1;flex-direction:column;gap:4px;min-width:0; }
@@ -409,7 +405,7 @@ footer { background:rgba(5,9,19,.85)!important;border-top-color:rgba(125,211,252
 
 
 /* Study Hub layout: reference-inspired structure, responsive navigation and glass cards */
-.study-hub-nav{display:flex;align-items:center;gap:7px;overflow-x:auto;scrollbar-width:none;margin:0 0 18px;padding:8px;border:1px solid rgba(148,163,184,.14);border-radius:15px;background:rgba(8,14,28,.82);backdrop-filter:blur(18px);white-space:nowrap}
+.study-hub-nav{display:flex;align-items:center;gap:7px;overflow-x:auto;scrollbar-width:none;margin:0 0 18px;padding:8px;border:1px solid rgba(148,163,184,.14);border-radius:15px;background:rgba(8,14,28,.82);white-space:nowrap}
 .study-hub-nav::-webkit-scrollbar{display:none}
 .study-hub-nav a{display:inline-flex;align-items:center;gap:8px;padding:10px 13px;border:1px solid transparent;border-radius:10px;color:#91a2bb;text-decoration:none;font-size:11px;font-weight:800;transition:all .2s}
 .study-hub-nav a i{color:#7dd3fc}
@@ -534,3 +530,9 @@ body.mc-home .library-discovery,
 body.mc-home .personal-library-toolbar { backdrop-filter:none!important; -webkit-backdrop-filter:none!important; box-shadow:none!important; }
 body.mc-home .mc-material-row,
 body.mc-home .mc-subject-item { transition: border-color .15s ease,background-color .15s ease!important; }
+
+
+/* Keep multi-line page and section headings visually balanced. */
+h1, h2, h3 {
+  text-wrap: balance;
+}

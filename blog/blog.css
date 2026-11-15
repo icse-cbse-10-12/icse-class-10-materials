@@ -34,3 +34,44 @@ body[data-site-mode="light"] .editorial-brand,body[data-site-mode="light"] .edit
 body[data-site-mode="light"] .editorial-lede,body[data-site-mode="light"] .editorial-content,body[data-site-mode="light"] .editorial-card p{color:#46534c}
 body[data-site-mode="light"] .editorial-card,body[data-site-mode="light"] .editorial-faq details{background:#fff;border-color:#d7d2c7}
 body[data-site-mode="light"] .editorial-content strong,body[data-site-mode="light"] .editorial-faq summary{color:#202a26}
+
+
+/* Scroll-linked reading indicator. Animate transform rather than width so
+   supported browsers can composite the bar without per-frame layout. */
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  background-color: #1D4ED8;
+  z-index: 50;
+  transform: scaleX(0);
+  transform-origin: left center;
+  pointer-events: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  .reading-progress {
+    animation: grow-progress linear both;
+    animation-timeline: scroll();
+  }
+}
+
+@keyframes grow-progress {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reading-progress {
+    display: none;
+  }
+}
+
+
+/* Keyboard skip navigation */
+.editorial-skip-link{position:absolute;z-index:1000;top:12px;left:12px;transform:translateY(-160%);padding:12px 16px;border:2px solid #1D4ED8;border-radius:8px;background:#fff;color:#1E293B!important;font-weight:750;line-height:1.4;text-decoration:none;box-shadow:0 4px 16px rgba(15,23,42,.16)}
+.editorial-skip-link:focus,.editorial-skip-link:focus-visible{transform:translateY(0);outline:3px solid rgba(29,78,216,.32);outline-offset:3px}
+#main-content{scroll-margin-top:1rem}
