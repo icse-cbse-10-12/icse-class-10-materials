@@ -1,5 +1,5 @@
 // Previous cache: icse-masterclass-v1.16.0-edubot-api
-const CACHE_NAME = "icse-masterclass-v1.18.3-console-errors";
+const CACHE_NAME = "icse-masterclass-v1.18.4-dashboard-skiplink";
 const APP_SHELL = [
   "./",
   "./index.html",

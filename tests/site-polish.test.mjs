@@ -56,7 +56,7 @@ test("404 page uses local system fonts and no remote Tailwind or Google Fonts", 
 
 test("service worker precaches the shared visual layer under a fresh cache version", () => {
   const sw = read("sw.js");
-  assert.ok(sw.includes("icse-masterclass-v1.18.3-console-errors"));
+  assert.ok(sw.includes("icse-masterclass-v1.18.4-dashboard-skiplink"));
   assert.ok(sw.includes("./site-polish.css?v=1"));
 });
 
@@ -78,11 +78,12 @@ test("blog pages provide keyboard skip navigation to the main landmark", () => {
   ];
   for (const page of pages) {
     const html = read(page);
-    assert.ok(html.includes('class="editorial-skip-link" href="#main-content"'), page);
+    assert.ok(html.includes('class="editorial-skip-link" href="#main-content" tabindex="0"'), page);
     assert.match(html, /<main id="main-content" tabindex="-1"/i, page);
   }
   const css = read("blog/blog.css");
   assert.match(css, /editorial-skip-link:focus/);
+  assert.match(css, /editorial-skip-link\{position:fixed;/);
   assert.match(css, /transform:translateY\(0\)/);
 });
 
@@ -99,7 +100,7 @@ test("homepage exposes answer-ready directory guidance and matching site schema"
 
 test("service worker invalidates the previous shell cache after editorial accessibility changes", () => {
   const sw = read("sw.js");
-  assert.ok(sw.includes("icse-masterclass-v1.18.3-console-errors"));
+  assert.ok(sw.includes("icse-masterclass-v1.18.4-dashboard-skiplink"));
   assert.ok(sw.includes('"./blog/blog.css"'));
 });
 
@@ -143,4 +144,21 @@ test("deferred Tailwind configuration waits until the CDN is available", () => {
 test("student dashboard safely handles a missing optional due-date input", () => {
   const script = read("student-dashboard.js");
   assert.match(script, /const dashboardTaskDue = \$\("dashboardTaskDue"\); if \(dashboardTaskDue\) dashboardTaskDue\.min = today\(\);/);
+});
+
+
+test("dashboard Tailwind configuration waits for the deferred CDN", () => {
+  const html = read("dashboard.html");
+  assert.ok(html.includes('document.addEventListener("DOMContentLoaded"'));
+  assert.ok(html.includes("if (!window.tailwind) return;"));
+  assert.ok(html.includes("window.tailwind.config={"));
+  assert.ok(html.includes('src="https://cdn.tailwindcss.com" defer'));
+  assert.doesNotMatch(html, /(^|[^\w.])tailwind\.config\s*=/m);
+});
+
+test("student dashboard progress renderer tolerates pages without dashboard widgets", () => {
+  const script = read("student-dashboard.js");
+  assert.ok(script.includes('const tasksDone = $("dashboardTasksDone");'));
+  assert.ok(script.includes('if (!tasksDone || !tasksTotal || !completion || !sessionsEl || !minutesEl || !root) return;'));
+  assert.ok(script.includes('const dashboardTaskDue = $("dashboardTaskDue"); if (dashboardTaskDue) dashboardTaskDue.min = today();'));
 });
