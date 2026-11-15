@@ -121,3 +121,11 @@ test("mobile search placeholder stays concise and the logo has descriptive alt t
   assert.ok(html.includes('alt="ICSE MasterClass Study Vault logo for the independent ICSE Class 10 study-resource directory"'));
   assert.ok(html.includes("Guide last updated: 15 November 2026"));
 });
+
+
+test("sitemap homepage lastmod reflects homepage edits without changing blog and FAQ dates", () => {
+  const sitemap = read("sitemap.xml");
+  assert.ok(sitemap.includes("<loc>https://icse-cbse-10-12.github.io/icse-class-10-materials/</loc><lastmod>2026-11-15</lastmod>"));
+  assert.ok(sitemap.includes("<loc>https://icse-cbse-10-12.github.io/icse-class-10-materials/blog/</loc><lastmod>2026-11-12</lastmod>"));
+  assert.ok(sitemap.includes("<loc>https://icse-cbse-10-12.github.io/icse-class-10-materials/faq.html</loc><lastmod>2026-11-12</lastmod>"));
+});
