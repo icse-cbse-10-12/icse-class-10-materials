@@ -1,5 +1,5 @@
 // Previous cache: icse-masterclass-v1.16.0-edubot-api
-const CACHE_NAME = "icse-masterclass-v1.18.0-editorial-accessibility";
+const CACHE_NAME = "icse-masterclass-v1.18.1-editorial-faq";
 const APP_SHELL = [
   "./",
   "./index.html",

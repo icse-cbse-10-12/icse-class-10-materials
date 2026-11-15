@@ -56,7 +56,7 @@ test("404 page uses local system fonts and no remote Tailwind or Google Fonts", 
 
 test("service worker precaches the shared visual layer under a fresh cache version", () => {
   const sw = read("sw.js");
-  assert.ok(sw.includes("icse-masterclass-v1.18.0-editorial-accessibility"));
+  assert.ok(sw.includes("icse-masterclass-v1.18.1-editorial-faq"));
   assert.ok(sw.includes("./site-polish.css?v=1"));
 });
 
@@ -99,6 +99,17 @@ test("homepage exposes answer-ready directory guidance and matching site schema"
 
 test("service worker invalidates the previous shell cache after editorial accessibility changes", () => {
   const sw = read("sw.js");
-  assert.ok(sw.includes("icse-masterclass-v1.18.0-editorial-accessibility"));
+  assert.ok(sw.includes("icse-masterclass-v1.18.1-editorial-faq"));
   assert.ok(sw.includes('"./blog/blog.css"'));
+});
+
+
+test("homepage FAQ schema mirrors visible questions and answers", () => {
+  const html = read("index.html");
+  assert.ok(html.includes('id="study-vault-faq"'));
+  assert.ok(html.includes("Is ICSE MasterClass an official CISCE website?"));
+  assert.ok(html.includes("Are the resources in the Study Vault free?"));
+  assert.ok(html.includes("Are the PDFs and notes produced by Team MasterClass?"));
+  assert.ok(html.includes('"@type":"FAQPage"'));
+  assert.ok(html.includes("Read all Study Vault FAQs"));
 });
