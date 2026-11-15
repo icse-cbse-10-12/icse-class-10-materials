@@ -69,3 +69,9 @@ body[data-site-mode="light"] .editorial-content strong,body[data-site-mode="ligh
     display: none;
   }
 }
+
+
+/* Keyboard skip navigation */
+.editorial-skip-link{position:absolute;z-index:1000;top:12px;left:12px;transform:translateY(-160%);padding:12px 16px;border:2px solid #1D4ED8;border-radius:8px;background:#fff;color:#1E293B!important;font-weight:750;line-height:1.4;text-decoration:none;box-shadow:0 4px 16px rgba(15,23,42,.16)}
+.editorial-skip-link:focus,.editorial-skip-link:focus-visible{transform:translateY(0);outline:3px solid rgba(29,78,216,.32);outline-offset:3px}
+#main-content{scroll-margin-top:1rem}

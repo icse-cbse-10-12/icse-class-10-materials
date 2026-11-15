@@ -68,3 +68,37 @@ test("protected copyright and non-affiliation copy remains present", () => {
   assert.ok(html.includes("Original authors, publishers and rights holders retain their respective rights"));
   assert.ok(html.includes("icsemasterclass@gmail.com"));
 });
+
+test("blog pages provide keyboard skip navigation to the main landmark", () => {
+  const pages = [
+    "blog/index.html",
+    "blog/how-to-use-icse-masterclass-study-vault.html",
+    "blog/icse-class-10-date-sheet-2027.html",
+    "blog/icse-class-10-study-plan.html"
+  ];
+  for (const page of pages) {
+    const html = read(page);
+    assert.ok(html.includes('class="editorial-skip-link" href="#main-content"'), page);
+    assert.match(html, /<main id="main-content" tabindex="-1"/i, page);
+  }
+  const css = read("blog/blog.css");
+  assert.match(css, /editorial-skip-link:focus/);
+  assert.match(css, /transform:translateY\(0\)/);
+});
+
+test("homepage exposes answer-ready directory guidance and matching site schema", () => {
+  const html = read("index.html");
+  assert.ok(html.includes('id="study-vault-guide"'));
+  assert.ok(html.includes("An independent ICSE Class 10 resource directory"));
+  assert.ok(html.includes("previous-year questions, specimen papers and revision resources"));
+  assert.ok(html.includes('"@type":"WebSite"'));
+  assert.ok(html.includes('"@type":"WebPage"'));
+  assert.ok(html.includes('property="og:image:alt"'));
+  assert.ok(html.includes("not an official CISCE website or service"));
+});
+
+test("service worker invalidates the previous shell cache after editorial accessibility changes", () => {
+  const sw = read("sw.js");
+  assert.ok(sw.includes("icse-masterclass-v1.18.0-editorial-accessibility"));
+  assert.ok(sw.includes('"./blog/blog.css"'));
+});
