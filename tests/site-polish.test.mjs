@@ -56,7 +56,7 @@ test("404 page uses local system fonts and no remote Tailwind or Google Fonts", 
 
 test("service worker precaches the shared visual layer under a fresh cache version", () => {
   const sw = read("sw.js");
-  assert.ok(sw.includes("icse-masterclass-v1.18.1-editorial-faq"));
+  assert.ok(sw.includes("icse-masterclass-v1.18.2-mobile-search"));
   assert.ok(sw.includes("./site-polish.css?v=1"));
 });
 
@@ -99,7 +99,7 @@ test("homepage exposes answer-ready directory guidance and matching site schema"
 
 test("service worker invalidates the previous shell cache after editorial accessibility changes", () => {
   const sw = read("sw.js");
-  assert.ok(sw.includes("icse-masterclass-v1.18.1-editorial-faq"));
+  assert.ok(sw.includes("icse-masterclass-v1.18.2-mobile-search"));
   assert.ok(sw.includes('"./blog/blog.css"'));
 });
 
@@ -112,4 +112,12 @@ test("homepage FAQ schema mirrors visible questions and answers", () => {
   assert.ok(html.includes("Are the PDFs and notes produced by Team MasterClass?"));
   assert.ok(html.includes('"@type":"FAQPage"'));
   assert.ok(html.includes("Read all Study Vault FAQs"));
+});
+
+
+test("mobile search placeholder stays concise and the logo has descriptive alt text", () => {
+  const html = read("index.html");
+  assert.ok(html.includes('placeholder="Search title, subject or chapter"'));
+  assert.ok(html.includes('alt="ICSE MasterClass Study Vault logo for the independent ICSE Class 10 study-resource directory"'));
+  assert.ok(html.includes("Guide last updated: 15 November 2026"));
 });
