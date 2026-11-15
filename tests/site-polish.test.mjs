@@ -56,7 +56,7 @@ test("404 page uses local system fonts and no remote Tailwind or Google Fonts", 
 
 test("service worker precaches the shared visual layer under a fresh cache version", () => {
   const sw = read("sw.js");
-  assert.ok(sw.includes("icse-masterclass-v1.17.0-site-polish"));
+  assert.ok(sw.includes("icse-masterclass-v1.18.0-editorial-accessibility"));
   assert.ok(sw.includes("./site-polish.css?v=1"));
 });
 
