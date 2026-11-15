@@ -56,7 +56,7 @@ test("404 page uses local system fonts and no remote Tailwind or Google Fonts", 
 
 test("service worker precaches the shared visual layer under a fresh cache version", () => {
   const sw = read("sw.js");
-  assert.ok(sw.includes("icse-masterclass-v1.18.2-mobile-search"));
+  assert.ok(sw.includes("icse-masterclass-v1.18.3-console-errors"));
   assert.ok(sw.includes("./site-polish.css?v=1"));
 });
 
@@ -99,7 +99,7 @@ test("homepage exposes answer-ready directory guidance and matching site schema"
 
 test("service worker invalidates the previous shell cache after editorial accessibility changes", () => {
   const sw = read("sw.js");
-  assert.ok(sw.includes("icse-masterclass-v1.18.2-mobile-search"));
+  assert.ok(sw.includes("icse-masterclass-v1.18.3-console-errors"));
   assert.ok(sw.includes('"./blog/blog.css"'));
 });
 
@@ -128,4 +128,19 @@ test("sitemap homepage lastmod reflects homepage edits without changing blog and
   assert.ok(sitemap.includes("<loc>https://icse-cbse-10-12.github.io/icse-class-10-materials/</loc><lastmod>2026-11-15</lastmod>"));
   assert.ok(sitemap.includes("<loc>https://icse-cbse-10-12.github.io/icse-class-10-materials/blog/</loc><lastmod>2026-11-12</lastmod>"));
   assert.ok(sitemap.includes("<loc>https://icse-cbse-10-12.github.io/icse-class-10-materials/faq.html</loc><lastmod>2026-11-12</lastmod>"));
+});
+
+
+test("deferred Tailwind configuration waits until the CDN is available", () => {
+  const html = read("index.html");
+  assert.ok(html.includes('document.addEventListener("DOMContentLoaded"'));
+  assert.ok(html.includes("if (!window.tailwind) return;"));
+  assert.ok(html.includes("window.tailwind.config = {"));
+  assert.ok(html.includes('src="https://cdn.tailwindcss.com" defer'));
+  assert.doesNotMatch(html, /(^|[^\w.])tailwind\.config\s*=/m);
+});
+
+test("student dashboard safely handles a missing optional due-date input", () => {
+  const script = read("student-dashboard.js");
+  assert.match(script, /const dashboardTaskDue = \$\("dashboardTaskDue"\); if \(dashboardTaskDue\) dashboardTaskDue\.min = today\(\);/);
 });

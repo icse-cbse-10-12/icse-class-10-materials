@@ -76,22 +76,25 @@
 <!-- CATALOG_SCHEMA_END -->
   <link rel="alternate" type="text/plain" href="https://icse-cbse-10-12.github.io/icse-class-10-materials/llms.txt" title="AI-readable site summary">
 
-  <!-- Tailwind CSS -->
+  <!-- Tailwind CDN is deferred; configure it after deferred scripts execute. -->
   <script>
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              400: "#f59e0b",
-              500: "#d97706",
-              600: "#b45309"
+    document.addEventListener("DOMContentLoaded", () => {
+      if (!window.tailwind) return;
+      window.tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                400: "#f59e0b",
+                500: "#d97706",
+                600: "#b45309"
+              }
             }
           }
         }
-      }
-    };
+      };
+    }, { once: true });
   </script>
   <script src="https://cdn.tailwindcss.com" defer></script>
 
