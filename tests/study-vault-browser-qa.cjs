@@ -34,6 +34,7 @@ async function runViewport(browser, name, viewport, mobile, expectedCards) {
   const navigationStarted = Date.now();
   await page.goto(BASE_URL, { waitUntil: "domcontentloaded", timeout: 45000 });
   await page.waitForFunction(() => typeof window.selectSubject === "function" && typeof window.filterResources === "function", null, { timeout: 30000 });
+  await page.waitForFunction(() => typeof allResources !== "undefined" && allResources.length > 1000, null, { timeout: 45000 });
   await page.evaluate(() => window.selectSubject("All", false));
   await page.waitForFunction(expected => document.querySelectorAll("#resourceGrid > article").length === expected, expectedCards, { timeout: 30000 });
   await page.waitForTimeout(300);
