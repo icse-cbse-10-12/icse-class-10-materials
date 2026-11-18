@@ -128,7 +128,8 @@ async function runViewport(browser, name, viewport, mobile, expectedCards) {
   const notesCount = await page.locator("#itemCount").innerText();
   assert.ok(notesCount.length > 0, `${name}: Notes category did not render a result state`);
 
-  await page.locator("#edubotDataAcknowledgement").check({ force: true });
+  await page.evaluate(() => window.toggleEduBot(true));
+  await page.locator("#edubotDataAcknowledgement").check();
   await page.waitForFunction(() => document.getElementById("edubotPrivacyNotice")?.open === false && localStorage.getItem("icseMasterClass.edubotNoticeAcknowledged.v1") === "true", null, { timeout: 3000 });
   await page.reload({ waitUntil: "domcontentloaded", timeout: 45000 });
   await page.waitForFunction(() => document.getElementById("edubotPrivacyNotice")?.open === false, null, { timeout: 5000 });
