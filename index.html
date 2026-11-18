@@ -242,7 +242,7 @@
 
   </style>
 <link rel="stylesheet" href="design-polish.css?v=20261026-1">
-  <link rel="stylesheet" href="luxury-theme.css?v=3">
+  <link rel="stylesheet" href="luxury-theme.css?v=4">
   <link rel="stylesheet" href="academic-library.css?v=5">
   <link rel="stylesheet" href="site-polish.css?v=1">
 
@@ -428,26 +428,6 @@
       </div>
     </section>
 
-    <section id="study-vault-guide" class="library-seo-guide" aria-labelledby="study-vault-guide-title">
-      <h2 id="study-vault-guide-title">An independent ICSE Class 10 resource directory</h2>
-      <p class="library-guide-updated"><time datetime="2026-11-15">Guide last updated: 15 November 2026</time></p>
-      <p>ICSE MasterClass Study Vault helps students discover study resources across subjects and topics. It is an independent directory, not an official CISCE website or service.</p>
-      <ul>
-        <li>Explore notes, question banks, previous-year questions, specimen papers and revision resources.</li>
-        <li>Search by subject, chapter, topic, resource title or publisher, then check the edition and original source.</li>
-        <li>Use the current CISCE regulations, syllabus and official notices as the final authority for examination information.</li>
-      </ul>
-      <p>Listed third-party files and links are not authored by Team MasterClass. Their availability and access conditions are controlled by their original providers.</p>
-    </section>
-
-    <section id="study-vault-faq" class="library-seo-faq" aria-labelledby="study-vault-faq-title">
-      <h2 id="study-vault-faq-title">Study Vault: common questions</h2>
-      <details><summary>Is ICSE MasterClass an official CISCE website?</summary><p>No. ICSE MasterClass is an independent educational project and is not affiliated with, authorised by or endorsed by CISCE. Use cisce.org for official syllabus, regulations and examination notices.</p></details>
-      <details><summary>Are the resources in the Study Vault free?</summary><p>The Study Vault is free to browse. Some links lead to third-party publishers or websites that may require an account, payment or permission. Check the original provider’s terms before accessing a resource.</p></details>
-      <details><summary>Are the PDFs and notes produced by Team MasterClass?</summary><p>No. The PDFs, notes, question papers and other downloadable study files listed in the catalogue are not produced or authored by Team MasterClass. The catalogue aggregates or references educational resources found across online sources. Original authors, publishers and rights holders retain their rights. A listing does not grant permission to copy or redistribute a file; check the original source and its terms.</p></details>
-      <p><a href="./faq.html">Read all Study Vault FAQs</a></p>
-    </section>
-
     <!-- Landing Page -->
     <section id="mainLandingView" class="space-y-4">
       <div class="library-section-label"><div><h2>Browse by subject</h2><p class="library-section-note">Choose a subject to explore its notes, question banks and practice resources.</p></div></div>
@@ -609,7 +589,7 @@
   </div>
   <div class="personal-library-actions">
     <button type="button" class="personal-view-btn active" data-personal-view="all" onclick="setPersonalView('all')"><i class="fa-solid fa-layer-group" aria-hidden="true"></i> All</button>
-    <button type="button" class="personal-view-btn" data-personal-view="saved" onclick="setPersonalView('saved')"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Saved <span id="savedMaterialCount">0</span></button>
+    <button type="button" class="personal-view-btn" data-personal-view="saved" onclick="setPersonalView('saved')"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Saved <span id="savedMaterialCount" hidden>0</span></button>
     <button type="button" class="personal-view-btn" data-personal-view="recent" onclick="setPersonalView('recent')"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Recently opened</button>
   </div>
 </div>
@@ -663,7 +643,7 @@
   <p id="resourceLoadMoreCount" class="mc-resource-page-caption" aria-live="polite">Showing materials</p>
   <button id="resourceLoadMoreButton" type="button" onclick="loadMoreMaterials()" class="mc-load-more" aria-label="Load more matching study materials">
     <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
-    Load 36 more materials
+    <span id="resourceLoadMoreLabel">Show more materials</span>
     <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
   </button>
 </div>
@@ -671,6 +651,26 @@
 
 
 
+    </section>
+
+    <section id="study-vault-guide" class="library-seo-guide" aria-labelledby="study-vault-guide-title">
+      <h2 id="study-vault-guide-title">An independent ICSE Class 10 resource directory</h2>
+      <p class="library-guide-updated"><time datetime="2026-11-15">Guide last updated: 15 November 2026</time></p>
+      <p>ICSE MasterClass Study Vault helps students discover study resources across subjects and topics. It is an independent directory, not an official CISCE website or service.</p>
+      <ul>
+        <li>Explore notes, question banks, previous-year questions, specimen papers and revision resources.</li>
+        <li>Search by subject, chapter, topic, resource title or publisher, then check the edition and original source.</li>
+        <li>Use the current CISCE regulations, syllabus and official notices as the final authority for examination information.</li>
+      </ul>
+      <p>Listed third-party files and links are not authored by Team MasterClass. Their availability and access conditions are controlled by their original providers.</p>
+    </section>
+
+    <section id="study-vault-faq" class="library-seo-faq" aria-labelledby="study-vault-faq-title">
+      <h2 id="study-vault-faq-title">Study Vault: common questions</h2>
+      <details><summary>Is ICSE MasterClass an official CISCE website?</summary><p>No. ICSE MasterClass is an independent educational project and is not affiliated with, authorised by or endorsed by CISCE. Use cisce.org for official syllabus, regulations and examination notices.</p></details>
+      <details><summary>Are the resources in the Study Vault free?</summary><p>The Study Vault is free to browse. Some links lead to third-party publishers or websites that may require an account, payment or permission. Check the original provider’s terms before accessing a resource.</p></details>
+      <details><summary>Are the PDFs and notes produced by Team MasterClass?</summary><p>No. The PDFs, notes, question papers and other downloadable study files listed in the catalogue are not produced or authored by Team MasterClass. The catalogue aggregates or references educational resources found across online sources. Original authors, publishers and rights holders retain their rights. A listing does not grant permission to copy or redistribute a file; check the original source and its terms.</p></details>
+      <p><a href="./faq.html">Read all Study Vault FAQs</a></p>
     </section>
 
     <!-- About and copyright information restored in the original Study Vault layout. -->
@@ -867,10 +867,13 @@
       <button id="edubotSendButton" type="submit"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i><span>Send</span></button>
     </form>
     <div class="edubot-chat-footer"><span id="edubotChatStatus" role="status">Ready to help · Keep personal information private</span><button type="button" id="edubotClearChat">Clear chat</button></div>
-    <label class="edubot-data-ack" for="edubotDataAcknowledgement">
-      <input id="edubotDataAcknowledgement" form="edubotChatForm" type="checkbox" required>
-      <span><strong>Before sending:</strong> Your question and recent conversation context (up to 10 messages, including your questions and EduBot replies) are sent to the EduBot API hosted by Vercel and may be processed by Google Gemini or Groq to generate a reply. Do not include your name, email, phone number, school details, passwords or other personal information. AI answers can be inaccurate. If you are under 18, use this feature with parent/guardian guidance. <strong>This acknowledgement is not parental consent.</strong> <span class="edubot-data-ack-confirm">I have read and understood this notice.</span></span>
-    </label>
+    <details id="edubotPrivacyNotice" class="edubot-privacy-disclosure" open>
+      <summary>Privacy &amp; AI notice <span aria-hidden="true">ⓘ</span></summary>
+      <label class="edubot-data-ack" for="edubotDataAcknowledgement">
+        <input id="edubotDataAcknowledgement" form="edubotChatForm" type="checkbox" required>
+        <span><strong>Before sending:</strong> Your question and recent conversation context (up to 10 messages, including your questions and EduBot replies) are sent to the EduBot API hosted by Vercel and may be processed by Google Gemini or Groq to generate a reply. Do not include your name, email, phone number, school details, passwords or other personal information. AI answers can be inaccurate. If you are under 18, use this feature with parent/guardian guidance. <strong>This acknowledgement is not parental consent.</strong> <span class="edubot-data-ack-confirm">I have read and understood this notice.</span></span>
+      </label>
+    </details>
     <noscript><p>Enable JavaScript to use EduBot.</p></noscript>
   </div>
   <p class="icse-ai-route-note">For important exam answers, cross-check with your textbook or teacher.</p>
@@ -985,6 +988,6 @@
 <script src="syllabus-tracker.js" defer></script>
 
 <script src="consent-manager.js" defer></script>
-<script type="module" src="./edubot-loader.js?v=2"></script>
+<script type="module" src="./edubot-loader.js?v=3"></script>
 </body>
 </html>

@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { mkdtemp, readFile, writeFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { parseCSV, buildCatalog, renderCard } from "../scripts/build-catalog.mjs";
+import { parseCSV, buildCatalog, renderCard, formatMaterialTitle, formatMaterialSubject, deduplicateResources } from "../scripts/build-catalog.mjs";
 
 const fixture = 'Book Name,Subject,Category,Format,Google Drive Link,File Size,Scope\n"Physics, Volume 1",Physics,Notes,PDF,https://drive.google.com/file/d/abc/view,12 MB,"Motion, force and energy"\n';
 
@@ -54,8 +54,40 @@ test("resource cards use accurate labels for different resource formats", () => 
   assert.match(card("Video", "https://example.org/video"), /Open Resource/);
   assert.match(card("", "https://example.org/file.pdf"), /Open PDF/);
   assert.match(card("", "https://example.org/resource"), /Open Resource/);
+  assert.doesNotMatch(renderCard({ "Book Name":"Unknown size", Subject:"Physics", Format:"PDF", "File Size":"Size not listed", "Google Drive Link":"https://drive.google.com/file/d/x/view" }), /Size not listed/);
 });
 
 test("empty catalog input is rejected without replacing existing content", async () => {
   await assert.rejects(() => buildCatalog({ root: tmpdir(), csvText: "" }), /no material rows/);
+});
+
+
+test("catalogue card titles are readable and known spelling errors are corrected", () => {
+  assert.equal(formatMaterialTitle("CHEMISTRY_most_likely_ICSE_question_Bank_class_10_chemistry_Gurukul(2025).pdf"), "Chemistry Most Likely ICSE Question Bank Class 10 Chemistry Gurukul (2025)");
+  assert.equal(formatMaterialTitle("mole concept and dtoichiometry numericals.pdf"), "Mole Concept and Stoichiometry Numericals");
+  assert.equal(formatMaterialTitle("Notes by Vastal.pdf"), "Notes by Vatsal");
+});
+
+test("multi-subject rows collapse to one compact subject label", () => {
+  assert.equal(formatMaterialSubject("Physics, Chemistry, Biology"), "Physics, Chemistry, Biology");
+  assert.equal(formatMaterialSubject("English Paper 1, English Paper 2, Mathematics, Physics, Chemistry"), "All Subjects (5)");
+});
+
+test("exact duplicate rows with the same source are hidden without merging distinct resources", () => {
+  const row = { "Book Name":"Entire Chemistry MCQ 2026 by Sir Tarun Rupani.pdf", Subject:"Chemistry", Category:"MCQ", Edition:"2026", "Google Drive Link":"https://drive.google.com/file/d/shared/view" };
+  const other = { ...row, "Google Drive Link":"https://drive.google.com/file/d/other/view" };
+  assert.equal(deduplicateResources([row, { ...row }, other]).length, 2);
+});
+
+test("prerendered catalogue is limited to twelve compact cards", async () => {
+  const root = await mkdtemp(join(tmpdir(), "icse-catalog-mobile-"));
+  try {
+    await writeFile(join(root, "index.html"), '<p id="itemCount">0 Materials Found</p><!-- CATALOG_CARDS_START --><!-- CATALOG_CARDS_END --><!-- CATALOG_DATA_START --><!-- CATALOG_DATA_END --><!-- CATALOG_SCHEMA_START --><!-- CATALOG_SCHEMA_END -->');
+    await writeFile(join(root, "sitemap.xml"), '<urlset><url><loc>https://icse-cbse-10-12.github.io/icse-class-10-materials/</loc><lastmod>2026-01-01</lastmod></url></urlset>');
+    const rows = Array.from({ length: 16 }, (_, i) => `Book ${i+1},Physics,Notes,PDF,https://drive.google.com/file/d/${i+1}/view,,`).join("\n");
+    const result = await buildCatalog({ root, csvText: "Book Name,Subject,Category,Format,Google Drive Link,File Size,Scope\n" + rows, now: new Date("2026-11-18T00:00:00Z") });
+    const html = await readFile(join(root, "index.html"), "utf8");
+    assert.equal(result.prerendered, 12);
+    assert.equal((html.match(/mc-prerendered-row/g) || []).length, 12);
+  } finally { await rm(root, { recursive: true, force: true }); }
 });

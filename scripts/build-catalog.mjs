@@ -34,6 +34,20 @@ export function parseCSV(input) {
 
 const esc = value => String(value ?? "").replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
 const clean = value => String(value ?? "").trim();
+export function formatMaterialTitle(value) {
+  const title=clean(value).replace(/\.(?:pdf|docx?|pptx?|xlsx?|csv|zip|rar)$/i,"").replace(/_+/g," ").replace(/\s+/g," ").replace(/\s*\(\s*(\d{4})\s*\)/g," ($1)").replace(/\bdtoichiometry\b/gi,"Stoichiometry").replace(/\bVastal\b/gi,"Vatsal").trim();
+  const acronyms={icse:"ICSE",isc:"ISC",cisce:"CISCE",cbse:"CBSE",mcq:"MCQ",pyq:"PYQ",pdf:"PDF",docx:"DOCX",jee:"JEE",neet:"NEET",iit:"IIT",ai:"AI"};
+  const smallWords=new Set(["a","an","and","as","at","by","for","from","in","of","on","or","the","to","with"]);
+  return title.replace(/\b[\p{L}][\p{L}'’.-]*\b/gu,(word,offset)=>{const lower=word.toLocaleLowerCase();if(acronyms[lower])return acronyms[lower];if(offset>0&&smallWords.has(lower))return lower;if(word===word.toLocaleUpperCase()&&word.length>1)return word[0]+word.slice(1).toLocaleLowerCase();if(word===word.toLocaleLowerCase())return word[0].toLocaleUpperCase()+word.slice(1);return word;});
+}
+export function formatMaterialSubject(value) {
+  const subjects=[...new Map(String(value||"").split(/[,;|\n]+/).map(part=>part.trim().replace(/\s+/g," ")).filter(Boolean).map(part=>[part.toLocaleLowerCase(),part])).values()];
+  return subjects.length>3?`All Subjects (${subjects.length})`:subjects.join(", ");
+}
+export function deduplicateResources(items) {
+  const seen=new Set();
+  return items.filter(item=>{const url=resourceUrl(item);if(!url)return true;const key=[formatMaterialTitle(item["Book Name"]||item.Subject).toLocaleLowerCase(),clean(item.Subject).toLocaleLowerCase(),clean(item.Category).toLocaleLowerCase(),clean(item.Edition).toLocaleLowerCase(),url].join("\u001f");if(seen.has(key))return false;seen.add(key);return true;});
+}
 
 function safeUrl(value) {
   const raw = clean(value);
@@ -60,24 +74,25 @@ function materialKey(item) {
 }
 
 export function renderCard(item) {
-  const title = clean(item["Book Name"] || item.Subject || "Study material");
-  const subject = clean(item.Subject);
+  const title = formatMaterialTitle(item["Book Name"] || item.Subject || "Study material");
+  const rawSubject = clean(item.Subject);
+  const subject = formatMaterialSubject(rawSubject);
   const category = clean(item.Category);
   const edition = clean(item.Edition);
   const publisher = clean(item["Publisher/Company"] || item.Publisher);
   const scope = clean(item.Scope);
-  const size = clean(item["File Size"]) || "Size not listed";
+  const size = clean(item["File Size"]);
+  const hasFileSize = Boolean(size) && !/^(?:size\s+not\s+listed|not\s+listed|unknown|n\/?a|na|-)$/i.test(size);
   const format = clean(item.Format) || "Resource";
   const url = resourceUrl(item);
   let source = "Link unavailable";
   try { source = url && new URL(url).hostname.toLowerCase().endsWith("drive.google.com") ? "Direct Drive" : url ? "External source" : source; } catch { /* keep safe fallback */ }
-  const meta = [subject, category, edition && edition !== "Not Specified" ? `Ed. ${edition}` : "", publisher]
-    .filter(Boolean).map(value => `<span class="mc-material-meta-chip">${esc(value)}</span>`).join("");
+  const meta = [subject ? `<span class="mc-material-meta-chip" title="${esc(rawSubject)}">${esc(subject)}</span>` : "", category ? `<span class="mc-material-meta-chip">${esc(category)}</span>` : "", edition && edition !== "Not Specified" ? `<span class="mc-material-meta-chip">Ed. ${esc(edition)}</span>` : "", publisher ? `<span class="mc-material-meta-chip">${esc(publisher)}</span>` : ""].filter(Boolean).join("");
   const actionLabel = isVerifiedPdfResource(item, url) ? "Open PDF" : "Open Resource";
   const action = url
     ? `<a class="mc-material-action mc-material-open" href="${esc(url)}" target="_blank" rel="noopener noreferrer"><span>${actionLabel}</span></a>`
     : `<span class="mc-material-action is-disabled" aria-disabled="true">Link unavailable</span>`;
-  return `<article class="mc-material-row mc-prerendered-row"><div class="mc-material-main"><div class="mc-material-meta">${meta}</div><h3>${esc(title)}</h3>${scope ? `<p class="mc-material-scope">${esc(scope)}</p>` : ""}<div class="mc-material-file-badges"><span class="mc-material-file-badge">${esc(format)}</span><span class="mc-material-file-badge">${esc(size)}</span><span class="mc-material-file-badge">${esc(source)}</span></div></div><div class="mc-material-actions">${action}<button type="button" class="mc-material-action js-toggle-save" data-material-key="${esc(materialKey(item))}" aria-pressed="false" aria-label="Save material: ${esc(title)}"><span>Save</span></button></div></article>`;
+  return `<article class="mc-material-row mc-prerendered-row"><div class="mc-material-main"><div class="mc-material-meta">${meta}</div><h3>${esc(title)}</h3>${scope ? `<p class="mc-material-scope">${esc(scope)}</p>` : ""}<div class="mc-material-file-badges"><span class="mc-material-file-badge">${esc(format)}</span>${hasFileSize ? `<span class="mc-material-size">File size: ${esc(size)}</span>` : ""}<span class="mc-material-file-badge">${esc(source)}</span></div></div><div class="mc-material-actions">${action}<button type="button" class="mc-material-action js-toggle-save" data-material-key="${esc(materialKey(item))}" aria-pressed="false" aria-label="Save material: ${esc(title)}"><span>Save</span></button></div></article>`;
 }
 
 const CATALOG_FIELDS = [
@@ -138,12 +153,13 @@ export async function buildCatalog({ root = resolve(fileURLToPath(new URL("..", 
   const catalogChanged = previousCatalog !== catalogJson;
   const previousHtml = await readFile(indexPath, "utf8");
   let html = previousHtml;
-  const firstPage = resources.slice(0, 36);
+  const uniqueResources = deduplicateResources(resources);
+  const firstPage = uniqueResources.slice(0, 12);
   html = replaceMarkedBlock(html, "<!-- CATALOG_CARDS_START -->", "<!-- CATALOG_CARDS_END -->", firstPage.map(renderCard).join("\n"));
   const safeJson = value => JSON.stringify(value).replace(/</g, "\\u003c");
   html = replaceMarkedBlock(html, "<!-- CATALOG_DATA_START -->", "<!-- CATALOG_DATA_END -->", '<link rel="preload" href="./catalog-data.json" as="fetch" crossorigin>');
-  html = replaceMarkedBlock(html, "<!-- CATALOG_SCHEMA_START -->", "<!-- CATALOG_SCHEMA_END -->", `<script type="application/ld+json" id="catalog-learning-resources">${safeJson(schemaFor(firstPage, resources.length))}</script>`);
-  html = html.replace(/(<p id="itemCount"[^>]*>)[\s\S]*?(<\/p>)/, `$1${resources.length.toLocaleString("en-IN")} Materials Found$2`);
+  html = replaceMarkedBlock(html, "<!-- CATALOG_SCHEMA_START -->", "<!-- CATALOG_SCHEMA_END -->", `<script type="application/ld+json" id="catalog-learning-resources">${safeJson(schemaFor(firstPage, uniqueResources.length))}</script>`);
+  html = html.replace(/(<p id="itemCount"[^>]*>)[\s\S]*?(<\/p>)/, `$1${uniqueResources.length.toLocaleString("en-IN")} Materials Found$2`);
   html = html.replace(/<span>Loading the materials catalogue…<\/span>/, `<span>${resources.length.toLocaleString("en-IN")} materials are ready to browse.</span>`);
   const indexChanged = html !== previousHtml;
   if (catalogChanged) await writeFile(catalogJsonPath, catalogJson);
@@ -160,7 +176,7 @@ export async function buildCatalog({ root = resolve(fileURLToPath(new URL("..", 
     });
     if (updatedSitemap !== sitemap) await writeFile(sitemapPath, updatedSitemap);
   }
-  return { count: resources.length, prerendered: firstPage.length, modified, homepageChanged: indexChanged || catalogChanged, jsonBytes: Buffer.byteLength(catalogJson) };
+  return { count: resources.length, uniqueCount: uniqueResources.length, prerendered: firstPage.length, modified, homepageChanged: indexChanged || catalogChanged, jsonBytes: Buffer.byteLength(catalogJson) };
 }
 
 async function main() {

@@ -17,10 +17,10 @@ test("all public pages load the shared academic design layer", () => {
 
 test("EduBot shared API module is not loaded during initial page parsing", () => {
   const html = read("index.html");
-  assert.match(html, /edubot-loader\.js\?v=2/);
+  assert.match(html, /edubot-loader\.js\?v=3/);
   assert.doesNotMatch(html, /<script[^>]+gemini-ai\.js/i);
   const loader = read("edubot-loader.js");
-  assert.match(loader, /import\(\"\.\/gemini-ai\.js\?v=3\"\)/);
+  assert.match(loader, /import\(\"\.\/gemini-ai\.js\?v=4\"\)/);
   assert.match(loader, /addEventListener\(\"submit\"/);
 });
 
@@ -81,7 +81,7 @@ test("EduBot lazy loading coalesces concurrent submits and can retry focus after
 
 test("service-worker precache includes exact versioned CSS keys used by the homepage and login", () => {
   const sw = read("sw.js");
-  for (const asset of ["style.css?v=study-hub-layout-1", "design-polish.css?v=20261026-1", "luxury-theme.css?v=3", "academic-library.css?v=5"]) {
+  for (const asset of ["style.css?v=study-hub-layout-1", "design-polish.css?v=20261026-1", "luxury-theme.css?v=4", "academic-library.css?v=5"]) {
     assert.ok(sw.includes(asset), `APP_SHELL must precache ${asset}`);
   }
 });
@@ -246,7 +246,7 @@ test("mobile subject cards retain their vector illustrations at narrow widths", 
 test("file size is shown only when the published row includes file-size metadata", () => {
   const script = read("script.js");
   assert.match(script, /const fileSize = String\(item\["File Size"\] \|\| ""\)\.trim\(\)/);
-  assert.match(script, /fileSize \? `<span class="mc-material-size">/);
+  assert.match(script, /hasFileSize \? `<span class="mc-material-size">/);
 });
 
 test("all active stylesheets have balanced rule braces", () => {
@@ -407,7 +407,7 @@ test("EduBot API integration keeps the optional-service consent gate", () => {
   const loader = read("edubot-loader.js");
   const client = read("gemini-ai.js");
   assert.ok(loader.includes('window.ICSEConsent && window.ICSEConsent.has("externalServices") === true'));
-  assert.ok(loader.includes('import("./gemini-ai.js?v=3")'));
+  assert.ok(loader.includes('import("./gemini-ai.js?v=4")'));
   assert.ok(client.includes("https://edubot-nu-wheat.vercel.app/api/chat"));
   assert.ok(read("index.html").includes("up to 10 messages, including your questions and EduBot replies"));
   assert.ok(read("privacy-policy.html").includes("EduBot API hosted on Vercel"));

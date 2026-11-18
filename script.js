@@ -45,19 +45,55 @@ let allResources = [];
 let filteredResources = [];
 // Build only a small number of cards per frame to keep mobile devices responsive.
 // Filter and search still scan the complete catalogue of 8,000+ materials.
-const RESOURCE_PAGE_SIZE = 36;
-let visibleResourceCount = RESOURCE_PAGE_SIZE;
+const DESKTOP_RESOURCE_PAGE_SIZE = 36;
+const MOBILE_RESOURCE_PAGE_SIZE = 12;
+function getResourcePageSize() {
+  return typeof window.matchMedia === "function" && window.matchMedia("(max-width: 767px)").matches ? MOBILE_RESOURCE_PAGE_SIZE : DESKTOP_RESOURCE_PAGE_SIZE;
+}
+let visibleResourceCount = getResourcePageSize();
 let materialSearchTimer = null;
 const materialSearchTextCache = new WeakMap();
+const materialYearCache = new WeakMap();
+const materialPublisherCache = new WeakMap();
+const materialSubjectCache = new WeakMap();
+const materialSourceUrlCache = new WeakMap();
+const materialFilterMetadataCache = new WeakMap();
 function materialSearchText(item) {
   let cached = materialSearchTextCache.get(item);
   if (cached !== undefined) return cached;
-  cached = [
-    item["Book Name"],item["Subject"],item["Publisher/Company"],item["Publisher"],
-    item["Category"],item["Scope"],item["Edition"],item["Format"]
-  ].filter(Boolean).join(" ").toLowerCase();
+  cached = [item["Book Name"],formatMaterialTitle(item["Book Name"]),item["Subject"],item["Publisher/Company"],item["Publisher"],item["Category"],item["Scope"],item["Edition"],item["Format"]].filter(Boolean).join(" ").toLowerCase();
   materialSearchTextCache.set(item,cached);
   return cached;
+}
+function formatMaterialTitle(value) {
+  const title = String(value || "").trim().replace(/\.(?:pdf|docx?|pptx?|xlsx?|csv|zip|rar)$/i, "").replace(/_+/g, " ").replace(/\s+/g, " ").replace(/\s*\(\s*(\d{4})\s*\)/g, " ($1)").replace(/\bdtoichiometry\b/gi, "Stoichiometry").replace(/\bVastal\b/gi, "Vatsal").trim();
+  const acronyms = { icse:"ICSE", isc:"ISC", cisce:"CISCE", cbse:"CBSE", mcq:"MCQ", pyq:"PYQ", pdf:"PDF", docx:"DOCX", jee:"JEE", neet:"NEET", iit:"IIT", ai:"AI" };
+  const smallWords = new Set(["a","an","and","as","at","by","for","from","in","of","on","or","the","to","with"]);
+  return title.replace(/\b[\p{L}][\p{L}'’.-]*\b/gu, (word, offset) => { const lower=word.toLocaleLowerCase(); if(acronyms[lower])return acronyms[lower]; if(offset>0&&smallWords.has(lower))return lower; if(word===word.toLocaleUpperCase()&&word.length>1)return word[0]+word.slice(1).toLocaleLowerCase(); if(word===word.toLocaleLowerCase())return word[0].toLocaleUpperCase()+word.slice(1); return word; });
+}
+function formatMaterialSubject(value) {
+  const subjects=[...new Map(String(value||"").split(/[,;|\n]+/).map(part=>part.trim().replace(/\s+/g," ")).filter(Boolean).map(part=>[part.toLocaleLowerCase(),part])).values()];
+  return subjects.length>3 ? `All Subjects (${subjects.length})` : subjects.join(", ");
+}
+function getMaterialSubjectEntries(item) {
+  let cached=materialSubjectCache.get(item); if(cached)return cached;
+  cached=String(item["Subject"]||"").toLowerCase().trim().split(/[,;|\n]+/).map(value=>value.trim().replace(/\s+/g," ")).filter(Boolean);
+  materialSubjectCache.set(item,cached); return cached;
+}
+function getMaterialSourceUrl(item) {
+  let cached=materialSourceUrlCache.get(item); if(cached!==undefined)return cached;
+  const raw=item["Google Drive Link"]||item["Google Drive Direct View / Download Link"]||item["Link"]||"";
+  cached=normalizeExternalUrl(raw); materialSourceUrlCache.set(item,cached); return cached;
+}
+function getMaterialFilterMetadata(item) {
+  let cached=materialFilterMetadataCache.get(item); if(cached)return cached;
+  const publisher=getMaterialPublisher(item);
+  cached={subjectEntries:getMaterialSubjectEntries(item),category:String(item["Category"]||"").toLowerCase().trim(),publisher:publisher.toLowerCase(),publisherKey:normalizePublisherValue(publisher),title:String(item["Book Name"]||"").toLowerCase(),scope:String(item["Scope"]||"").toLowerCase(),edition:String(item["Edition"]||"").trim(),year:getMaterialYear(item)};
+  materialFilterMetadataCache.set(item,cached); return cached;
+}
+function deduplicateExactResourceRows(items) {
+  const seen=new Set();
+  return items.filter(item=>{const url=getMaterialSourceUrl(item);if(!url)return true;const key=[formatMaterialTitle(item["Book Name"]||item["Subject"]).toLocaleLowerCase(),String(item["Subject"]||"").trim().toLocaleLowerCase(),String(item["Category"]||"").trim().toLocaleLowerCase(),String(item["Edition"]||"").trim().toLocaleLowerCase(),url].join("\u001f");if(seen.has(key))return false;seen.add(key);return true;});
 }
 function scheduleMaterialSearch(source) {
   clearTimeout(materialSearchTimer);
@@ -65,12 +101,12 @@ function scheduleMaterialSearch(source) {
     materialSearchTimer = null;
     if (source === "global") searchAllMaterials();
     else filterResources();
-  }, 200);
+  }, 250);
 }
 function loadMoreMaterials() {
   if (visibleResourceCount >= filteredResources.length) return;
   const from = visibleResourceCount;
-  visibleResourceCount = Math.min(visibleResourceCount + RESOURCE_PAGE_SIZE, filteredResources.length);
+  visibleResourceCount = Math.min(visibleResourceCount + getResourcePageSize(), filteredResources.length);
   renderGrid(filteredResources, from);
 }
 let deferredPwaPrompt = null;
@@ -93,10 +129,14 @@ function getMaterialKey(item) {
   if (shareId) return `share:${shareId}`;
   return [item?.["Book Name"], item?.["Subject"], item?.["Category"], item?.["Edition"]].map(value => String(value || "").trim().toLowerCase()).join("|");
 }
-function isMaterialSaved(item) { return readPersonalList(SAVED_MATERIALS_KEY).includes(getMaterialKey(item)); }
+function isMaterialSaved(item, savedKeySet = null) {
+  const keys = savedKeySet instanceof Set ? savedKeySet : new Set(readPersonalList(SAVED_MATERIALS_KEY));
+  return keys.has(getMaterialKey(item));
+}
 function updatePersonalLibraryUI() {
   const savedCount = document.getElementById("savedMaterialCount");
-  if (savedCount) savedCount.textContent = String(readPersonalList(SAVED_MATERIALS_KEY).length);
+  const savedItems = readPersonalList(SAVED_MATERIALS_KEY);
+  if (savedCount) { savedCount.textContent = String(savedItems.length); savedCount.hidden = savedItems.length === 0; }
   document.querySelectorAll("[data-personal-view]").forEach(button => {
     const active = button.dataset.personalView === currentPersonalView;
     button.classList.toggle("active", active);
@@ -615,12 +655,11 @@ function searchAllMaterials() {
    ============================================================ */
 
 function getMaterialYear(item) {
-  const text = `${item["Edition"] || ""} ${item["Book Name"] || ""} ${item["Scope"] || ""}`;
-  const matches = text.match(/20\d{2}/g) || [];
-  // Prefer the explicit Edition field when it contains a year.
-  const edition = String(item["Edition"] || "").trim();
-  if (/^20\d{2}$/.test(edition)) return edition;
-  return matches.length ? matches[matches.length - 1] : "";
+  const cached=materialYearCache.get(item); if(cached!==undefined)return cached;
+  const text=`${item["Edition"]||""} ${item["Book Name"]||""} ${item["Scope"]||""}`;
+  const matches=text.match(/20\d{2}/g)||[]; const edition=String(item["Edition"]||"").trim();
+  const year=/^20\d{2}$/.test(edition)?edition:matches.length?matches[matches.length-1]:"";
+  materialYearCache.set(item,year); return year;
 }
 
 function populateYearFilter() {
@@ -635,9 +674,9 @@ function populateYearFilter() {
 }
 
 function getMaterialPublisher(item) {
-  return String(item?.["Publisher/Company"] || item?.["Publisher"] || "")
-    .trim()
-    .replace(/\s+/g, " ");
+  const cached=materialPublisherCache.get(item); if(cached!==undefined)return cached;
+  const publisher=String(item?.["Publisher/Company"]||item?.["Publisher"]||"").trim().replace(/\s+/g," ");
+  materialPublisherCache.set(item,publisher); return publisher;
 }
 
 function normalizePublisherValue(value) {
@@ -714,15 +753,10 @@ function filterResources() {
       : null;
 
   filteredResources = allResources.filter(item => {
-    const itemSubject =
-      (item["Subject"] || "").toLowerCase().trim();
-
-    const itemCategory =
-      (item["Category"] || "").toLowerCase().trim();
-
-    const publisher = (
-      item["Publisher/Company"] || item["Publisher"] || ""
-    ).toLowerCase().trim();
+    const metadata = getMaterialFilterMetadata(item);
+    const entries = metadata.subjectEntries;
+    const itemCategory = metadata.category;
+    const publisher = metadata.publisher;
 
     let subMatch = false;
 
@@ -732,7 +766,6 @@ function filterResources() {
       const target = currentSubject.toLowerCase().trim().replace(/\s+/g, " ");
       // Sheet subjects are comma-separated. Match complete subject names only;
       // substring checks such as "pe", "lit", and "lang" caused cross-subject leaks.
-      const entries = itemSubject.split(/[,;|\n]+/).map(value => value.trim().replace(/\s+/g, " ")).filter(Boolean);
       const has = (...names) => entries.some(entry => names.includes(entry));
 
       if (target === "other subjects") {
@@ -769,9 +802,9 @@ if (currentCategory === "All") {
   catMatch = true;
 
 } else if (currentCategory === "Latest Materials") {
-  const edition = String(item["Edition"] || "").trim();
-  const scope = String(item["Scope"] || "").toLowerCase();
-  const title = String(item["Book Name"] || "").toLowerCase();
+  const edition = metadata.edition;
+  const scope = metadata.scope;
+  const title = metadata.title;
 
   catMatch =
     edition === "2027" ||
@@ -779,8 +812,8 @@ if (currentCategory === "All") {
     title.includes("2027");
 
 } else if (currentCategory === "PYQ" || currentCategory === "PYQs / Specimen Papers") {
-  const title = String(item["Book Name"] || "").toLowerCase();
-  const scope = String(item["Scope"] || "").toLowerCase();
+  const title = metadata.title;
+  const scope = metadata.scope;
   catMatch = itemCategory.includes("pyq") || itemCategory.includes("previous year") || itemCategory.includes("specimen") || itemCategory.includes("sample paper") || title.includes("specimen paper") || title.includes("previous year") || title.includes("board question paper") || title.includes("board paper") || scope.includes("previous year");
 
 } else if (currentCategory === "Special Notes") {
@@ -800,9 +833,8 @@ if (currentCategory === "All") {
 
     // Search across more fields than just book name and subject.
     const srchMatch = !searchVal || materialSearchText(item).includes(searchVal);
-    const yearMatch = selectedYear === "all" || getMaterialYear(item) === selectedYear;
-    const itemPublisher = normalizePublisherValue(getMaterialPublisher(item));
-    const publisherMatch = selectedPublisher === "all" || itemPublisher === selectedPublisher;
+    const yearMatch = selectedYear === "all" || metadata.year === selectedYear;
+    const publisherMatch = selectedPublisher === "all" || metadata.publisherKey === selectedPublisher;
     const personalMatch = !personalKeySet || personalKeySet.has(getMaterialKey(item));
 
     return subMatch && catMatch && srchMatch && yearMatch && publisherMatch && personalMatch;
@@ -817,7 +849,8 @@ if (currentCategory === "All") {
       return yearOf(b) - yearOf(a);
     });
   }
-  visibleResourceCount = RESOURCE_PAGE_SIZE;
+  filteredResources = deduplicateExactResourceRows(filteredResources);
+  visibleResourceCount = getResourcePageSize();
   renderGrid(filteredResources);
 }
 
@@ -901,7 +934,11 @@ function renderGrid(data, appendFrom = 0) {
   const loadMoreWrap = document.getElementById("resourceLoadMoreWrap");
   const loadMoreCount = document.getElementById("resourceLoadMoreCount");
   const loadMoreButton = document.getElementById("resourceLoadMoreButton");
+  const loadMoreLabel = document.getElementById("resourceLoadMoreLabel");
   const shown = Math.min(visibleResourceCount, data.length);
+  const nextPageSize = Math.min(getResourcePageSize(), Math.max(0, data.length - shown));
+  if (loadMoreLabel) loadMoreLabel.textContent = `Show ${nextPageSize} more materials`;
+  if (loadMoreButton) loadMoreButton.setAttribute("aria-label", `Show ${nextPageSize} more matching study materials`);
   if (loadMoreCount) loadMoreCount.textContent = `Showing ${shown.toLocaleString()} of ${data.length.toLocaleString()} matching materials`;
   if (loadMoreWrap) loadMoreWrap.hidden = shown >= data.length;
   if (loadMoreButton) loadMoreButton.disabled = shown >= data.length;
@@ -914,9 +951,9 @@ function renderGrid(data, appendFrom = 0) {
   // Render only the visible page; the source catalogue remains untouched.
   const first = appendFrom > 0 ? appendFrom : 0;
   const visible = data.slice(first, shown);
+  const savedKeySet = new Set(readPersonalList(SAVED_MATERIALS_KEY));
   const rowsHTML = visible.map((item, index) => {
-    const rawDrive = item["Google Drive Link"] || item["Google Drive Direct View / Download Link"] || item["Link"] || "";
-    const driveLink = normalizeExternalUrl(rawDrive);
+    const driveLink = getMaterialSourceUrl(item);
     const rawLecture = item["Lecture Link"] || item["Telegram Channel Post Link"] || "";
     const lectureLink = normalizeExternalUrl(rawLecture);
     const latestEdLink = normalizeExternalUrl(item["Latest Edition Link"] || "", true);
@@ -924,12 +961,14 @@ function renderGrid(data, appendFrom = 0) {
     const latestStatus = item["Latest Edition Available?"] || "";
     const editionText = item["Edition"] && item["Edition"] !== "Not Specified" ? `Ed. ${item["Edition"]}` : "";
     const materialKey = getMaterialKey(item);
-    const saved = isMaterialSaved(item);
-    const title = item["Book Name"] || item["Subject"] || "";
+    const saved = isMaterialSaved(item, savedKeySet);
+    const title = formatMaterialTitle(item["Book Name"] || item["Subject"] || "");
     const subject = item["Subject"] || "";
+    const subjectLabel = formatMaterialSubject(subject);
     const category = item["Category"] || "";
     const publisher = item["Publisher/Company"] || item["Publisher"] || "";
     const fileSize = String(item["File Size"] || "").trim();
+    const hasFileSize = Boolean(fileSize) && !/^(?:size\s+not\s+listed|not\s+listed|unknown|n\/?a|na|-)$/i.test(fileSize);
     const fileFormat = String(item["Format"] || "Resource").trim() || "Resource";
     let sourceBadge = "Link unavailable";
     try { sourceBadge = driveLink && new URL(driveLink).hostname.toLowerCase().endsWith("drive.google.com") ? "Direct Drive" : driveLink ? "External source" : "Link unavailable"; } catch (_) {}
@@ -939,14 +978,14 @@ function renderGrid(data, appendFrom = 0) {
       <article class="mc-material-row">
         <div class="mc-material-main">
           <div class="mc-material-meta">
-            ${subject ? `<span class="mc-material-subject">${escapeHTML(subject)}</span>` : ""}
+            ${subject ? `<span class="mc-material-subject" title="${escapeHTML(subject)}">${escapeHTML(subjectLabel)}</span>` : ""}
             ${category ? `<span class="mc-material-category">${escapeHTML(category)}</span>` : ""}
             ${editionText ? `<span class="mc-material-edition">${escapeHTML(editionText)}</span>` : ""}
             ${publisher ? `<span class="mc-material-publisher">${escapeHTML(publisher)}</span>` : ""}
           </div>
           <div class="mc-material-file-badges">
             <span class="mc-material-file-badge">${escapeHTML(fileFormat)}</span>
-            ${fileSize ? `<span class="mc-material-size"><i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i><span>File size: ${escapeHTML(fileSize)}</span></span>` : `<span class="mc-material-file-badge">Size not listed</span>`}
+            ${hasFileSize ? `<span class="mc-material-size"><i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i><span>File size: ${escapeHTML(fileSize)}</span></span>` : ""}
             <span class="mc-material-file-badge">${escapeHTML(sourceBadge)}</span>
           </div>
           <h3>${escapeHTML(title)}</h3>
@@ -1000,13 +1039,7 @@ function getMaterialShareUrl(shareId) {
 }
 
 function getMaterialResourceUrl(item) {
-  const raw =
-    item["Google Drive Link"] ||
-    item["Google Drive Direct View / Download Link"] ||
-    item["Link"] ||
-    "";
-
-  return normalizeExternalUrl(raw);
+  return getMaterialSourceUrl(item);
 }
 
 function openSharePageById(shareId) {

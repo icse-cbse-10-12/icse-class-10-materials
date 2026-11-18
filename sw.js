@@ -1,5 +1,5 @@
 // Previous cache: icse-masterclass-v1.16.0-edubot-api
-const CACHE_NAME = "icse-masterclass-v1.18.5-dashboard-tailwind";
+const CACHE_NAME = "icse-masterclass-v1.18.6-mobile-polish";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -24,7 +24,7 @@ const APP_SHELL = [
   "./design-polish.css",
   "./design-polish.css?v=20261026-1",
   "./luxury-theme.css",
-  "./luxury-theme.css?v=3",
+  "./luxury-theme.css?v=4",
   "./academic-library.css?v=5",
   "./site-polish.css?v=1",
   "./script.js",
@@ -33,7 +33,7 @@ const APP_SHELL = [
   "./study-tools.js",
   "./student-dashboard.js",
   "./syllabus-tracker.js",
-  "./edubot-loader.js?v=2",
+  "./edubot-loader.js?v=3",
   "./manifest.json",
   "./luxury-book.svg",
   "./icseYtLogo.webp",
