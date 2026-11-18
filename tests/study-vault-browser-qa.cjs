@@ -33,7 +33,7 @@ async function runViewport(browser, name, viewport, mobile, expectedCards) {
 
   const navigationStarted = Date.now();
   await page.goto(BASE_URL, { waitUntil: "domcontentloaded", timeout: 45000 });
-  await page.waitForFunction(() => typeof window.selectSubject === "function" && typeof window.filterResources === "function", { timeout: 30000 });
+  await page.waitForFunction(() => typeof window.selectSubject === "function" && typeof window.filterResources === "function", null, { timeout: 30000 });
   await page.evaluate(() => window.selectSubject("All", false));
   await page.waitForFunction(expected => document.querySelectorAll("#resourceGrid > article").length === expected, expectedCards, { timeout: 30000 });
   await page.waitForTimeout(300);
@@ -50,7 +50,7 @@ async function runViewport(browser, name, viewport, mobile, expectedCards) {
     const filter = document.querySelector(".library-filter-tabs");
     const refineFields = [...document.querySelectorAll(".library-refinement-filters .library-refinement-field")].filter(el => getComputedStyle(el).display !== "none");
     const firstTitle = firstCard?.querySelector("h3")?.textContent?.trim() || "";
-    const allSubjects = cards.some(card => /All Subjects \\(\\d+\\)/.test(card.textContent));
+    const allSubjects = cards.some(card => /All Subjects \(\d+\)/.test(card.textContent));
     const countBadge = document.getElementById("savedMaterialCount");
     const guide = document.getElementById("study-vault-guide");
     const faq = document.getElementById("study-vault-faq");
@@ -63,7 +63,7 @@ async function runViewport(browser, name, viewport, mobile, expectedCards) {
       scrollWidth: document.documentElement.scrollWidth,
       cards: cards.length,
       firstTitle,
-      badTitle: /\\.(pdf|docx?)$/i.test(firstTitle) || firstTitle.includes("_"),
+      badTitle: /\.(pdf|docx?)$/i.test(firstTitle) || firstTitle.includes("_"),
       sizeNotListed: /Size not listed/i.test(grid?.textContent || ""),
       allSubjectsBadge: allSubjects,
       filterWrap: filter ? getComputedStyle(filter).flexWrap : "missing",
@@ -128,9 +128,9 @@ async function runViewport(browser, name, viewport, mobile, expectedCards) {
   assert.ok(notesCount.length > 0, `${name}: Notes category did not render a result state`);
 
   await page.locator("#edubotDataAcknowledgement").check({ force: true });
-  await page.waitForFunction(() => document.getElementById("edubotPrivacyNotice")?.open === false && localStorage.getItem("icseMasterClass.edubotNoticeAcknowledged.v1") === "true", { timeout: 3000 });
+  await page.waitForFunction(() => document.getElementById("edubotPrivacyNotice")?.open === false && localStorage.getItem("icseMasterClass.edubotNoticeAcknowledged.v1") === "true", null, { timeout: 3000 });
   await page.reload({ waitUntil: "domcontentloaded", timeout: 45000 });
-  await page.waitForFunction(() => document.getElementById("edubotPrivacyNotice")?.open === false, { timeout: 5000 });
+  await page.waitForFunction(() => document.getElementById("edubotPrivacyNotice")?.open === false, null, { timeout: 5000 });
 
   const runtime = await page.evaluate(() => ({
     errors: window.__studyVaultLongTasks || [],
