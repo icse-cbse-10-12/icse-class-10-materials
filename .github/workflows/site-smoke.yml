@@ -51,3 +51,14 @@ jobs:
           for file in sw.js edubot-loader.js consent-manager.js script.js gemini-ai.js functions/index.js; do
             node --check "$file"
           done
+
+      - name: Install pinned Playwright browser tooling
+        run: npm install --prefix /tmp/playwright --no-save --no-audit --no-fund playwright@1.56.1
+
+      - name: Install Chromium for desktop and mobile emulation
+        run: /tmp/playwright/node_modules/.bin/playwright install --with-deps chromium
+
+      - name: Run real desktop and mobile browser checks
+        env:
+          NODE_PATH: /tmp/playwright/node_modules
+        run: node tests/study-vault-browser-qa.cjs

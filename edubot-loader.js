@@ -9,6 +9,27 @@
   let previousFocus = null;
   if (!form) return;
 
+  const acknowledgement = document.getElementById("edubotDataAcknowledgement");
+  const privacyNotice = document.getElementById("edubotPrivacyNotice");
+  const acknowledgementKey = "icseMasterClass.edubotNoticeAcknowledged.v1";
+  try {
+    if (localStorage.getItem(acknowledgementKey) === "true" && acknowledgement) {
+      acknowledgement.checked = true;
+      if (privacyNotice) privacyNotice.open = false;
+    }
+  } catch { /* Keep the required acknowledgement visible when storage is unavailable. */ }
+  acknowledgement?.addEventListener("change", () => {
+    try {
+      if (acknowledgement.checked) {
+        localStorage.setItem(acknowledgementKey, "true");
+        if (privacyNotice) privacyNotice.open = false;
+      } else {
+        localStorage.removeItem(acknowledgementKey);
+        if (privacyNotice) privacyNotice.open = true;
+      }
+    } catch { /* The checkbox remains checked for this page session. */ }
+  });
+
   function toggleEduBot(open) {
     if (!drawer) return;
     const shouldOpen = Boolean(open);
@@ -46,7 +67,7 @@
 
   function loadEduBot() {
     if (!modulePromise) {
-      modulePromise = import("./gemini-ai.js?v=3")
+      modulePromise = import("./gemini-ai.js?v=4")
         .then(() => { ready = true; })
         .catch(error => {
           modulePromise = null;

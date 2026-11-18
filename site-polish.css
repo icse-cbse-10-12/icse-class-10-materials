@@ -91,3 +91,33 @@ body.mc-not-found .not-found-actions a{display:inline-flex;min-height:48px;align
 body.mc-not-found .not-found-actions a:first-child{border-color:var(--site-primary);background:var(--site-primary);color:#fff}
 @media(max-width:520px){body.mc-not-found .not-found-actions{display:grid;grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){body.editorial-page .editorial-card,body.editorial-page .editorial-card:hover{transition:none!important;transform:none!important}}
+
+
+/* Study Vault mobile catalogue: compact, swipeable filters and thumb-friendly cards. */
+body.mc-home .library-filter-tabs { display:flex; flex-wrap:nowrap; gap:8px; overflow-x:auto; overflow-y:hidden; overscroll-behavior-x:contain; -webkit-overflow-scrolling:touch; scrollbar-width:none; padding-bottom:8px; }
+body.mc-home .library-filter-tabs::-webkit-scrollbar { display:none; }
+body.mc-home .library-filter-tabs > .cat-btn { flex:0 0 auto; min-height:44px; white-space:nowrap; }
+body.mc-home .mc-material-main h3 { overflow-wrap:anywhere; word-break:normal; }
+body.mc-home .mc-material-file-badges { display:flex; flex-wrap:wrap; gap:6px; }
+body.mc-home .mc-material-size { display:inline-flex; align-items:center; gap:5px; min-height:24px; padding:4px 8px; border:1px solid #E2E8F0; border-radius:6px; background:#F8FAFC; color:#334155; font-size:10px; font-weight:750; }
+body.mc-home .edubot-privacy-disclosure { margin-top:10px; border-top:1px solid var(--mc-rule); }
+body.mc-home .edubot-privacy-disclosure > summary { display:flex; align-items:center; gap:6px; min-height:44px; color:var(--mc-ink-soft); font-size:12px; font-weight:750; cursor:pointer; }
+body.mc-home .edubot-privacy-disclosure > summary:focus-visible { outline:3px solid #1D4ED8; outline-offset:2px; border-radius:6px; }
+body.mc-home .edubot-privacy-disclosure > summary::-webkit-details-marker { display:none; }
+body.mc-home .edubot-data-ack { display:flex; align-items:flex-start; gap:10px; margin:8px 0 0; padding:12px; border:1px solid var(--mc-rule); border-radius:8px; background:var(--mc-paper-2); color:var(--mc-ink-soft); font-size:11px; line-height:1.55; }
+body.mc-home .edubot-data-ack input { flex:0 0 20px; width:20px; height:20px; min-width:20px; min-height:20px; margin:2px 0 0; }
+@media (max-width:760px) {
+  body.mc-home .mc-material-row { grid-template-columns:minmax(0,1fr); align-items:start; gap:10px; padding:14px 0; }
+  body.mc-home .mc-material-actions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); justify-content:stretch; gap:8px; }
+  body.mc-home .mc-material-actions > :is(a,button,span) { width:100%; min-width:0; min-height:44px!important; padding:10px 8px!important; white-space:normal; text-align:center; }
+  body.mc-home .mc-material-meta { gap:4px 8px; }
+  body.mc-home :is(.mc-material-row,.mc-material-action,.mc-subject-item,.cat-btn) { transition:none!important; box-shadow:none!important; backdrop-filter:none!important; -webkit-backdrop-filter:none!important; }
+  body.mc-home .library-refinement-filters { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+  body.mc-home .library-refinement-field { min-width:0; }
+  body.mc-home .library-refinement-field :is(select,input) { width:100%; min-width:0; min-height:44px; }
+}
+@media (max-width:380px) {
+  body.mc-home .mc-material-actions { gap:7px; }
+  body.mc-home .mc-material-actions > :is(a,button,span) { font-size:11px; }
+  body.mc-home .mc-material-main h3 { font-size:.9rem!important; }
+}

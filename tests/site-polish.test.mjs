@@ -12,7 +12,9 @@ test("publisher filtering uses existing sheet metadata rather than a hard-coded 
   const script = read("script.js");
   assert.ok(html.includes('id="publisherFilter"'));
   assert.ok(html.includes('onchange="setPublisherFilter(this.value)"'));
-  assert.ok(script.includes('item?.["Publisher/Company"] || item?.["Publisher"]'));
+  assert.ok(script.includes("const materialPublisherCache = new WeakMap();"));
+  assert.ok(script.includes("function getMaterialPublisher(item)"));
+  assert.ok(script.includes('item?.["Publisher/Company"]||item?.["Publisher"]||""'));
   assert.ok(script.includes("function populatePublisherFilter()"));
   assert.ok(script.includes("function setPublisherFilter(value)"));
   assert.ok(script.includes("publisherMatch"));
@@ -56,7 +58,7 @@ test("404 page uses local system fonts and no remote Tailwind or Google Fonts", 
 
 test("service worker precaches the shared visual layer under a fresh cache version", () => {
   const sw = read("sw.js");
-  assert.ok(sw.includes("icse-masterclass-v1.18.5-dashboard-tailwind"));
+  assert.ok(sw.includes("icse-masterclass-v1.18.6-mobile-polish"));
   assert.ok(sw.includes("./site-polish.css?v=1"));
 });
 
@@ -100,7 +102,7 @@ test("homepage exposes answer-ready directory guidance and matching site schema"
 
 test("service worker invalidates the previous shell cache after editorial accessibility changes", () => {
   const sw = read("sw.js");
-  assert.ok(sw.includes("icse-masterclass-v1.18.5-dashboard-tailwind"));
+  assert.ok(sw.includes("icse-masterclass-v1.18.6-mobile-polish"));
   assert.ok(sw.includes('"./blog/blog.css"'));
 });
 
@@ -126,7 +128,9 @@ test("mobile search placeholder stays concise and the logo has descriptive alt t
 
 test("sitemap homepage lastmod reflects homepage edits without changing blog and FAQ dates", () => {
   const sitemap = read("sitemap.xml");
-  assert.ok(sitemap.includes("<loc>https://icse-cbse-10-12.github.io/icse-class-10-materials/</loc><lastmod>2026-11-15</lastmod>"));
+  const homepageLastmod = sitemap.match(/<loc>https:\/\/icse-cbse-10-12\.github\.io\/icse-class-10-materials\/\s*<\/loc><lastmod>(\d{4}-\d{2}-\d{2})<\/lastmod>/)?.[1];
+  assert.ok(homepageLastmod, "homepage sitemap entry has a valid lastmod date");
+  assert.ok(homepageLastmod >= "2026-11-15", "homepage lastmod reflects the recent homepage update");
   assert.ok(sitemap.includes("<loc>https://icse-cbse-10-12.github.io/icse-class-10-materials/blog/</loc><lastmod>2026-11-12</lastmod>"));
   assert.ok(sitemap.includes("<loc>https://icse-cbse-10-12.github.io/icse-class-10-materials/faq.html</loc><lastmod>2026-11-12</lastmod>"));
 });
@@ -161,4 +165,68 @@ test("student dashboard progress renderer tolerates pages without dashboard widg
   assert.ok(script.includes('const tasksDone = $("dashboardTasksDone");'));
   assert.ok(script.includes('if (!tasksDone || !tasksTotal || !completion || !sessionsEl || !minutesEl || !root) return;'));
   assert.ok(script.includes('const dashboardTaskDue = $("dashboardTaskDue"); if (dashboardTaskDue) dashboardTaskDue.min = today();'));
+});
+
+
+test("mobile catalogue starts with 12 cards, desktop pages with 36, and search is debounced", () => {
+  const script = read("script.js");
+  assert.ok(script.includes("const DESKTOP_RESOURCE_PAGE_SIZE = 36;"));
+  assert.ok(script.includes("const MOBILE_RESOURCE_PAGE_SIZE = 12;"));
+  assert.ok(script.includes('window.matchMedia("(max-width: 767px)")'));
+  assert.match(script, /}, 250\);/);
+  assert.ok(script.includes("function getMaterialFilterMetadata(item)"));
+  assert.ok(script.includes("function deduplicateExactResourceRows(items)"));
+  assert.ok(script.includes("const savedKeySet = new Set(readPersonalList(SAVED_MATERIALS_KEY));"));
+  assert.ok(script.includes("isMaterialSaved(item, savedKeySet)"));
+});
+
+test("resource cards clean filenames, omit unknown file sizes, and compact multi-subject labels", () => {
+  const script = read("script.js");
+  const builder = read("scripts/build-catalog.mjs");
+  for (const source of [script, builder]) {
+    assert.ok(source.includes("formatMaterialTitle"));
+    assert.ok(source.includes("dtoichiometry"));
+    assert.ok(source.includes("Vastal"));
+    assert.ok(source.includes("All Subjects ("));
+    assert.doesNotMatch(source, /Size not listed/);
+  }
+  assert.ok(script.includes("deduplicateExactResourceRows(filteredResources)"));
+  assert.ok(builder.includes("const firstPage = uniqueResources.slice(0, 12);"));
+});
+
+test("directory guidance and FAQ appear after the material catalogue, not before subject browsing", () => {
+  const html = read("index.html");
+  assert.ok(html.indexOf('id="mainLandingView"') < html.indexOf('id="study-vault-guide"'));
+  assert.ok(html.indexOf('id="resourceGrid"') < html.indexOf('id="study-vault-guide"'));
+  assert.ok(html.indexOf('id="study-vault-guide"') < html.indexOf('id="study-vault-faq"'));
+  assert.ok(html.indexOf('id="study-vault-faq"') < html.indexOf('class="library-legal"'));
+  assert.ok(html.includes("About ICSE MasterClass Study Vault"));
+  assert.ok(html.includes("Resource Index, Copyright and Disclaimer"));
+});
+
+test("saved count is hidden when empty and EduBot privacy acknowledgement stays available", () => {
+  const html = read("index.html");
+  const script = read("script.js");
+  const client = read("gemini-ai.js");
+  const loader = read("edubot-loader.js");
+  assert.ok(html.includes('<span id="savedMaterialCount" hidden>0</span>'));
+  assert.ok(html.includes('<details id="edubotPrivacyNotice" class="edubot-privacy-disclosure" open>'));
+  assert.ok(html.includes("Privacy &amp; AI notice"));
+  assert.ok(html.includes('id="edubotDataAcknowledgement" form="edubotChatForm" type="checkbox" required'));
+  assert.ok(html.includes("This acknowledgement is not parental consent."));
+  assert.ok(script.includes("savedCount.hidden = savedItems.length === 0;"));
+  assert.ok(loader.includes("icseMasterClass.edubotNoticeAcknowledged.v1"));
+  assert.ok(loader.includes("privacyNotice.open = false"));
+  assert.ok(html.includes("edubot-loader.js?v=3"));
+  assert.ok(loader.includes("gemini-ai.js?v=4"));
+});
+
+test("mobile layout keeps filters swipeable and card actions thumb-friendly without blur", () => {
+  const css = read("site-polish.css");
+  assert.ok(css.includes("body.mc-home .library-filter-tabs"));
+  assert.ok(css.includes("flex-wrap:nowrap"));
+  assert.ok(css.includes("overflow-x:auto"));
+  assert.ok(css.includes("min-height:44px!important"));
+  assert.ok(css.includes("backdrop-filter:none!important"));
+  assert.ok(css.includes("grid-template-columns:repeat(2,minmax(0,1fr))"));
 });
