@@ -130,7 +130,14 @@ async function runViewport(browser, name, viewport, mobile, expectedCards) {
   assert.ok(notesCount.length > 0, `${name}: Notes category did not render a result state`);
 
   await page.evaluate(() => window.toggleEduBot(true));
-  await page.locator("#edubotDataAcknowledgement").check();
+  const drawerState = await page.evaluate(() => ({ hidden: document.getElementById("edubotDrawer")?.hidden, noticeOpen: document.getElementById("edubotPrivacyNotice")?.open }));
+  assert.equal(drawerState.hidden, false, `${name}: EduBot drawer did not open`);
+  assert.equal(drawerState.noticeOpen, true, `${name}: privacy notice should be expanded before acknowledgement`);
+  await page.evaluate(() => {
+    const checkbox = document.getElementById("edubotDataAcknowledgement");
+    checkbox.checked = true;
+    checkbox.dispatchEvent(new Event("change", { bubbles: true }));
+  });
   await page.waitForFunction(() => document.getElementById("edubotPrivacyNotice")?.open === false && localStorage.getItem("icseMasterClass.edubotNoticeAcknowledged.v1") === "true", null, { timeout: 3000 });
   await page.reload({ waitUntil: "domcontentloaded", timeout: 45000 });
   await page.waitForFunction(() => document.getElementById("edubotPrivacyNotice")?.open === false, null, { timeout: 5000 });
