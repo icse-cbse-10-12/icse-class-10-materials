@@ -73,10 +73,11 @@ test("multi-subject rows collapse to one compact subject label", () => {
   assert.equal(formatMaterialSubject("English Paper 1, English Paper 2, Mathematics, Physics, Chemistry"), "All Subjects (5)");
 });
 
-test("exact duplicate rows with the same source are hidden without merging distinct resources", () => {
-  const row = { "Book Name":"Entire Chemistry MCQ 2026 by Sir Tarun Rupani.pdf", Subject:"Chemistry", Category:"MCQ", Edition:"2026", "Google Drive Link":"https://drive.google.com/file/d/shared/view" };
-  const other = { ...row, "Google Drive Link":"https://drive.google.com/file/d/other/view" };
-  assert.equal(deduplicateResources([row, { ...row }, other]).length, 2);
+test("duplicate title metadata collapses mirror URLs but preserves distinct formats", () => {
+  const row = { "Book Name":"Entire Chemistry MCQ 2026 by Sir Tarun Rupani.pdf", Subject:"Chemistry", Category:"MCQ", Edition:"2026", Publisher:"Sir Tarun Rupani", Format:"PDF", Scope:"Full chapter", "Google Drive Link":"https://drive.google.com/file/d/shared/view" };
+  const mirror = { ...row, "Google Drive Link":"https://drive.google.com/file/d/other/view" };
+  const otherFormat = { ...row, Format:"DOCX", "Google Drive Link":"https://drive.google.com/file/d/docx/view" };
+  assert.equal(deduplicateResources([row, { ...row }, mirror, otherFormat]).length, 2);
 });
 
 test("prerendered catalogue is limited to twelve compact cards", async () => {

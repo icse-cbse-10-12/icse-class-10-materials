@@ -92,8 +92,20 @@ function getMaterialFilterMetadata(item) {
   materialFilterMetadataCache.set(item,cached); return cached;
 }
 function deduplicateExactResourceRows(items) {
-  const seen=new Set();
-  return items.filter(item=>{const url=getMaterialSourceUrl(item);if(!url)return true;const key=[formatMaterialTitle(item["Book Name"]||item["Subject"]).toLocaleLowerCase(),String(item["Subject"]||"").trim().toLocaleLowerCase(),String(item["Category"]||"").trim().toLocaleLowerCase(),String(item["Edition"]||"").trim().toLocaleLowerCase(),url].join("\u001f");if(seen.has(key))return false;seen.add(key);return true;});
+  const seen = new Set();
+  return items.filter(item => {
+    const title = formatMaterialTitle(item["Book Name"] || item["Subject"]).toLocaleLowerCase();
+    if (!title) return true;
+    const key = [title, String(item["Subject"] || "").trim().toLocaleLowerCase(),
+      String(item["Category"] || "").trim().toLocaleLowerCase(),
+      String(item["Edition"] || "").trim().toLocaleLowerCase(),
+      getMaterialPublisher(item).toLocaleLowerCase(),
+      String(item["Format"] || "").trim().toLocaleLowerCase(),
+      String(item["Scope"] || "").trim().toLocaleLowerCase()].join("\u001f");
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 }
 function scheduleMaterialSearch(source) {
   clearTimeout(materialSearchTimer);

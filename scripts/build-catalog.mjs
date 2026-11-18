@@ -45,8 +45,17 @@ export function formatMaterialSubject(value) {
   return subjects.length>3?`All Subjects (${subjects.length})`:subjects.join(", ");
 }
 export function deduplicateResources(items) {
-  const seen=new Set();
-  return items.filter(item=>{const url=resourceUrl(item);if(!url)return true;const key=[formatMaterialTitle(item["Book Name"]||item.Subject).toLocaleLowerCase(),clean(item.Subject).toLocaleLowerCase(),clean(item.Category).toLocaleLowerCase(),clean(item.Edition).toLocaleLowerCase(),url].join("\u001f");if(seen.has(key))return false;seen.add(key);return true;});
+  const seen = new Set();
+  return items.filter(item => {
+    const title = formatMaterialTitle(item["Book Name"] || item.Subject).toLocaleLowerCase();
+    if (!title) return true;
+    const key = [title, clean(item.Subject).toLocaleLowerCase(), clean(item.Category).toLocaleLowerCase(),
+      clean(item.Edition).toLocaleLowerCase(), clean(item["Publisher/Company"] || item.Publisher).toLocaleLowerCase(),
+      clean(item.Format).toLocaleLowerCase(), clean(item.Scope).toLocaleLowerCase()].join("\u001f");
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 }
 
 function safeUrl(value) {
