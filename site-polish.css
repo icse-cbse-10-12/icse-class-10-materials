@@ -238,3 +238,41 @@ body.mc-home :is(button,a,input,select,textarea,summary):focus-visible{outline:3
 .offline-notice{padding:13px 16px;border:1px solid #e7d7b7;border-radius:12px;background:#fff9ec;color:#77551d;font-size:.84rem;line-height:1.6}
 .offline-notice[hidden]{display:none!important}
 @media(prefers-reduced-motion:reduce){#icseStudyTools,#icseStudyPanel{scroll-behavior:auto!important;transition:none!important}}
+
+
+/* Dark-mode subject cards: keep card surfaces aligned with dark theme tokens.
+   The shared white-card rule above previously mixed dark-mode cream text with
+   white surfaces, making subject names and hints difficult to read. */
+body.mc-home[data-site-mode="dark"] #mainSubjectGrid .mc-subject-item,
+body.mc-home[data-site-mode="midnight"] #mainSubjectGrid .mc-subject-item {
+  background:var(--mc-paper-2) !important;
+  border-color:var(--mc-rule) !important;
+  color:var(--mc-ink) !important;
+}
+body.mc-home[data-site-mode="dark"] #mainSubjectGrid .mc-subject-item:hover,
+body.mc-home[data-site-mode="midnight"] #mainSubjectGrid .mc-subject-item:hover {
+  background:var(--mc-paper-3) !important;
+  border-color:var(--mc-forest) !important;
+}
+body.mc-home[data-site-mode="dark"] #mainSubjectGrid .mc-subject-name,
+body.mc-home[data-site-mode="midnight"] #mainSubjectGrid .mc-subject-name {
+  color:var(--mc-ink) !important;
+}
+body.mc-home[data-site-mode="dark"] #mainSubjectGrid .mc-subject-hint,
+body.mc-home[data-site-mode="midnight"] #mainSubjectGrid .mc-subject-hint {
+  color:var(--mc-ink-mute) !important;
+}
+body.mc-home[data-site-mode="dark"] #mainSubjectGrid .mc-art-blue,
+body.mc-home[data-site-mode="midnight"] #mainSubjectGrid .mc-art-blue { color:#8CC7E8; background:#263B49; }
+body.mc-home[data-site-mode="dark"] #mainSubjectGrid .mc-art-rose,
+body.mc-home[data-site-mode="midnight"] #mainSubjectGrid .mc-art-rose { color:#E7A99B; background:#47312E; }
+body.mc-home[data-site-mode="dark"] #mainSubjectGrid .mc-art-green,
+body.mc-home[data-site-mode="midnight"] #mainSubjectGrid .mc-art-green { color:#A7D5AE; background:#2E4435; }
+body.mc-home[data-site-mode="dark"] #mainSubjectGrid .mc-art-lavender,
+body.mc-home[data-site-mode="midnight"] #mainSubjectGrid .mc-art-lavender { color:#C7B2E6; background:#3C3448; }
+body.mc-home[data-site-mode="dark"] #mainSubjectGrid .mc-art-sky,
+body.mc-home[data-site-mode="midnight"] #mainSubjectGrid .mc-art-sky { color:#A5D7D4; background:#2B4140; }
+body.mc-home[data-site-mode="dark"] #mainSubjectGrid .mc-art-sand,
+body.mc-home[data-site-mode="midnight"] #mainSubjectGrid .mc-art-sand { color:#E2C58F; background:#493D29; }
+body.mc-home[data-site-mode="dark"] #mainSubjectGrid .mc-art-sage,
+body.mc-home[data-site-mode="midnight"] #mainSubjectGrid .mc-art-sage { color:#B7D0B8; background:#354238; }

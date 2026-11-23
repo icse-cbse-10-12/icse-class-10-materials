@@ -36,7 +36,7 @@ test("PWA runtime handles install prompts, iOS instructions, connectivity and sa
 
 test("offline shell is cached and missing navigation routes use a useful offline page", () => {
   const sw = read("sw.js");
-  assert.match(sw, /icse-masterclass-v1\.19\.0-mobile-pwa/);
+  assert.match(sw, /icse-masterclass-v1\.19\.1-colour-refresh/);
   assert.ok(sw.includes("./offline.html"));
   assert.ok(sw.includes("./pwa.js"));
   assert.match(sw, /caches\.match\("\.\/offline\.html"\)/);
