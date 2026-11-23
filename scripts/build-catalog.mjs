@@ -60,7 +60,19 @@ function materialKey(item) {
 }
 
 function displayTitle(value) {
-  return clean(value).replace(/\.(?:pdf|docx?)$/i, "").replace(/_+/g, " ").replace(/\s+/g, " ").trim();
+  const acronyms = new Set(["ICSE", "ISC", "CBSE", "CISCE", "PYQ", "PYQS", "JEE", "NEET", "MCQ", "MCQS", "DNA", "RNA", "HTML", "CSS", "AI"]);
+  return clean(value)
+    .replace(/\.(?:pdf|docx?)$/i, "")
+    .replace(/\s*\([12]\)$/, "")
+    .replace(/_+/g, " ")
+    .replace(/([A-Za-z])-(?=[A-Za-z0-9])/g, "$1 ")
+    .replace(/([0-9])-(?=[A-Za-z])/g, "$1 ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .replace(/\bVastal\b/gi, "Vatsal")
+    .split(" ")
+    .map(token => /^[A-Z]{2,}$/.test(token) && !acronyms.has(token) ? token[0] + token.slice(1).toLowerCase() : token)
+    .join(" ");
 }
 function displaySubject(value) {
   const raw = clean(value);

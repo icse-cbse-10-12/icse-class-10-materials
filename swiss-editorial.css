@@ -1,4 +1,9 @@
 /* Swiss editorial system — Materials Library homepage and catalogue */
+/* Native hidden state must win over component display declarations. */
+body.mc-home [hidden] {display:none!important;}
+body.mc-home #detailView[hidden] {display:none!important;}
+body.mc-home #pwaIosInstallGuide:not([open]) > :not(summary) {display:none!important;}
+
 body.mc-home {
   --swiss-accent:#FF4F00;
   --swiss-ink:#141414;

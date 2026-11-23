@@ -67,7 +67,7 @@ test("catalogue renderer cleans filenames, collapses broad subject labels and om
     Category: "Question Banks",
     Format: "PDF"
   });
-  assert.match(card, /CHEMISTRY most likely ICSE question Bank/);
+  assert.match(card, /Chemistry most likely ICSE question Bank/);
   assert.match(card, /All Subjects \(13\)/);
   assert.doesNotMatch(card, /Size not listed/);
 });

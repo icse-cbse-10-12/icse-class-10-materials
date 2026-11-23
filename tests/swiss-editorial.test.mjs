@@ -12,7 +12,7 @@ test("catalogue cards clean filenames, collapse broad subject lists and omit unk
     Category: "Question Banks",
     Format: "PDF"
   });
-  assert.match(card, /CHEMISTRY most likely ICSE question Bank/);
+  assert.match(card, /Chemistry most likely ICSE question Bank/);
   assert.doesNotMatch(card, /\.PDF|CHEMISTRY_most_likely/);
   assert.match(card, /All Subjects \(13\)/);
   assert.doesNotMatch(card, /Size not listed/);

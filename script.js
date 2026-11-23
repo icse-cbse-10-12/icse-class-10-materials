@@ -439,8 +439,8 @@ async function fetchSheetData() {
    ============================================================ */
 
 function checkHashRoute() {
-  const sharedId =
-    new URLSearchParams(window.location.search).get("material");
+  const queryParams = new URLSearchParams(window.location.search);
+  const sharedId = queryParams.get("material") || queryParams.get("id");
 
   if (sharedId) {
     showSharedMaterialPage(sharedId);
@@ -917,11 +917,19 @@ function closeSubjectSubPage() {
    ============================================================ */
 
 function formatMaterialDisplayTitle(value) {
+  const acronyms = new Set(["ICSE", "ISC", "CBSE", "CISCE", "PYQ", "PYQS", "JEE", "NEET", "MCQ", "MCQS", "DNA", "RNA", "HTML", "CSS", "AI"]);
   return String(value || "Study material").trim()
     .replace(/\.(?:pdf|docx?)$/i, "")
+    .replace(/\s*\([12]\)$/, "")
     .replace(/_+/g, " ")
+    .replace(/([A-Za-z])-(?=[A-Za-z0-9])/g, "$1 ")
+    .replace(/([0-9])-(?=[A-Za-z])/g, "$1 ")
     .replace(/\s+/g, " ")
-    .trim();
+    .trim()
+    .replace(/\bVastal\b/gi, "Vatsal")
+    .split(" ")
+    .map(token => /^[A-Z]{2,}$/.test(token) && !acronyms.has(token) ? token[0] + token.slice(1).toLowerCase() : token)
+    .join(" ");
 }
 function formatMaterialSubjectLabel(value) {
   const raw = String(value || "").trim();
@@ -1398,11 +1406,25 @@ function openMaterialModalByIndex(index) {
     `;
   }
 
-  document.getElementById("detailView")?.classList.remove("hidden");
+  const detailView = document.getElementById("detailView");
+  if (detailView) {
+    detailView.hidden = false;
+    detailView.removeAttribute("hidden");
+    detailView.classList.remove("hidden");
+    detailView.setAttribute("aria-hidden", "false");
+  }
 }
 
 function closeMaterialModal() {
-  document.getElementById("detailView")?.classList.add("hidden");
+  const detailView = document.getElementById("detailView");
+  if (detailView) {
+    detailView.hidden = true;
+    detailView.setAttribute("hidden", "");
+    detailView.classList.add("hidden");
+    detailView.setAttribute("aria-hidden", "true");
+  }
+  const container = document.getElementById("detailContent");
+  if (container) container.replaceChildren();
 }
 
 /* ============================================================
