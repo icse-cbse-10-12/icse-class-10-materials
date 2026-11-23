@@ -1,0 +1,10 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+const css=readFileSync(new URL("../study-desk.css",import.meta.url),"utf8");
+const html=readFileSync(new URL("../index.html",import.meta.url),"utf8");
+test("warm day palette uses the approved study desk tokens",()=>{for(const token of ["#F7F4EB","#FFFDF8","#2B241E","#6B5E52","#4E7A38","#E6EFE0","#E4DEC9"])assert.ok(css.includes(token),token)});
+test("night and midnight modes retain warm charcoal and sage",()=>{assert.match(css,/data-site-mode=\"dark\"/);assert.match(css,/data-site-mode=\"midnight\"/);for(const token of ["#181614","#23201D","#F3EFE6","#A89E92","#7CB35B","#141A11"])assert.ok(css.includes(token),token)});
+test("resource cards use a single column and thumb-friendly actions",()=>{assert.match(css,/grid-template-columns:minmax\(0,1fr\)/);assert.match(css,/min-height:44px/);assert.match(css,/border-radius:14px/)});
+test("mobile filters scroll horizontally and reduced motion is respected",()=>{assert.match(css,/overflow-x:auto/);assert.match(css,/prefers-reduced-motion:reduce/)});
+test("theme layer loads after the existing Swiss editorial layer",()=>{assert.ok(html.indexOf("swiss-editorial.css")<html.indexOf("study-desk.css"))});
