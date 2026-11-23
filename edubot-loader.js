@@ -6,7 +6,16 @@
   const drawer = document.getElementById("edubotDrawer");
   const drawerPanel = drawer?.querySelector(".edubot-drawer-panel");
   const closeButton = drawer?.querySelector(".edubot-drawer-close");
+  const acknowledgement = document.getElementById("edubotDataAcknowledgement");
+  const privacyNotice = document.getElementById("edubotPrivacyNotice");
   let previousFocus = null;
+
+  if (acknowledgement && privacyNotice) {
+    privacyNotice.open = !acknowledgement.checked;
+    acknowledgement.addEventListener("change", () => {
+      privacyNotice.open = !acknowledgement.checked;
+    });
+  }
   if (!form) return;
 
   function toggleEduBot(open) {

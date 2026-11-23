@@ -57,7 +57,7 @@ test("404 page uses local system fonts and no remote Tailwind or Google Fonts", 
 
 test("service worker precaches the shared visual layer under a fresh cache version", () => {
   const sw = read("sw.js");
-  assert.ok(sw.includes("icse-masterclass-v1.20.0-swiss-editorial"));
+  assert.ok(sw.includes("icse-masterclass-v1.21.0-ux-polish"));
   assert.ok(sw.includes("./site-polish.css?v=2"));
   assert.ok(sw.includes("./swiss-editorial.css?v=1"));
 });
@@ -102,7 +102,7 @@ test("homepage exposes answer-ready directory guidance and matching site schema"
 
 test("service worker invalidates the previous shell cache after editorial accessibility changes", () => {
   const sw = read("sw.js");
-  assert.ok(sw.includes("icse-masterclass-v1.20.0-swiss-editorial"));
+  assert.ok(sw.includes("icse-masterclass-v1.21.0-ux-polish"));
   assert.ok(sw.includes('"./blog/blog.css"'));
 });
 

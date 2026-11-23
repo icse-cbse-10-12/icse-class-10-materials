@@ -17,9 +17,16 @@
       (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
   };
 
+  const isAppleMobileSafari = () => {
+    const ua = navigator.userAgent || "";
+    return isAppleMobile() &&
+      /Safari/i.test(ua) &&
+      !/(CriOS|FxiOS|EdgiOS|OPiOS|DuckDuckGo)/i.test(ua);
+  };
+
   const updateConnection = () => {
     if (!offlineNotice) return;
-    offlineNotice.hidden = navigator.onLine;
+    offlineNotice.hidden = navigator.onLine !== false;
   };
 
   window.addEventListener("online", updateConnection);
@@ -28,7 +35,7 @@
 
   if (isStandalone() && installCard) installCard.hidden = true;
 
-  if (!isStandalone() && isAppleMobile() && installCard && iosGuide) {
+  if (!isStandalone() && isAppleMobileSafari() && installCard && iosGuide) {
     installCard.hidden = false;
     installDescription.textContent =
       "Add Study Vault to your iPhone or iPad home screen from Safari.";
