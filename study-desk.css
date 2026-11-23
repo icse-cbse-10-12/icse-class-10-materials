@@ -1,6 +1,6 @@
 /* ICSE MasterClass Study Vault — Study Desk theme */
 body.mc-home{--desk-bg:#F7F4EB;--desk-surface:#FFFDF8;--desk-ink:#2B241E;--desk-muted:#6B5E52;--desk-line:#E4DEC9;--desk-green:#4E7A38;--desk-green-ink:#FFFFFF;--desk-soft:#E6EFE0;--desk-soft-ink:#2F4F20;background:var(--desk-bg)!important;color:var(--desk-ink)!important;color-scheme:light}
-body.mc-home[data-site-mode="dark"],body.mc-home[data-site-mode="midnight"]{--desk-bg:#181614;--desk-surface:#23201D;--desk-ink:#F3EFE6;--desk-muted:#A89E92;--desk-line:#35302B;--desk-green:#7CB35B;--desk-green-ink:#141A11;--desk-soft:#2A3425;--desk-soft-ink:#DCEBD2;background:var(--desk-bg)!important;color:var(--desk-ink)!important;color-scheme:dark}
+:is(html.dark,html[data-theme="dark"]) body.mc-home:not([data-site-mode="light"]),body.mc-home[data-site-mode="dark"],body.mc-home[data-site-mode="midnight"]{--desk-bg:#181614;--desk-surface:#23201D;--desk-ink:#F3EFE6;--desk-muted:#A89E92;--desk-line:#35302B;--desk-green:#7CB35B;--desk-green-ink:#141A11;--desk-soft:#2A3425;--desk-soft-ink:#DCEBD2;background:var(--desk-bg)!important;color:var(--desk-ink)!important;color-scheme:dark}
 body.mc-home,body.mc-home main{background:var(--desk-bg)!important;color:var(--desk-ink)!important}
 body.mc-home header{background:color-mix(in srgb,var(--desk-surface) 96%,transparent)!important;border-color:var(--desk-line)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;box-shadow:0 1px 0 var(--desk-line)}
 body.mc-home header :is(a,span,button,i){color:var(--desk-ink)}
