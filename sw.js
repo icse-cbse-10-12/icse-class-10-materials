@@ -79,8 +79,9 @@ async function fetchWithTimeout(request, timeoutMs) {
 }
 
 async function networkFirst(request, timeoutMs, ignoreSearch = false) {
+  let response;
   try {
-    const response = await fetchWithTimeout(request, timeoutMs);
+    response = await fetchWithTimeout(request, timeoutMs);
     if (response && response.ok) {
       const cache = await caches.open(CACHE_NAME);
       await cache.put(new Request(request.url), response.clone()).catch(() => {});
@@ -102,7 +103,7 @@ async function networkFirst(request, timeoutMs, ignoreSearch = false) {
       const home = await caches.match("./index.html");
       if (home) return home;
     }
-    return Response.error();
+    return cached || response || Response.error();
   }
 }
 
