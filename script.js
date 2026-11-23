@@ -46,7 +46,10 @@ let filteredResources = [];
 // Build only a small number of cards per frame to keep mobile devices responsive.
 // Filter and search still scan the complete catalogue of 8,000+ materials.
 const RESOURCE_PAGE_SIZE = 36;
-let visibleResourceCount = RESOURCE_PAGE_SIZE;
+function isMobileResourceViewport() { return window.matchMedia && window.matchMedia("(max-width: 767px)").matches; }
+function getInitialResourcePageSize() { return isMobileResourceViewport() ? 12 : RESOURCE_PAGE_SIZE; }
+function getResourcePageIncrement() { return isMobileResourceViewport() ? 12 : RESOURCE_PAGE_SIZE; }
+let visibleResourceCount = getInitialResourcePageSize();
 let materialSearchTimer = null;
 const materialSearchTextCache = new WeakMap();
 function materialSearchText(item) {
@@ -65,12 +68,12 @@ function scheduleMaterialSearch(source) {
     materialSearchTimer = null;
     if (source === "global") searchAllMaterials();
     else filterResources();
-  }, 200);
+  }, 250);
 }
 function loadMoreMaterials() {
   if (visibleResourceCount >= filteredResources.length) return;
   const from = visibleResourceCount;
-  visibleResourceCount = Math.min(visibleResourceCount + RESOURCE_PAGE_SIZE, filteredResources.length);
+  visibleResourceCount = Math.min(visibleResourceCount + getResourcePageIncrement(), filteredResources.length);
   renderGrid(filteredResources, from);
 }
 let deferredPwaPrompt = null;
@@ -96,7 +99,7 @@ function getMaterialKey(item) {
 function isMaterialSaved(item) { return readPersonalList(SAVED_MATERIALS_KEY).includes(getMaterialKey(item)); }
 function updatePersonalLibraryUI() {
   const savedCount = document.getElementById("savedMaterialCount");
-  if (savedCount) savedCount.textContent = String(readPersonalList(SAVED_MATERIALS_KEY).length);
+  if (savedCount) { const count = readPersonalList(SAVED_MATERIALS_KEY).length; savedCount.textContent = String(count); savedCount.hidden = count === 0; }
   document.querySelectorAll("[data-personal-view]").forEach(button => {
     const active = button.dataset.personalView === currentPersonalView;
     button.classList.toggle("active", active);
@@ -200,6 +203,8 @@ function normalizeExternalUrl(value, rejectGenericCisceHome = false) {
    ============================================================ */
 
 window.addEventListener("beforeinstallprompt", event => {
+  const standalone = window.matchMedia?.("(display-mode: standalone)").matches || window.navigator.standalone === true;
+  if (standalone) return;
   event.preventDefault();
   deferredPwaPrompt = event;
 
@@ -291,7 +296,9 @@ function initSubjectCards() {
   const subjects = subjectGroups[activeSubjectGroup] || subjectsList;
   grid.innerHTML=subjects.map(subject=>{
     const label=subject.replace(/^Second Language\s*[-:]?\s*/i,"");
-    return `<button data-subject="${escapeHTML(subject)}" class="mc-subject-item" type="button" aria-label="Open ${escapeHTML(subject)} subject materials"><span class="mc-subject-illustration" aria-hidden="true">${getSubjectIllustration(subject)}</span><span class="mc-subject-copy"><span class="mc-subject-name">${subject === "All" ? "All Subjects" : escapeHTML(label)}</span><span class="mc-subject-hint">Explore materials <span aria-hidden="true">→</span></span></span></button>`;
+    const illustration = getSubjectIllustration(subject);
+    const tone = illustration.match(/mc-art-([a-z]+)/)?.[1] || "sage";
+    return `<button data-subject="${escapeHTML(subject)}" class="mc-subject-item" type="button" aria-label="Open ${escapeHTML(subject)} subject materials"><span class="mc-subject-illustration mc-illustration-${tone}" aria-hidden="true">${illustration}</span><span class="mc-subject-copy"><span class="mc-subject-name">${subject === "All" ? "All Subjects" : escapeHTML(label)}</span><span class="mc-subject-hint">Explore materials <span aria-hidden="true">→</span></span></span></button>`;
   }).join("");
   document.querySelectorAll("[data-subject-group]").forEach(tab => {
     const active = tab.dataset.subjectGroup === activeSubjectGroup;
@@ -835,7 +842,7 @@ if (currentCategory === "All") {
       return yearOf(b) - yearOf(a);
     });
   }
-  visibleResourceCount = RESOURCE_PAGE_SIZE;
+  visibleResourceCount = getInitialResourcePageSize();
   renderGrid(filteredResources);
 }
 
@@ -909,6 +916,19 @@ function closeSubjectSubPage() {
    MATERIAL DIRECTORY ROWS
    ============================================================ */
 
+function formatMaterialDisplayTitle(value) {
+  return String(value || "Study material").trim()
+    .replace(/\.(?:pdf|docx?)$/i, "")
+    .replace(/_+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+function formatMaterialSubjectLabel(value) {
+  const raw = String(value || "").trim();
+  const parts = raw.split(/[,;|]+/).map(part => part.trim()).filter(Boolean);
+  return parts.length >= 3 ? "All Subjects (13)" : raw;
+}
+
 function renderGrid(data, appendFrom = 0) {
   const grid = document.getElementById("resourceGrid");
   const countEl = document.getElementById("itemCount");
@@ -943,8 +963,8 @@ function renderGrid(data, appendFrom = 0) {
     const editionText = item["Edition"] && item["Edition"] !== "Not Specified" ? `Ed. ${item["Edition"]}` : "";
     const materialKey = getMaterialKey(item);
     const saved = isMaterialSaved(item);
-    const title = item["Book Name"] || item["Subject"] || "";
-    const subject = item["Subject"] || "";
+    const title = formatMaterialDisplayTitle(item["Book Name"] || item["Subject"] || "");
+    const subject = formatMaterialSubjectLabel(item["Subject"] || "");
     const category = item["Category"] || "";
     const publisher = item["Publisher/Company"] || item["Publisher"] || "";
     const fileSize = String(item["File Size"] || "").trim();
@@ -964,7 +984,7 @@ function renderGrid(data, appendFrom = 0) {
           </div>
           <div class="mc-material-file-badges">
             <span class="mc-material-file-badge">${escapeHTML(fileFormat)}</span>
-            ${fileSize ? `<span class="mc-material-size"><i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i><span>File size: ${escapeHTML(fileSize)}</span></span>` : `<span class="mc-material-file-badge">Size not listed</span>`}
+            ${fileSize ? `<span class="mc-material-size"><i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i><span>File size: ${escapeHTML(fileSize)}</span></span>` : ""}
             <span class="mc-material-file-badge">${escapeHTML(sourceBadge)}</span>
           </div>
           <h3>${escapeHTML(title)}</h3>

@@ -1,6 +1,6 @@
 {
   "short_name": "ICSE Vault",
-  "name": "ICSE MasterClass Materials Library",
+  "name": "ICSE MasterClass Study Material Vault",
   "icons": [
     {
       "src": "icseYtPwa-192.png",
@@ -14,21 +14,16 @@
     }
   ],
   "start_url": "./",
-  "background_color": "#F5F1E8",
-  "theme_color": "#F5F1E8",
+  "background_color": "#FAF9F6",
+  "theme_color": "#FAF9F6",
   "display": "standalone",
   "orientation": "any",
-  "description": "Browse ICSE Class 10 study resources. Previously opened pages and cached catalogue data may be available offline; external publisher resources require internet access.",
+  "description": "Free educational resource vault for ICSE Class 10 students. Download question banks, PYQs, revision notes, and video lectures.",
   "id": "./",
   "scope": "./",
   "display_override": [
     "standalone",
-    "minimal-ui"
-  ],
-  "lang": "en-IN",
-  "categories": [
-    "education",
-    "productivity"
-  ],
-  "prefer_related_applications": false
+    "minimal-ui",
+    "browser"
+  ]
 }

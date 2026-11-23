@@ -59,14 +59,23 @@ function materialKey(item) {
   return [item["Book Name"], item.Subject, item.Category, item.Edition].map(value => clean(value).toLowerCase()).join("|");
 }
 
+function displayTitle(value) {
+  return clean(value).replace(/\.(?:pdf|docx?)$/i, "").replace(/_+/g, " ").replace(/\s+/g, " ").trim();
+}
+function displaySubject(value) {
+  const raw = clean(value);
+  const parts = raw.split(/[,;|]+/).map(part => part.trim()).filter(Boolean);
+  return parts.length >= 3 ? "All Subjects (13)" : raw;
+}
+
 export function renderCard(item) {
-  const title = clean(item["Book Name"] || item.Subject || "Study material");
-  const subject = clean(item.Subject);
+  const title = displayTitle(item["Book Name"] || item.Subject || "Study material");
+  const subject = displaySubject(item.Subject);
   const category = clean(item.Category);
   const edition = clean(item.Edition);
   const publisher = clean(item["Publisher/Company"] || item.Publisher);
   const scope = clean(item.Scope);
-  const size = clean(item["File Size"]) || "Size not listed";
+  const size = clean(item["File Size"]);
   const format = clean(item.Format) || "Resource";
   const url = resourceUrl(item);
   let source = "Link unavailable";
@@ -77,7 +86,7 @@ export function renderCard(item) {
   const action = url
     ? `<a class="mc-material-action mc-material-open" href="${esc(url)}" target="_blank" rel="noopener noreferrer"><span>${actionLabel}</span></a>`
     : `<span class="mc-material-action is-disabled" aria-disabled="true">Link unavailable</span>`;
-  return `<article class="mc-material-row mc-prerendered-row"><div class="mc-material-main"><div class="mc-material-meta">${meta}</div><h3>${esc(title)}</h3>${scope ? `<p class="mc-material-scope">${esc(scope)}</p>` : ""}<div class="mc-material-file-badges"><span class="mc-material-file-badge">${esc(format)}</span><span class="mc-material-file-badge">${esc(size)}</span><span class="mc-material-file-badge">${esc(source)}</span></div></div><div class="mc-material-actions">${action}<button type="button" class="mc-material-action js-toggle-save" data-material-key="${esc(materialKey(item))}" aria-pressed="false" aria-label="Save material: ${esc(title)}"><span>Save</span></button></div></article>`;
+  return `<article class="mc-material-row mc-prerendered-row"><div class="mc-material-main"><div class="mc-material-meta">${meta}</div><h3>${esc(title)}</h3>${scope ? `<p class="mc-material-scope">${esc(scope)}</p>` : ""}<div class="mc-material-file-badges"><span class="mc-material-file-badge">${esc(format)}</span>${size ? `<span class="mc-material-file-badge">${esc(size)}</span>` : ""}<span class="mc-material-file-badge">${esc(source)}</span></div></div><div class="mc-material-actions">${action}<button type="button" class="mc-material-action js-toggle-save" data-material-key="${esc(materialKey(item))}" aria-pressed="false" aria-label="Save material: ${esc(title)}"><span>Save</span></button></div></article>`;
 }
 
 const CATALOG_FIELDS = [
@@ -138,7 +147,7 @@ export async function buildCatalog({ root = resolve(fileURLToPath(new URL("..", 
   const catalogChanged = previousCatalog !== catalogJson;
   const previousHtml = await readFile(indexPath, "utf8");
   let html = previousHtml;
-  const firstPage = resources.slice(0, 36);
+  const firstPage = resources.slice(0, 12);
   html = replaceMarkedBlock(html, "<!-- CATALOG_CARDS_START -->", "<!-- CATALOG_CARDS_END -->", firstPage.map(renderCard).join("\n"));
   const safeJson = value => JSON.stringify(value).replace(/</g, "\\u003c");
   html = replaceMarkedBlock(html, "<!-- CATALOG_DATA_START -->", "<!-- CATALOG_DATA_END -->", '<link rel="preload" href="./catalog-data.json" as="fetch" crossorigin>');
