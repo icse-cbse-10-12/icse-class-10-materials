@@ -5,7 +5,7 @@
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <!-- Primary SEO Metadata -->
   <title>Free ICSE Class 10 Study Materials, Notes & PYQs | ICSE MasterClass</title>
   <meta name="title" content="Free ICSE Class 10 Study Materials, Notes & PYQs | ICSE MasterClass">
@@ -426,6 +426,24 @@
         <i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i>
         <span>8,459 materials are ready to browse.</span>
       </div>
+      <div id="pwaInstallCard" class="pwa-install-card" hidden>
+        <div class="pwa-install-copy">
+          <strong>Take Study Vault with you</strong>
+          <span id="pwaInstallDescription">Install the library for quicker access from your home screen.</span>
+        </div>
+        <button id="pwaInstallAction" type="button" onclick="installPwaApp()" hidden>Install app</button>
+        <details id="pwaIosInstallGuide" hidden>
+          <summary>How to add to Home Screen</summary>
+          <ol>
+            <li>Open this page in Safari.</li>
+            <li>Tap the Share button.</li>
+            <li>Choose <strong>Add to Home Screen</strong>, then tap Add.</li>
+          </ol>
+        </details>
+      </div>
+      <p id="offlineNotice" class="offline-notice" role="status" aria-live="polite" hidden>
+        You are offline. Previously opened pages and the last cached catalogue may still be available. External resource links and PDFs need an internet connection.
+      </p>
     </section>
 
     <section id="study-vault-guide" class="library-seo-guide" aria-labelledby="study-vault-guide-title">
@@ -941,18 +959,6 @@
     <button type="button" onclick="toggleSettings(true)"><i class="fa-solid fa-sliders" aria-hidden="true"></i><span>Settings</span></button>
   </nav>
 
-  <!-- Service Worker Registration -->
-  <script>
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker
-          .register("./sw.js")
-          .catch(error => {
-            console.error("Service worker registration failed:", error);
-          });
-      });
-    }
-  </script>
 
   <script type="module">
     import { createInkTheme } from "./src/inkbleed.js";
@@ -979,6 +985,7 @@
 
 
 <script src="script.js"></script>
+<script src="pwa.js" defer></script>
 <script src="study-tools.js" defer></script>
 <script src="ui-ux.js" defer></script>
 <script src="student-dashboard.js" defer></script>

@@ -203,26 +203,44 @@ window.addEventListener("beforeinstallprompt", event => {
   event.preventDefault();
   deferredPwaPrompt = event;
 
-  document.getElementById("pwaInstallBtn")
-    ?.classList.remove("hidden");
+  document.getElementById("pwaInstallBtn")?.classList.remove("hidden");
+  document.getElementById("pwaInstallCard")?.removeAttribute("hidden");
+  document.getElementById("pwaInstallAction")?.removeAttribute("hidden");
+  const installDescription = document.getElementById("pwaInstallDescription");
+  if (installDescription) installDescription.textContent =
+    "Install the library for quicker access from your home screen.";
+  document.dispatchEvent(new Event("icse:pwa-install-ready"));
 });
 
-function installPwaApp() {
+async function installPwaApp() {
   if (!deferredPwaPrompt) return;
 
-  deferredPwaPrompt.prompt();
+  const promptEvent = deferredPwaPrompt;
+  deferredPwaPrompt = null;
+  const action = document.getElementById("pwaInstallAction");
+  if (action) action.disabled = true;
 
-  deferredPwaPrompt.userChoice.then(choiceResult => {
+  try {
+    await promptEvent.prompt();
+    const choiceResult = await promptEvent.userChoice;
     if (choiceResult.outcome === "accepted") {
       console.log("User accepted the PWA install prompt");
     }
-
-    deferredPwaPrompt = null;
-
-    document.getElementById("pwaInstallBtn")
-      ?.classList.add("hidden");
-  });
+  } catch (error) {
+    console.warn("The install prompt could not be completed.", error);
+  } finally {
+    document.getElementById("pwaInstallBtn")?.classList.add("hidden");
+    document.getElementById("pwaInstallCard")?.setAttribute("hidden", "");
+    if (action) action.disabled = false;
+  }
 }
+
+window.addEventListener("appinstalled", () => {
+  deferredPwaPrompt = null;
+  document.getElementById("pwaInstallBtn")?.classList.add("hidden");
+  document.getElementById("pwaInstallCard")?.setAttribute("hidden", "");
+  document.dispatchEvent(new Event("icse:pwa-installed"));
+});
 
 /* ============================================================
    SUBJECT GRID

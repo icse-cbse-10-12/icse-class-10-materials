@@ -1,8 +1,10 @@
 // Previous cache: icse-masterclass-v1.16.0-edubot-api
-const CACHE_NAME = "icse-masterclass-v1.18.5-dashboard-tailwind";
+const CACHE_NAME = "icse-masterclass-v1.19.0-mobile-pwa";
 const APP_SHELL = [
   "./",
   "./index.html",
+  "./offline.html",
+  "./pwa.js",
   "./blog/",
   "./blog/index.html",
   "./blog/blog.css",
@@ -77,23 +79,31 @@ async function fetchWithTimeout(request, timeoutMs) {
 }
 
 async function networkFirst(request, timeoutMs, ignoreSearch = false) {
+  let response;
   try {
-    const response = await fetchWithTimeout(request, timeoutMs);
+    response = await fetchWithTimeout(request, timeoutMs);
     if (response && response.ok) {
       const cache = await caches.open(CACHE_NAME);
       await cache.put(new Request(request.url), response.clone()).catch(() => {});
       return response;
     }
     const cached = await caches.match(request, { ignoreSearch });
-    return cached || response;
+    if (cached) return cached;
+    if (request.mode === "navigate") {
+      const offline = await caches.match("./offline.html");
+      if (offline) return offline;
+    }
+    return response;
   } catch (error) {
     const cached = await caches.match(request, { ignoreSearch });
     if (cached) return cached;
     if (request.mode === "navigate") {
+      const offline = await caches.match("./offline.html");
+      if (offline) return offline;
       const home = await caches.match("./index.html");
       if (home) return home;
     }
-    return Response.error();
+    return cached || response || Response.error();
   }
 }
 

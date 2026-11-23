@@ -44,10 +44,10 @@ jobs:
           package-manager-cache: false
 
       - name: Run site smoke tests
-        run: node --test tests/site-smoke.test.mjs tests/privacy-controls.test.mjs tests/catalog-build.test.mjs tests/site-polish.test.mjs
+        run: node --test tests/site-smoke.test.mjs tests/privacy-controls.test.mjs tests/catalog-build.test.mjs tests/site-polish.test.mjs tests/mobile-pwa.test.mjs
 
       - name: Check JavaScript syntax
         run: |
-          for file in sw.js edubot-loader.js consent-manager.js script.js gemini-ai.js functions/index.js; do
+          for file in sw.js pwa.js edubot-loader.js consent-manager.js script.js gemini-ai.js functions/index.js; do
             node --check "$file"
           done
