@@ -34,11 +34,12 @@ test("homepage places the subject directory directly after hero search and legal
   assert.doesNotMatch(cards, /Size not listed|<h3>[^<]*_[^<]*<\/h3>/);
   assert.match(html, /A listing does not grant permission to copy or redistribute a file/);
   assert.ok(html.indexOf('id="offlineNotice"') > html.indexOf('id="mainLandingView"'));
+  assert.match(html, /id="resourceLoadMoreButton"[\s\S]*?Load more/);
 });
 
 test("mobile resource rendering starts with 12 cards and search uses a 250ms debounce", () => {
   const js = read("../script.js");
-  assert.match(js, /function getInitialResourcePageSize\(\) \{ return isMobileResourceViewport\(\) \? 12 : RESOURCE_PAGE_SIZE; \}/);
+  assert.ok(js.includes("function getInitialResourcePageSize() { return isMobileResourceViewport() ? 12 : RESOURCE_PAGE_SIZE; }"));
   assert.match(read("../scripts/build-catalog.mjs"), /resources\.slice\(0, 12\)/);
   assert.match(js, /},\s*250\);/);
   assert.match(js, /visibleResourceCount = getInitialResourcePageSize\(\)/);
