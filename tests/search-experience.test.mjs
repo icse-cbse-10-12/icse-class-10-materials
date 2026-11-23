@@ -9,7 +9,7 @@ const css = readFileSync(new URL("../study-desk.css", import.meta.url), "utf8");
 const block = script.match(/\/\* SEARCH INDEX START \*\/([\s\S]*?)\/\* SEARCH INDEX END \*\//);
 assert.ok(block, "search helper block must exist");
 const context = {};
-vm.runInNewContext(block[1] + "\nglobalThis.searchApi = { normalizeSearchText, prepareMaterialSearchIndex, getSearchTokenGroups, matchesMaterialSearch, getMaterialSearchScore };", context);
+vm.runInNewContext(block[1] + "\nglobalThis.searchApi = { normalizeSearchText, prepareMaterialSearchIndex, getSearchTokenGroups, matchesMaterialSearch, getMaterialSearchScore, isMaterialSearchQueryReady };", context);
 const api = context.searchApi;
 
 test("catalogue indexing precomputes normalized title, blob, subject, publisher and year", () => {
@@ -86,4 +86,15 @@ test("empty state resets filters and opens EduBot with the searched topic prefil
   assert.ok(script.includes("ICSE Class 10 level"));
   assert.ok(script.includes("Clear search &amp; filters"));
   assert.ok(script.includes("Ask EduBot about this topic"));
+});
+
+test("live search waits for two characters but permits an empty query to reset", () => {
+  assert.equal(api.isMaterialSearchQueryReady(""), true);
+  assert.equal(api.isMaterialSearchQueryReady("a"), false);
+  assert.equal(api.isMaterialSearchQueryReady("s"), false);
+  assert.equal(api.isMaterialSearchQueryReady("ic"), true);
+  assert.equal(api.isMaterialSearchQueryReady("  a  "), false);
+  assert.match(script, /globalSearchMinimumHint/);
+  assert.match(script, /detailSearchMinimumHint/);
+  assert.match(script, /results\) results\.hidden = true/);
 });
