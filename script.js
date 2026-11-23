@@ -296,7 +296,9 @@ function initSubjectCards() {
   const subjects = subjectGroups[activeSubjectGroup] || subjectsList;
   grid.innerHTML=subjects.map(subject=>{
     const label=subject.replace(/^Second Language\s*[-:]?\s*/i,"");
-    return `<button data-subject="${escapeHTML(subject)}" class="mc-subject-item" type="button" aria-label="Open ${escapeHTML(subject)} subject materials"><span class="mc-subject-illustration" aria-hidden="true">${getSubjectIllustration(subject)}</span><span class="mc-subject-copy"><span class="mc-subject-name">${subject === "All" ? "All Subjects" : escapeHTML(label)}</span><span class="mc-subject-hint">Explore materials <span aria-hidden="true">→</span></span></span></button>`;
+    const illustration = getSubjectIllustration(subject);
+    const tone = illustration.match(/mc-art-([a-z]+)/)?.[1] || "sage";
+    return `<button data-subject="${escapeHTML(subject)}" class="mc-subject-item" type="button" aria-label="Open ${escapeHTML(subject)} subject materials"><span class="mc-subject-illustration mc-illustration-${tone}" aria-hidden="true">${illustration}</span><span class="mc-subject-copy"><span class="mc-subject-name">${subject === "All" ? "All Subjects" : escapeHTML(label)}</span><span class="mc-subject-hint">Explore materials <span aria-hidden="true">→</span></span></span></button>`;
   }).join("");
   document.querySelectorAll("[data-subject-group]").forEach(tab => {
     const active = tab.dataset.subjectGroup === activeSubjectGroup;

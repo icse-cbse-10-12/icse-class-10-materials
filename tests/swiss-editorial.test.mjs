@@ -62,6 +62,8 @@ test("Swiss editorial styling preserves light, dark and midnight palettes with d
   assert.match(css, /color:#141414!important/);
   assert.match(css, /min-height:44px/);
   assert.match(css, /prefers-reduced-motion:reduce/);
+  assert.match(css, /mc-illustration-blue/);
+  assert.ok(read("../script.js").includes("mc-illustration-" + "$" + "{tone}"));
 });
 
 test("PWA hides install UI in standalone mode and keeps offline state event-driven", () => {
