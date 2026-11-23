@@ -24,8 +24,8 @@ test("PWA manifest declares a GitHub Pages-safe scope and adaptive display", () 
 test("PWA runtime handles install prompts, iOS instructions, connectivity and safe service-worker updates", () => {
   const pwa = read("pwa.js");
   const script = read("script.js");
-  assert.match(pwa, /beforeinstallprompt/);
-  assert.match(pwa, /Add to Home Screen/);
+  assert.match(script, /beforeinstallprompt/);
+  assert.match(read("index.html"), /Add to Home Screen/);
   assert.match(pwa, /navigator\.onLine/);
   assert.match(pwa, /updateViaCache:\s*"none"/);
   assert.match(pwa, /navigator\.serviceWorker\.register/);
@@ -47,5 +47,5 @@ test("mobile quick navigation respects safe areas and the Study Tools launcher s
   assert.match(css, /\.mobile-bottom-nav[^}]*safe-area-inset-bottom/s);
   assert.match(css, /#mobileAccountLink\s*\{[^}]*display:\s*flex/s);
   assert.match(css, /#headerActions\s*\{[^}]*display:\s*none/s);
-  assert.match(css, /#pwaInstallCard/);
+  assert.match(css, /\.pwa-install-card/);
 });
