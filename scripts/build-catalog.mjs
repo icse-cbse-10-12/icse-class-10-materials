@@ -85,7 +85,7 @@ export function renderCard(item) {
   const subject = displaySubject(item.Subject);
   const category = clean(item.Category);
   const edition = clean(item.Edition);
-  const publisher = clean(item["Publisher/Company"] || item.Publisher);
+  const publisher = clean(item["Publisher/Company"] || item.Publisher).replace(/\bVastal\b/gi, "Vatsal");
   const scope = clean(item.Scope);
   const size = clean(item["File Size"]);
   const format = clean(item.Format) || "Resource";
