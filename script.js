@@ -133,6 +133,11 @@ function materialSearchText(item) {
   prepareMaterialSearchIndex([item]);
   return item._searchBlob;
 }
+
+function isMaterialSearchQueryReady(query) {
+  const length = normalizeSearchText(query).length;
+  return length === 0 || length >= 2;
+}
 /* SEARCH INDEX END */
 
 function syncSearchClearButtons() {
@@ -149,6 +154,23 @@ function syncSearchClearButtons() {
 function scheduleMaterialSearch(source) {
   syncSearchClearButtons();
   clearTimeout(materialSearchTimer);
+  materialSearchTimer = null;
+
+  const input = document.getElementById(source === "global" ? "globalSearchInput" : "searchInput");
+  const query = input?.value || "";
+  const hint = document.getElementById(source === "global" ? "globalSearchMinimumHint" : "detailSearchMinimumHint");
+  const results = document.getElementById("resourceGrid");
+
+  if (!isMaterialSearchQueryReady(query)) {
+    if (hint) hint.hidden = false;
+    if (results) results.hidden = true;
+    const loadMore = document.getElementById("loadMoreButton");
+    if (loadMore) loadMore.hidden = true;
+    return;
+  }
+
+  if (hint) hint.hidden = true;
+  if (results) results.hidden = false;
   materialSearchTimer = setTimeout(() => {
     materialSearchTimer = null;
     if (source === "global") searchAllMaterials();
@@ -886,6 +908,19 @@ function filterResources() {
     populatePublisherFilter();
   }
   const searchVal = normalizeSearchText(document.getElementById("searchInput")?.value || "");
+  const minimumHint = document.getElementById("detailSearchMinimumHint");
+  const resultsGrid = document.getElementById("resourceGrid");
+  if (searchVal.length === 1) {
+    if (minimumHint) minimumHint.hidden = false;
+    if (resultsGrid) resultsGrid.hidden = true;
+    const loadMore = document.getElementById("loadMoreButton");
+    if (loadMore) loadMore.hidden = true;
+    return;
+  }
+  if (minimumHint) minimumHint.hidden = true;
+  const globalMinimumHint = document.getElementById("globalSearchMinimumHint");
+  if (globalMinimumHint) globalMinimumHint.hidden = true;
+  if (resultsGrid) resultsGrid.hidden = false;
   const searchTokenGroups = getSearchTokenGroups(searchVal);
 
   // Read local browser preferences once, never thousands of times per filter.
