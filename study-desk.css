@@ -29,3 +29,24 @@ body.mc-home .pwa-install-card,body.mc-home #offlineNotice{background:var(--desk
 body.mc-home .pwa-install-card :is(p,span,summary),body.mc-home #offlineNotice :is(p,span){color:inherit}
 @media(max-width:767px){body.mc-home #resourceGrid .mc-material-row{padding:16px!important}body.mc-home #resourceGrid .mc-material-actions{grid-template-columns:minmax(0,1fr) 104px}body.mc-home .library-filter-tabs{overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none;overscroll-behavior-x:contain}body.mc-home .library-filter-tabs::-webkit-scrollbar{display:none}body.mc-home .library-filter-tabs .cat-btn{flex:0 0 auto;white-space:nowrap}}
 @media(prefers-reduced-motion:reduce){body.mc-home *,body.mc-home *::before,body.mc-home *::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}}
+
+
+/* Search experience: compact, thumb-friendly and consistent with Study Desk. */
+body.mc-home .study-desk-search-field{position:relative;display:flex;align-items:center;min-width:0}
+body.mc-home .study-desk-search-field #globalSearchInput{width:100%;min-width:0;padding-right:3.5rem!important;min-height:48px}
+body.mc-home .study-desk-detail-search #searchInput{width:100%;min-height:44px;padding-right:3.5rem!important}
+body.mc-home .study-desk-search-clear{position:absolute;right:4px;top:50%;transform:translateY(-50%);display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;min-width:44px;padding:0;border:0;border-radius:10px;background:transparent;color:var(--desk-muted);font-size:26px;line-height:1;cursor:pointer}
+body.mc-home .study-desk-search-clear[hidden]{display:none!important}
+body.mc-home .study-desk-search-clear:hover{background:var(--desk-soft);color:var(--desk-ink)}
+body.mc-home .study-desk-quick-search{display:flex;gap:8px;overflow-x:auto;padding:10px 1px 4px;scrollbar-width:none;overscroll-behavior-x:contain}
+body.mc-home .study-desk-quick-search::-webkit-scrollbar{display:none}
+body.mc-home .study-desk-quick-search button{flex:0 0 auto;min-height:44px;padding:8px 13px;border:1px solid var(--desk-line);border-radius:999px;background:var(--desk-surface);color:var(--desk-muted);font-size:12px;font-weight:750;white-space:nowrap}
+body.mc-home .study-desk-quick-search button:hover,body.mc-home .study-desk-quick-search button:focus-visible{background:var(--desk-soft);border-color:var(--desk-green);color:var(--desk-soft-ink)}
+body.mc-home .study-desk-search-empty{display:grid;justify-items:center;gap:10px;max-width:620px;margin:12px auto;padding:28px 20px;border:1px solid var(--desk-line);border-radius:16px;background:var(--desk-surface);color:var(--desk-ink);text-align:center}
+body.mc-home .study-desk-search-empty-icon{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--desk-soft);color:var(--desk-soft-ink);font-size:26px}
+body.mc-home .study-desk-search-empty h3{margin:0;color:var(--desk-ink);font-size:17px;font-weight:800}
+body.mc-home .study-desk-search-empty p{max-width:44ch;margin:0;color:var(--desk-muted);font-size:13px;line-height:1.6;overflow-wrap:anywhere}
+body.mc-home .study-desk-search-empty-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:4px}
+body.mc-home .study-desk-search-empty-actions button{min-height:44px;padding:10px 15px;border:1px solid var(--desk-green);border-radius:10px;background:var(--desk-green);color:var(--desk-green-ink);font-size:13px;font-weight:750}
+body.mc-home .study-desk-search-empty-actions button.secondary{background:var(--desk-soft);color:var(--desk-soft-ink);border-color:var(--desk-line)}
+@media(max-width:520px){body.mc-home .study-desk-search-empty{padding:22px 14px}body.mc-home .study-desk-search-empty-actions{width:100%}body.mc-home .study-desk-search-empty-actions button{width:100%}}

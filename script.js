@@ -43,26 +43,111 @@ let currentCategory = "All";
 let currentPublisher = "all";
 let allResources = [];
 let filteredResources = [];
-// Build only a small number of cards per frame to keep mobile devices responsive.
-// Filter and search still scan the complete catalogue of 8,000+ materials.
-const RESOURCE_PAGE_SIZE = 36;
+// Keep DOM work bounded on every device: 12 cards per render batch.
+const RESOURCE_PAGE_SIZE = 12;
 function isMobileResourceViewport() { return window.matchMedia && window.matchMedia("(max-width: 767px)").matches; }
-function getInitialResourcePageSize() { return isMobileResourceViewport() ? 12 : RESOURCE_PAGE_SIZE; }
-function getResourcePageIncrement() { return isMobileResourceViewport() ? 12 : RESOURCE_PAGE_SIZE; }
-let visibleResourceCount = getInitialResourcePageSize();
+function getInitialResourcePageSize() { return 12; }
+function getResourcePageIncrement() { return 12; }
+let visibleResourceCount = 12;
 let materialSearchTimer = null;
-const materialSearchTextCache = new WeakMap();
-function materialSearchText(item) {
-  let cached = materialSearchTextCache.get(item);
-  if (cached !== undefined) return cached;
-  cached = [
-    item["Book Name"],item["Subject"],item["Publisher/Company"],item["Publisher"],
-    item["Category"],item["Scope"],item["Edition"],item["Format"]
-  ].filter(Boolean).join(" ").toLowerCase();
-  materialSearchTextCache.set(item,cached);
-  return cached;
+
+/* SEARCH INDEX START */
+const SEARCH_TERM_ALIASES = Object.freeze({
+  chem: ["chem", "chemistry"],
+  phy: ["phy", "physics"],
+  bio: ["bio", "biology"],
+  geo: ["geo", "geography"],
+  hist: ["hist", "history"],
+  comp: ["comp", "computer"],
+  lit: ["lit", "literature"],
+  pyq: ["pyq", "previous year", "previous year solved", "past year", "solved question", "question paper"],
+  pyqs: ["pyq", "pyqs", "previous year", "previous year solved", "past year", "solved question", "question paper"]
+});
+
+function normalizeSearchText(value) {
+  return String(value ?? "")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim()
+    .replace(/\s+/g, " ");
 }
+
+function prepareMaterialSearchIndex(items) {
+  for (const item of items) {
+    const rawTitle = String(item["Book Name"] || item["Subject"] || "")
+      .replace(/\.(?:pdf|docx?)$/i, "")
+      .replace(/[_-]+/g, " ");
+    const publisher = String(item["Publisher/Company"] || item["Publisher"] || "")
+      .trim()
+      .replace(/\s+/g, " ")
+      .replace(/\bVastal\b/gi, "Vatsal");
+    const subject = String(item["Subject"] || "");
+    const category = String(item["Category"] || "");
+    const edition = String(item["Edition"] || "");
+    const scope = String(item["Scope"] || "");
+    const format = String(item["Format"] || "");
+    const editionMatches = [edition, rawTitle, scope].join(" ").match(/20\d{2}/g) || [];
+
+    item._searchTitle = normalizeSearchText(rawTitle);
+    item._searchSubject = subject.toLowerCase().trim();
+    item._searchCategory = category.toLowerCase().trim();
+    item._searchPublisher = publisher.toLowerCase().trim();
+    item._publisherKey = publisher.toLocaleLowerCase();
+    item._materialYear = /^20\d{2}$/.test(edition.trim())
+      ? edition.trim()
+      : editionMatches.length ? editionMatches[editionMatches.length - 1] : "";
+    item._searchBlob = normalizeSearchText([
+      rawTitle, subject, publisher, category, edition, scope, format
+    ].filter(Boolean).join(" "));
+  }
+  return items;
+}
+
+function getSearchTokenGroups(query) {
+  return normalizeSearchText(query).split(" ").filter(Boolean).map(token =>
+    SEARCH_TERM_ALIASES[token] || [token]
+  );
+}
+
+function matchesMaterialSearch(item, tokenGroups) {
+  if (!tokenGroups.length) return true;
+  const blob = item._searchBlob || materialSearchText(item);
+  return tokenGroups.every(group => group.some(alias => blob.includes(alias)));
+}
+
+function getMaterialSearchScore(item, tokenGroups, normalizedQuery) {
+  if (!tokenGroups.length) return 0;
+  const title = item._searchTitle || normalizeSearchText(item["Book Name"] || item["Subject"] || "");
+  if (normalizedQuery && title === normalizedQuery) return 1000;
+  const titleMatches = tokenGroups.reduce((count, group) =>
+    count + (group.some(alias => title.includes(alias)) ? 1 : 0), 0);
+  if (titleMatches === tokenGroups.length) return 500 + titleMatches;
+  return titleMatches * 10;
+}
+
+function materialSearchText(item) {
+  if (typeof item._searchBlob === "string") return item._searchBlob;
+  prepareMaterialSearchIndex([item]);
+  return item._searchBlob;
+}
+/* SEARCH INDEX END */
+
+function syncSearchClearButtons() {
+  [["globalSearchInput", "globalSearchClear"], ["searchInput", "detailSearchClear"]].forEach(([inputId, buttonId]) => {
+    const input = document.getElementById(inputId);
+    const button = document.getElementById(buttonId);
+    if (!button) return;
+    const hasValue = Boolean(input?.value?.trim());
+    button.hidden = !hasValue;
+    button.setAttribute("aria-hidden", String(!hasValue));
+  });
+}
+
 function scheduleMaterialSearch(source) {
+  syncSearchClearButtons();
   clearTimeout(materialSearchTimer);
   materialSearchTimer = setTimeout(() => {
     materialSearchTimer = null;
@@ -70,6 +155,7 @@ function scheduleMaterialSearch(source) {
     else filterResources();
   }, 250);
 }
+
 function loadMoreMaterials() {
   if (visibleResourceCount >= filteredResources.length) return;
   const from = visibleResourceCount;
@@ -356,6 +442,7 @@ async function fetchSheetData() {
       const prerendered = JSON.parse(embeddedCatalog.textContent || "[]");
       if (Array.isArray(prerendered) && prerendered.length > 0) {
         allResources = prerendered;
+        prepareMaterialSearchIndex(allResources);
         window.icseCatalogReady = true;
         if (statusEl) statusEl.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600" aria-hidden="true"></i><span>Loaded ${allResources.length.toLocaleString()} materials from the pre-rendered catalogue.</span>`;
         const pendingQuery = document.getElementById("globalSearchInput")?.value?.trim();
@@ -378,6 +465,7 @@ async function fetchSheetData() {
           : [];
       if (cachedResources.length > 0) {
         allResources = cachedResources;
+        prepareMaterialSearchIndex(allResources);
         window.icseCatalogReady = true;
         if (statusEl) statusEl.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600" aria-hidden="true"></i><span>Loaded ${allResources.length.toLocaleString()} materials from the cached catalogue.</span>`;
         const pendingQuery = document.getElementById("globalSearchInput")?.value?.trim();
@@ -416,6 +504,7 @@ async function fetchSheetData() {
   }
 
   allResources = resources;
+        prepareMaterialSearchIndex(allResources);
   window.icseCatalogReady = true;
 
   if (statusEl) {
@@ -595,6 +684,7 @@ function searchAllMaterials() {
   if (detailInput) {
     detailInput.value = query;
   }
+  syncSearchClearButtons();
 
   currentSubject = "All";
   currentCategory = "All";
@@ -635,17 +725,89 @@ function searchAllMaterials() {
   filterResources();
 }
 
+function clearGlobalSearch() {
+  const globalInput = document.getElementById("globalSearchInput");
+  const detailInput = document.getElementById("searchInput");
+  if (globalInput) globalInput.value = "";
+  if (detailInput) detailInput.value = "";
+  currentSubject = "All";
+  currentCategory = "All";
+  currentPersonalView = "all";
+  updatePersonalLibraryUI();
+  syncSearchClearButtons();
+  filterResources();
+}
+
+function clearDetailSearch() {
+  const detailInput = document.getElementById("searchInput");
+  const globalInput = document.getElementById("globalSearchInput");
+  if (detailInput) detailInput.value = "";
+  if (globalInput) globalInput.value = "";
+  syncSearchClearButtons();
+  filterResources();
+}
+
+function runQuickSearch(query) {
+  const globalInput = document.getElementById("globalSearchInput");
+  const detailInput = document.getElementById("searchInput");
+  if (globalInput) globalInput.value = query;
+  if (detailInput) detailInput.value = query;
+  syncSearchClearButtons();
+  searchAllMaterials();
+}
+
+function clearSearchAndFilters() {
+  clearTimeout(materialSearchTimer);
+  materialSearchTimer = null;
+  currentSubject = "All";
+  currentCategory = "All";
+  currentPublisher = "all";
+  currentPersonalView = "all";
+  const globalInput = document.getElementById("globalSearchInput");
+  const detailInput = document.getElementById("searchInput");
+  const yearFilter = document.getElementById("yearFilter");
+  const publisherFilter = document.getElementById("publisherFilter");
+  if (globalInput) globalInput.value = "";
+  if (detailInput) detailInput.value = "";
+  if (yearFilter) yearFilter.value = "all";
+  if (publisherFilter) publisherFilter.value = "all";
+  document.querySelectorAll(".cat-btn").forEach(button => button.classList.remove("active-tab", "bg-amber-500", "text-black"));
+  document.querySelector(".cat-btn")?.classList.add("active-tab", "bg-amber-500", "text-black");
+  document.getElementById("mainLandingView")?.classList.remove("hidden");
+  document.getElementById("subjectDetailView")?.classList.add("hidden");
+  document.getElementById("globalSearchWrap")?.classList.remove("hidden");
+  document.querySelector(".library-discovery")?.classList.remove("hidden");
+  const title = document.getElementById("selectedSubjectTitle");
+  if (title) title.textContent = "All Subjects Vault";
+  updatePersonalLibraryUI();
+  syncSearchClearButtons();
+  filterResources();
+  history.pushState("", document.title, window.location.pathname + window.location.search);
+}
+
+function askEduBotAboutSearch() {
+  const query = (document.getElementById("searchInput")?.value || document.getElementById("globalSearchInput")?.value || "").trim();
+  const input = document.getElementById("edubotChatInput");
+  if (input) input.value = query
+    ? "Please explain \"" + query + "\" at ICSE Class 10 level, with key concepts and a short example."
+    : "Please help me understand an ICSE Class 10 topic.";
+  if (typeof window.toggleEduBot === "function") {
+    window.toggleEduBot(true);
+  } else {
+    document.getElementById("eduBotAssistant")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
+
 /* ============================================================
    FILTER RESOURCES
    ============================================================ */
 
 function getMaterialYear(item) {
-  const text = `${item["Edition"] || ""} ${item["Book Name"] || ""} ${item["Scope"] || ""}`;
+  if (typeof item._materialYear === "string") return item._materialYear;
+  const text = [item["Edition"] || "", item["Book Name"] || "", item["Scope"] || ""].join(" ");
   const matches = text.match(/20\d{2}/g) || [];
-  // Prefer the explicit Edition field when it contains a year.
   const edition = String(item["Edition"] || "").trim();
-  if (/^20\d{2}$/.test(edition)) return edition;
-  return matches.length ? matches[matches.length - 1] : "";
+  return /^20\d{2}$/.test(edition) ? edition : matches.length ? matches[matches.length - 1] : "";
 }
 
 function populateYearFilter() {
@@ -723,9 +885,8 @@ function filterResources() {
   if (document.getElementById("publisherFilter") && document.getElementById("publisherFilter").options.length <= 1 && allResources.length) {
     populatePublisherFilter();
   }
-  const searchVal = (
-    document.getElementById("searchInput")?.value || ""
-  ).toLowerCase().trim();
+  const searchVal = normalizeSearchText(document.getElementById("searchInput")?.value || "");
+  const searchTokenGroups = getSearchTokenGroups(searchVal);
 
   // Read local browser preferences once, never thousands of times per filter.
   const selectedYear = document.getElementById("yearFilter")?.value || "all";
@@ -737,15 +898,11 @@ function filterResources() {
       : null;
 
   filteredResources = allResources.filter(item => {
-    const itemSubject =
-      (item["Subject"] || "").toLowerCase().trim();
+    const itemSubject = item._searchSubject ?? (item["Subject"] || "").toLowerCase().trim();
 
-    const itemCategory =
-      (item["Category"] || "").toLowerCase().trim();
+    const itemCategory = item._searchCategory ?? (item["Category"] || "").toLowerCase().trim();
 
-    const publisher = (
-      item["Publisher/Company"] || item["Publisher"] || ""
-    ).toLowerCase().trim();
+    const publisher = item._searchPublisher ?? (item["Publisher/Company"] || item["Publisher"] || "").toLowerCase().trim();
 
     let subMatch = false;
 
@@ -822,16 +979,21 @@ if (currentCategory === "All") {
 
 
     // Search across more fields than just book name and subject.
-    const srchMatch = !searchVal || materialSearchText(item).includes(searchVal);
+    const srchMatch = !searchVal || matchesMaterialSearch(item, searchTokenGroups);
     const yearMatch = selectedYear === "all" || getMaterialYear(item) === selectedYear;
-    const itemPublisher = normalizePublisherValue(getMaterialPublisher(item));
+    const itemPublisher = item._publisherKey ?? normalizePublisherValue(getMaterialPublisher(item));
     const publisherMatch = selectedPublisher === "all" || itemPublisher === selectedPublisher;
     const personalMatch = !personalKeySet || personalKeySet.has(getMaterialKey(item));
 
     return subMatch && catMatch && srchMatch && yearMatch && publisherMatch && personalMatch;
   });
 
-  if (currentPersonalView === "recent") {
+  if (searchVal) {
+    filteredResources.sort((a, b) =>
+      getMaterialSearchScore(b, searchTokenGroups, searchVal) -
+      getMaterialSearchScore(a, searchTokenGroups, searchVal)
+    );
+  } else if (currentPersonalView === "recent") {
     const recentOrder = readPersonalList(RECENT_MATERIALS_KEY);
     filteredResources.sort((a, b) => recentOrder.indexOf(getMaterialKey(a)) - recentOrder.indexOf(getMaterialKey(b)));
   } else if (currentCategory === "PYQ" || currentCategory === "PYQs / Specimen Papers") {
@@ -955,7 +1117,16 @@ function renderGrid(data, appendFrom = 0) {
   if (loadMoreButton) loadMoreButton.disabled = shown >= data.length;
 
   if (data.length === 0) {
-    grid.innerHTML = '<div class="mc-material-empty">No study materials matched your search or category filter.</div>';
+    const query = (document.getElementById("searchInput")?.value || document.getElementById("globalSearchInput")?.value || "").trim();
+    const safeQuery = escapeHTML(query);
+    grid.innerHTML = '<section class="study-desk-search-empty" role="status" aria-live="polite">' +
+      '<span class="study-desk-search-empty-icon" aria-hidden="true">⌕</span>' +
+      '<h3>No matching materials found</h3>' +
+      '<p>' + (query ? 'No resource matched “' + safeQuery + '” with the current filters.' : 'No materials match the selected filters.') + '</p>' +
+      '<div class="study-desk-search-empty-actions">' +
+      '<button type="button" onclick="clearSearchAndFilters()">Clear search &amp; filters</button>' +
+      (query ? '<button type="button" class="secondary" onclick="askEduBotAboutSearch()">Ask EduBot about this topic</button>' : '') +
+      '</div></section>';
     return;
   }
 

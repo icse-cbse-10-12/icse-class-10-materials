@@ -246,7 +246,7 @@
   <link rel="stylesheet" href="academic-library.css?v=5">
   <link rel="stylesheet" href="site-polish.css?v=2">
   <link rel="stylesheet" href="swiss-editorial.css?v=1">
-  <link rel="stylesheet" href="study-desk.css?v=1">
+  <link rel="stylesheet" href="study-desk.css?v=2">
 
   <style id="edubot-embed-responsive">
     #eduBotAssistant { scroll-margin-top: 84px; min-width: 0; }
@@ -416,14 +416,22 @@
       <p class="library-intro">Search notes, question banks, specimen papers and revision resources—or start with a subject below.</p>
       <div id="globalSearchWrap" class="library-search-wrap">
         <label for="globalSearchInput">Search materials</label>
-        <div class="library-search-field">
+        <div class="library-search-field study-desk-search-field">
           <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
           <input id="globalSearchInput" type="search" oninput="scheduleMaterialSearch('global')"
             placeholder="Search title, subject or chapter" autocomplete="off"
             aria-label="Search all study materials">
+          <button id="globalSearchClear" class="study-desk-search-clear" type="button" onclick="clearGlobalSearch()" aria-label="Clear search" aria-hidden="true" hidden>×</button>
+        </div>
+        <div class="study-desk-quick-search" role="group" aria-label="Quick searches">
+          <button type="button" onclick="runQuickSearch('PYQs 2026')">PYQs 2026</button>
+          <button type="button" onclick="runQuickSearch('Oswaal')">Oswaal</button>
+          <button type="button" onclick="runQuickSearch('Selina')">Selina</button>
+          <button type="button" onclick="runQuickSearch('Specimen Papers')">Specimen Papers</button>
+          <button type="button" onclick="runQuickSearch('Handwritten Notes')">Handwritten Notes</button>
         </div>
       </div>
-      <p class="library-search-hint">Tip: Try a chapter, topic, book title or publisher.</p>
+      <p class="library-search-hint">Tip: Search a chapter, topic, book title or publisher. Try a quick search above.</p>
 
 
     <!-- Landing Page -->
@@ -495,16 +503,17 @@
           </div>
         </div>
 
-        <div class="relative w-full sm:w-72">
-          <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xs"></i>
-
+        <div class="relative w-full sm:w-72 study-desk-detail-search">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xs" aria-hidden="true"></i>
           <input
-            type="text"
+            type="search"
             id="searchInput"
             oninput="scheduleMaterialSearch('detail')"
             placeholder="Search book, topic, publisher..."
-            class="w-full bg-gray-900 border border-gray-800 rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 transition"
+            aria-label="Search within materials"
+            class="w-full bg-gray-900 border border-gray-800 rounded-xl pl-9 pr-12 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 transition"
           >
+          <button id="detailSearchClear" class="study-desk-search-clear" type="button" onclick="clearDetailSearch()" aria-label="Clear search" aria-hidden="true" hidden>×</button>
         </div>
       </div>
 
