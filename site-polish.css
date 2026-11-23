@@ -101,7 +101,7 @@ body.mc-not-found .not-found-actions a:first-child{border-color:var(--site-prima
 html{background:var(--site-paper)!important;scroll-padding-top:88px}
 body.mc-home{background:var(--site-paper)!important;color:var(--site-ink)!important;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif!important;padding-bottom:calc(82px + env(safe-area-inset-bottom))!important}
 body.mc-home ::selection{background:#dce8f3;color:#17324c}
-body.mc-home header.sticky{background:rgba(255,255,255,.94)!important;border-bottom:1px solid var(--site-line)!important;box-shadow:0 3px 18px rgba(24,34,48,.045);backdrop-filter:blur(16px)!important}
+body.mc-home header.sticky{background:rgba(255,255,255,.94)!important;border-bottom:1px solid var(--site-line)!important;box-shadow:0 3px 18px rgba(24,34,48,.045);}
 #siteHeaderInner{height:76px!important;max-width:1240px!important;gap:14px!important}
 #siteHeaderInner>a:first-child{gap:11px!important;text-decoration:none}
 #siteHeaderInner>a:first-child img{width:44px!important;height:44px!important;border:1px solid #e6d7b4!important;background:#fff!important}
@@ -115,7 +115,7 @@ body.mc-home header.sticky{background:rgba(255,255,255,.94)!important;border-bot
 #headerActions a{width:40px!important;height:40px!important;border-radius:11px!important;background:#f4f6f8!important;border:1px solid #e0e5eb!important;color:#35516d!important}
 #headerActions a:hover{background:#eaf1f7!important;color:#173f65!important}
 #mainContent{max-width:1240px!important;padding:34px 28px 52px!important;color:var(--site-ink)!important}
-.library-discovery{position:relative!important;overflow:hidden!important;padding:clamp(24px,4vw,42px)!important;border:1px solid #e1e6ec!important;border-radius:24px!important;background:linear-gradient(125deg,#fff 0%,#f8fafc 68%,#edf3f7 100%)!important;box-shadow:var(--site-shadow)!important}
+.library-discovery{position:relative!important;overflow:hidden!important;padding:clamp(24px,4vw,42px)!important;border:1px solid #e1e6ec!important;border-radius:24px!important;background:#fff!important;box-shadow:var(--site-shadow)!important}
 .library-discovery:after{content:"";position:absolute;right:-70px;top:-110px;width:290px;height:290px;border:1px solid rgba(35,78,112,.09);border-radius:50%;pointer-events:none}
 .library-heading,.library-intro,.library-search-wrap,.library-search-hint,.library-status{position:relative;z-index:1}
 .library-eyebrow{color:#9a6c1c!important;font-size:.72rem!important;font-weight:800!important;letter-spacing:.16em!important;margin:0 0 12px!important}
@@ -171,7 +171,7 @@ body.mc-home .library-legal-copy>section[aria-labelledby="resourceDisclaimerTitl
 body.mc-home .library-legal-copy>section[aria-labelledby="resourceDisclaimerTitle"] h3{color:#8a621c!important}
 body.mc-home footer{background:#fff!important;border-color:#e2e7ed!important;color:#647184!important}
 body.mc-home footer a{color:#355a7a!important}
-body.mc-home .mobile-bottom-nav{z-index:1000!important;position:fixed!important;left:0!important;right:0!important;bottom:0!important;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:3px!important;padding:8px 10px calc(8px + env(safe-area-inset-bottom))!important;background:rgba(255,255,255,.97)!important;border-top:1px solid #e1e6ec!important;box-shadow:0 -8px 24px rgba(24,34,48,.07)!important;backdrop-filter:blur(16px)!important}
+body.mc-home .mobile-bottom-nav{z-index:1000!important;position:fixed!important;left:0!important;right:0!important;bottom:0!important;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:3px!important;padding:8px 10px calc(8px + env(safe-area-inset-bottom))!important;background:rgba(255,255,255,.97)!important;border-top:1px solid #e1e6ec!important;box-shadow:0 -8px 24px rgba(24,34,48,.07)!important;}
 body.mc-home .mobile-bottom-nav button{min-width:0!important;min-height:54px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:4px!important;border:0!important;border-radius:11px!important;background:transparent!important;color:#536477!important;font-size:.69rem!important;font-weight:700!important;box-shadow:none!important}
 body.mc-home .mobile-bottom-nav button i{font-size:1.05rem!important;color:#315675!important}
 body.mc-home .mobile-bottom-nav button:active{background:#edf3f7!important}
