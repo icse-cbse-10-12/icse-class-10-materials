@@ -7,6 +7,8 @@ const read = path => readFileSync(new URL(`../${path}`, import.meta.url), "utf8"
 test("display titles repair known typos, title-case uppercase filename tokens and remove copy suffixes", () => {
   const title = value => renderCard({ "Book Name": value, Subject: "Chemistry", Format: "PDF" }).match(/<h3>(.*?)<\/h3>/)?.[1];
   assert.equal(title("Vastal Chemistry Handbook (2024).pdf"), "Vatsal Chemistry Handbook (2024)");
+  const publisherCard = renderCard({ "Book Name": "Vatsal Chemistry Handbook (2024).pdf", "Publisher/Company": "Vastal", Subject: "Chemistry", Format: "PDF" });
+  assert.match(publisherCard, /mc-material-meta-chip\">Vatsal<\/span>/);
   assert.equal(title("QUEST-BOOK-ICSE-10-Chemistry.pdf"), "Quest Book ICSE 10 Chemistry");
   assert.equal(title("Arihant Chemistry 2022-2000 (1).pdf"), "Arihant Chemistry 2022-2000");
   assert.equal(title("Arihant Chemistry 2022-2000 (2).pdf"), "Arihant Chemistry 2022-2000");
@@ -26,6 +28,7 @@ test("hidden UI state is authoritative for PWA notices, saved count and the mate
   assert.match(pwa, /navigator\.onLine !== false/);
   assert.match(html, /<h3>Vatsal Chemistry Handbook \(2024\)<\/h3>/);
   assert.match(html, /<h3>Quest Book ICSE 10 Chemistry<\/h3>/);
+  assert.match(js, /formatMaterialPublisherLabel/);
   assert.match(js, /detailView.*removeAttribute\(\"hidden\"\)/s);
   assert.match(js, /detailView.*setAttribute\(\"hidden\"/s);
 });

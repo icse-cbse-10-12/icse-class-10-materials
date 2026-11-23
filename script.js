@@ -660,9 +660,7 @@ function populateYearFilter() {
 }
 
 function getMaterialPublisher(item) {
-  return String(item?.["Publisher/Company"] || item?.["Publisher"] || "")
-    .trim()
-    .replace(/\s+/g, " ");
+  return formatMaterialPublisherLabel(item?.["Publisher/Company"] || item?.["Publisher"] || "");
 }
 
 function normalizePublisherValue(value) {
@@ -916,6 +914,10 @@ function closeSubjectSubPage() {
    MATERIAL DIRECTORY ROWS
    ============================================================ */
 
+function formatMaterialPublisherLabel(value) {
+  return String(value || "").trim().replace(/\s+/g, " ").replace(/\bVastal\b/gi, "Vatsal");
+}
+
 function formatMaterialDisplayTitle(value) {
   const acronyms = new Set(["ICSE", "ISC", "CBSE", "CISCE", "PYQ", "PYQS", "JEE", "NEET", "MCQ", "MCQS", "DNA", "RNA", "HTML", "CSS", "AI"]);
   return String(value || "Study material").trim()
@@ -974,7 +976,7 @@ function renderGrid(data, appendFrom = 0) {
     const title = formatMaterialDisplayTitle(item["Book Name"] || item["Subject"] || "");
     const subject = formatMaterialSubjectLabel(item["Subject"] || "");
     const category = item["Category"] || "";
-    const publisher = item["Publisher/Company"] || item["Publisher"] || "";
+    const publisher = formatMaterialPublisherLabel(item["Publisher/Company"] || item["Publisher"] || "");
     const fileSize = String(item["File Size"] || "").trim();
     const fileFormat = String(item["Format"] || "Resource").trim() || "Resource";
     let sourceBadge = "Link unavailable";
