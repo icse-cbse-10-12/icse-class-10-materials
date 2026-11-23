@@ -75,7 +75,7 @@ test("search is debounced and result rendering is capped at 12 cards per batch",
   assert.match(script, /const RESOURCE_PAGE_SIZE = 12;/);
   assert.ok(script.includes("function getInitialResourcePageSize() { return isMobileResourceViewport() ? 12 : RESOURCE_PAGE_SIZE; }"));
   assert.ok(script.includes("function getResourcePageIncrement() { return isMobileResourceViewport() ? 12 : RESOURCE_PAGE_SIZE; }"));
-  assert.match(script, /function getResourcePageIncrement\(\) \{ return 12; \}/);
+  assert.ok(script.includes("function getResourcePageIncrement() { return isMobileResourceViewport() ? 12 : RESOURCE_PAGE_SIZE; }"));
   assert.match(html, /onclick="loadMoreMaterials\(\)"/);
 });
 
