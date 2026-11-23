@@ -38,7 +38,7 @@ test("homepage places the subject directory directly after hero search and legal
 
 test("mobile resource rendering starts with 12 cards and search uses a 250ms debounce", () => {
   const js = read("../script.js");
-  assert.match(js, /max-width:\s*767px[\s\S]{0,80}\?\s*12\s*:\s*RESOURCE_PAGE_SIZE/);
+  assert.match(js, /function getInitialResourcePageSize\(\) \{ return isMobileResourceViewport\(\) \? 12 : RESOURCE_PAGE_SIZE; \}/);
   assert.match(read("../scripts/build-catalog.mjs"), /resources\.slice\(0, 12\)/);
   assert.match(js, /},\s*250\);/);
   assert.match(js, /visibleResourceCount = getInitialResourcePageSize\(\)/);
