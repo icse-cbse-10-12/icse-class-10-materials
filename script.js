@@ -46,9 +46,9 @@ let filteredResources = [];
 // Keep DOM work bounded on every device: 12 cards per render batch.
 const RESOURCE_PAGE_SIZE = 12;
 function isMobileResourceViewport() { return window.matchMedia && window.matchMedia("(max-width: 767px)").matches; }
-function getInitialResourcePageSize() { return 12; }
-function getResourcePageIncrement() { return 12; }
-let visibleResourceCount = 12;
+function getInitialResourcePageSize() { return isMobileResourceViewport() ? 12 : RESOURCE_PAGE_SIZE; }
+function getResourcePageIncrement() { return isMobileResourceViewport() ? 12 : RESOURCE_PAGE_SIZE; }
+let visibleResourceCount = getInitialResourcePageSize();
 let materialSearchTimer = null;
 
 /* SEARCH INDEX START */

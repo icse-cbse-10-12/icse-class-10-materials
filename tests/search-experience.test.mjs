@@ -72,7 +72,9 @@ test("global and detail search have clear controls and five quick-search chips",
 
 test("search is debounced and result rendering is capped at 12 cards per batch", () => {
   assert.match(script, /setTimeout\(\(\) => \{[\s\S]*?\}, 250\)/);
-  assert.match(script, /function getInitialResourcePageSize\(\) \{ return 12; \}/);
+  assert.match(script, /const RESOURCE_PAGE_SIZE = 12;/);
+  assert.ok(script.includes("function getInitialResourcePageSize() { return isMobileResourceViewport() ? 12 : RESOURCE_PAGE_SIZE; }"));
+  assert.ok(script.includes("function getResourcePageIncrement() { return isMobileResourceViewport() ? 12 : RESOURCE_PAGE_SIZE; }"));
   assert.match(script, /function getResourcePageIncrement\(\) \{ return 12; \}/);
   assert.match(html, /onclick="loadMoreMaterials\(\)"/);
 });
