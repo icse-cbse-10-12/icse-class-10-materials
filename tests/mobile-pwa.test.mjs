@@ -10,6 +10,8 @@ test("mobile viewport supports device safe areas and exposes a real install acti
   assert.match(html, /id="pwaInstallCard"/);
   assert.match(html, /id="offlineNotice"/);
   assert.match(html, /pwa\.js/);
+  assert.match(html, /name="apple-mobile-web-app-status-bar-style" content="default"/);
+  assert.doesNotMatch(html, /apple-mobile-web-app-status-bar-style" content="black-translucent"/);
 });
 
 test("PWA manifest declares a GitHub Pages-safe scope and adaptive display", () => {
