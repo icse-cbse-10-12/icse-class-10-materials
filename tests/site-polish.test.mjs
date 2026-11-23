@@ -57,8 +57,9 @@ test("404 page uses local system fonts and no remote Tailwind or Google Fonts", 
 
 test("service worker precaches the shared visual layer under a fresh cache version", () => {
   const sw = read("sw.js");
-  assert.ok(sw.includes("icse-masterclass-v1.19.1-colour-refresh"));
+  assert.ok(sw.includes("icse-masterclass-v1.20.0-swiss-editorial"));
   assert.ok(sw.includes("./site-polish.css?v=2"));
+  assert.ok(sw.includes("./swiss-editorial.css?v=1"));
 });
 
 test("protected copyright and non-affiliation copy remains present", () => {
@@ -101,7 +102,7 @@ test("homepage exposes answer-ready directory guidance and matching site schema"
 
 test("service worker invalidates the previous shell cache after editorial accessibility changes", () => {
   const sw = read("sw.js");
-  assert.ok(sw.includes("icse-masterclass-v1.19.1-colour-refresh"));
+  assert.ok(sw.includes("icse-masterclass-v1.20.0-swiss-editorial"));
   assert.ok(sw.includes('"./blog/blog.css"'));
 });
 
@@ -127,7 +128,7 @@ test("mobile search placeholder stays concise and the logo has descriptive alt t
 
 test("sitemap homepage lastmod reflects homepage edits without changing blog and FAQ dates", () => {
   const sitemap = read("sitemap.xml");
-  assert.ok(sitemap.includes("<loc>https://icse-cbse-10-12.github.io/icse-class-10-materials/</loc><lastmod>2026-11-15</lastmod>"));
+  assert.ok(sitemap.includes("<loc>https://icse-cbse-10-12.github.io/icse-class-10-materials/</loc><lastmod>2026-11-23</lastmod>"));
   assert.ok(sitemap.includes("<loc>https://icse-cbse-10-12.github.io/icse-class-10-materials/blog/</loc><lastmod>2026-11-12</lastmod>"));
   assert.ok(sitemap.includes("<loc>https://icse-cbse-10-12.github.io/icse-class-10-materials/faq.html</loc><lastmod>2026-11-12</lastmod>"));
 });

@@ -59,3 +59,16 @@ test("resource cards use accurate labels for different resource formats", () => 
 test("empty catalog input is rejected without replacing existing content", async () => {
   await assert.rejects(() => buildCatalog({ root: tmpdir(), csvText: "" }), /no material rows/);
 });
+
+test("catalogue renderer cleans filenames, collapses broad subject labels and omits unknown file sizes", () => {
+  const card = renderCard({
+    "Book Name": "CHEMISTRY_most_likely_ICSE_question_Bank.PDF",
+    Subject: "Physics, Chemistry, Biology, Mathematics",
+    Category: "Question Banks",
+    Format: "PDF"
+  });
+  assert.match(card, /CHEMISTRY most likely ICSE question Bank/);
+  assert.match(card, /All Subjects \(13\)/);
+  assert.doesNotMatch(card, /Size not listed/);
+});
+

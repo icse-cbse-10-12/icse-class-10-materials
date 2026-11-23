@@ -26,6 +26,8 @@
   window.addEventListener("offline", updateConnection);
   updateConnection();
 
+  if (isStandalone() && installCard) installCard.hidden = true;
+
   if (!isStandalone() && isAppleMobile() && installCard && iosGuide) {
     installCard.hidden = false;
     installDescription.textContent =
