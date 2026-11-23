@@ -34,7 +34,8 @@ test("publisher and year refinements remain independent and the source catalogue
 
 test("the shared design layer is loaded on every public page with a rendered interface", () => {
   const pages = ["index.html","login.html","dashboard.html","admin-1.html","faq.html","privacy-policy.html","cookie-policy.html","terms-and-conditions.html","refund-policy.html","404.html","blog/index.html","blog/how-to-use-icse-masterclass-study-vault.html","blog/icse-class-10-date-sheet-2027.html","blog/icse-class-10-study-plan.html"];
-  for (const page of pages) assert.ok(read(page).includes("site-polish.css?v=1"), page);
+  for (const page of pages) assert.match(read(page), /site-polish\.css(?:\?v=\d+)?/, page);
+  assert.ok(read("index.html").includes("site-polish.css?v=2"));
 });
 
 test("shared visual tokens preserve Paper Light and avoid costly visual effects", () => {
@@ -57,7 +58,7 @@ test("404 page uses local system fonts and no remote Tailwind or Google Fonts", 
 test("service worker precaches the shared visual layer under a fresh cache version", () => {
   const sw = read("sw.js");
   assert.ok(sw.includes("icse-masterclass-v1.19.0-mobile-pwa"));
-  assert.ok(sw.includes("./site-polish.css?v=1"));
+  assert.ok(sw.includes("./site-polish.css?v=2"));
 });
 
 test("protected copyright and non-affiliation copy remains present", () => {
@@ -161,4 +162,30 @@ test("student dashboard progress renderer tolerates pages without dashboard widg
   assert.ok(script.includes('const tasksDone = $("dashboardTasksDone");'));
   assert.ok(script.includes('if (!tasksDone || !tasksTotal || !completion || !sessionsEl || !minutesEl || !root) return;'));
   assert.ok(script.includes('const dashboardTaskDue = $("dashboardTaskDue"); if (dashboardTaskDue) dashboardTaskDue.min = today();'));
+});
+
+
+test("dark-mode subject cards keep readable text and distinct illustration colours", () => {
+  const css = read("site-polish.css");
+  assert.ok(css.includes('body.mc-home[data-site-mode="dark"] #mainSubjectGrid .mc-subject-item'));
+  assert.ok(css.includes('body.mc-home[data-site-mode="midnight"] #mainSubjectGrid .mc-subject-item'));
+  assert.ok(css.includes('background:var(--mc-paper-2) !important;'));
+  assert.ok(css.includes('color:var(--mc-ink) !important;'));
+  assert.ok(css.includes('color:var(--mc-ink-mute) !important;'));
+  const luminance = hex => {
+    const rgb = hex.slice(1).match(/../g).map(value => parseInt(value, 16) / 255);
+    const linear = rgb.map(value => value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4);
+    return 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2];
+  };
+  const contrast = (foreground, background) => {
+    const values = [luminance(foreground), luminance(background)].sort((a, b) => b - a);
+    return (values[0] + 0.05) / (values[1] + 0.05);
+  };
+  assert.ok(contrast("#F0EBDD", "#30362D") >= 4.5, "dark card title must meet WCAG AA");
+  assert.ok(contrast("#B6B4A8", "#30362D") >= 4.5, "dark card helper text must meet WCAG AA");
+  for (const [foreground, background] of [
+    ["#8CC7E8", "#263B49"], ["#E7A99B", "#47312E"], ["#A7D5AE", "#2E4435"],
+    ["#C7B2E6", "#3C3448"], ["#A5D7D4", "#2B4140"], ["#E2C58F", "#493D29"],
+    ["#B7D0B8", "#354238"]
+  ]) assert.ok(contrast(foreground, background) >= 4.5, `${foreground} on ${background} must meet WCAG AA`);
 });
