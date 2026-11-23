@@ -1452,6 +1452,8 @@ function applySiteSettings() {
   const settings = readSiteSettings();
   document.body.dataset.siteMode = settings.mode;
   document.body.dataset.siteAccent = settings.accent;
+  const themeColor = document.querySelector('meta[name="theme-color"]');
+  if (themeColor) themeColor.content = settings.mode === "light" ? "#F7F4EB" : "#181614";
   document.documentElement.style.fontSize = `${settings.fontSize}%`;
   const range = document.getElementById("fontSizeControl");
   const label = document.getElementById("fontSizeLabel");
