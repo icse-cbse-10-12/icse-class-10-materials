@@ -1,0 +1,33 @@
+/* Mobile homepage corrections based on the 24 Nov 2026 device review. */
+@media (max-width: 760px) {
+  /* Study Tools gets a dedicated bottom-nav action instead of floating over content. */
+  #icseStudyToggle { display: none !important; }
+  #icseStudyTools { right: 12px !important; bottom: 12px !important; }
+  body.mc-home .mobile-bottom-nav { grid-template-columns: repeat(5, minmax(0, 1fr)) !important; gap: 1px !important; }
+  body.mc-home .mobile-bottom-nav button { padding-inline: 1px !important; font-size: 10px !important; line-height: 1.2 !important; }
+  body.mc-home .mobile-bottom-nav button i { font-size: 17px !important; }
+
+  /* Keep one clean search-field border; the input itself stays borderless. */
+  body.mc-home .library-search-field {
+    box-sizing: border-box !important; width: 100% !important; min-width: 0 !important;
+    border: 1px solid #cbd5df !important; outline: 0 !important; box-shadow: none !important;
+    padding-inline: 13px !important; gap: 10px !important;
+  }
+  body.mc-home .library-search-field:focus-within {
+    border-color: #527da1 !important; box-shadow: 0 0 0 3px rgba(41, 92, 137, .12) !important;
+  }
+  body.mc-home .library-search-field #globalSearchInput {
+    flex: 1 1 auto !important; width: 0 !important; min-width: 0 !important;
+    border: 0 !important; outline: 0 !important; box-shadow: none !important; background: transparent !important;
+  }
+
+  /* Show all common searches without a clipped horizontal strip. */
+  body.mc-home .study-desk-quick-search {
+    display: flex !important; flex-wrap: wrap !important; overflow: visible !important;
+    padding: 8px 0 2px !important; background: transparent !important; border: 0 !important; border-radius: 0 !important;
+  }
+  body.mc-home .study-desk-quick-search button {
+    flex: 0 1 auto !important; max-width: 100% !important; white-space: normal !important; text-align: center !important;
+  }
+}
+@media (max-width: 380px) { body.mc-home .mobile-bottom-nav button span { font-size: 9px !important; } }
