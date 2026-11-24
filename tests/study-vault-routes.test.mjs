@@ -13,6 +13,6 @@ test("original legal and resource disclosures remain present", () => { const ind
 
 test("route stylesheet has a valid shadow token and balanced rules", () => {
   const css = readFileSync(join(root, "routes.css"), "utf8");
-  assert.match(css, /--shadow:0 18px 50px rgba\\(37,41,35,\\.08\\)\\}/);
-  assert.equal((css.match(/\\{/g) || []).length, (css.match(/\\}/g) || []).length);
+  assert.match(css, /--shadow:0 18px 50px rgba\(37,41,35,\.08\)\}/);
+  assert.equal((css.match(/\{/g) || []).length, (css.match(/\}/g) || []).length);
 });
