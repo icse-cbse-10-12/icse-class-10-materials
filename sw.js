@@ -1,4 +1,4 @@
-// Previous cache: icse-masterclass-v1.16.0-edubot-api
+// Previous cache: icse-masterclass-v1.21.0-ux-polish
 const CACHE_NAME = "icse-masterclass-v1.22.0-six-routes";
 const APP_SHELL = [
   "./",
