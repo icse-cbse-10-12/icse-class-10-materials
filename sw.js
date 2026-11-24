@@ -1,8 +1,22 @@
 // Previous cache: icse-masterclass-v1.16.0-edubot-api
-const CACHE_NAME = "icse-masterclass-v1.21.0-ux-polish";
+const CACHE_NAME = "icse-masterclass-v1.22.0-six-routes";
 const APP_SHELL = [
   "./",
   "./index.html",
+  "./home/",
+  "./home/index.html",
+  "./Materials/",
+  "./Materials/index.html",
+  "./EduBot/",
+  "./EduBot/index.html",
+  "./Settings/",
+  "./Settings/index.html",
+  "./StudyTools/",
+  "./StudyTools/index.html",
+  "./Privacy/",
+  "./Privacy/index.html",
+  "./routes.css",
+  "./routes.js",
   "./offline.html",
   "./pwa.js",
   "./blog/",
