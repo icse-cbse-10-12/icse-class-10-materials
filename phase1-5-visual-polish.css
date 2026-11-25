@@ -1,0 +1,152 @@
+/* ICSE MasterClass Study Vault — Phase 1.5 visual polish.
+   Presentation-only layer for Homepage and Materials.
+   Existing catalogue, search, iframe and legal content remain untouched. */
+
+:root {
+  --mc-forest: #243d32;
+  --mc-paper: #ede9df;
+  --mc-paper-light: #f7f4ec;
+  --mc-surface: #fffdf8;
+  --mc-terracotta: #c47d54;
+  --mc-sage: #d6dfd2;
+  --mc-ink: #282a27;
+  --mc-muted: #697068;
+  --mc-line: #d8d4c9;
+  --mc-shadow: 0 18px 46px rgba(40, 42, 39, .07);
+}
+
+/* Shared editorial chrome */
+.topbar {
+  background: rgba(247, 244, 236, .96);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.topbar-inner { min-height: 82px; }
+.brand { gap: 13px; }
+.brand img { width: 44px; height: 44px; }
+.brand-copy strong { font-size: 18px; letter-spacing: -.05em; }
+.nav { gap: 8px; }
+.nav a { padding: 10px 13px; border-radius: 2px; }
+.nav a[aria-current=page] { background: rgba(214, 223, 210, .48); }
+.nav a:focus-visible, .footer a:focus-visible, .text-link:focus-visible,
+.subject-card:focus-visible, .support-card:focus-visible, .quick-search a:focus-visible {
+  outline: 3px solid var(--mc-terracotta); outline-offset: 4px;
+}
+
+/* Homepage: stronger editorial rhythm without changing the content model. */
+.home-main { padding-top: 62px; }
+.hero { padding-top: 24px; padding-bottom: 76px; gap: clamp(38px, 6.5vw, 92px); }
+.hero h1 { font-size: clamp(56px, 7.2vw, 94px); line-height: .96; letter-spacing: -.072em; }
+.lead { max-width: 590px; font-size: 17px; line-height: 1.8; }
+.home-search {
+  min-height: 66px; margin-top: 32px; padding: 8px 8px 8px 19px;
+  border-color: #c5c6b9; border-radius: 4px;
+  box-shadow: 0 7px 24px rgba(40, 42, 39, .045);
+}
+.home-search:focus-within { border-color: var(--mc-forest); box-shadow: 0 0 0 4px rgba(36, 61, 50, .1); }
+.home-search input { min-height: 46px; }
+.home-search button { min-height: 48px; padding-inline: 20px; border-radius: 3px; }
+.quick-search { margin-top: 17px; gap: 9px; }
+.quick-search > a { padding: 6px 10px; border-radius: 3px; background: rgba(255, 253, 248, .5); }
+.index-note {
+  min-height: 410px; padding: 28px 28px 24px;
+  border: 1px solid rgba(255, 255, 255, .08);
+  box-shadow: 0 20px 48px rgba(22, 40, 31, .14);
+}
+.index-note-heading { font-size: clamp(36px, 3.2vw, 43px); }
+.index-lines a { padding-block: 14px; }
+.section-block { padding-block: 68px 72px; }
+.section-heading { margin-bottom: 27px; }
+.section-heading h2, .support-intro h2 { letter-spacing: -.045em; }
+.subject-grid { gap: 1px; border: 0; background: var(--mc-line); }
+.subject-card {
+  position: relative; min-height: 166px; padding: 20px 21px 18px;
+  border: 0; background: var(--mc-paper-light);
+  transition: background-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+.subject-card:before {
+  content: ""; position: absolute; inset: 0 auto 0 0; width: 3px;
+  background: transparent; transition: background-color .18s ease;
+}
+.subject-card:hover {
+  position: relative; z-index: 1; background: var(--mc-surface);
+  box-shadow: var(--mc-shadow); transform: translateY(-2px);
+}
+.subject-card:hover:before, .subject-card:focus-visible:before { background: var(--mc-terracotta); }
+.subject-card strong { margin-top: 25px; font-size: clamp(22px, 2vw, 26px); }
+.subject-card > span:last-child { font-size: 11px; }
+.support-strip { gap: 14px; padding-block: 60px; }
+.support-card { min-height: 194px; padding: 23px; background: rgba(247, 244, 236, .88); }
+.support-card:hover { transform: translateY(-2px); box-shadow: var(--mc-shadow); }
+.closing-note { padding-top: 22px; }
+.footer { background: #e6e1d6; }
+
+/* Materials: a clear page introduction and a calm, contained catalogue surface. */
+.materials-main { padding-top: 30px; padding-bottom: 54px; }
+.catalogue-kicker { padding-block: 7px 15px; }
+.materials-intro {
+  display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(220px, .75fr);
+  align-items: end; gap: 32px; padding: 30px 0 28px;
+}
+.materials-intro h1 {
+  margin: 0; color: var(--mc-forest); font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(40px, 5.2vw, 64px); font-weight: 500;
+  line-height: .98; letter-spacing: -.06em;
+}
+.materials-intro p {
+  max-width: 430px; margin: 0 0 3px; color: #626b62;
+  font-size: 14px; line-height: 1.8;
+}
+.catalogue-frame {
+  overflow: clip; margin-top: 0; padding: 10px 14px 14px;
+  border: 1px solid #d7d3c8; border-radius: 4px;
+  background: rgba(247, 244, 236, .78); box-shadow: 0 12px 34px rgba(40, 42, 39, .055);
+}
+.catalogue-frame iframe { min-height: 78vh; }
+.frame-note {
+  min-height: 44px; margin-top: 8px; padding: 12px 3px 2px;
+  border-top: 1px solid #d8d4c9; font-size: 12px;
+}
+.frame-note a { text-underline-offset: 3px; }
+body.materials-page .footer { margin-top: 0; }
+
+@media (max-width: 900px) {
+  .home-main { padding-top: 42px; }
+  .hero { gap: 28px; padding-bottom: 58px; }
+  .hero h1 { font-size: clamp(50px, 7vw, 70px); }
+  .subject-card { min-height: 154px; }
+  .materials-intro { grid-template-columns: 1fr; gap: 13px; padding-block: 25px; }
+  .materials-intro p { max-width: 620px; }
+}
+@media (max-width: 700px) {
+  .topbar-inner { min-height: 70px; }
+  .brand img { width: 40px; height: 40px; }
+  .home-main { padding-top: 27px; }
+  .hero { padding-top: 18px; padding-bottom: 38px; }
+  .hero h1 { font-size: clamp(49px, 13vw, 68px); }
+  .home-search { min-height: 60px; margin-top: 24px; padding-left: 12px; }
+  .home-search button { min-height: 44px; padding-inline: 12px; }
+  .quick-search { align-items: flex-start; }
+  .section-block { padding-block: 42px; }
+  .subject-card { min-height: 145px; padding: 16px; }
+  .subject-card strong { margin-top: 19px; }
+  .support-strip { padding-block: 38px; }
+  .support-card { min-height: 150px; padding: 19px; }
+  .materials-main { padding-top: 16px; padding-bottom: 34px; }
+  .materials-intro { padding-block: 22px 20px; }
+  .materials-intro h1 { font-size: clamp(39px, 11vw, 52px); }
+  .materials-intro p { font-size: 13px; }
+  .catalogue-frame { margin-inline: -3px; padding: 7px 7px 10px; }
+  .catalogue-frame iframe { min-height: 82vh; }
+}
+@media (max-width: 380px) {
+  .brand-copy strong { font-size: 16px; }
+  .home-search { gap: 7px; }
+  .home-search button { padding-inline: 9px; font-size: 10px; }
+  .subject-card { min-height: 132px; }
+  .materials-intro h1 { font-size: 38px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .subject-card, .subject-card:before, .support-card, .nav a { transition: none !important; }
+  .subject-card:hover, .support-card:hover { transform: none; }
+}
