@@ -191,6 +191,13 @@ test("dark-mode subject cards keep readable text and distinct illustration colou
   ]) assert.ok(contrast(foreground, background) >= 4.5, `${foreground} on ${background} must meet WCAG AA`);
 });
 
+
+test("embedded catalogue wrapper preserves theme-owned text colours", () => {
+  const source = read("routes.js");
+  assert.match(source, /body\[data-site-mode="light"\]\{background:#ede9df!important;color:#282a27!important\}/);
+  assert.doesNotMatch(source, /#mainContent\{[^}]*color:/);
+});
+
 test("custom 404 resolves project-site assets from the repository root and uses authored styles", () => {
   const html = read("404.html");
   assert.ok(html.includes('<base href="/icse-class-10-materials/">'));
@@ -199,10 +206,4 @@ test("custom 404 resolves project-site assets from the repository root and uses 
   assert.ok(html.includes('src="consent-manager.js"'));
   assert.ok(html.includes('aria-labelledby="not-found-title"'));
   assert.doesNotMatch(html, /\b(?:w-full|max-w-2xl|text-center|mb-\d+|text-amber-\d+|rounded-xl|inline-flex|focus:ring-\d+|ml-\d+)\b/);
-});
-
-test("embedded catalogue wrapper preserves theme-owned text colours", () => {
-  const source = read("routes.js");
-  assert.match(source, /body\[data-site-mode="light"\]\{background:#ede9df!important;color:#282a27!important\}/);
-  assert.doesNotMatch(source, /#mainContent\{[^}]*color:/);
 });
