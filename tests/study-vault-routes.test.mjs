@@ -16,3 +16,10 @@ test("route stylesheet has a valid shadow token and balanced rules", () => {
   assert.match(css, /--shadow:0 18px 50px rgba\(37,41,35,\.08\)\}/);
   assert.equal((css.match(/\{/g) || []).length, (css.match(/\}/g) || []).length);
 });
+
+
+test("embedded catalogue preserves the selected appearance without forcing light colors in dark mode", () => {
+  const source = readFileSync(join(root, "routes.js"), "utf8");
+  assert.ok(source.includes('body[data-site-mode="light"]{background:#ede9df!important;color:#282a27!important}'));
+  assert.ok(!source.includes('html,body{height:auto!important;min-height:0!important;background:#ede9df!important;color:#282a27!important}'));
+});

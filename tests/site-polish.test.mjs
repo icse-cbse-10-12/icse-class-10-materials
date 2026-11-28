@@ -128,7 +128,7 @@ test("mobile search placeholder stays concise and the logo has descriptive alt t
 
 test("sitemap homepage lastmod reflects homepage edits without changing blog and FAQ dates", () => {
   const sitemap = read("sitemap.xml");
-  assert.ok(sitemap.includes("<loc>https://icse-cbse-10-12.github.io/icse-class-10-materials/</loc><lastmod>2026-11-23</lastmod>"));
+  assert.ok(sitemap.includes("<loc>https://icse-cbse-10-12.github.io/icse-class-10-materials/</loc><lastmod>2026-11-27</lastmod>"));
   assert.ok(sitemap.includes("<loc>https://icse-cbse-10-12.github.io/icse-class-10-materials/blog/</loc><lastmod>2026-11-12</lastmod>"));
   assert.ok(sitemap.includes("<loc>https://icse-cbse-10-12.github.io/icse-class-10-materials/faq.html</loc><lastmod>2026-11-12</lastmod>"));
 });
@@ -189,4 +189,11 @@ test("dark-mode subject cards keep readable text and distinct illustration colou
     ["#C7B2E6", "#3C3448"], ["#A5D7D4", "#2B4140"], ["#E2C58F", "#493D29"],
     ["#B7D0B8", "#354238"]
   ]) assert.ok(contrast(foreground, background) >= 4.5, `${foreground} on ${background} must meet WCAG AA`);
+});
+
+
+test("embedded catalogue wrapper preserves theme-owned text colours", () => {
+  const source = read("routes.js");
+  assert.match(source, /body\[data-site-mode="light"\]\{background:#ede9df!important;color:#282a27!important\}/);
+  assert.doesNotMatch(source, /#mainContent\{[^}]*color:/);
 });
