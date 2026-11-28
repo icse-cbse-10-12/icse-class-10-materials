@@ -5,20 +5,31 @@
   const VERSION = 1;
   const defaults = { necessary: true, analytics: false, externalServices: false };
   const REGION_PROFILES = Object.freeze({ unknown: "Not sure / prefer not to say", india: "India", eea_uk: "EEA / UK", california_us: "California / United States", other: "Other region" });
+  function parseConsent(raw) {
+    try {
+      const saved = JSON.parse(raw || "null");
+      if (!saved || saved.version !== VERSION || !saved.categories) return null;
+      return {
+        version: VERSION,
+        updatedAt: typeof saved.updatedAt === "string" ? saved.updatedAt : "",
+        region: Object.prototype.hasOwnProperty.call(REGION_PROFILES, saved.region) ? saved.region : "unknown",
+        categories: { ...defaults, analytics: saved.categories.analytics === true, externalServices: saved.categories.externalServices === true }
+      };
+    } catch (_) { return null; }
+  }
   let consent = null;
-  try {
-    const saved = JSON.parse(localStorage.getItem(KEY) || "null");
-    if (saved && saved.version === VERSION && saved.categories) consent = {
-      version: VERSION,
-      updatedAt: typeof saved.updatedAt === "string" ? saved.updatedAt : "",
-      region: Object.prototype.hasOwnProperty.call(REGION_PROFILES, saved.region) ? saved.region : "unknown",
-      categories: { ...defaults, analytics: saved.categories.analytics === true, externalServices: saved.categories.externalServices === true }
-    };
-  } catch (_) {}
+  try { consent = parseConsent(localStorage.getItem(KEY)); } catch (_) {}
 
   const has = category => category === "necessary" || !!(consent && consent.categories[category] === true);
+  const getSnapshot = () => consent ? JSON.parse(JSON.stringify(consent)) : null;
+  const publishConsentChange = () => window.dispatchEvent(new CustomEvent("icse-consent-change", { detail: getSnapshot() }));
   if (window.self !== window.top) {
-    window.ICSEConsent = Object.freeze({ has, get: () => consent ? JSON.parse(JSON.stringify(consent)) : null, version: VERSION });
+    window.addEventListener("storage", event => {
+      if (event.key !== KEY && event.key !== null) return;
+      consent = parseConsent(event.key === null ? null : event.newValue);
+      publishConsentChange();
+    });
+    window.ICSEConsent = Object.freeze({ has, get: getSnapshot, version: VERSION });
     return;
   }
   const scriptUrl = document.currentScript?.src;
@@ -69,9 +80,11 @@
     try { localStorage.setItem(KEY, JSON.stringify(next)); consent = next; }
     catch (_) {
       consent = null;
+      try { localStorage.removeItem(KEY); } catch (_) {}
       document.getElementById("icseConsentStatus").textContent = "Your browser could not save this choice. Optional services remain disabled in this page.";
     }
     render();
+    publishConsentChange();
     closeDialog();
   }
   function action(name) {
@@ -95,6 +108,6 @@
     }
   });
   document.body.append(banner, dialog, settings);
-  window.ICSEConsent = Object.freeze({ has, open: openDialog, get: () => consent ? JSON.parse(JSON.stringify(consent)) : null, version: VERSION });
+  window.ICSEConsent = Object.freeze({ has, open: openDialog, get: getSnapshot, version: VERSION });
   render();
 })();

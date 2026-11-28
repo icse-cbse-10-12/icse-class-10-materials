@@ -1,4 +1,5 @@
 import test from "node:test";
+import { runInNewContext } from "node:vm";
 import assert from "node:assert/strict";
 import { readFileSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
@@ -125,4 +126,36 @@ test("embedded documents share the saved consent API without rendering duplicate
   assert.ok(source.includes("window.ICSEConsent = Object.freeze({ has,"));
   assert.ok(source.includes('new URL(".", scriptUrl)'));
   assert.ok(source.includes('new URL(link.getAttribute("href"), siteRoot)'));
+});
+
+
+test("embedded consent API follows parent-tab acceptance and revocation", () => {
+  const source = read("consent-manager.js");
+  const listeners = new Map();
+  const emitted = [];
+  const window = {
+    self: {},
+    top: {},
+    addEventListener(type, listener) {
+      const entries = listeners.get(type) || [];
+      entries.push(listener);
+      listeners.set(type, entries);
+    },
+    dispatchEvent(event) { emitted.push(event); }
+  };
+  const localStorage = { getItem() { return null; } };
+  class CustomEvent {
+    constructor(type, options = {}) { this.type = type; this.detail = options.detail; }
+  }
+
+  runInNewContext(source, { window, localStorage, CustomEvent });
+  assert.equal(window.ICSEConsent.has("externalServices"), false);
+  const storage = listeners.get("storage")[0];
+  storage({ key: "icseMasterClassConsentV1", newValue: JSON.stringify({ version: 1, categories: { analytics: false, externalServices: true } }) });
+  assert.equal(window.ICSEConsent.has("externalServices"), true);
+  storage({ key: "icseMasterClassConsentV1", newValue: JSON.stringify({ version: 1, categories: { analytics: false, externalServices: false } }) });
+  assert.equal(window.ICSEConsent.has("externalServices"), false);
+  storage({ key: null, newValue: null });
+  assert.equal(window.ICSEConsent.has("externalServices"), false);
+  assert.equal(emitted.filter(event => event.type === "icse-consent-change").length, 3);
 });
