@@ -190,3 +190,10 @@ test("dark-mode subject cards keep readable text and distinct illustration colou
     ["#B7D0B8", "#354238"]
   ]) assert.ok(contrast(foreground, background) >= 4.5, `${foreground} on ${background} must meet WCAG AA`);
 });
+
+
+test("embedded catalogue wrapper preserves theme-owned text colours", () => {
+  const source = read("routes.js");
+  assert.match(source, /body\[data-site-mode="light"\]\{background:#ede9df!important;color:#282a27!important\}/);
+  assert.doesNotMatch(source, /#mainContent\{[^}]*color:/);
+});

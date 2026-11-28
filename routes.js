@@ -40,7 +40,7 @@
       body[data-site-mode="light"]{background:#ede9df!important;color:#282a27!important}
       body{padding-bottom:0!important}
       body>header,body>footer,#siteNavOverlay,.mobile-bottom-nav,#icseStudyTools,#icseStudyToggle,#icsePrivacySettings{display:none!important}
-      #mainContent{width:100%!important;max-width:none!important;margin:0!important;padding:16px 0 38px!important;color:#282a27!important}
+      #mainContent{width:100%!important;max-width:none!important;margin:0!important;padding:16px 0 38px!important}
       body.mc-home[data-site-mode="light"]{--vault-paper:#ede9df;--vault-ink:#282a27;--vault-green:#243d32;--vault-line:rgba(36,61,50,.2)}
       body.mc-home[data-site-mode="light"] .library-discovery{background:#f7f4ec!important;border-color:#d8d4c9!important;box-shadow:none!important}
       body.mc-home[data-site-mode="light"] .library-discovery:after{border-color:rgba(36,61,50,.12)!important;box-shadow:0 0 0 24px rgba(36,61,50,.025),0 0 0 48px rgba(36,61,50,.018)!important}
