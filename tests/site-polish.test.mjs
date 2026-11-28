@@ -166,6 +166,16 @@ test("student dashboard progress renderer tolerates pages without dashboard widg
 });
 
 
+test("custom 404 resolves project-site assets from the repository root and uses authored styles", () => {
+  const html = read("404.html");
+  assert.ok(html.includes('<base href="/icse-class-10-materials/">'));
+  assert.ok(html.includes('href="site-polish.css?v=1"'));
+  assert.ok(html.includes('href="./"'));
+  assert.ok(html.includes('src="consent-manager.js"'));
+  assert.ok(html.includes('aria-labelledby="not-found-title"'));
+  assert.doesNotMatch(html, /\b(?:w-full|max-w-2xl|text-center|mb-\d+|text-amber-\d+|rounded-xl|inline-flex|focus:ring-\d+|ml-\d+)\b/);
+});
+
 test("dark-mode subject cards keep readable text and distinct illustration colours", () => {
   const css = read("site-polish.css");
   assert.ok(css.includes('body.mc-home[data-site-mode="dark"] #mainSubjectGrid .mc-subject-item'));

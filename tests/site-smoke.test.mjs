@@ -440,3 +440,24 @@ test("generated catalogue JSON revalidates online and keeps an offline cache fal
   assert.match(sw, /const cached = await caches\.match\(request/);
   assert.match(script, /fetch\("\.\/catalog-data\.json", \{ cache: "no-cache" \}\)/);
 });
+
+
+test("Homepage and Materials expose route-specific canonical and social metadata", () => {
+  const routes = [
+    ["home/index.html", "https://icse-cbse-10-12.github.io/icse-class-10-materials/home/"],
+    ["Materials/index.html", "https://icse-cbse-10-12.github.io/icse-class-10-materials/Materials/"]
+  ];
+  for (const [page, url] of routes) {
+    const html = read(page);
+    assert.ok(html.includes(`rel="canonical" href="${url}"`), `${page} canonical URL`);
+    assert.ok(html.includes(`property="og:url" content="${url}"`), `${page} Open Graph URL`);
+    assert.ok(html.includes('property="og:image"'), `${page} Open Graph image`);
+    assert.ok(html.includes('name="twitter:card" content="summary_large_image"'), `${page} Twitter card`);
+  }
+});
+
+test("custom 404 page includes the site favicon and remains excluded from indexing", () => {
+  const html = read("404.html");
+  assert.ok(html.includes('rel="icon" href="icseYtFavicon.png"'));
+  assert.ok(html.includes('name="robots" content="noindex, nofollow"'));
+});

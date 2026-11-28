@@ -51,3 +51,8 @@ test("mobile quick navigation respects safe areas and the Study Tools launcher s
   assert.match(css, /#headerActions\s*\{[^}]*display:\s*none/s);
   assert.match(css, /\.pwa-install-card/);
 });
+
+
+test("service worker uses a fresh cache version for the route-wide consent update", () => {
+  assert.ok(read("sw.js").includes("icse-masterclass-v1.23.0-six-routes"));
+});

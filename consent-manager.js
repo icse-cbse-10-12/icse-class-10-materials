@@ -5,18 +5,35 @@
   const VERSION = 1;
   const defaults = { necessary: true, analytics: false, externalServices: false };
   const REGION_PROFILES = Object.freeze({ unknown: "Not sure / prefer not to say", india: "India", eea_uk: "EEA / UK", california_us: "California / United States", other: "Other region" });
+  function parseConsent(raw) {
+    try {
+      const saved = JSON.parse(raw || "null");
+      if (!saved || saved.version !== VERSION || !saved.categories) return null;
+      return {
+        version: VERSION,
+        updatedAt: typeof saved.updatedAt === "string" ? saved.updatedAt : "",
+        region: Object.prototype.hasOwnProperty.call(REGION_PROFILES, saved.region) ? saved.region : "unknown",
+        categories: { ...defaults, analytics: saved.categories.analytics === true, externalServices: saved.categories.externalServices === true }
+      };
+    } catch (_) { return null; }
+  }
   let consent = null;
-  try {
-    const saved = JSON.parse(localStorage.getItem(KEY) || "null");
-    if (saved && saved.version === VERSION && saved.categories) consent = {
-      version: VERSION,
-      updatedAt: typeof saved.updatedAt === "string" ? saved.updatedAt : "",
-      region: Object.prototype.hasOwnProperty.call(REGION_PROFILES, saved.region) ? saved.region : "unknown",
-      categories: { ...defaults, analytics: saved.categories.analytics === true, externalServices: saved.categories.externalServices === true }
-    };
-  } catch (_) {}
+  try { consent = parseConsent(localStorage.getItem(KEY)); } catch (_) {}
 
   const has = category => category === "necessary" || !!(consent && consent.categories[category] === true);
+  const getSnapshot = () => consent ? JSON.parse(JSON.stringify(consent)) : null;
+  const publishConsentChange = () => window.dispatchEvent(new CustomEvent("icse-consent-change", { detail: getSnapshot() }));
+  if (window.self !== window.top) {
+    window.addEventListener("storage", event => {
+      if (event.key !== KEY && event.key !== null) return;
+      consent = parseConsent(event.key === null ? null : event.newValue);
+      publishConsentChange();
+    });
+    window.ICSEConsent = Object.freeze({ has, get: getSnapshot, version: VERSION });
+    return;
+  }
+  const scriptUrl = document.currentScript?.src;
+  const siteRoot = scriptUrl ? new URL(".", scriptUrl) : new URL("./", window.location.href);
   const style = document.createElement("style");
   style.textContent = ".icse-consent-select{width:100%;min-height:42px;padding:8px 10px;border:1px solid #60718a;border-radius:9px;background:#17263a;color:#fff;font:inherit;margin-top:6px}#icseConsentBanner,#icseConsentDialog,#icsePrivacySettings{font:14px/1.5 system-ui,sans-serif}#icseConsentBanner{position:fixed;z-index:10000;inset:auto 16px 16px;margin:auto;max-width:760px;padding:18px;background:#101b2b;color:#f8fafc;border:1px solid #40516a;border-radius:16px;box-shadow:0 18px 60px #0008}#icseConsentBanner p,#icseConsentDialog p{margin:6px 0;color:#d1d9e5}#icseConsentBanner a,#icseConsentDialog a{color:#f7ca76;text-underline-offset:3px}.icse-consent-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.icse-consent-btn{min-height:42px;padding:9px 14px;border:1px solid #60718a;border-radius:10px;background:#17263a;color:#fff;font-weight:700;cursor:pointer}.icse-consent-btn.primary{background:#f2bd58;color:#172033;border-color:#f2bd58}.icse-consent-btn:focus-visible,#icsePrivacySettings:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}#icseConsentDialog[hidden],#icseConsentBanner[hidden],#icsePrivacySettings[hidden]{display:none!important}#icseConsentDialog{position:fixed;z-index:10002;inset:0;display:grid;place-items:center;padding:16px;background:#020617c9}.icse-consent-panel{width:min(100%,560px);max-height:88vh;overflow:auto;padding:22px;background:#101b2b;color:#f8fafc;border:1px solid #40516a;border-radius:18px}.icse-consent-panel h2{margin:0 0 8px;font-size:1.35rem}.icse-consent-option{display:flex;gap:12px;align-items:flex-start;padding:14px 0;border-top:1px solid #34445a}.icse-consent-option input{width:20px;height:20px;flex:0 0 20px;margin-top:2px;accent-color:#f2bd58}.icse-consent-option strong{display:block;color:#fff}.icse-consent-option small{display:block;color:#c1ccda;margin-top:3px}#icsePrivacySettings{position:fixed;z-index:9998;left:12px;bottom:12px;min-height:38px;padding:8px 11px;border:1px solid #60718a;border-radius:999px;background:#101b2b;color:#f8fafc;font-size:12px;font-weight:700;box-shadow:0 4px 18px #0005;cursor:pointer}#icseConsentStatus{min-height:1.3em;color:#f7ca76;font-size:12px}@media(max-width:520px){#icseConsentBanner{inset:auto 8px 8px;padding:14px}.icse-consent-actions>*{flex:1 1 100%}.icse-consent-panel{padding:18px}}@media(prefers-reduced-motion:reduce){#icseConsentDialog *{scroll-behavior:auto!important;transition:none!important}}";
   document.head.append(style);
@@ -31,6 +48,12 @@
   dialog.id = "icseConsentDialog";
   dialog.hidden = true;
   dialog.innerHTML = '<section class="icse-consent-panel" role="dialog" aria-modal="true" aria-labelledby="icseConsentTitle" aria-describedby="icseConsentDescription"><h2 id="icseConsentTitle">Privacy preferences</h2><p id="icseConsentDescription">Choose which optional categories you allow. Necessary storage is always on because the site cannot provide core functions without it.</p><label class="icse-consent-option"><span><strong>Privacy region (optional)</strong><select id="icseConsentRegion" class="icse-consent-select"><option value="unknown">Not sure / prefer not to say</option><option value="india">India</option><option value="eea_uk">EEA / UK</option><option value="california_us">California / United States</option><option value="other">Other region</option></select><small>This is self-selected, not inferred from your location. It does not determine which laws apply; optional categories remain off by default for every profile.</small></span></label><div class="icse-consent-option"><input type="checkbox" checked disabled aria-label="Necessary storage always active"><div><strong>Necessary storage <small>(always active)</small></strong><small>Authentication persistence, this preference record, local study data you choose to save, and offline application cache.</small></div></div><label class="icse-consent-option"><input id="icseConsentAnalytics" type="checkbox"><span><strong>Analytics</strong><small>Optional audience measurement. No analytics SDK is currently activated by this website.</small></span></label><label class="icse-consent-option"><input id="icseConsentExternal" type="checkbox"><span><strong>Optional external services</strong><small>Enables EduBot to load the shared API client and send your question and recent conversation context to the Vercel-hosted EduBot API. The API may use Google Gemini or Groq to generate a reply. It also permits the administrator-only Supabase connection when an administrator manually starts it.</small></span></label><p id="icseConsentStatus" role="status" aria-live="polite"></p><div class="icse-consent-actions"><button class="icse-consent-btn primary" type="button" data-consent-action="save">Save choices</button><button class="icse-consent-btn" type="button" data-consent-action="reject">Reject optional</button><button class="icse-consent-btn" type="button" data-consent-action="close">Cancel</button></div><p><a href="cookie-policy.html">Read the Cookie Policy</a></p></section>';
+
+  for (const container of [banner, dialog]) {
+    container.querySelectorAll('a[href="cookie-policy.html"], a[href="privacy-policy.html"]').forEach(link => {
+      link.href = new URL(link.getAttribute("href"), siteRoot).href;
+    });
+  }
 
   const settings = document.createElement("button");
   settings.id = "icsePrivacySettings";
@@ -57,9 +80,11 @@
     try { localStorage.setItem(KEY, JSON.stringify(next)); consent = next; }
     catch (_) {
       consent = null;
+      try { localStorage.removeItem(KEY); } catch (_) {}
       document.getElementById("icseConsentStatus").textContent = "Your browser could not save this choice. Optional services remain disabled in this page.";
     }
     render();
+    publishConsentChange();
     closeDialog();
   }
   function action(name) {
@@ -83,6 +108,6 @@
     }
   });
   document.body.append(banner, dialog, settings);
-  window.ICSEConsent = Object.freeze({ has, open: openDialog, get: () => consent ? JSON.parse(JSON.stringify(consent)) : null, version: VERSION });
+  window.ICSEConsent = Object.freeze({ has, open: openDialog, get: getSnapshot, version: VERSION });
   render();
 })();

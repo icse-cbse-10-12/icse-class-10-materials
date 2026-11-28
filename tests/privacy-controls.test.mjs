@@ -1,4 +1,5 @@
 import test from "node:test";
+import { runInNewContext } from "node:vm";
 import assert from "node:assert/strict";
 import { readFileSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
@@ -8,7 +9,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const read = path => readFileSync(join(root, path), "utf8");
 
 test("consent manager is present on the public, account and admin surfaces", () => {
-  for (const page of ["index.html", "login.html", "dashboard.html", "admin-1.html", "privacy-policy.html", "terms-and-conditions.html"]) {
+  for (const page of ["index.html", "home/index.html", "Materials/index.html", "EduBot/index.html", "Settings/index.html", "StudyTools/index.html", "Privacy/index.html", "faq.html", "blog/index.html", "blog/icse-class-10-date-sheet-2027.html", "blog/icse-class-10-study-plan.html", "blog/how-to-use-icse-masterclass-study-vault.html", "404.html", "login.html", "dashboard.html", "admin-1.html", "privacy-policy.html", "terms-and-conditions.html", "cookie-policy.html", "refund-policy.html"]) {
     assert.ok(read(page).includes("consent-manager.js"), page + " must load the shared consent manager");
   }
 });
@@ -116,4 +117,45 @@ test("deployment instructions explicitly distinguish source from deployed backen
   assert.ok(doc.includes("not a deployed backend"));
   assert.ok(doc.includes("Verify the deployed function name and region"));
   assert.ok(doc.includes("Blaze plan"));
+});
+
+
+test("embedded documents share the saved consent API without rendering duplicate consent UI", () => {
+  const source = read("consent-manager.js");
+  assert.ok(source.includes("if (window.self !== window.top)"));
+  assert.ok(source.includes("window.ICSEConsent = Object.freeze({ has,"));
+  assert.ok(source.includes('new URL(".", scriptUrl)'));
+  assert.ok(source.includes('new URL(link.getAttribute("href"), siteRoot)'));
+});
+
+
+test("embedded consent API follows parent-tab acceptance and revocation", () => {
+  const source = read("consent-manager.js");
+  const listeners = new Map();
+  const emitted = [];
+  const window = {
+    self: {},
+    top: {},
+    addEventListener(type, listener) {
+      const entries = listeners.get(type) || [];
+      entries.push(listener);
+      listeners.set(type, entries);
+    },
+    dispatchEvent(event) { emitted.push(event); }
+  };
+  const localStorage = { getItem() { return null; } };
+  class CustomEvent {
+    constructor(type, options = {}) { this.type = type; this.detail = options.detail; }
+  }
+
+  runInNewContext(source, { window, localStorage, CustomEvent });
+  assert.equal(window.ICSEConsent.has("externalServices"), false);
+  const storage = listeners.get("storage")[0];
+  storage({ key: "icseMasterClassConsentV1", newValue: JSON.stringify({ version: 1, categories: { analytics: false, externalServices: true } }) });
+  assert.equal(window.ICSEConsent.has("externalServices"), true);
+  storage({ key: "icseMasterClassConsentV1", newValue: JSON.stringify({ version: 1, categories: { analytics: false, externalServices: false } }) });
+  assert.equal(window.ICSEConsent.has("externalServices"), false);
+  storage({ key: null, newValue: null });
+  assert.equal(window.ICSEConsent.has("externalServices"), false);
+  assert.equal(emitted.filter(event => event.type === "icse-consent-change").length, 3);
 });
