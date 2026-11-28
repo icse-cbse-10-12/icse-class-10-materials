@@ -198,5 +198,5 @@ test("custom 404 resolves project-site assets from the repository root and uses 
   assert.ok(html.includes('href="./"'));
   assert.ok(html.includes('src="consent-manager.js"'));
   assert.ok(html.includes('aria-labelledby="not-found-title"'));
-  assert.doesNotMatch(html, /\b(?:w-full|max-w-2xl|text-center|mb-\d+|text-amber-\d+|rounded-xl|inline-flex|focus:ring-\d+)\b/);
+  assert.doesNotMatch(html, /\b(?:w-full|max-w-2xl|text-center|mb-\d+|text-amber-\d+|rounded-xl|inline-flex|focus:ring-\d+|ml-\d+)\b/);
 });
