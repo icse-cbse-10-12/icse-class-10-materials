@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { mkdtemp, readFile, writeFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { parseCSV, buildCatalog, renderCard } from "../scripts/build-catalog.mjs";
+import { parseCSV, buildCatalog, renderCard, deduplicateResources } from "../scripts/build-catalog.mjs";
 
 const fixture = 'Book Name,Subject,Category,Format,Google Drive Link,File Size,Scope\n"Physics, Volume 1",Physics,Notes,PDF,https://drive.google.com/file/d/abc/view,12 MB,"Motion, force and energy"\n';
 
@@ -68,7 +68,27 @@ test("catalogue renderer cleans filenames, collapses broad subject labels and om
     Format: "PDF"
   });
   assert.match(card, /Chemistry most likely ICSE question Bank/);
-  assert.match(card, /All Subjects \(13\)/);
+  assert.match(card, /All Subjects \(4\)/);
   assert.doesNotMatch(card, /Size not listed/);
 });
 
+
+
+test("catalogue de-duplicates exact rows but preserves identical titles with different source URLs", () => {
+  const base = { "Book Name": "Physics Notes", Subject: "Physics", Category: "Notes", Format: "PDF", "Google Drive Link": "https://drive.google.com/file/d/one/view", "File Size": "12 MB" };
+  const sameRow = { ...base };
+  const differentSource = { ...base, "Google Drive Link": "https://drive.google.com/file/d/two/view" };
+  const result = deduplicateResources([base, sameRow, differentSource]);
+  assert.equal(result.length, 2);
+  assert.equal(result[0]["Google Drive Link"], "https://drive.google.com/file/d/one/view");
+  assert.equal(result[1]["Google Drive Link"], "https://drive.google.com/file/d/two/view");
+});
+
+test("unknown file-size labels are not rendered as if they were measured metadata", () => {
+  for (const value of ["", "Size not listed", "Unknown", "N/A", "-"]) {
+    const card = renderCard({ "Book Name": "Physics Notes", Subject: "Physics", Format: "PDF", "File Size": value });
+    assert.doesNotMatch(card, /File size:/);
+  }
+  const known = renderCard({ "Book Name": "Physics Notes", Subject: "Physics", Format: "PDF", "File Size": "12 MB" });
+  assert.match(known, /File size: 12 MB/);
+});

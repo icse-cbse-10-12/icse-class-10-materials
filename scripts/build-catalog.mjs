@@ -75,9 +75,8 @@ function displayTitle(value) {
     .join(" ");
 }
 function displaySubject(value) {
-  const raw = clean(value);
-  const parts = raw.split(/[,;|]+/).map(part => part.trim()).filter(Boolean);
-  return parts.length >= 3 ? "All Subjects (13)" : raw;
+  const parts = [...new Map(clean(value).split(/[,;|]+/).map(part => part.trim().replace(/\s+/g, " ")).filter(Boolean).map(part => [part.toLocaleLowerCase(), part])).values()];
+  return parts.length > 3 ? `All Subjects (${parts.length})` : parts.join(", ");
 }
 
 export function renderCard(item) {
@@ -88,6 +87,7 @@ export function renderCard(item) {
   const publisher = clean(item["Publisher/Company"] || item.Publisher).replace(/\bVastal\b/gi, "Vatsal");
   const scope = clean(item.Scope);
   const size = clean(item["File Size"]);
+  const hasFileSize = Boolean(size) && !/^(?:size\s+not\s+listed|not\s+listed|unknown|n\/?a|na|-)$/i.test(size);
   const format = clean(item.Format) || "Resource";
   const url = resourceUrl(item);
   let source = "Link unavailable";
@@ -98,7 +98,7 @@ export function renderCard(item) {
   const action = url
     ? `<a class="mc-material-action mc-material-open" href="${esc(url)}" target="_blank" rel="noopener noreferrer"><span>${actionLabel}</span></a>`
     : `<span class="mc-material-action is-disabled" aria-disabled="true">Link unavailable</span>`;
-  return `<article class="mc-material-row mc-prerendered-row"><div class="mc-material-main"><div class="mc-material-meta">${meta}</div><h3>${esc(title)}</h3>${scope ? `<p class="mc-material-scope">${esc(scope)}</p>` : ""}<div class="mc-material-file-badges"><span class="mc-material-file-badge">${esc(format)}</span>${size ? `<span class="mc-material-file-badge">${esc(size)}</span>` : ""}<span class="mc-material-file-badge">${esc(source)}</span></div></div><div class="mc-material-actions">${action}<button type="button" class="mc-material-action js-toggle-save" data-material-key="${esc(materialKey(item))}" aria-pressed="false" aria-label="Save material: ${esc(title)}"><span>Save</span></button></div></article>`;
+  return `<article class="mc-material-row mc-prerendered-row"><div class="mc-material-main"><div class="mc-material-meta">${meta}</div><h3>${esc(title)}</h3>${scope ? `<p class="mc-material-scope">${esc(scope)}</p>` : ""}<div class="mc-material-file-badges"><span class="mc-material-file-badge">${esc(format)}</span>${hasFileSize ? `<span class="mc-material-size">File size: ${esc(size)}</span>` : ""}<span class="mc-material-file-badge">${esc(source)}</span></div></div><div class="mc-material-actions">${action}<button type="button" class="mc-material-action js-toggle-save" data-material-key="${esc(materialKey(item))}" aria-pressed="false" aria-label="Save material: ${esc(title)}"><span>Save</span></button></div></article>`;
 }
 
 const CATALOG_FIELDS = [
@@ -107,6 +107,18 @@ const CATALOG_FIELDS = [
   "Link", "Lecture Link", "Telegram Channel Post Link", "Edition",
   "Latest Edition Available?", "Latest Edition Link", "Share ID"
 ];
+
+export function deduplicateResources(items) {
+  const seen = new Set();
+  return items.filter(item => {
+    // Exact-row identity includes every published field, especially source URLs.
+    // Similar titles or metadata must not collapse two distinct resources.
+    const key = JSON.stringify(CATALOG_FIELDS.map(field => [field, clean(item[field])]));
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
 
 function schemaFor(resources, totalCount) {
   const learningResources = resources.map((item, index) => {
@@ -148,9 +160,10 @@ export async function buildCatalog({ root = resolve(fileURLToPath(new URL("..", 
 
   const modified = now.toISOString().slice(0, 10);
   const indexPath = resolve(root, "index.html");
+  const uniqueResources = deduplicateResources(resources);
   const catalogPayload = {
     fields: CATALOG_FIELDS,
-    rows: resources.map(item => CATALOG_FIELDS.map(key => clean(item[key])))
+    rows: uniqueResources.map(item => CATALOG_FIELDS.map(key => clean(item[key])))
   };
   const catalogJson = JSON.stringify(catalogPayload);
   const catalogJsonPath = resolve(root, "catalog-data.json");
@@ -159,13 +172,13 @@ export async function buildCatalog({ root = resolve(fileURLToPath(new URL("..", 
   const catalogChanged = previousCatalog !== catalogJson;
   const previousHtml = await readFile(indexPath, "utf8");
   let html = previousHtml;
-  const firstPage = resources.slice(0, 12);
+  const firstPage = uniqueResources.slice(0, 12);
   html = replaceMarkedBlock(html, "<!-- CATALOG_CARDS_START -->", "<!-- CATALOG_CARDS_END -->", firstPage.map(renderCard).join("\n"));
   const safeJson = value => JSON.stringify(value).replace(/</g, "\\u003c");
   html = replaceMarkedBlock(html, "<!-- CATALOG_DATA_START -->", "<!-- CATALOG_DATA_END -->", '<link rel="preload" href="./catalog-data.json" as="fetch" crossorigin>');
-  html = replaceMarkedBlock(html, "<!-- CATALOG_SCHEMA_START -->", "<!-- CATALOG_SCHEMA_END -->", `<script type="application/ld+json" id="catalog-learning-resources">${safeJson(schemaFor(firstPage, resources.length))}</script>`);
-  html = html.replace(/(<p id="itemCount"[^>]*>)[\s\S]*?(<\/p>)/, `$1${resources.length.toLocaleString("en-IN")} Materials Found$2`);
-  html = html.replace(/<span>Loading the materials catalogue…<\/span>/, `<span>${resources.length.toLocaleString("en-IN")} materials are ready to browse.</span>`);
+  html = replaceMarkedBlock(html, "<!-- CATALOG_SCHEMA_START -->", "<!-- CATALOG_SCHEMA_END -->", `<script type="application/ld+json" id="catalog-learning-resources">${safeJson(schemaFor(firstPage, uniqueResources.length))}</script>`);
+  html = html.replace(/(<p id="itemCount"[^>]*>)[\s\S]*?(<\/p>)/, `$1${uniqueResources.length.toLocaleString("en-IN")} Materials Found$2`);
+  html = html.replace(/<span>Loading the materials catalogue…<\/span>/, `<span>${uniqueResources.length.toLocaleString("en-IN")} materials are ready to browse.</span>`);
   const indexChanged = html !== previousHtml;
   if (catalogChanged) await writeFile(catalogJsonPath, catalogJson);
   if (indexChanged) await writeFile(indexPath, html);
@@ -181,7 +194,7 @@ export async function buildCatalog({ root = resolve(fileURLToPath(new URL("..", 
     });
     if (updatedSitemap !== sitemap) await writeFile(sitemapPath, updatedSitemap);
   }
-  return { count: resources.length, prerendered: firstPage.length, modified, homepageChanged: indexChanged || catalogChanged, jsonBytes: Buffer.byteLength(catalogJson) };
+  return { count: resources.length, uniqueCount: uniqueResources.length, prerendered: firstPage.length, modified, homepageChanged: indexChanged || catalogChanged, jsonBytes: Buffer.byteLength(catalogJson) };
 }
 
 async function main() {

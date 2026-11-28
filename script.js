@@ -43,11 +43,16 @@ let currentCategory = "All";
 let currentPublisher = "all";
 let allResources = [];
 let filteredResources = [];
-// Keep DOM work bounded on every device: 12 cards per render batch.
-const RESOURCE_PAGE_SIZE = 12;
-function isMobileResourceViewport() { return window.matchMedia && window.matchMedia("(max-width: 767px)").matches; }
-function getInitialResourcePageSize() { return isMobileResourceViewport() ? 12 : RESOURCE_PAGE_SIZE; }
-function getResourcePageIncrement() { return isMobileResourceViewport() ? 12 : RESOURCE_PAGE_SIZE; }
+// Keep initial DOM work bounded on mobile while showing a useful desktop page.
+const DESKTOP_RESOURCE_PAGE_SIZE = 36;
+const MOBILE_RESOURCE_PAGE_SIZE = 12;
+function getResourcePageSize() {
+  return typeof window.matchMedia === "function" && window.matchMedia("(max-width: 767px)").matches
+    ? MOBILE_RESOURCE_PAGE_SIZE
+    : DESKTOP_RESOURCE_PAGE_SIZE;
+}
+function getInitialResourcePageSize() { return getResourcePageSize(); }
+function getResourcePageIncrement() { return getResourcePageSize(); }
 let visibleResourceCount = getInitialResourcePageSize();
 let materialSearchTimer = null;
 
@@ -126,6 +131,20 @@ function getMaterialSearchScore(item, tokenGroups, normalizedQuery) {
     count + (group.some(alias => title.includes(alias)) ? 1 : 0), 0);
   if (titleMatches === tokenGroups.length) return 500 + titleMatches;
   return titleMatches * 10;
+}
+
+function deduplicateExactResourceRows(items) {
+  const seen = new Set();
+  return items.filter(item => {
+    // Compare the complete published row, including every source URL. Similar
+    // titles or metadata are not enough to prove that two resources are duplicates.
+    const fields = Object.keys(item || {}).filter(key => !key.startsWith("_")).sort();
+    const identity = fields.map(key => [key, String(item[key] ?? "").trim()]);
+    const key = JSON.stringify(identity);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 }
 
 function materialSearchText(item) {
@@ -463,7 +482,7 @@ async function fetchSheetData() {
     try {
       const prerendered = JSON.parse(embeddedCatalog.textContent || "[]");
       if (Array.isArray(prerendered) && prerendered.length > 0) {
-        allResources = prerendered;
+        allResources = deduplicateExactResourceRows(prerendered);
         prepareMaterialSearchIndex(allResources);
         window.icseCatalogReady = true;
         if (statusEl) statusEl.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600" aria-hidden="true"></i><span>Loaded ${allResources.length.toLocaleString()} materials from the pre-rendered catalogue.</span>`;
@@ -486,7 +505,7 @@ async function fetchSheetData() {
           ? cachePayload.rows.map(row => Object.fromEntries(cachePayload.fields.map((field, index) => [field, row[index] ?? ""])))
           : [];
       if (cachedResources.length > 0) {
-        allResources = cachedResources;
+        allResources = deduplicateExactResourceRows(cachedResources);
         prepareMaterialSearchIndex(allResources);
         window.icseCatalogReady = true;
         if (statusEl) statusEl.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600" aria-hidden="true"></i><span>Loaded ${allResources.length.toLocaleString()} materials from the cached catalogue.</span>`;
@@ -525,7 +544,7 @@ async function fetchSheetData() {
     return;
   }
 
-  allResources = resources;
+  allResources = deduplicateExactResourceRows(resources);
         prepareMaterialSearchIndex(allResources);
   window.icseCatalogReady = true;
 
@@ -1133,7 +1152,8 @@ function formatMaterialDisplayTitle(value) {
 function formatMaterialSubjectLabel(value) {
   const raw = String(value || "").trim();
   const parts = raw.split(/[,;|]+/).map(part => part.trim()).filter(Boolean);
-  return parts.length >= 3 ? "All Subjects (13)" : raw;
+  const uniqueCount = new Set(parts.map(part => part.toLocaleLowerCase())).size;
+  return uniqueCount > 3 ? `All Subjects (${uniqueCount})` : [...new Set(parts)].join(", ");
 }
 
 function renderGrid(data, appendFrom = 0) {
@@ -1184,6 +1204,7 @@ function renderGrid(data, appendFrom = 0) {
     const category = item["Category"] || "";
     const publisher = formatMaterialPublisherLabel(item["Publisher/Company"] || item["Publisher"] || "");
     const fileSize = String(item["File Size"] || "").trim();
+    const hasFileSize = Boolean(fileSize) && !/^(?:size\s+not\s+listed|not\s+listed|unknown|n\/?a|na|-)$/i.test(fileSize);
     const fileFormat = String(item["Format"] || "Resource").trim() || "Resource";
     let sourceBadge = "Link unavailable";
     try { sourceBadge = driveLink && new URL(driveLink).hostname.toLowerCase().endsWith("drive.google.com") ? "Direct Drive" : driveLink ? "External source" : "Link unavailable"; } catch (_) {}
@@ -1200,7 +1221,7 @@ function renderGrid(data, appendFrom = 0) {
           </div>
           <div class="mc-material-file-badges">
             <span class="mc-material-file-badge">${escapeHTML(fileFormat)}</span>
-            ${fileSize ? `<span class="mc-material-size"><i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i><span>File size: ${escapeHTML(fileSize)}</span></span>` : ""}
+            ${hasFileSize ? `<span class="mc-material-size"><i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i><span>File size: ${escapeHTML(fileSize)}</span></span>` : ""}
             <span class="mc-material-file-badge">${escapeHTML(sourceBadge)}</span>
           </div>
           <h3>${escapeHTML(title)}</h3>
