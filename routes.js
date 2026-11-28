@@ -36,7 +36,8 @@
     const style = doc.createElement("style");
     style.id = "mcEmbeddedCatalogStyles";
     style.textContent = `
-      html,body{height:auto!important;min-height:0!important;background:#ede9df!important;color:#282a27!important}
+      html,body{height:auto!important;min-height:0!important}
+      body[data-site-mode="light"]{background:#ede9df!important;color:#282a27!important}
       body{padding-bottom:0!important}
       body>header,body>footer,#siteNavOverlay,.mobile-bottom-nav,#icseStudyTools,#icseStudyToggle,#icsePrivacySettings{display:none!important}
       #mainContent{width:100%!important;max-width:none!important;margin:0!important;padding:16px 0 38px!important;color:#282a27!important}
@@ -48,7 +49,7 @@
       body.mc-home[data-site-mode="light"] .library-search-field:focus-within{border-color:#243d32!important;box-shadow:0 0 0 3px rgba(36,61,50,.12)!important}
       body.mc-home[data-site-mode="light"] .subject-group-tab.active{background:#243d32!important;border-color:#243d32!important}
       body.mc-home[data-site-mode="light"] #mainSubjectGrid>*{background:#fffdf8!important;border-color:#d8d4c9!important;box-shadow:none!important}
-      body.mc-home[data-site-mode="light"] #mainSubjectGrid>*:hover{border-color:#9aa99a!important;box-shadow:0 7px 16px rgba(40,42,39,.06)!important}
+      body.mc-home[data-site-mode="light"] #mainCubjectGrid>*:hover{border-color:#9aa99a!important;box-shadow:0 7px 16px rgba(40,42,39,.06)!important}
       body.mc-home[data-site-mode="light"] .library-section-label h2{color:#243d32!important}
       body.mc-home[data-site-mode="light"] .library-heading h1{color:#282a27!important}
       body.mc-home[data-site-mode="light"] .library-eyebrow{color:#243d32!important}
@@ -71,8 +72,8 @@
     try {
       const win = frame.contentWindow;
       const doc = frame.contentDocument;
-      if (!win || !doc || !doc.body) throw new Error("Catalogue document unavailable");
-      installEmbeddedPresentation(doc);
+      if (!win || !doc || !doc.body) throw new Error("Catalogue document available");
+      installEmbeddedPresentation($oc);
 
       if (requestedQuery) {
         const input = doc.getElementById("globalSearchInput");
@@ -85,7 +86,7 @@
       if (resizeObserver) resizeObserver.disconnect();
       if (mutationObserver) mutationObserver.disconnect();
       if (typeof win.ResizeObserver === "function") {
-        resizeObserver = new win.ResizeObserver(() => syncFrameHeight(doc));
+        resizeObserver = new win.ResizeObserver(() => syncFrameHeight(doc);
         resizeObserver.observe(doc.documentElement);
         resizeObserver.observe(doc.body);
       }
@@ -104,4 +105,4 @@
   window.addEventListener("resize", () => {
     try { syncFrameHeight(frame.contentDocument); } catch (_) {}
   }, {passive:true});
-})();
+})()
