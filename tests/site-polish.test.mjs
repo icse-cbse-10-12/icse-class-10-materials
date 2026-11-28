@@ -128,7 +128,7 @@ test("mobile search placeholder stays concise and the logo has descriptive alt t
 
 test("sitemap homepage lastmod reflects homepage edits without changing blog and FAQ dates", () => {
   const sitemap = read("sitemap.xml");
-  assert.ok(sitemap.includes("<loc>https://icse-cbse-10-12.github.io/icse-class-10-materials/</loc><lastmod>2026-11-23</lastmod>"));
+  assert.ok(sitemap.includes("<loc>https://icse-cbse-10-12.github.io/icse-class-10-materials/</loc><lastmod>2026-11-27</lastmod>"));
   assert.ok(sitemap.includes("<loc>https://icse-cbse-10-12.github.io/icse-class-10-materials/blog/</loc><lastmod>2026-11-12</lastmod>"));
   assert.ok(sitemap.includes("<loc>https://icse-cbse-10-12.github.io/icse-class-10-materials/faq.html</loc><lastmod>2026-11-12</lastmod>"));
 });
