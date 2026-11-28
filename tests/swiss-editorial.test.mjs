@@ -14,7 +14,7 @@ test("catalogue cards clean filenames, collapse broad subject lists and omit unk
   });
   assert.match(card, /Chemistry most likely ICSE question Bank/);
   assert.doesNotMatch(card, /\.PDF|CHEMISTRY_most_likely/);
-  assert.match(card, /All Subjects \(13\)/);
+  assert.match(card, /All Subjects \(4\)/);
   assert.doesNotMatch(card, /Size not listed/);
 });
 
@@ -39,8 +39,10 @@ test("homepage places the subject directory directly after hero search and legal
 
 test("mobile resource rendering starts with 12 cards and search uses a 250ms debounce", () => {
   const js = read("../script.js");
-  assert.ok(js.includes("function getInitialResourcePageSize() { return isMobileResourceViewport() ? 12 : RESOURCE_PAGE_SIZE; }"));
-  assert.match(read("../scripts/build-catalog.mjs"), /resources\.slice\(0, 12\)/);
+  assert.ok(js.includes("const DESKTOP_RESOURCE_PAGE_SIZE = 36;"));
+  assert.ok(js.includes("const MOBILE_RESOURCE_PAGE_SIZE = 12;"));
+  assert.match(js, /function getResourcePageSize\(\)/);
+  assert.ok(read("../scripts/build-catalog.mjs").includes("uniqueResources.slice(0, 12)"));
   assert.match(js, /},\s*250\);/);
   assert.match(js, /visibleResourceCount = getInitialResourcePageSize\(\)/);
   assert.match(js, /visibleResourceCount \+ getResourcePageIncrement\(\)/);
@@ -49,7 +51,7 @@ test("mobile resource rendering starts with 12 cards and search uses a 250ms deb
 test("runtime card labels clean titles, compact broad subjects and omit missing file sizes", () => {
   const js = read("../script.js");
   assert.match(js, /replace\(\/\\\.\(\?:pdf\|docx\?\)\$\/i/);
-  assert.match(js, /All Subjects \(13\)/);
+  assert.match(js, /All Subjects \(\$\{uniqueCount\}\)/);
   assert.doesNotMatch(js, /Size not listed/);
   assert.match(js, /savedCount\.hidden = count === 0/);
 });

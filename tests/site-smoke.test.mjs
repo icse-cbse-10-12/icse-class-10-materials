@@ -246,7 +246,7 @@ test("mobile subject cards retain their vector illustrations at narrow widths", 
 test("file size is shown only when the published row includes file-size metadata", () => {
   const script = read("script.js");
   assert.match(script, /const fileSize = String\(item\["File Size"\] \|\| ""\)\.trim\(\)/);
-  assert.match(script, /fileSize \? `<span class="mc-material-size">/);
+  assert.match(script, /hasFileSize \? `<span class="mc-material-size">/);
 });
 
 test("all active stylesheets have balanced rule braces", () => {
